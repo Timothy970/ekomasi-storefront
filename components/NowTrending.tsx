@@ -18,14 +18,12 @@ const products = [
 ];
 
 export default function ProductRowSlider() {
-    // index of the first visible card
     const [index, setIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
-    const [cardW, setCardW] = useState(0); // measured card width (px)
-    const GAP_PX = 16; // gap-4
+    const [cardW, setCardW] = useState(0); 
+    const GAP_PX = 16; 
 
-    // Measure card width responsively
     useLayoutEffect(() => {
         const update = () => {
             if (cardRef.current) setCardW(cardRef.current.offsetWidth);
@@ -35,20 +33,18 @@ export default function ProductRowSlider() {
         return () => window.removeEventListener("resize", update);
     }, []);
 
-    // Compute how many cards fit in the container
     const visibleCount = useMemo(() => {
         const wrapW = containerRef.current?.offsetWidth ?? 0;
         if (!wrapW || !cardW) return 1;
-        // Each card takes cardW + GAP, last card doesn't need trailing gap; add a small epsilon
+
         const count = Math.max(1, Math.floor((wrapW + GAP_PX) / (cardW + GAP_PX)));
         return count;
     }, [cardW]);
 
-    // Recompute visible count on resize of container
     useEffect(() => {
         if (!containerRef.current) return;
         const ro = new ResizeObserver(() => {
-            // trigger recalculation by toggling cardW (noop if unchanged)
+
             if (cardRef.current) setCardW(cardRef.current.offsetWidth);
         });
         ro.observe(containerRef.current);
@@ -84,12 +80,12 @@ export default function ProductRowSlider() {
                             <div
                                 key={p.id}
                                 ref={i === 0 ? cardRef : undefined}
-                                className="shrink-0 overflow-hidden border border-gray-50 rounded-t-[0.5rem]"
+                                className="shrink-0 overflow-hidden border border-gray-200 rounded-t-[0.5rem] hover:shadow-xl transform transition duration-300 ease-in-out"
                             >
-                                <div className="h-[13.5rem] sm:h-[20rem] md:h-[21.875rem] w-auto sm:w-[14rem] md:w-[16rem] lg:w-[18rem] overflow-hidden">
+                                <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden">
                                     <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                                 </div>
-                                <div className="p-[0.5rem] flex flex-col gap-y-[0.5rem]">
+                                <div className="p-[1rem] flex flex-col gap-y-[0.5rem]">
                                     <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>
                                         {p.name}
                                     </h3>
