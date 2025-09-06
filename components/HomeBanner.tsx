@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 
 const slides = [
@@ -31,7 +30,6 @@ const slides = [
 export default function HomeBanner() {
     const [current, setCurrent] = useState(0);
 
-    // Auto-slide every 5 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length);
@@ -48,7 +46,7 @@ export default function HomeBanner() {
     };
 
     return (
-        <div className="relative w-full max-w-[90rem] mx-auto overflow-hidden lg:lg:bg-black/40">
+        <div className="relative w-full max-w-[90rem] mx-auto overflow-hidden bg-black/40">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={slides[current].id}
@@ -56,7 +54,7 @@ export default function HomeBanner() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="relative h-[30rem] md:h-[35rem] lg:h-[40rem]"
+                    className="relative h-[34.375rem] md:h-[30.125rem]"
                 >
                     <img
                         src={slides[current].image}
@@ -108,14 +106,17 @@ export default function HomeBanner() {
             </div>
 
 
-            <div className="absolute bottom-[1rem] lg:bottom-[4rem] w-full flex justify-start space-x-2 px-[1rem] lg:px-[4rem]">
+            <div className="absolute bottom-[1rem] lg:bottom-[4rem] w-[10rem] lg:w-[25rem] flex justify-start items-center space-x-[1.47rem] px-[1rem] lg:px-[4rem] h-[1.5rem]">
                 {slides.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrent(index)}
-                        className={`w-[0.5rem] h-[0.5rem] rounded-full ${current === index ? "bg-white" : "bg-gray-400"
-                            }`}
-                    />
+                        className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
+                    >
+                        <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer ${current === index ? "bg-white" : "bg-[#F5F5F596]"}`}>
+
+                        </span>
+                    </button>
                 ))}
             </div>
         </div>
