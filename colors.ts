@@ -1,0 +1,1 @@
+export const pink = '#AF52DE';

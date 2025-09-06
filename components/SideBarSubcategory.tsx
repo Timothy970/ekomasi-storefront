@@ -1,0 +1,51 @@
+import { SubCategory } from '@/lib/features/types';
+import React from 'react'
+
+interface SideBarProps {
+    openInnerSideBar: boolean;
+    setOpenInnerSideBar: React.Dispatch<React.SetStateAction<boolean>>;
+    subcategories: SubCategory[];
+    subCategoryTitle: string
+}
+
+export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideBar, subcategories, subCategoryTitle }: SideBarProps) {
+    return (
+        <div className={`h-screen w-screen absolute px-[1.25rem] pb-[2.5rem]  top-0 left-0 z-50 border border-gray-300 bg-white transform transition-transform duration-500 ease-in-out ${openInnerSideBar ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className="flex justify-start items-center mt-[1rem] w-full gap-[0.38rem]">
+                <div onClick={() => setOpenInnerSideBar(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[1.5rem] h-[1.5rem] lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6" /></svg>
+                </div>
+
+                <h2 className='text-black text-center font-poppins text-sm font-medium leading-[1.3125rem]'>{subCategoryTitle}</h2>
+            </div>
+
+            <div className="mt-[1.5rem] max-h-[70%] overflow-y-hidden shadow-xl border border-slate-50 rounded-md">
+                <div className="max-h-[60%] w-full bg-white  px-[0.75rem] overflow-y-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+                    <ul className="mt-[1.25rem] p-y-[0.81rem]">
+                        {subcategories.map((sub, index) => (
+                            <li
+                                key={index}
+                                onClick={() => setOpenInnerSideBar(true)}
+                                className="hover:text-gray-400 cursor-pointer"
+                            >
+                                <div className="flex justify-between items-center py-[0.5rem] h-[2.75rem]">
+                                    <h3 className="text-black font-poppins text-base font-semibold leading-[1.5rem] capitalize">
+                                        {sub?.name}
+                                    </h3>
+                                </div>
+
+                                <ul className="space-y-1">
+                                    {sub.products.map((prod) => (
+                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize">
+                                            {prod.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    );
+}
