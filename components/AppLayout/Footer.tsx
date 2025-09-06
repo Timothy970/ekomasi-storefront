@@ -62,7 +62,7 @@ export default function Footer() {
             </div>
           }
 
-          <div className='flex flex-col gap-y-[1rem]'>
+          <div className='flex flex-col gap-y-[1rem] lg:hidden'>
             <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Privacy Policy</a>
             <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Terms of Service</a>
             <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Cookies Settings</a>
@@ -127,8 +127,24 @@ export default function Footer() {
 
       <div className='border-b border-[rgba(219,181,181,0.44)] w-screen z-10 hidden lg:block'></div>
 
-      <div className='mt-[2rem] z-10'>
+      <div className='z-10 mt-[3rem] hidden w-full lg:flex justify-center items-center'>
+        <Image
+          src={"/images/adenzo-logo-footer.png"}
+          alt="Logo"
+          width={150}
+          height={25}
+          priority={true}
+          className='w-auto h-[5rem] shrink-0'
+        />
+      </div>
+
+      <div className='mt-[3rem] z-10 w-full flex justify-center items-center'>
         <h2 className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{homeData?.copyright_text}</h2>
+      </div>
+      <div className='lg:flex flex-row gap-y-[1rem] z-10 hidden gap-x-[2rem] mt-[3rem]'>
+        <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Privacy Policy</a>
+        <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Terms of Service</a>
+        <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Cookies Settings</a>
       </div>
     </div>
   )
