@@ -5,7 +5,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -19,12 +18,14 @@ export function FilterSortBy() {
 
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          <SelectItem value="low to high">Price: low to high</SelectItem>
+          <SelectItem value="high to low">Price: high to low</SelectItem>
+          <SelectItem value="old to new">Date: old to new</SelectItem>
+          <SelectItem value="new to old">Date: new to old</SelectItem>
+          <SelectItem value="featured">Featured</SelectItem>
+          <SelectItem value="best sellers">Best Sellers</SelectItem>
+          <SelectItem value="a to z">Alphabetically: A-Z</SelectItem>
+          <SelectItem value="z to a">Alphabetically: Z-A</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
