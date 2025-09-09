@@ -12,7 +12,7 @@ export default function Home() {
     <Navigation>
       <HomeBanner />
       <HomeCategories />
-      <NowTrending />
+      <NowTrending title="Now Trending" />
       <CustomerTestimonials />
       <TalkToUs />
       <MothersDayBundle />

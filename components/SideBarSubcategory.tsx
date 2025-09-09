@@ -1,4 +1,5 @@
 import { SubCategory } from '@/lib/features/types';
+import Link from 'next/link';
 import React from 'react'
 
 interface SideBarProps {
@@ -36,8 +37,10 @@ export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideB
 
                                 <ul className="space-y-1">
                                     {sub.products.map((prod) => (
-                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize">
-                                            {prod.name}
+                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize h-[2.75rem]">
+                                            <Link href={`/products/${prod.id}`}>
+                                                <span className='h-full '>{prod.name}</span>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>

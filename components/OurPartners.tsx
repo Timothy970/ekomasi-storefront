@@ -24,7 +24,7 @@ export default function Brands() {
     }, []);
 
     return (
-        <div className="mt-8 overflow-hidden relative py-[3rem] flex items-center flex-col justify-center">
+        <div className="mt-8 overflow-hidden relative w-full max-w-[90rem] mx-auto py-[3rem] flex items-center flex-col justify-center">
             <div className="flex w-full max-w-[90rem] bg-white">
                 <div className="flex items-start justify-between gap-4 mb-8 w-full px-[1rem] lg:px-[4rem]">
                     <div className='w-full'>

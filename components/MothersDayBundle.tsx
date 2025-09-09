@@ -52,33 +52,35 @@ export default function MothersDayBundle() {
     };
 
     return (
-        <div className="relative w-full max-w-[90rem] mx-auto overflow-hidden mt-[2rem] lg:mt-[5rem] bg-black/40">
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={slides[current].id}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -50 }}
-                    transition={{ duration: 0.5 }}
-                    className="relative h-[20.375rem] lg:max-h-[20rem]"
-                >
-                    <img
-                        src={slides[current].image}
-                        alt={slides[current].title}
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center">
-                        <div className="bg-black/40 lg:bg-transparent p-4 w-full h-full flex flex-col justify-center items-center">
-                            <h2 className="text-white text-center font-roboto text-4xl font-bold leading-[3rem] lg:text-[3.5rem]">
-                                {slides[current].title}
-                            </h2>
-                            <p className="text-white text-center font-poppins text-base font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
-                                {slides[current].description}
-                            </p>
+        <div className="relative w-full max-w-[90rem] mx-auto px-[1rem] lg:px-[4rem] overflow-hidden mt-[2rem] lg:mt-[5rem]">
+            <div className="bg-black/40">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={slides[current].id}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative h-[20.375rem] lg:max-h-[20rem]"
+                    >
+                        <img
+                            src={slides[current].image}
+                            alt={slides[current].title}
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center">
+                            <div className="bg-black/40 lg:bg-transparent p-4 w-full h-full flex flex-col justify-center items-center">
+                                <h2 className="text-white text-center font-roboto text-4xl font-bold leading-[3rem] lg:text-[3.5rem]">
+                                    {slides[current].title}
+                                </h2>
+                                <p className="text-white text-center font-poppins text-base font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
+                                    {slides[current].description}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </motion.div>
-            </AnimatePresence>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
 
             <div className="absolute bottom-[1rem] hidden lg:flex lg:bottom-[4rem] w-full justify-center items-center space-x-[1.47rem] px-[1rem] lg:px-[4rem] h-[1.5rem]">
                 {slides.map((_, index) => (
