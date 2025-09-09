@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { useRef } from "react";
 
-export default function SearchBar({placeHolderText}) {
+export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     return (

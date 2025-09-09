@@ -18,7 +18,7 @@ export default function ProductCategory() {
 
             <div className='px-[1rem] lg:px-[4rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
                 <div className='flex flex-row gap-x-[2rem]'>
-                    <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem]'>
+                    <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                         <CategoryFilter />
                     </div>
 
@@ -69,7 +69,7 @@ export default function ProductCategory() {
                         <CategoryProducts />
 
                         <div className='flex w-full justify-center items-center'>
-                            <Button className='bg-white text-black mt-[2rem] h-[3rem] min-w-[20rem] border border-black text-base font-normal leading-[195%]'>Load More ...</Button>
+                            <Button className='bg-white text-black mt-[2rem] h-[3rem] min-w-[20rem] border border-black text-base font-normal leading-[195%]'>Load More</Button>
                         </div>
                     </div>
                 </div>
