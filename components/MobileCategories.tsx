@@ -3,6 +3,7 @@ import SideBarSubcategory from "./SideBarSubcategory";
 import { useAppSelector } from "@/lib/hooks";
 import { selectCategories } from "@/lib/features/navigation/navigationSlice";
 import { SubCategory } from "@/lib/features/types";
+import Link from "next/link";
 
 export default function MobileCategories() {
     const [openInnerSideBar, setOpenInnerSideBar] = useState(false)
@@ -18,11 +19,13 @@ export default function MobileCategories() {
             if (category && category?.subcategories) {
                 setSubcategories(category.subcategories);
                 setSubCategoryTitle(category.name)
+            } else {
+                setSubcategories([]);
+                setSubCategoryTitle("")
             }
         } else {
             setSubcategories([]);
             setSubCategoryTitle("")
-
         }
     }, [clickedCategoryId]);
 
@@ -35,15 +38,21 @@ export default function MobileCategories() {
         <div className="h-full w-full">
             <ul className="mt-[1.25rem] space-y-4 h-full w-full">
                 {categories?.map((cat, index) => (
-                    <li onClick={() => handleCategoryClick(cat?.id)} key={index} className="hover:text-gray-400 cursor-pointer">
-                        <div className="flex justify-between items-center border-t border-black py-[0.5rem] h-[2.75rem]">
-                            <span className="text-black font-poppins text-base font-medium leading-[1.5rem]">
-                                {cat?.name}
-                            </span>
+                    <li key={index} className="w-full">
+                        <div className="flex justify-between items-center border-t border-black py-[0.5rem] w-full h-[2.75rem]">
                             {
-                                cat?.subcategories && <div className="w-[1.5rem] h-[1.5rem] flex justify-center items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-full w-full lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6" /></svg>
-                                </div>
+                                cat?.subcategories ? <div onClick={() => handleCategoryClick(cat?.id)} className="flex justify-between items-center w-full h-full">
+                                    <span className="text-black font-poppins text-base font-medium leading-[1.5rem]">{cat?.name}</span>
+                                    <div className="w-[1.5rem] h-[1.5rem] flex justify-center items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-full w-full lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6" /></svg>
+                                    </div>
+                                </div> : <Link href={`/category/${cat?.id}`} className="w-full">
+                                    <div className="h-[2.75rem] w-full flex justify-center items-center">
+                                        <span className="text-black font-poppins text-base font-medium leading-[1.5rem] mt-[1rem] w-full h-full">
+                                            {cat?.name}
+                                        </span>
+                                    </div>
+                                </Link>
                             }
                         </div>
                     </li>

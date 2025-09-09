@@ -1,4 +1,5 @@
 import { SubCategory } from '@/lib/features/types';
+import Link from 'next/link';
 import React from 'react'
 
 interface SideBarProps {
@@ -9,6 +10,7 @@ interface SideBarProps {
 }
 
 export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideBar, subcategories, subCategoryTitle }: SideBarProps) {
+    console.log(subcategories, 'subcategories')
     return (
         <div className={`h-screen w-screen absolute px-[1.25rem] pb-[2.5rem]  top-0 left-0 z-50 border border-gray-300 bg-white transform transition-transform duration-500 ease-in-out ${openInnerSideBar ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="flex justify-start items-center mt-[1rem] w-full gap-[0.38rem]">
@@ -36,8 +38,10 @@ export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideB
 
                                 <ul className="space-y-1">
                                     {sub.products.map((prod) => (
-                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize">
-                                            {prod.name}
+                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize h-[2.75rem]">
+                                            <Link href={`/products/${prod.id}`}>
+                                                <span className='h-full '>{prod.name}</span>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
