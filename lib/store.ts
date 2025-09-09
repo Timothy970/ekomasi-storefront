@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from 'redux-persist'
 import { navigationReducer } from "./features/navigation/navigationSlice";
 import { toastReducer } from "./features/toast/toastSlice";
+import { mallReducer } from "./features/mall/mallSlice";
 
 const persistConfig = { key: "user", storage: storage };
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   navigation: navigationReducer,
   toast: toastReducer,
+  mall: mallReducer,
 });
 
 const makeConfiguredStore = () => configureStore({

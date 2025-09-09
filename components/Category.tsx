@@ -1,6 +1,7 @@
 import { selectCategories } from "@/lib/features/navigation/navigationSlice";
-import { SubCategory } from "@/lib/features/types";
+import { Category, SubCategory } from "@/lib/features/types";
 import { useAppSelector } from "@/lib/hooks";
+import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
 
 export default function CategorySlider() {
@@ -8,14 +9,18 @@ export default function CategorySlider() {
     const [subcategories, setSubcategories] = useState<SubCategory[] | []>([]);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const categories = useAppSelector(selectCategories)
-
+    const [hoveredCategory, setHoveredCategory] = useState<Category>()
 
     useEffect(() => {
         if (hoveredCategoryId) {
             const category = categories?.find((c) => c.id === hoveredCategoryId);
 
+            if (category) setHoveredCategory(category)
+
             if (category && category?.subcategories) {
                 setSubcategories(category.subcategories);
+            } else {
+                setSubcategories([]);
             }
         } else {
             setSubcategories([]);
@@ -63,13 +68,23 @@ export default function CategorySlider() {
 
                             <ul className="space-y-1">
                                 {sub.products.map((prod) => (
-                                    <li key={prod.id} className="text-black font-poppins text-base font-normal leading-[1.95rem]">
-                                        {prod.name}
-                                    </li>
+                                    <Link key={prod.id} href={`/subcategory/${prod.id}`}>
+                                        <li className="text-black font-poppins text-base font-normal leading-[1.95rem]">
+                                            {prod.name}
+                                        </li>
+                                    </Link>
                                 ))}
                             </ul>
                         </div>
                     ))}
+
+                    {
+                        subcategories?.length <= 0 && hoveredCategory && <div>
+                            <Link href={`/category/${hoveredCategory?.name}`}>
+                                <span className="text-black font-poppins text-base font-normal leading-[1.95rem] hover:underline">Shop All</span>
+                            </Link>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

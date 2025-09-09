@@ -5,6 +5,7 @@ import Category from '../Category'
 import { useAppSelector } from '@/lib/hooks'
 import { selectHomeData } from '@/lib/features/navigation/navigationSlice'
 import SocialIcons from '../SocialIcons'
+import Link from 'next/link'
 
 interface AppHeaderProps {
   isOpen: boolean;
@@ -34,14 +35,16 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
 
       <div className='w-full flex justify-center items-center z-50 bg-white'>
         <div className='bg-white w-full h-[4rem] px-[1.25rem] lg:px-[4rem] flex flex-row items-center justify-between max-w-[90rem]'>
-          <Image
-            src={"/images/company-logo.svg"}
-            alt="Logo"
-            width={150}
-            height={25}
-            priority={true}
-            className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0'
-          />
+          <Link href={`/`}>
+            <Image
+              src={"/images/company-logo.svg"}
+              alt="Logo"
+              width={150}
+              height={25}
+              priority={true}
+              className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0'
+            />
+          </Link>
 
           <div className='w-[50%] hidden lg:block'>
             <SearchInput placeHolderText="Search for products, brands and more" />

@@ -9,7 +9,7 @@ import { useFilter } from '@/app/ClientLayout';
 import CategoryFilter from '@/components/CategoryFilter'
 import { FilterSortBy } from '@/components/FilterSortBy'
 
-export default function ProductCategory() {
+export default function SubCategory() {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
     return (
@@ -17,14 +17,16 @@ export default function ProductCategory() {
             <CategoryBanner />
 
             <div className='px-[1rem] lg:px-[4rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
-                <div className='flex '>
-                    <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll'>
+                <div className='flex flex-row gap-x-[2rem]'>
+                    <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem]'>
                         <CategoryFilter />
                     </div>
 
                     <div className=''>
                         <div className='mt-[2rem] lg:mt-[2.5rem] flex flex-row items-center justify-between lg:justify-end'>
-                            <FilterSortBy />
+                            <div className='block lg:hidden'>
+                                <FilterSortBy />
+                            </div>
 
                             <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-black h-[2.5rem] lg:h-[3rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
                                 <span className='text-base'>Filter</span>
@@ -51,9 +53,15 @@ export default function ProductCategory() {
                             </Button>
                         </div>
 
-                        <Breadcrumb />
+                        <div className='w-full flex flex-row justify-between items-center'>
+                            <Breadcrumb />
 
-                        <div className='flex flex-col items-start justify-center'>
+                            <div className='hidden lg:block'>
+                                <FilterSortBy />
+                            </div>
+                        </div>
+
+                        <div className='flex flex-col items-start justify-center lg:mt-[1rem]'>
                             <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-black'>Cots & Bassinets</h2>
                             <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>

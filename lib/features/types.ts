@@ -112,3 +112,25 @@ export interface HomeDataResponse {
     message: string;
     status_code: number;
 }
+
+export interface MallVariant {
+    variant_id: string;
+    variant_type: string;
+    name: string;
+}
+
+export interface VariantGroup {
+    variant_type: string;
+    variants: MallVariant[];
+}
+
+export interface GetVariantsResponse {
+    data: VariantGroup[];
+    message: string;
+    status_code: number;
+}
+
+export interface GetVariantsParams {
+    phone_number?: string;
+    email?: string;
+}
