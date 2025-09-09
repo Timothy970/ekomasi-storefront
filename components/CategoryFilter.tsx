@@ -8,11 +8,9 @@ export default function CategoryFilter() {
     const dispatch = useAppDispatch()
     const variants = useAppSelector(selectVariants)
     const router = useRouter()
-    console.log(variants, 'variants')
 
     useEffect(() => {
         dispatch(getVariantsAsync())
-
     }, [router, dispatch])
 
     return (
@@ -20,7 +18,7 @@ export default function CategoryFilter() {
             <div>
                 {
                     variants?.map((variant, index) => {
-                        return <Variant key={variant?.variant_type} variant={variant} />
+                        return <Variant key={index?.toString()} variant={variant} />
                     })
                 }
             </div>
