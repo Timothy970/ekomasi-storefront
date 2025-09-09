@@ -5,18 +5,22 @@ import ProductQuantitySelect from '@/components/ProductQuantitySelect'
 import ProductStars from '@/components/ProductStars'
 import { Button } from '@/components/ui/button'
 import React from 'react'
+import NowTrending from "@/components/NowTrending";
+import ProductImages from '@/components/ProductImages'
 
 export default function ProductDetail() {
   return (
     <Navigation>
-      <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem]'>
+      <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem] bg-white'>
         <ProductBreadCrumb />
 
-        <div className='mt-[1.5rem]'>
-          <div className='w-full bg-green-400 flex flex-col lg:flex-row items-center'>
-            <div className='w-full'>Product Image</div>
+        <div className='mt-[1.5rem] px-[1rem] lg:px-[4rem]'>
+          <div className='w-full flex flex-col lg:flex-row items-stretch'>
+            <div className='w-full h-full flex-1'>
+              <ProductImages />
+            </div>
 
-            <div className='w-full bg-white flex flex-col justify-start px-[1rem] pb-[1rem]'>
+            <div className='w-full bg-white flex flex-col justify-start px-[1rem] pb-[1rem] flex-1'>
               <h2 className='text-lg lg:text-[2.25rem] font-bold mt-[1rem]'>Jogger Stroller - XCEL-R8</h2>
 
               <span className='mt-[0.5rem] text-[1.5rem]'>$55</span>
@@ -58,7 +62,10 @@ export default function ProductDetail() {
 
           </div>
         </div>
+
+        <NowTrending title="You may also like" />
       </div>
+      
     </Navigation>
   )
 }

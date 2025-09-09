@@ -7,7 +7,7 @@ export default function ProductBreadCrumb() {
     const segments = pathname.split("/").filter(Boolean);
 
     return (
-        <nav className="text-sm text-gray-600 my-4">
+        <nav className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[4rem]">
             <ol className="flex flex-wrap items-center space-x-2">
                 <li>
                     <Link href="/" className="hover:underline text-black font-roboto text-base not-italic font-semibold leading-[150%] underline-offset-auto decoration-solid">

@@ -10,7 +10,6 @@ interface SideBarProps {
 }
 
 export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideBar, subcategories, subCategoryTitle }: SideBarProps) {
-    console.log(subcategories, 'subcategories')
     return (
         <div className={`h-screen w-screen absolute px-[1.25rem] pb-[2.5rem]  top-0 left-0 z-50 border border-gray-300 bg-white transform transition-transform duration-500 ease-in-out ${openInnerSideBar ? 'translate-x-0' : 'translate-x-full'}`}>
             <div className="flex justify-start items-center mt-[1rem] w-full gap-[0.38rem]">
