@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     ],
     domains: ['picsum.photos'],
   },
+  output: "standalone",
 };
 
 export default nextConfig;
