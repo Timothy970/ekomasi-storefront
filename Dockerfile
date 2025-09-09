@@ -17,7 +17,7 @@ RUN npm run build
 # Stage 3: Production server
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 
 # Copy standalone server build output
 COPY --from=builder /app/.next/standalone ./
