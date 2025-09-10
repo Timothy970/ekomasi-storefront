@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getFeaturedProductsAsync, selectFeatured } from "@/lib/features/navigation/navigationSlice";
+import Link from "next/link";
 
 export default function NowTrending({ title }: { title: string }) {
     const [index, setIndex] = useState(0);
@@ -72,24 +73,25 @@ export default function NowTrending({ title }: { title: string }) {
                         transition={{ type: "spring", stiffness: 380, damping: 40 }}
                     >
                         {featured?.map((p, i) => (
-                            <div
-                                key={i.toString()}
-                                ref={i === 0 ? cardRef : undefined}
-                                className="shrink-0 overflow-hidden mr-[1.5rem]"
-                            >
-                                <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden">
-                                    <img src={p.urls[0]?.url} alt={p.name} className="w-full h-full object-cover rounded-md" />
+                            <Link  key={i.toString()} href={`/products/${p.product_id}`}>
+                                <div
+                                    ref={i === 0 ? cardRef : undefined}
+                                    className="shrink-0 overflow-hidden mr-[1.5rem]"
+                                >
+                                    <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden">
+                                        <img src={p.urls[0]?.url} alt={p.name} className="w-full h-full object-cover rounded-md" />
+                                    </div>
+                                    <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
+                                        <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>
+                                            {p.name}
+                                        </h3>
+                                        <h3 className="text-xs font-medium leading-[1.5rem] truncate" title={p.name}>
+                                            {p.name}
+                                        </h3>
+                                        <span className="text-sm font-bold text-[1.125rem]">{p.price}</span>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
-                                    <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>
-                                        {p.name}
-                                    </h3>
-                                    <h3 className="text-xs font-medium leading-[1.5rem] truncate" title={p.name}>
-                                        {p.name}
-                                    </h3>
-                                    <span className="text-sm font-bold text-[1.125rem]">{p.price}</span>
-                                </div>
-                            </div>
+                            </Link>
                         ))}
                     </motion.div>
                 </div>

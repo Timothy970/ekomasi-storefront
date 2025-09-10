@@ -172,7 +172,7 @@ export interface GetVariantsParams {
 }
 
 export interface SubCategoryProduct {
-  id: string;
+  product_id: string;
   name: string;
   description: string;
   sku: string;
