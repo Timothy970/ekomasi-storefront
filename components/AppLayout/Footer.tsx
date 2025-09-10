@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full max-w-[60rem]'>
-            <div className='w-full'>
+            {/* <div className='w-full'>
               <h2 className='text-base not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
               <ul className="flex flex-col list-none p-0 text-black font-sans text-base font-normal leading-[1.5rem]">
                 {categories?.map((cat) => (
@@ -54,7 +54,7 @@ export default function Footer() {
                   </div>
                 ))}
               </ul>
-            </div>
+            </div> */}
 
             {
               homeData?.social_links && <div className='w-full'>

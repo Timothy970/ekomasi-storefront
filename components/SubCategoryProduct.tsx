@@ -1,17 +1,17 @@
 import React from 'react'
 import Image from 'next/image'
-import type { Product } from '@/lib/features/types'
+import type {  SubCategoryProduct } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
 
-export default function Product({ product }: { product: Product }) {
+export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
     const router = useRouter()
 
     return (
         <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.id}`)}>
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
                 {
-                    product.images[0]?.url && <Image
-                        src={product.images[0]?.url}
+                    product.urls[0]?.url && <Image
+                        src={product.urls[0]?.url}
                         alt={product.name}
                         fill
                         className="object-cover"

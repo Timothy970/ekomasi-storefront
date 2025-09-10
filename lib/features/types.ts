@@ -53,33 +53,68 @@ export interface VerifyOtpResponse {
     token?: string
 }
 
+export interface Image {
+  image_id: string;
+  url: string;
+  is_primary: boolean;
+}
+
 export interface Product {
-    id: string
-    name: string
-    price: number
-    url?: string
+  id: string;
+  name: string;
+  description: string;
+  sku: string;
+  price: number;
+  parent_category_id: string;
+  subcategory_id: string;
+  stock_quantity: number;
+  search_vector: string;
+  created_at: string; // ISO date string
+  last_updated: string; // ISO date string
+  images: Image[];
 }
 
 export interface SubCategory {
-    id: string
-    name: string
-    parent_category_id: string | null
-    description: string
-    products: Product[]
+  id: string;
+  name: string;
+  parent_id: string | null;
+  image_url: string;
 }
 
 export interface Category {
-    id: string
-    name: string
-    parent_category_id: string | null
-    description: string
-    subcategories: SubCategory[]
+  id: string;
+  name: string;
+  parent_id: string | null;
+  image_url: string;
+  subcategories: SubCategory[] | null;
+  products: Product[] | null;
+}
+
+export interface Meta {
+  page: number;
+  size: number;
+  total_items: number;
+  total_pages: number;
+  has_prev: boolean;
+  has_next: boolean;
+}
+
+export interface CategoriesResponse {
+  data: {
+    categories: Category[];
+    meta: Meta;
+  };
+  message: string;
+  status_code: number;
 }
 
 export interface CategoryResponse {
-    data: Category[]
-    message: string
-    status_code: number
+  data: {
+    categories: Category[];
+    meta: Meta;
+  };
+  message: string;
+  status_code: number;
 }
 
 export interface SocialLink {
@@ -133,4 +168,47 @@ export interface GetVariantsResponse {
 export interface GetVariantsParams {
     phone_number?: string;
     email?: string;
+}
+
+export interface SubCategoryProduct {
+  id: string;
+  name: string;
+  description: string;
+  sku: string;
+  price: number;
+  parent_category_id: string;
+  subcategory_id: string;
+  stock_quantity: number;
+  search_vector: string;
+  created_at: string;
+  last_updated: string;
+  urls: Image[];
+}
+
+export interface SubcategoryProducts {
+  id: string;
+  name: string;
+  image_url: string;
+  parent_id: string;
+  parent_category_name: string;
+  parent_category_image_url: string;
+  products: SubCategoryProduct[];
+}
+
+export interface Pagination {
+  page: number;
+  size: number;
+  total_items: number;
+  total_pages: number;
+  has_prev: boolean;
+  has_next: boolean;
+}
+
+export interface SubcategoryProductsResponse {
+  data: {
+    pagination: Pagination;
+    products: SubcategoryProducts;
+  };
+  message: string;
+  status_code: number;
 }
