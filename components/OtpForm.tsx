@@ -133,7 +133,7 @@ export default function OtpForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full mt-[2rem] flex justify-center items-center flex-col">
+        <form className="w-full mt-[2rem] flex justify-center items-center flex-col">
             <input type="hidden" name="otp" value={value} />
 
             <div className="flex flex-row justify-center items-center gap-x-[1rem] justify-items-center">
@@ -161,7 +161,7 @@ export default function OtpForm() {
                 <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-base font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
             </div>
 
-            <Button variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-base font-normal leading-[195%] h-[3.4rem] lg:h-[4rem]'>Continue</Button>
+            <Button onClick={handleSubmit}  variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-base font-normal leading-[195%] h-[3.4rem] lg:h-[4rem]'>Continue</Button>
         </form>
     )
 }
