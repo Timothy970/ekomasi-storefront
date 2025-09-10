@@ -35,7 +35,7 @@ export default function Brands() {
                 </div>
             </div>
 
-            <div className="marquee mt-[1rem]">
+            <div className="marquee mt-[1rem] px-[1rem]">
                 {brands.concat(brands).map((src, i) => (
                     <div key={i} className="inline-block px-8 lg:px-[2rem]">
                         <div className="relative w-32 h-16">

@@ -103,7 +103,7 @@ export default function SubCategory() {
                         </div>
 
                         {
-                            pagination && <Pagination meta={pagination} onPrev={handlePrev} onNext={handleNext} />
+                            pagination && subCategory?.products && <Pagination meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                         }
                     </div>
                 </div>

@@ -71,7 +71,8 @@ export interface Product {
   search_vector: string;
   created_at: string; // ISO date string
   last_updated: string; // ISO date string
-  images: Image[];
+  images?: Image[];
+  urls?: Image[];
 }
 
 export interface SubCategory {
@@ -209,6 +210,32 @@ export interface SubcategoryProductsResponse {
     pagination: Pagination;
     products: SubcategoryProducts;
   };
+  message: string;
+  status_code: number;
+}
+
+export interface ProductImage {
+  image_id: string;
+  url: string;
+  is_primary: boolean;
+}
+
+export interface FeaturedProduct {
+  product_id: string;
+  name: string;
+  description: string;
+  sku: string;
+  price: number;
+  category_id: string;
+  stock_quantity: number;
+  search_vector: string;
+  created_at: string;  
+  last_updated: string; 
+  urls: ProductImage[];
+}
+
+export interface FeaturedProductsResponse {
+  data: FeaturedProduct[];
   message: string;
   status_code: number;
 }

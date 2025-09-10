@@ -37,8 +37,8 @@ export default function CustomerTestimonials() {
 
     return (
         <div className="w-full flex justify-center items-center py-12">
-            <div className="w-full max-w-[90rem] px-4 lg:px-[4rem]">
-                <div className="flex items-end justify-between gap-4 mb-8">
+            <div className="w-full max-w-[90rem] px-[1rem] lg:px-[4rem]">
+                <div className="flex items-end justify-between gap-4 mb-8 ">
                     <div>
                         <h2 className="text-2xl font-bold leading-[2.1rem]">
                             Customer Testimonials
