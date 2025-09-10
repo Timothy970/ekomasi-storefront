@@ -103,7 +103,7 @@ export default function ProductCategory() {
                         </div>
 
                         {
-                            meta && <Pagination meta={meta} onPrev={handlePrev} onNext={handleNext} />
+                            meta && category?.products && <Pagination meta={meta} onPrev={handlePrev} onNext={handleNext} />
                         }
                     </div>
                 </div>
