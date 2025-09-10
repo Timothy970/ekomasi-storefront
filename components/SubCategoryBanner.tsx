@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-export default function CategoryBanner({ imageUrl }: { imageUrl: string }) {
+export default function SubCategoryBanner({ imageUrl }: { imageUrl: string }) {
   return (
     <div className="relative w-full max-w-[90rem] mx-auto overflow-hidden bg-black/40 h-[34.375rem] md:h-[30.125rem] z-0">
       {
