@@ -9,15 +9,17 @@ export default function Product({ product }: { product: Product }) {
     return (
         <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.id}`)}>
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
-                {
-                    product.images[0]?.url && <Image
-                        src={product.images[0]?.url}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                    />
+                {product.urls && <>
+                    {
+                        product.urls[0]?.url && <Image
+                            src={product.urls[0]?.url}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                        />
+                    }
+                </>
                 }
-
             </div>
 
             <div className="pt-4">

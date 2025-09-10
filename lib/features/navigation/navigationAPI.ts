@@ -1,4 +1,4 @@
-import { CategoriesResponse, Category, CategoryResponse, HomeDataResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, Category, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -49,6 +49,20 @@ export async function getSubCategoryById(
   }
 }
 
+export async function getFeaturedProducts(): Promise<FeaturedProductsResponse | null> {
+  try {
+    const response = await axios.get<FeaturedProductsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/featured`);
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<FeaturedProductsResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
 
 export async function getHomeDate(): Promise<HomeDataResponse> {
   try {
