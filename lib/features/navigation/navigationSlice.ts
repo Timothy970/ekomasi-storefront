@@ -1,21 +1,29 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, HomeDataWrapper,  } from "../types";
-import { getCategories, getHomeDate } from "./navigationAPI";
+import { Category, HomeDataWrapper, Meta, Pagination, SubcategoryProducts, } from "../types";
+import { getCategories, getCategoryById, getHomeDate, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
 	categories: Category[] | null;
+	category: Category | null;
+	subcategory: SubcategoryProducts | null;
 	status: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
 	homeData: HomeDataWrapper | null;
+	meta: Meta | null;
+	pagination: Pagination | null;
 }
 
 const initialState: NavigationSliceState = {
 	categories: null,
+	subcategory: null,
+	category: null,
 	homeData: null,
 	status: "idle",
 	message: "",
 	success: false,
+	meta: null,
+	pagination: null,
 };
 
 export const navigationSlice = createAppSlice({
@@ -37,7 +45,7 @@ export const navigationSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200) {
 						state.success = true;
-						state.categories = action.payload.data;
+						state.categories = action.payload.data?.categories;
 						state.message = action.payload.message;
 					}
 					state.status = "idle";
@@ -49,6 +57,66 @@ export const navigationSlice = createAppSlice({
 				},
 			}
 		),
+		getCategoryAsync: create.asyncThunk(
+			async ({ id, page, size }: { id: string; page?: number; size?: number }) => {
+				const response = await getCategoryById(id, page, size);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.category = action.payload.data.categories[0];
+						state.meta = action.payload.data.meta;
+					} else {
+						state.success = false;
+						state.category = null;
+						state.meta = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getSubCategoryAsync: create.asyncThunk(
+			async ({ id, page, size }: { id: string; page?: number; size?: number }) => {
+				const response = await getSubCategoryById(id, page, size);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.subcategory = action.payload.data.products;
+						state.pagination = action.payload.data.pagination;
+					} else {
+						state.success = false;
+						state.subcategory = null;
+						state.meta = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+					state.subcategory = null;
+					state.pagination = null;
+				},
+			}
+		),
+
 		getHomeDataAsync: create.asyncThunk(
 			async () => {
 				const response = await getHomeDate();
@@ -77,6 +145,10 @@ export const navigationSlice = createAppSlice({
 	}),
 	selectors: {
 		selectCategories: (state: NavigationSliceState) => state.categories || null,
+		selectCategory: (state: NavigationSliceState) => state.category || null,
+		selectSubCategory: (state: NavigationSliceState) => state.subcategory || null,
+		selectMeta: (state: NavigationSliceState) => state.meta || null,
+		selectPagination: (state: NavigationSliceState) => state.pagination || null,
 		selectHomeData: (state: NavigationSliceState) => state.homeData?.data || null,
 		selectStatus: (state: NavigationSliceState) => state.status,
 		selectSuccess: (state: NavigationSliceState) => state.success,
@@ -85,6 +157,6 @@ export const navigationSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { getCategoriesAsync, getHomeDataAsync } = navigationSlice.actions; // Export actions
-export const { selectCategories, selectHomeData } = navigationSlice.selectors;
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getSubCategoryAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectMeta, selectSubCategory, selectPagination } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

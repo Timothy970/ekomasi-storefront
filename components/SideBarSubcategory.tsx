@@ -29,21 +29,13 @@ export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideB
                                 onClick={() => setOpenInnerSideBar(true)}
                                 className="hover:text-gray-400 cursor-pointer"
                             >
-                                <div className="flex justify-between items-center py-[0.5rem] h-[2.75rem]">
-                                    <h3 className="text-black font-poppins text-base font-semibold leading-[1.5rem] capitalize">
-                                        {sub?.name}
-                                    </h3>
-                                </div>
-
-                                <ul className="space-y-1">
-                                    {sub.products.map((prod) => (
-                                        <li key={prod.id} className="text-black font-poppins text-sm font-normal leading-[1.95rem] capitalize h-[2.75rem]">
-                                            <Link href={`/products/${prod.id}`}>
-                                                <span className='h-full '>{prod.name}</span>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <Link href={`/subcategory/${sub.id}`}>
+                                    <div className="flex justify-between items-center py-[0.5rem] h-[2.75rem]">
+                                        <h3 className="text-black font-poppins text-base font-semibold leading-[1.5rem] capitalize">
+                                            {sub?.name}
+                                        </h3>
+                                    </div>
+                                </Link>
                             </li>
                         ))}
                     </ul>

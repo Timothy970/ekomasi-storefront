@@ -6,9 +6,8 @@ const nextConfig: NextConfig = {
       new URL('https://assets.example.com/account123/**'),
       new URL('https://picsum.photos/**')
     ],
-    domains: ['picsum.photos'],
-  },
-  output: "standalone",
+    domains: ['picsum.photos', 'storage.googleapis.com'],
+  }
 };
 
 export default nextConfig;
