@@ -48,9 +48,7 @@ export default function CategorySlider() {
                                 onMouseLeave={handleMouseLeave}
                                 className="flex w-auto h-[3.1875rem] hover:font-semibold p-[0.625rem] text-base justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
-                                <Link key={cat.id} href={`/category/${cat?.id}`}>
-                                    <span className="text-black font-poppins text-base font-normal leading-[1.95rem] hover:underline">{cat.name}</span>
-                                </Link>
+                                <span className="text-black font-poppins text-base font-normal leading-[1.95rem]">{cat.name}</span>
                             </li>
                         ))}
                     </ul>
@@ -65,7 +63,7 @@ export default function CategorySlider() {
             >
                 <div className="max-w-[90rem] w-full grid grid-cols-3 gap-y-[0.69rem] gap-x-[2rem] h-full pt-[1rem]">
                     {subcategories.map((sub) => (
-                        <Link key={sub.id} href={`/subcategory/${hoveredCategory?.id}`}>
+                        <Link key={sub.id} href={`/subcategory/${sub?.id}`}>
                             <span className="text-black font-poppins text-base font-normal leading-[1.95rem] hover:underline">{sub.name}</span>
                         </Link>
                     ))}

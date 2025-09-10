@@ -7,7 +7,7 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
     const router = useRouter()
 
     return (
-        <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.id}`)}>
+        <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.product_id}`)}>
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
                 {
                     product.urls[0]?.url && <Image
