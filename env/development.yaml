@@ -1,5 +1,4 @@
 type: node-next
+
 ingress: true
-env:
-  NODE_ENV: development
-  HOST: dev.adenzo.com
+
