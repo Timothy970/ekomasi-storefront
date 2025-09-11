@@ -1,6 +1,5 @@
 type: node-next
+ingress: true
 env:
   NODE_ENV: development
-ingress: true
-# secrets:
-#   - MY_SECRET
+  HOST: dev.adenzo.com
