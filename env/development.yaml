@@ -1,1 +1,6 @@
 type: node-next
+env:
+  NODE_ENV: development
+ingress: true
+# secrets:
+#   - MY_SECRET
