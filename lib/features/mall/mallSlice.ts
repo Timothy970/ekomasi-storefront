@@ -1,12 +1,13 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { VariantGroup } from "../types";
-import { getVariants } from "./mallAPI";
+import { LocationData, VariantGroup } from "../types";
+import { getLocations, getVariants } from "./mallAPI";
 
 interface MallSliceState {
 	variants: VariantGroup[] | [];
 	status: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
+	locations: LocationData | null;
 }
 
 const initialState: MallSliceState = {
@@ -14,6 +15,7 @@ const initialState: MallSliceState = {
 	message: "",
 	success: false,
 	variants: [],
+	locations: null,
 };
 
 export const mallSlice = createAppSlice({
@@ -52,6 +54,33 @@ export const mallSlice = createAppSlice({
 				},
 			}
 		),
+		getLocationsAsync: create.asyncThunk(
+			async () => {
+				const response = await getLocations();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.locations = action.payload.data;
+						state.success = true;
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+						state.locations = null;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 
 	}),
 	selectors: {
@@ -59,10 +88,11 @@ export const mallSlice = createAppSlice({
 		selectStatus: (state: MallSliceState) => state.status,
 		selectSuccess: (state: MallSliceState) => state.success,
 		selectMessage: (state: MallSliceState) => state.message,
+		selectLocations: (state: MallSliceState) => state.locations,
 	},
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVariantsAsync } = mallSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectVariants } = mallSlice.selectors;
+export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync } = mallSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectVariants, selectLocations } = mallSlice.selectors;
 export const mallReducer = mallSlice.reducer;

@@ -302,3 +302,20 @@ export interface CreateCartResponse {
   message: string;
   status_code?: number;
 };
+
+export interface DeliveryLocation {
+  id: number
+  location: string
+  charge: number
+}
+
+export interface LocationData {
+  locations: DeliveryLocation[]
+  pagination: Pagination
+}
+
+export interface LocationsResponse {
+  data: LocationData
+  message: string
+  status_code: number
+}
