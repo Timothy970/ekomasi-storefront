@@ -97,7 +97,7 @@ export default function Cart() {
           <div className='flex flex-col w-full items-center justify-center md:w-[60%]'>
             <h2 className='text-[2.25rem] font-bold self-start'>Cart</h2>
 
-            <div className='flex flex-row justify-center items-center py-[1.12rem] gap-x-[0.38rem] border-b md:border-b-0 w-full md:hidden'>
+            <div className='flex flex-row justify-center items-center py-[1.12rem] gap-x-[0.38rem] border-b border-[rgba(0,0,0,0.40)] md:border-b-0 w-full md:hidden'>
               <div className='flex items-center justify-start gap-x-[0.38rem] text-gray-600'>
                 <span>3</span>
                 <span>Items</span>
@@ -112,7 +112,7 @@ export default function Cart() {
             <div className='w-full mt-[2rem] flex flex-col gap-y-[1.5rem]'>
               {
                 cart_items?.map((item, index) => {
-                  return <div key={index?.toString()} className='gap-x-[1.5rem] w-full flex justify-between items-start py-[1.5rem] border-b'>
+                  return <div key={index?.toString()} className='gap-x-[1.5rem] w-full flex justify-between items-start py-[1.5rem] border-b border-[rgba(0,0,0,0.40)]'>
                     <div className="w-[40%] h-full">
                       <div className="relative w-full h-[10rem] md:h-[15rem]">
                         <Image
