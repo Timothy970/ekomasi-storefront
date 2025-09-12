@@ -1,7 +1,8 @@
+import Navigation from '@/components/Navigation'
 import React from 'react'
 
 export default function MemberCheckout() {
   return (
-    <div>MemberCheckout</div>
+    <Navigation>MemberCheckout</Navigation>
   )
 }

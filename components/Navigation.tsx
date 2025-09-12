@@ -22,24 +22,31 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
 
     return (
         <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || openGuestCheckoutModal ? 'overflow-hidden' : 'overscroll-auto'}`}>
-            <div className='flex flex-col w-full z-0'>
-                <AppHeader isOpen={isOpen} setIsOpen={setIsOpen} />
+            <div className='flex flex-col w-full z-0 justify-between h-full'>
+                <div className='w-full flex flex-col'>
+                    <AppHeader isOpen={isOpen} setIsOpen={setIsOpen} />
 
-                <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+                    <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
 
-                {children}
+                    {children}
+                </div>
 
                 <Footer />
 
-                <CategoryFilterModal
-                    setOpenFilterModal={setOpenFilterModal}
-                    openFilterModal={openFilterModal}
-                />
+                {
+                    openFilterModal && <CategoryFilterModal
+                        setOpenFilterModal={setOpenFilterModal}
+                        openFilterModal={openFilterModal}
+                    />
 
-                <GuestCheckoutModal
-                    openGuestCheckoutModal={openGuestCheckoutModal}
-                    setOpenGuestCheckoutModal={setOpenGuestCheckoutModal}
-                />
+                }
+
+                {
+                    openGuestCheckoutModal && <GuestCheckoutModal
+                        openGuestCheckoutModal={openGuestCheckoutModal}
+                        setOpenGuestCheckoutModal={setOpenGuestCheckoutModal}
+                    />
+                }
             </div>
         </div>
 

@@ -1,15 +1,16 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import NowTrending from '@/components/NowTrending';
 import Link from 'next/link';
-import { useGuestCheckout } from '../ClientLayout';
-import { useAppSelector } from '@/lib/hooks';
+import { useGuestCheckout } from '../../ClientLayout';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { selectUserToken } from '@/lib/features/user/userSlice';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { getCartAsync } from '@/lib/features/cart/cartSlice';
 
 const cart_items = [
   {
@@ -73,12 +74,21 @@ export default function Cart() {
   const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
   const token = useAppSelector(selectUserToken)
   const router = useRouter()
+  const params = useParams<{ cart_id: string }>()
+  const dispatch = useAppDispatch()
+
 
   const handleContinueToCheckout = () => {
     if (token == null) {
       setOpenGuestCheckoutModal(true)
     }
   }
+
+  useEffect(() => {
+    if (params?.cart_id) {
+      dispatch(getCartAsync(params?.cart_id))
+    }
+  }, [params?.cart_id])
 
   return (
     <Navigation>

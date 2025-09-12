@@ -73,19 +73,21 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
               </svg>
             </Link>
 
-            <Link href={`/cart`}>
-              <div className='h-[2rem] w-[2rem] flex justify-center items-center mr-[0.5rem] relative'>
-                {
-                  cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute bottom-0 right-0 flex justify-center items-center rounded-full'>
-                    <span className='text-xs'>{cart?.cart_items?.length}</span>
-                  </div>
-                }
+            {
+              cartId && <Link href={`/cart/${cartId}`}>
+                <div className='h-[2rem] w-[2rem] flex justify-center items-center mr-[0.5rem] relative'>
+                  {
+                    cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute bottom-0 right-0 flex justify-center items-center rounded-full'>
+                      <span className='text-xs'>{cart?.cart_items?.length}</span>
+                    </div>
+                  }
 
-                <svg className='w-[1.2rem] h-[1.2rem] cursor-pointer flex-shrink-0' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M2.22222 20H17.7778C19.0033 20 20 19.103 20 18V7C20 6.73478 19.8829 6.48043 19.6746 6.29289C19.4662 6.10536 19.1836 6 18.8889 6H15.5556V5C15.5556 2.243 13.0633 0 10 0C6.93667 0 4.44444 2.243 4.44444 5V6H1.11111C0.816426 6 0.533811 6.10536 0.325437 6.29289C0.117063 6.48043 0 6.73478 0 7V18C0 19.103 0.996667 20 2.22222 20ZM6.66667 5C6.66667 3.346 8.16222 2 10 2C11.8378 2 13.3333 3.346 13.3333 5V6H6.66667V5ZM2.22222 8H4.44444V10H6.66667V8H13.3333V10H15.5556V8H17.7778L17.78 18H2.22222V8Z" fill="black" />
-                </svg>
-              </div>
-            </Link>
+                  <svg className='w-[1.2rem] h-[1.2rem] cursor-pointer flex-shrink-0' xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2.22222 20H17.7778C19.0033 20 20 19.103 20 18V7C20 6.73478 19.8829 6.48043 19.6746 6.29289C19.4662 6.10536 19.1836 6 18.8889 6H15.5556V5C15.5556 2.243 13.0633 0 10 0C6.93667 0 4.44444 2.243 4.44444 5V6H1.11111C0.816426 6 0.533811 6.10536 0.325437 6.29289C0.117063 6.48043 0 6.73478 0 7V18C0 19.103 0.996667 20 2.22222 20ZM6.66667 5C6.66667 3.346 8.16222 2 10 2C11.8378 2 13.3333 3.346 13.3333 5V6H6.66667V5ZM2.22222 8H4.44444V10H6.66667V8H13.3333V10H15.5556V8H17.7778L17.78 18H2.22222V8Z" fill="black" />
+                  </svg>
+                </div>
+              </Link>
+            }
 
             <div
               onClick={() => setIsOpen(!isOpen)}
