@@ -1,3 +1,4 @@
+"use client"
 import Navigation from '@/components/Navigation'
 import React from 'react'
 import { Input } from "@/components/ui/input"
@@ -5,6 +6,10 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import NowTrending from '@/components/NowTrending';
 import Link from 'next/link';
+import { useGuestCheckout } from '../ClientLayout';
+import { useAppSelector } from '@/lib/hooks';
+import { selectUserToken } from '@/lib/features/user/userSlice';
+import { useRouter } from 'next/navigation';
 
 const cart_items = [
   {
@@ -65,6 +70,16 @@ const cart_items = [
 ]
 
 export default function Cart() {
+  const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
+  const token = useAppSelector(selectUserToken)
+  const router = useRouter()
+
+  const handleContinueToCheckout = () => {
+    if (token == null) {
+      setOpenGuestCheckoutModal(true)
+    }
+  }
+
   return (
     <Navigation>
       <div className='w-full mx-auto max-w-[90rem]'>
@@ -84,7 +99,7 @@ export default function Cart() {
               </div>
             </div>
 
-            <div className='w-full mt-[2rem] flex flex-col gap-y-[1.5rem] lg:max-h-[60vh] lg:overflow-y-scroll'>
+            <div className='w-full mt-[2rem] flex flex-col gap-y-[1.5rem]'>
               {
                 cart_items?.map((item, index) => {
                   return <div key={index?.toString()} className='gap-x-[1.5rem] w-full flex justify-between items-start py-[1.5rem] border-b'>
@@ -183,11 +198,11 @@ export default function Cart() {
                 </div>
 
                 <div className='w-full flex flex-col justify-between gap-y-[1rem] mt-[1.5rem] mb-[3rem]'>
-                  <Button className='bg-[#AF52DE] h-[3rem] text-base'>
+                  <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[3rem] text-base'>
                     Checkout
                   </Button>
 
-                  <Button className='border border-black h-[3rem] text-base bg-white text-black'>
+                  <Button onClick={() => router.push("/")} className='border border-black h-[3rem] text-base bg-white text-black'>
                     Continue Shopping
                   </Button>
                 </div>
@@ -195,7 +210,7 @@ export default function Cart() {
             </div>
           </div>
         </div>
-        
+
         <div className='px-[1rem] lg:px-[4rem]'>
           <h2 className='text-[1.5rem] font-bold'>Wishlist</h2>
           <p className='text-xs'>Want to view your favourites? <Link className='underline' href={`/user/signup`}>Join us</Link> or <Link className='underline' href={`/user/login`}>Sign in</Link></p>

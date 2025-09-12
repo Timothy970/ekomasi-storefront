@@ -8,7 +8,13 @@ type FilterContextType = {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+type GuestCheckoutContextType = {
+    openGuestCheckoutModal: boolean;
+    setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
+const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
 
 export function useFilter() {
     const ctx = useContext(FilterContext)
@@ -16,9 +22,16 @@ export function useFilter() {
     return ctx
 }
 
+export function useGuestCheckout() {
+    const ctx = useContext(GuestCheckoutContext);
+    if (!ctx) throw new Error("useGuestCheckout must be used within GuestCheckoutProvider");
+    return ctx;
+}
+
 export default function ClientLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const [mounted, setMounted] = useState(false);
     const [openFilterModal, setOpenFilterModal] = useState(false)
+    const [openGuestCheckoutModal, setOpenGuestCheckoutModal] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -30,9 +43,11 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
 
     return (
         <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-            <main className="bg-white h-screen w-screen flex justify-between flex-col items-center z-0">
-                {children}
-            </main>
+            <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
+                <main className="bg-white h-screen w-screen flex justify-between flex-col items-center z-0">
+                    {children}
+                </main>
+            </GuestCheckoutContext.Provider>
         </FilterContext.Provider>
     )
 }
