@@ -1,8 +1,8 @@
 import Navigation from '@/components/Navigation'
 import React from 'react'
 
-export default function Cart() {
+export default function GuestCheckout() {
   return (
-    <Navigation>Cart</Navigation>
+    <Navigation>page</Navigation>
   )
 }

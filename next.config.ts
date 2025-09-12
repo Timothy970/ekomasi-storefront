@@ -6,7 +6,11 @@ const nextConfig: NextConfig = {
       new URL('https://assets.example.com/account123/**'),
       new URL('https://picsum.photos/**')
     ],
-    domains: ['picsum.photos', 'storage.googleapis.com'],
+    domains: [
+      'picsum.photos',
+      'storage.googleapis.com',
+      'images.unsplash.com'
+    ],
   }
 };
 
