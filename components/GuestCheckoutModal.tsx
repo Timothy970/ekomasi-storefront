@@ -14,14 +14,20 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
     }
 
     const handleLogin = () => {
+        setOpenGuestCheckoutModal(false)
         const redirectUrl = encodeURIComponent("/checkout/member")
         router.push(`/user/login?redirect=${redirectUrl}`)
     }
 
     const handleCreateAccount = () => {
         const redirectUrl = encodeURIComponent("/checkout/member")
-
+        setOpenGuestCheckoutModal(false)
         router.push(`/user/signup?redirect=${redirectUrl}`)
+    }
+
+    const handleGuestCheckout = () => {
+        setOpenGuestCheckoutModal(false)
+        router.push("/checkout/guest")
     }
 
     return (
@@ -66,7 +72,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                     <h2 className='font-bold text-[1.125rem]'>Check out as a Guest</h2>
                     <p className='text-center text-[1.125rem]'>You can create a free Adenzo Comfies Member Profile at any point during the checkout process.</p>
 
-                    <Button onClick={() => router.push("/checkout/guest")} className='h-[3rem] rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
+                    <Button onClick={() => handleGuestCheckout()} className='h-[3rem] rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
                             <path d="M11 2.5C10.121 2.5 9.26168 2.74694 8.5308 3.2096C7.79991 3.67226 7.23026 4.32985 6.89387 5.09923C6.55748 5.8686 6.46946 6.7152 6.64095 7.53196C6.81244 8.34872 7.23574 9.09897 7.8573 9.68782C8.47887 10.2767 9.27079 10.6777 10.1329 10.8401C10.9951 11.0026 11.8887 10.9192 12.7008 10.6005C13.5129 10.2819 14.2071 9.74219 14.6954 9.04977C15.1838 8.35735 15.4444 7.54329 15.4444 6.71053C15.4444 5.59383 14.9762 4.52286 14.1427 3.73323C13.3092 2.94361 12.1787 2.5 11 2.5ZM11 9.23684C10.4726 9.23684 9.95701 9.08868 9.51848 8.81108C9.07995 8.53349 8.73815 8.13893 8.53632 7.67731C8.33449 7.21568 8.28168 6.70772 8.38457 6.21767C8.48747 5.72761 8.74144 5.27746 9.11438 4.92415C9.48732 4.57084 9.96248 4.33023 10.4798 4.23275C10.997 4.13527 11.5332 4.1853 12.0205 4.37651C12.5078 4.56773 12.9242 4.89153 13.2173 5.30698C13.5103 5.72243 13.6667 6.21087 13.6667 6.71053C13.6667 7.38055 13.3857 8.02313 12.8856 8.4969C12.3855 8.97068 11.7072 9.23684 11 9.23684ZM19 18.5V17.6579C19 16.0945 18.3444 14.5952 17.1776 13.4897C16.0107 12.3842 14.428 11.7632 12.7778 11.7632H9.22222C7.57199 11.7632 5.98934 12.3842 4.82245 13.4897C3.65555 14.5952 3 16.0945 3 17.6579V18.5H4.77778V17.6579C4.77778 16.5412 5.24603 15.4702 6.07953 14.6806C6.91302 13.891 8.04348 13.4474 9.22222 13.4474H12.7778C13.9565 13.4474 15.087 13.891 15.9205 14.6806C16.754 15.4702 17.2222 16.5412 17.2222 17.6579V18.5H19Z" fill="white" />
                         </svg>

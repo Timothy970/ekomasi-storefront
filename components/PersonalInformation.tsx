@@ -4,10 +4,13 @@ import { Button } from './ui/button'
 import { useAppSelector } from '@/lib/hooks'
 import { selectLocations } from '@/lib/features/mall/mallSlice'
 import LocationDropdown from './LocationDropdown'
+import { Checkbox } from './ui/checkbox'
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function PersonalInformation() {
-      const [deliveryType, setDeliveryType] = useState<'Ship' | 'Instore'>()
-      const locations = useAppSelector(selectLocations)
+    const [deliveryType, setDeliveryType] = useState<'Ship' | 'Instore'>()
+    const locations = useAppSelector(selectLocations)
 
     return (
         <div className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
@@ -121,8 +124,56 @@ export default function PersonalInformation() {
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-base font-semibold'>Shipping price</span>
-
                     <LocationDropdown />
+                </div>
+
+                <div className='flex flex-col gap-y-[1.5rem]'>
+                    <h2 className='font-bold text-[1.5rem]'>Payment</h2>
+                    <p className='text-basea'>Please select your preferred payment option</p>
+
+                    <div className='flex gap-x-[0.5rem] items-center'>
+                        <Checkbox className='h-[1.125rem] w-[1.125rem]' />
+                        <p className='text-base'>Do you have a gift card, product voucher, or promo code?</p>
+                    </div>
+
+                    <div className='flex gap-x-[2rem]'>
+                        <Input className='h-[3rem] border-[rgba(0,0,0,0.40)]' />
+                        <Button className='border h-[3rem] bg-white text-black border-[rgba(0,0,0,0.40)]'>
+                            Apply
+                        </Button>
+                    </div>
+
+                    <RadioGroup defaultValue="card" className="flex flex-col gap-y-[1rem]">
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="card" id="card" />
+                            <Label htmlFor="card">Credit or Debit Card</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="paypal" id="paypal" />
+                            <Label htmlFor="paypal">Paypal</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="mpesa" id="mpesa" />
+                            <Label htmlFor="mpesa">Mpesa</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="airtel" id="airtel" />
+                            <Label htmlFor="airtel">Airtel</Label>
+                        </div>
+                    </RadioGroup>
+
+                    <div className='flex flex-col gap-y-[1rem]'>
+                        <Input placeholder='254123456789' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+
+                        <Button className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'>
+                            Pay now
+                        </Button>
+                    </div>
+
+
                 </div>
             </div>
         </div>
