@@ -6,24 +6,24 @@ import { Button } from "./ui/button";
 const slides = [
     {
         id: 1,
-        title: "Discover New Deals",
-        description: "Get the best offers curated just for you.",
-        image: "https://picsum.photos/1200/400?random=1",
-        buttonText: "Learn More",
+        title: "Excitement Starts Here: Welcome to Adenzo!",
+        description: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
+        image: "/images/baby1.jpg",
+        buttonText: "Find the Perfect Gift",
     },
     {
         id: 2,
-        title: "Shop the Latest Trends",
-        description: "Stay ahead with fresh arrivals every week.",
-        image: "https://picsum.photos/1200/400?random=2",
-        buttonText: "Learn More",
+        title: "Excitement Starts Here:",
+        description: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
+        image: "/images/baby2.jpg",
+        buttonText: "Discover Our Collections",
     },
     {
         id: 3,
-        title: "Exclusive Discounts",
-        description: "Enjoy up to 50% off on selected items.",
-        image: "https://picsum.photos/1200/400?random=3",
-        buttonText: "Learn More",
+        title: "Because Dads Do It Too",
+        description: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
+        image: "/images/baby3.jpg",
+        buttonText: "Shop Travel Essentials",
     },
 ];
 

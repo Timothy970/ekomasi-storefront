@@ -4,16 +4,24 @@ import Image from 'next/image'
 import OtpForm from '@/components/OtpForm'
 import { useAppSelector } from '@/lib/hooks'
 import { selectPhoneOrEmailValue, selectUserToken } from '@/lib/features/user/userSlice'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function Otp() {
     const emailOrPhone = useAppSelector(selectPhoneOrEmailValue)
     const router = useRouter()
     const token = useAppSelector(selectUserToken)
+    const searchParams = useSearchParams()
 
     useEffect(() => {
+        const redirect = searchParams.get("redirect")
+
         if (token) {
-            router.replace("/");
+            if (redirect) {
+                router.push(`/checkout/member`);
+            }
+            else {
+                router.replace("/");
+            }
         }
     }, [token, router]);
 

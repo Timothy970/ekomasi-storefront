@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { Category, FeaturedProduct, HomeDataWrapper, Meta, Pagination, Product, SubcategoryProducts, } from "../types";
-import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getSubCategoryById } from "./navigationAPI";
+import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getProduct, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
 	categories: Category[] | null;
@@ -13,6 +13,7 @@ interface NavigationSliceState {
 	meta: Meta | null;
 	pagination: Pagination | null;
 	featured: FeaturedProduct[] | null;
+	product: Product | null;
 }
 
 const initialState: NavigationSliceState = {
@@ -26,6 +27,7 @@ const initialState: NavigationSliceState = {
 	meta: null,
 	pagination: null,
 	featured: null,
+	product: null,
 };
 
 export const navigationSlice = createAppSlice({
@@ -146,6 +148,34 @@ export const navigationSlice = createAppSlice({
 				},
 			}
 		),
+		getProductAsync: create.asyncThunk(
+			async (product_id: string) => {
+				const response = await getProduct(product_id);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.product = action.payload.data;
+					} else {
+						state.success = false;
+						state.featured = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+					state.product = null;
+				},
+			}
+		),
 		getHomeDataAsync: create.asyncThunk(
 			async () => {
 				const response = await getHomeDate();
@@ -176,6 +206,7 @@ export const navigationSlice = createAppSlice({
 		selectCategories: (state: NavigationSliceState) => state.categories || null,
 		selectCategory: (state: NavigationSliceState) => state.category || null,
 		selectFeatured: (state: NavigationSliceState) => state.featured || null,
+		selectProduct: (state: NavigationSliceState) => state.product || null,
 		selectSubCategory: (state: NavigationSliceState) => state.subcategory || null,
 		selectMeta: (state: NavigationSliceState) => state.meta || null,
 		selectPagination: (state: NavigationSliceState) => state.pagination || null,
@@ -187,6 +218,6 @@ export const navigationSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectMeta, selectSubCategory, selectPagination, selectFeatured } = navigationSlice.selectors;
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectMeta, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

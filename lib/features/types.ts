@@ -1,56 +1,56 @@
 export interface User {
-    phone_number?: string
-    email?: string
+  phone_number?: string
+  email?: string
 }
 
 export interface SignUpParams {
-    phone_number?: string
-    email?: string
+  phone_number?: string
+  email?: string
 }
 
 export interface SignInParams {
-    phone_number?: string
-    email?: string
+  phone_number?: string
+  email?: string
 }
 
 export interface SignUpResponse {
-    data: null;
-    message: string;
-    status_code: number
+  data: null;
+  message: string;
+  status_code: number
 }
 
 export interface SignInResponse {
-    data: null;
-    message: string;
-    status_code: number
+  data: null;
+  message: string;
+  status_code: number
 }
 
 export interface OtpRequestParams {
-    phone_number?: string
-    email?: string
+  phone_number?: string
+  email?: string
 }
 
 export interface OtpResponse {
-    status_code: number
-    message: string
+  status_code: number
+  message: string
 }
 
 export interface VerifyOtpParams {
-    phone_number?: string
-    email?: string
-    otp: string
+  phone_number?: string
+  email?: string
+  otp: string
 }
 
 export interface verfiyOtp {
-    expires_in: number
-    token: string
+  expires_in: number
+  token: string
 }
 
 export interface VerifyOtpResponse {
-    data: verfiyOtp
-    status_code: number
-    message: string
-    token?: string
+  data: verfiyOtp
+  status_code: number
+  message: string
+  token?: string
 }
 
 export interface Image {
@@ -60,7 +60,8 @@ export interface Image {
 }
 
 export interface Product {
-  id: string;
+  product_id?: string;
+  id?: string;
   name: string;
   description: string;
   sku: string;
@@ -69,8 +70,8 @@ export interface Product {
   subcategory_id: string;
   stock_quantity: number;
   search_vector: string;
-  created_at: string; // ISO date string
-  last_updated: string; // ISO date string
+  created_at: string;
+  last_updated: string;
   images?: Image[];
   urls?: Image[];
 }
@@ -119,56 +120,56 @@ export interface CategoryResponse {
 }
 
 export interface SocialLink {
-    icon_class: string;
-    platform: string;
-    url: string;
+  icon_class: string;
+  platform: string;
+  url: string;
 }
 
 export interface CompanyData {
-    company_address: string;
-    contact_email: string;
-    copyright_text: string;
-    menu_links: string[] | null;
-    phone_number: string;
-    social_links: SocialLink[];
+  company_address: string;
+  contact_email: string;
+  copyright_text: string;
+  menu_links: string[] | null;
+  phone_number: string;
+  social_links: SocialLink[];
 }
 
 export interface Meta {
-    api_version: string;
-    version: string;
+  api_version: string;
+  version: string;
 }
 
 export interface HomeDataWrapper {
-    data: CompanyData;
-    meta: Meta;
+  data: CompanyData;
+  meta: Meta;
 }
 
 export interface HomeDataResponse {
-    data: HomeDataWrapper;
-    message: string;
-    status_code: number;
+  data: HomeDataWrapper;
+  message: string;
+  status_code: number;
 }
 
 export interface MallVariant {
-    variant_id: string;
-    variant_type: string;
-    name: string;
+  variant_id: string;
+  variant_type: string;
+  name: string;
 }
 
 export interface VariantGroup {
-    variant_type: string;
-    variants: MallVariant[];
+  variant_type: string;
+  variants: MallVariant[];
 }
 
 export interface GetVariantsResponse {
-    data: VariantGroup[];
-    message: string;
-    status_code: number;
+  data: VariantGroup[];
+  message: string;
+  status_code: number;
 }
 
 export interface GetVariantsParams {
-    phone_number?: string;
-    email?: string;
+  phone_number?: string;
+  email?: string;
 }
 
 export interface SubCategoryProduct {
@@ -229,8 +230,8 @@ export interface FeaturedProduct {
   category_id: string;
   stock_quantity: number;
   search_vector: string;
-  created_at: string;  
-  last_updated: string; 
+  created_at: string;
+  last_updated: string;
   urls: ProductImage[];
 }
 
@@ -239,3 +240,65 @@ export interface FeaturedProductsResponse {
   message: string;
   status_code: number;
 }
+
+export interface ProductResponse {
+  data: Product;
+  message: string;
+  status_code: number;
+};
+
+export interface CartItem {
+  price?: number;
+  product_id?: string;
+  product_name?: string;
+  quantity?: number;
+};
+
+export interface ViewCartResponse {
+  cart_items?: CartItem[];
+  discount?: number;
+  final?: number;
+  total?: number;
+  message?: string;
+  status_code?: number;
+  data?: any;
+};
+
+
+export interface AddToCartRequest {
+  product_id: string;
+  cart_id: string;
+  quantity: number;
+}
+
+export interface CreateCartRequest {
+  product_id: string;
+  quantity: number;
+}
+
+export interface WishList {
+  is_public: boolean;
+  products: Product[];
+  name: string;
+  wishlist_id: string;
+}
+
+
+export interface WishListData {
+  pagination: Pagination;
+  wishlists: WishList[]
+}
+
+export interface WishlistsResponse {
+  data: WishListData;
+  message: string;
+  status_code: number;
+}
+
+export interface CreateCartResponse {
+  data: {
+    cart_id: string
+  };
+  message: string;
+  status_code?: number;
+};

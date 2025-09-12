@@ -7,7 +7,7 @@ import Link from 'next/link'
 import SocialLogins from '@/components/SocialLogins'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { resetMessage, resetSuccess, selectMessage, selectUserToken, signUpUserAsync } from '@/lib/features/user/userSlice'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Exclusive from '@/components/Exclusive'
 import { triggerToast } from '@/app/utils/toastUtils'
 
@@ -18,6 +18,7 @@ export default function SignUp() {
     const router = useRouter();
     const message = useAppSelector(selectMessage)
     const token = useAppSelector(selectUserToken)
+    const searchParams = useSearchParams()
 
     function handlePhoneOrEmail(e: React.FormEvent) {
         e.preventDefault()
@@ -38,12 +39,17 @@ export default function SignUp() {
     useEffect(() => {
         if (message === "OTP sent") {
             triggerToast(message, "success");
+            const redirect = searchParams.get("redirect")
 
             const timer = setTimeout(() => {
                 dispatch(resetSuccess());
                 dispatch(resetMessage());
 
-                router.push("/user/otp");
+                if (redirect) {
+                    router.push(`/user/otp?redirect=${redirect}`);
+                } else {
+                    router.push(`/user/otp`);
+                }
             }, 2000);
 
             return () => clearTimeout(timer);

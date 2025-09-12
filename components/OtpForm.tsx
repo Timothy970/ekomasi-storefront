@@ -1,10 +1,10 @@
 "use client"
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { requestOtpAsync, resetMessage, resetSuccess, selectMessage, selectPhoneOrEmailValue, verifyOtpAsync } from '@/lib/features/user/userSlice';
-import { useRouter } from 'next/navigation'
+import { requestOtpAsync, selectMessage, selectPhoneOrEmailValue, verifyOtpAsync } from '@/lib/features/user/userSlice';
+import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
 
 export default function OtpForm() {
@@ -15,6 +15,7 @@ export default function OtpForm() {
     const emailOrPhone = useAppSelector(selectPhoneOrEmailValue)
     const message = useAppSelector(selectMessage)
     const router = useRouter();
+    const searchParams = useSearchParams()
 
     const focusAt = (idx: number) => {
         const el = inputsRef.current[idx];
@@ -96,7 +97,13 @@ export default function OtpForm() {
             triggerToast(message, "success");
 
             if (successRedirect) {
-                router.push(successRedirect)
+                const redirect = searchParams.get("redirect")
+
+                if (redirect) {
+                    router.push(`/checkout/member`);
+                } else {
+                    router.push(successRedirect);
+                }
             }
         } else {
             if (message) {
@@ -161,7 +168,7 @@ export default function OtpForm() {
                 <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-base font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
             </div>
 
-            <Button onClick={handleSubmit}  variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-base font-normal leading-[195%] h-[3.4rem] lg:h-[4rem]'>Continue</Button>
+            <Button onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-base font-normal leading-[195%] h-[3.4rem] lg:h-[4rem]'>Continue</Button>
         </form>
     )
 }
