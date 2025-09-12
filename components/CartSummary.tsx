@@ -1,0 +1,48 @@
+import React from 'react'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
+import CartItems from './GuestCartItems'
+
+export default function CartSummary() {
+    return (
+        <div className='flex flex-col w-full items-center justify-center'>
+            <h2 className='text-[2rem] font-bold self-start'>Cart Summary</h2>
+
+            <p className='self-start font-bold text-[1.5rem]'>KES 140,000</p>
+
+            <div className='flex flex-row justify-between items-center w-full mt-[1.5rem]'>
+                <span>Do you have a Promo Code ?</span>
+            </div>
+
+            <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
+                <Input placeholder='Promo Code' className='h-[3rem] max-w-[15rem] border-black' />
+                <Button className='h-[3rem] border rounded-md bg-white text-black border-black'>
+                    Apply
+                </Button>
+            </div>
+
+            <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1.5rem]'>
+                <div className='flex justify-between w-full'>
+                    <span className='text-base text-[#444]'>Subtotal</span>
+                    <span className='text-black text-base'>0</span>
+                </div>
+                <div className='flex justify-between w-full'>
+                    <span className='text-base text-[#444]'>Estimated Shipping & Handling</span>
+                    <span className='text-black text-base'>0</span>
+                </div>
+                <div className='flex justify-between w-full'>
+                    <span className='text-base text-[#444]'>Estimated Tax</span>
+                    <span className='text-black text-base'>0</span>
+                </div>
+                <div className='flex justify-between w-full'>
+                    <span className='text-base text-[#444]'>Discount Total</span>
+                    <span className='text-black text-base'>0</span>
+                </div>
+            </div>
+
+            <h2 className='text-[2rem] font-bold self-start mt-[1.5rem]'>Cart</h2>
+
+            <CartItems />
+        </div>
+    )
+}

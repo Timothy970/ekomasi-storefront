@@ -9,17 +9,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation'
 
 export default function WishList() {
     const dispatch = useAppDispatch()
     const token = useAppSelector(selectUserToken)
     const wishLists = useAppSelector(selectWishLists)
+    const router = useRouter()
 
     useEffect(() => {
         if (token) {
             dispatch(getWishListsAsync(token))
+        } else {
+            router.replace("/")
         }
-    }, [token])
+    }, [token, router])
 
     return (
         <Navigation>
