@@ -61,7 +61,7 @@ export default function SubCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-[#031026] h-[2.5rem] lg:h-[2rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2.5rem] lg:h-[2rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
                                     <span className='text-base'>Filter</span>
                                     <span>
                                         <svg
@@ -95,7 +95,7 @@ export default function SubCategory() {
                             </div>
 
                             <div className='flex flex-col items-start justify-center lg:mt-[1rem]'>
-                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-[#031026]'>{subCategory?.name}</h2>
+                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-custom-black'>{subCategory?.name}</h2>
                                 <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
 

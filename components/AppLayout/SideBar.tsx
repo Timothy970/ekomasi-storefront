@@ -9,14 +9,14 @@ interface AppHeaderProps {
 
 export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
     return (
-        <div className={`lg:hidden fixed px-[1.25rem] pb-[2.5rem]  top-0 left-0 h-full w-full bg-white overflow-hidden text-[#031026] transform transition-transform duration-500 ease-in-out z-60 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className={`lg:hidden fixed px-[1.25rem] pb-[2.5rem]  top-0 left-0 h-full w-full bg-white overflow-hidden text-custom-black transform transition-transform duration-500 ease-in-out z-60 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="flex justify-between items-start mt-[1rem] w-full]">
                 <div className='flex justify-start items-center mb-[1.25rem]'>
                     <div className='mr-[0.5rem]'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-user-round-icon lucide-user-round w-[1.5rem] h-[1.5rem]"><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></svg>
                     </div>
 
-                    <h2 className='text-[#031026] text-center font-poppins text-sm font-normal leading-[150%]'>Hi User!</h2>
+                    <h2 className='text-custom-black text-center font-poppins text-sm font-normal leading-[150%]'>Hi User!</h2>
                 </div>
 
                 <div onClick={() => setIsOpen(false)} className='h-[1.5rem] w-[1.5rem]'>

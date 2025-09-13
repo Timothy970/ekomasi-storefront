@@ -61,7 +61,7 @@ export default function NowTrending({ title }: { title: string }) {
                 <div className="flex items-end justify-between gap-4 mb-[2rem]">
                     <div>
                         <h2 className="text-2xl font-bold leading-[2.1rem]">{title}</h2>
-                        <p className="pt-[0.5rem] text-[#031026]/70 text-sm leading-[1.3125rem]">
+                        <p className="pt-[0.5rem] text-custom-black/70 text-sm leading-[1.3125rem]">
                             Tap the arrows to slide products. One row. Animated with Framer Motion.
                         </p>
                     </div>

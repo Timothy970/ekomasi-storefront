@@ -54,7 +54,7 @@ export default function PersonalInformation() {
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-[#031026]'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -74,7 +74,7 @@ export default function PersonalInformation() {
                         <span>Ship</span>
                     </Button>
 
-                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-[#031026]'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -138,7 +138,7 @@ export default function PersonalInformation() {
 
                     <div className='flex gap-x-[2rem]'>
                         <Input className='h-[2rem] border-[rgba(0,0,0,0.40)] text-[0.75rem] text-[0.75rem]' />
-                        <Button className='border h-[2rem] bg-white text-[#031026] border-[rgba(0,0,0,0.40)]'>
+                        <Button className='border h-[2rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
                             Apply
                         </Button>
                     </div>

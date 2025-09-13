@@ -28,7 +28,7 @@ export default function HeaderTopSlider({
             <div className="max-w-[90rem] w-full grid grid-cols-3 gap-y-[0.69rem] gap-x-[2rem] h-full pt-[1rem]">
                 {subcategories.map((sub) => (
                     <Link key={sub.id} href={`/subcategory/${sub.id}`}>
-                        <span className="text-[#031026] font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
+                        <span className="text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
                             {sub.name}
                         </span>
                     </Link>
@@ -37,7 +37,7 @@ export default function HeaderTopSlider({
                 {subcategories.length <= 0 && hoveredCategory && (
                     <div className="">
                         <Link href={`/category/${hoveredCategory.id}`}>
-                            <span className="text-[#031026] font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
+                            <span className="text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
                                 Shop All
                             </span>
                         </Link>

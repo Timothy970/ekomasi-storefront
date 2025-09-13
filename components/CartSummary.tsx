@@ -16,7 +16,7 @@ export default function CartSummary() {
 
             <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
                 <Input placeholder='Promo Code' className='h-[2rem] max-w-[15rem] border-black text-[0.75rem]' />
-                <Button className='h-[2rem] border rounded-md bg-white text-[#031026] border-black'>
+                <Button className='h-[2rem] border rounded-md bg-white text-custom-black border-black'>
                     Apply
                 </Button>
             </div>
@@ -24,19 +24,19 @@ export default function CartSummary() {
             <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1.5rem]'>
                 <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Subtotal</span>
-                    <span className='text-[#031026] text-base'>0</span>
+                    <span className='text-custom-black text-base'>0</span>
                 </div>
                 <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Estimated Shipping & Handling</span>
-                    <span className='text-[#031026] text-base'>0</span>
+                    <span className='text-custom-black text-base'>0</span>
                 </div>
                 <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Estimated Tax</span>
-                    <span className='text-[#031026] text-base'>0</span>
+                    <span className='text-custom-black text-base'>0</span>
                 </div>
                 <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Discount Total</span>
-                    <span className='text-[#031026] text-base'>0</span>
+                    <span className='text-custom-black text-base'>0</span>
                 </div>
             </div>
 

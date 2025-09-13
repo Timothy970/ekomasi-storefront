@@ -41,7 +41,7 @@ export default function TalkToUs() {
                             priority
                         />
                     </div>
-                    <p className='text-[#031026] font-poppins text-base font-normal leading-[1.95rem]'>
+                    <p className='text-custom-black font-poppins text-base font-normal leading-[1.95rem]'>
                         Feeling overwhelmed by nursery design? Let us help you create the perfect space for your baby with expert guidance tailored to your needs. Enjoy a free consultation, redeemable with any purchase, and transform your dream nursery into a reality!
                     </p>
                     <Button className='max-w-[8rem] w-full text-white font-poppins text-base font-bold leading-[1.5rem] bg-[#9333EA] h-[2rem]'>

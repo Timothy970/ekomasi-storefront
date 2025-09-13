@@ -13,7 +13,7 @@ export default function HomeCategories() {
       <div className="max-w-[90rem] w-full px-[1rem] lg:px-[3rem]">
         <div className="flex flex-col gap-y-[1rem]">
           <h2 className="text-2xl not-italic font-bold leading-[2.1rem]">Categories</h2>
-          <p className="text-[#031026] font-poppins text-sm font-normal leading-[1.3125rem]">
+          <p className="text-custom-black font-poppins text-sm font-normal leading-[1.3125rem]">
             Discover our pushchairs, baby clothing, nursery furniture and more
           </p>
         </div>

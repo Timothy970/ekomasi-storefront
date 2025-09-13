@@ -23,13 +23,13 @@ export default function Product({ product }: { product: Product }) {
             </div>
 
             <div className="pt-4">
-                <h3 className="truncate text-[#031026] font-roboto text-base font-semibold leading-6">
+                <h3 className="truncate text-custom-black font-roboto text-base font-semibold leading-6">
                     {product.name}
                 </h3>
                 <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
                     {product.description}
                 </p>
-                <p className="mt-2 text-sm font-bold text-[#031026]">{product.price}</p>
+                <p className="mt-2 text-sm font-bold text-custom-black">{product.price}</p>
             </div>
         </div>
     )

@@ -40,7 +40,7 @@ export default function CategorySlider() {
         <div className="w-full relative hidden lg:block">
             <div className="w-full lg:flex justify-center items-center flex-col h-[2.438rem] bg-[rgba(148,35,117,0.08)] hidden">
                 <div className="max-w-[90rem] mx-auto">
-                    <ul className="flex flex-row list-none p-0 text-[#031026] font-sans text-base font-normal leading-[1.5rem] gap-2">
+                    <ul className="flex flex-row list-none p-0 text-custom-black font-sans text-base font-normal leading-[1.5rem] gap-2">
                         {categories?.map((cat) => (
                             <li
                                 key={cat.id}
@@ -48,7 +48,7 @@ export default function CategorySlider() {
                                 onMouseLeave={handleMouseLeave}
                                 className="flex w-auto hover:font-semibold p-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
-                                <span className="text-[#031026] leading-[1.95rem]">
+                                <span className="text-custom-black leading-[1.95rem]">
                                     {cat.name}
                                 </span>
                             </li>

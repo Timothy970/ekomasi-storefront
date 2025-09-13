@@ -17,7 +17,7 @@ export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideB
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[1.5rem] h-[1.5rem] lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6" /></svg>
                 </div>
 
-                <h2 className='text-[#031026] text-center font-poppins text-sm font-medium leading-[1.3125rem]'>{subCategoryTitle}</h2>
+                <h2 className='text-custom-black text-center font-poppins text-sm font-medium leading-[1.3125rem]'>{subCategoryTitle}</h2>
             </div>
 
             <div className="mt-[1.5rem] max-h-[70%] overflow-y-hidden shadow-xl border border-slate-50 rounded-md">
@@ -31,7 +31,7 @@ export default function SideBarSubcategory({ openInnerSideBar, setOpenInnerSideB
                             >
                                 <Link href={`/subcategory/${sub.id}`}>
                                     <div className="flex justify-between items-center py-[0.5rem] h-[2.75rem]">
-                                        <h3 className="text-[#031026] font-poppins text-base font-semibold leading-[1.5rem] capitalize">
+                                        <h3 className="text-custom-black font-poppins text-base font-semibold leading-[1.5rem] capitalize">
                                             {sub?.name}
                                         </h3>
                                     </div>
