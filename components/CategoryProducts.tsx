@@ -1,17 +1,15 @@
 import React from 'react'
-import Product from './Product'
-import { useAppSelector } from '@/lib/hooks'
-import { selectCategory } from '@/lib/features/navigation/navigationSlice'
+import type { Product } from '@/lib/features/types'
+import ProductCard from './ProductCard'
 
-export default function CategoryProducts() {
-    const category = useAppSelector(selectCategory)
+export default function CategoryProducts({ products }: { products: Product[] }) {
 
     return (
         <div className="mt-[2rem] lg:mt-[2.5rem]">
             {
-                category?.products && <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                    {category?.products.map((product) => (
-                        <Product key={product.id} product={product} />
+                products && <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                    {products.map((product, index) => (
+                        <ProductCard key={index?.toString()} product={product} />
                     ))}
                 </div>
             }

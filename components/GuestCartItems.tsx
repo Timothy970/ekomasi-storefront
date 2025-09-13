@@ -78,21 +78,21 @@ export default function GuestCartItems() {
 
                         <div className='w-[50%] flex flex-col gap-y-[0.5rem] font-semibold'>
                             <span className='text-[1.25rem]'>KES 13,000</span>
-                            <span className='text-base'>Flip 4-in-1 Convertible Carrier - Leopard</span>
+                            <span className='text-[0.875rem]'>Flip 4-in-1 Convertible Carrier - Leopard</span>
 
                             <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                                <span className='text-base font-light'>Brand:</span>
-                                <span className='text-base font-light'>Infantino</span>
+                                <span className='text-[0.875rem] font-light'>Brand:</span>
+                                <span className='text-[0.875rem] font-light'>Infantino</span>
                             </div>
 
                             <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                                <span className='text-base font-light'>Color:</span>
-                                <span className='text-base font-light'>Grey</span>
+                                <span className='text-[0.875rem] font-light'>Color:</span>
+                                <span className='text-[0.875rem] font-light'>Grey</span>
                             </div>
 
                             <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                                <span className='text-base font-light'>Size:</span>
-                                <span className='text-base font-light'>One Size</span>
+                                <span className='text-[0.875rem] font-light'>Size:</span>
+                                <span className='text-[0.875rem] font-light'>One Size</span>
                             </div>
                         </div>
                     </div>

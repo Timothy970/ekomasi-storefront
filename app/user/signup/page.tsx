@@ -69,7 +69,7 @@ export default function SignUp() {
     return (
         <div className='h-screen w-screen flex flex-col lg:flex-row justify-center items-center px-[1.25rem]'>
             <div className='max-w-[90rem] w-full h-full max-h-[56.25rem] flex flex-row justify-center'>
-                <div className='w-full max-w-[22rem] lg:max-w-[42rem] flex justify-start items-start flex-col h-full px-0 lg:px-[4rem]'>
+                <div className='w-full max-w-[22rem] lg:max-w-[42rem] flex justify-start items-start flex-col h-full px-0 lg:px-[3rem]'>
                     <div className='w-full flex justify-center items-center lg:justify-start lg:h-auto'>
                         <Image
                             src={"/images/company-logo.svg"}
@@ -95,8 +95,8 @@ export default function SignUp() {
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 type='text'
                                 placeholder='Enter phone or email'
-                                className={`mt-[2rem] p-[0.75rem] font-poppins text-base font-normal leading-[195%] 
-                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.4rem] lg:h-[4rem]
+                                className={`mt-[2rem] p-[0.75rem] font-poppins text-[0.875rem]  font-normal leading-[195%] 
+                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
                                     ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                 `}
                             />
@@ -107,7 +107,7 @@ export default function SignUp() {
                             <Button
                                 type="submit"
                                 variant="outline"
-                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.4rem] lg:h-[4rem]'
+                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[3rem]'
                             >
                                 Continue
                             </Button>
@@ -116,7 +116,7 @@ export default function SignUp() {
                         <div className='mt-[1rem] flex flex-row justify-center items-center w-full'>
                             <div className='h-[0.0625rem] bg-black w-[30%]'></div>
                             <div className='mx-[1rem]'>
-                                <h3 className='font-poppins text-nowrap text-base font-normal leading-[195%] text-[var(--Color-Neutral-Dark,#444)]'>or continue with</h3>
+                                <h3 className='font-poppins text-nowrap text-[0.875rem] font-normal leading-[195%] text-[var(--Color-Neutral-Dark,#444)]'>or continue with</h3>
                             </div>
                             <div className='h-[0.0625rem] bg-black w-[30%]'></div>
                         </div>
@@ -124,10 +124,10 @@ export default function SignUp() {
                         <SocialLogins />
 
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
-                            <span className='font-poppins text-base font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Already have an account?</span>
+                            <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Already have an account?</span>
 
                             <Link href="/user/login">
-                                <span className='font-roboto text-base font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
+                                <span className='font-roboto text-[0.875rem] font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
                             </Link>
                         </div>
                     </div>
@@ -135,11 +135,11 @@ export default function SignUp() {
 
                 <div className="w-[50%] lg:min-w-[50%] lg:min-h-full hidden lg:block relative">
                     <Image
-                        src="/images/signup.svg"
+                        src="/images/registration.png"
                         alt="Logo"
                         fill
                         priority
-                        className="object-cover rounded-[4rem_0_0_4rem]"
+                        className="object-cover rounded-l-[3rem] rounded-r-none"
                     />
                 </div>
             </div>

@@ -12,7 +12,7 @@ import {
 export function FilterSortBy() {
   return (
     <Select>
-      <SelectTrigger className="border bg-white text-black h-[2.5rem] lg:h-[3rem] min-w-[10rem] rounded-none lg:rounded-md flex gap-x-[1rem] lg:border lg:border-black">
+      <SelectTrigger className=" bg-white text-custom-black h-[2rem] min-w-[10rem] text-[0.875rem] ">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
 
