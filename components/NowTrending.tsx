@@ -97,7 +97,7 @@ export default function NowTrending({ title }: { title: string }) {
                                         <h3 className="text-xs font-medium leading-[1.5rem] truncate" title={p.name}>
                                             {p.name}
                                         </h3>
-                                        <span className="text-sm font-bold text-[1.125rem]">{p.price}</span>
+                                        <span className="text-sm font-bold text-[1.125rem]">KES {p.price}</span>
                                     </div>
                                 </div>
                             </Link>

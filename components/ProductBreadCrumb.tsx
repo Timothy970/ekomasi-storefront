@@ -2,12 +2,9 @@
 import { selectProduct } from "@/lib/features/navigation/navigationSlice";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function ProductBreadCrumb() {
     const product = useAppSelector(selectProduct)
-    const pathname = usePathname();
-    const segments = pathname.split("/").filter(Boolean);
 
     return (
         <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[3rem]">

@@ -1,13 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import type { Product } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
 
 export default function ProductCard({ product }: { product: Product }) {
     const router = useRouter()
+    const [productId, setProductId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (product?.id) {
+            setProductId(product?.id)
+        } else if (product?.product_id) {
+            setProductId(product?.product_id)
+        } else {
+            setProductId(null)
+        }
+
+    }, [product?.id, product?.product_id])
+
+    if (!productId) {
+        return <></>
+    }
 
     return (
-        <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.id}`)}>
+        <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${productId}`)}>
             <div className="relative w-full h-[13.5rem] md:h-[20rem]">
                 {product.urls && <>
                     {
