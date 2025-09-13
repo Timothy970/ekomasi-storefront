@@ -1,5 +1,5 @@
 "use client"
-import CartSummary from '@/components/CartSummary'
+import CartSummary from '@/components/CheckoutCartSummary'
 import Navigation from '@/components/Navigation'
 import PersonalInformation from '@/components/PersonalInformation'
 import { getLocationsAsync } from '@/lib/features/mall/mallSlice'
