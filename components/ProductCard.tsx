@@ -3,12 +3,12 @@ import Image from 'next/image'
 import type { Product } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
 
-export default function Product({ product }: { product: Product }) {
+export default function ProductCard({ product }: { product: Product }) {
     const router = useRouter()
 
     return (
         <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.id}`)}>
-            <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
+            <div className="relative w-full h-[13.5rem] md:h-[20rem]">
                 {product.urls && <>
                     {
                         product.urls[0]?.url && <Image
@@ -23,13 +23,13 @@ export default function Product({ product }: { product: Product }) {
             </div>
 
             <div className="pt-4">
-                <h3 className="truncate text-custom-black font-roboto text-base font-semibold leading-6">
+                <h3 className="truncate text-custom-black font-roboto text-[0.875rem] font-semibold leading-6 capitalize">
                     {product.name}
                 </h3>
-                <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
+                <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2 capitalize">
                     {product.description}
                 </p>
-                <p className="mt-2 text-sm font-bold text-custom-black">{product.price}</p>
+                <p className="mt-2 text-sm font-bold text-custom-black">KES {product.price}</p>
             </div>
         </div>
     )

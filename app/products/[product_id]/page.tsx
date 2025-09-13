@@ -100,7 +100,7 @@ export default function ProductDetail() {
             }
 
             <div className='w-full bg-white flex flex-col justify-start px-[1rem] pb-[1rem] flex-1'>
-              <h2 className='text-lg lg:text-[2.25rem] font-bold mt-[1rem]'>{product?.name}</h2>
+              <h2 className='text-lg lg:text-[1.625rem] font-bold mt-[1rem]'>{product?.name}</h2>
 
               <span className='mt-[0.5rem] text-[1.5rem]'>KES {product?.price}</span>
 
@@ -110,7 +110,7 @@ export default function ProductDetail() {
                 <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
               </div>
 
-              <p className='text-base mt-[1rem]'>{product?.description}</p>
+              <p className='text-[0.875rem] mt-[1rem]'>{product?.description}</p>
 
               {
                 product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1rem]'>
@@ -130,12 +130,12 @@ export default function ProductDetail() {
               </div>
 
               <div className='mt-[1rem]'>
-                <h3 className='text-base gap-y-[0.5rem]'>Color</h3>
+                <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
                 <ProductColors />
               </div>
 
               <div className='mt-[1rem]'>
-                <h3 className='text-base'>Quantity</h3>
+                <h3 className='text-[0.875rem]'>Quantity</h3>
                 <ProductQuantitySelect
                   setQuantity={setQuantity}
                   quantity={quantity}

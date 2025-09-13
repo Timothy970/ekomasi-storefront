@@ -73,7 +73,7 @@ export default function MothersDayBundle() {
                                 <h2 className="text-white text-center font-roboto text-4xl font-bold leading-[3rem] lg:text-[3.5rem]">
                                     {slides[current].title}
                                 </h2>
-                                <p className="text-white text-center font-poppins text-base font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
+                                <p className="text-white text-center font-poppins text-[0.875rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
                                     {slides[current].description}
                                 </p>
                             </div>

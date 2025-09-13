@@ -95,7 +95,7 @@ export default function Cart() {
       <div className='w-full mx-auto max-w-[90rem]'>
         <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[3rem] md:gap-x-[2rem]'>
           <div className='flex flex-col w-full items-center justify-center md:w-[60%]'>
-            <h2 className='text-[2.25rem] font-bold self-start'>Cart</h2>
+            <h2 className='text-[1.625rem] font-bold self-start'>Cart</h2>
 
             <div className='flex flex-row justify-center items-center py-[1.12rem] gap-x-[0.38rem] border-b border-[rgba(0,0,0,0.40)] md:border-b-0 w-full md:hidden'>
               <div className='flex items-center justify-start gap-x-[0.38rem] text-gray-600'>
@@ -126,21 +126,21 @@ export default function Cart() {
 
                     <div className='w-[50%] flex flex-col gap-y-[0.5rem] font-semibold'>
                       <span className='text-[1.25rem]'>KES 13,000</span>
-                      <span className='text-base'>Flip 4-in-1 Convertible Carrier - Leopard</span>
+                      <span className='text-[0.875rem]'>Flip 4-in-1 Convertible Carrier - Leopard</span>
 
                       <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                        <span className='text-base font-light'>Brand:</span>
-                        <span className='text-base font-light'>Infantino</span>
+                        <span className='text-[0.875rem] font-light'>Brand:</span>
+                        <span className='text-[0.875rem] font-light'>Infantino</span>
                       </div>
 
                       <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                        <span className='text-base font-light'>Color:</span>
-                        <span className='text-base font-light'>Grey</span>
+                        <span className='text-[0.875rem] font-light'>Color:</span>
+                        <span className='text-[0.875rem] font-light'>Grey</span>
                       </div>
 
                       <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                        <span className='text-base font-light'>Size:</span>
-                        <span className='text-base font-light'>One Size</span>
+                        <span className='text-[0.875rem] font-light'>Size:</span>
+                        <span className='text-[0.875rem] font-light'>One Size</span>
                       </div>
 
                       <div className='flex flex-row justify-between items-center w-full mt-[1rem] pr-[1rem]'>
@@ -176,7 +176,7 @@ export default function Cart() {
               </div>
 
               <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
-                <Input placeholder='Promo Code' className='h-[2rem] max-w-[15rem] border-black text-[0.75rem]' />
+                <Input placeholder='Promo Code' className='h-[2rem] max-w-[15rem] border-black text-[0.875rem] ' />
                 <Button className='h-[2rem] border rounded-md bg-white text-custom-black'>
                   Apply
                 </Button>
@@ -185,20 +185,20 @@ export default function Cart() {
               <div className='mt-[1.5rem]'>
                 <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>
                   <div className='flex justify-between w-full'>
-                    <span className='text-base text-[#444]'>Subtotal</span>
-                    <span className='text-custom-black text-base'>0</span>
+                    <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
+                    <span className='text-custom-black text-[0.875rem]'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
-                    <span className='text-base text-[#444]'>Estimated Shipping & Handling</span>
-                    <span className='text-custom-black text-base'>0</span>
+                    <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
+                    <span className='text-custom-black text-[0.875rem]'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
-                    <span className='text-base text-[#444]'>Estimated Tax</span>
-                    <span className='text-custom-black text-base'>0</span>
+                    <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
+                    <span className='text-custom-black text-[0.875rem]'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
-                    <span className='text-base text-[#444]'>Discount Total</span>
-                    <span className='text-custom-black text-base'>0</span>
+                    <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
+                    <span className='text-custom-black text-[0.875rem]'>0</span>
                   </div>
                 </div>
 
@@ -208,11 +208,11 @@ export default function Cart() {
                 </div>
 
                 <div className='w-full flex flex-col justify-between gap-y-[1rem] mt-[1.5rem] mb-[3rem]'>
-                  <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[2rem] text-base'>
+                  <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[2rem] text-[0.875rem]'>
                     Checkout
                   </Button>
 
-                  <Button onClick={() => router.push("/")} className='border border-black h-[2rem] text-base bg-white text-custom-black'>
+                  <Button onClick={() => router.push("/")} className='border border-black h-[2rem] text-[0.875rem] bg-white text-custom-black'>
                     Continue Shopping
                   </Button>
                 </div>

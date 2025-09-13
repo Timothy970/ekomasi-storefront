@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SideBarSubcategory from "./SideBarSubcategory";
+import SideBarSubcategory from "./SideBarSubcategoryLinks";
 import { useAppSelector } from "@/lib/hooks";
 import { selectCategories } from "@/lib/features/navigation/navigationSlice";
 import { SubCategory } from "@/lib/features/types";

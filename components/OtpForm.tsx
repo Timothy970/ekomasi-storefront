@@ -165,10 +165,10 @@ export default function OtpForm() {
             </div>
 
             <div className='mt-[1.5rem]'>
-                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-base font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
+                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
             </div>
 
-            <Button onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-base font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>Continue</Button>
+            <Button onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>Continue</Button>
         </form>
     )
 }

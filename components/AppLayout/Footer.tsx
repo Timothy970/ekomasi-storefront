@@ -30,10 +30,10 @@ export default function Footer() {
               className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 lg:hidden'
             />
             <div className='flex flex-col gap-y-[1.25rem]'>
-              <h2 className='text-white font-poppins text-base not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
+              <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
 
               <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
-                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.75rem] not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
+                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.875rem]  not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
 
                 <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[2rem] lg:w-[8rem]'>
                   Subscribe
@@ -46,8 +46,8 @@ export default function Footer() {
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full max-w-[60rem]'>
             {/* <div className='w-full'>
-              <h2 className='text-base not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
-              <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-base font-normal leading-[1.5rem]">
+              <h2 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
+              <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem]">
                 {categories?.map((cat) => (
                   <div key={cat.id} className='flex flex-col gap-y-[1rem] mb-[1rem]'>
                     <span className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{cat.name}</span>
@@ -58,7 +58,7 @@ export default function Footer() {
 
             {
               homeData?.social_links && <div className='w-full'>
-                <h2 className='text-base not-italic font-semibold leading-6 mb-[1rem]'>Follow Us</h2>
+                <h2 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Follow Us</h2>
                 <SocialLinksFooter social_links={homeData?.social_links} />
               </div>
             }

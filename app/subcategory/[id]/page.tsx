@@ -8,10 +8,10 @@ import { FilterSortBy } from '@/components/FilterSortBy'
 import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getSubCategoryAsync, selectPagination, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
-import SubCategoryFilter from '@/components/SubCategoryFilter'
 import { Pagination } from '@/components/Pagination'
-import SubCategoryProducts from '@/components/SubCategoryProducts'
-import SubCategoryBanner from '@/components/SubCategoryBanner'
+import CategoryBanner from '@/components/CategoryBanner'
+import CategoryFilter from '@/components/CategoryFilter'
+import CategoryProducts from '@/components/CategoryProducts'
 
 export default function SubCategory() {
     const { openFilterModal, setOpenFilterModal } = useFilter()
@@ -45,13 +45,13 @@ export default function SubCategory() {
     return (
         <Navigation>
             {
-                subCategory?.image_url && <SubCategoryBanner imageUrl={subCategory?.parent_category_image_url} />
+                subCategory?.image_url && <CategoryBanner imageUrl={subCategory?.parent_category_image_url} />
             }
 
             <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
-                <div className='flex flex-row gap-x-[2rem]'>
+                <div className='flex flex-row lg:gap-x-[2rem]'>
                     <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-                        <SubCategoryFilter />
+                        <CategoryFilter page="subcategory" />
                     </div>
 
                     <div className='flex flex-col justify-between w-full items-start'>
@@ -61,8 +61,8 @@ export default function SubCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2.5rem] lg:h-[2rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
-                                    <span className='text-base'>Filter</span>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2.5rem] lg:h-[2rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden'>
+                                    <span className='text-[0.875rem]'>Filter</span>
                                     <span>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -95,11 +95,15 @@ export default function SubCategory() {
                             </div>
 
                             <div className='flex flex-col items-start justify-center lg:mt-[1rem]'>
-                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-custom-black'>{subCategory?.name}</h2>
+                                <h2 className='text-[1.625rem] not-italic font-bold leading-[120%] text-custom-black'>{subCategory?.name}</h2>
                                 <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
 
-                            <SubCategoryProducts />
+                            {
+                                subCategory?.products && <CategoryProducts
+                                    products={subCategory?.products}
+                                />
+                            }
                         </div>
 
                         {

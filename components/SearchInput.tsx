@@ -11,7 +11,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
             <Input
                 ref={inputRef}
                 placeholder={placeHolderText}
-                className="w-full h-full pl-4 pr-10 text-[0.75rem] rounded-lg border border-[#AAA] bg-white"
+                className="w-full h-full pl-4 pr-10 text-[0.875rem]  rounded-lg border border-[#AAA] bg-white"
             />
 
             <div className="absolute right-2 h-full flex items-center cursor-pointer border-l border-[#AAA] w-[2.25rem] justify-center" onClick={() => inputRef.current?.focus()}>

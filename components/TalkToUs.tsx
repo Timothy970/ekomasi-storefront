@@ -9,7 +9,7 @@ export default function TalkToUs() {
                 <div className='md:w-1/2'>
                     <div className="flex items-start justify-between gap-4 mb-8 w-full">
                         <div className='w-full'>
-                            <h2 className="text-[#444] font-roboto text-base font-semibold leading-[1.5rem] tracking-[0.16rem]">
+                            <h2 className="text-[#444] font-roboto text-[0.875rem] font-semibold leading-[1.5rem] tracking-[0.16rem]">
                                 NURSERY
                             </h2>
                             <p className="pt-3 text-[#682B89] font-comfortaa text-2xl font-bold leading-[2.1rem]">
@@ -41,10 +41,10 @@ export default function TalkToUs() {
                             priority
                         />
                     </div>
-                    <p className='text-custom-black font-poppins text-base font-normal leading-[1.95rem]'>
+                    <p className='text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem]'>
                         Feeling overwhelmed by nursery design? Let us help you create the perfect space for your baby with expert guidance tailored to your needs. Enjoy a free consultation, redeemable with any purchase, and transform your dream nursery into a reality!
                     </p>
-                    <Button className='max-w-[8rem] w-full text-white font-poppins text-base font-bold leading-[1.5rem] bg-[#9333EA] h-[2rem]'>
+                    <Button className='max-w-[8rem] w-full text-white font-poppins text-[0.875rem] font-bold leading-[1.5rem] bg-[#9333EA] h-[2rem]'>
                         Talk to us
                     </Button>
                 </div>

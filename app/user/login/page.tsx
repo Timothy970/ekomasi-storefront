@@ -104,7 +104,7 @@ export default function Login() {
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 type='text'
                                 placeholder='Enter phone or email'
-                                className={`mt-[2rem] p-[0.75rem] text-[0.75rem] font-poppins text-base font-normal leading-[195%] 
+                                className={`mt-[2rem] p-[0.75rem] text-[0.875rem]  font-poppins text-[0.875rem] font-normal leading-[195%] 
                                                             text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
                                                             ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                                         `}
@@ -125,7 +125,7 @@ export default function Login() {
                         <div className='mt-[1rem] flex flex-row justify-center items-center w-full'>
                             <div className='h-[0.0625rem] bg-black w-[30%]'></div>
                             <div className='mx-[1rem]'>
-                                <h3 className='font-poppins text-nowrap text-base font-normal leading-[195%] text-[var(--Color-Neutral-Dark,#444)]'>or continue with</h3>
+                                <h3 className='font-poppins text-nowrap text-[0.875rem] font-normal leading-[195%] text-[var(--Color-Neutral-Dark,#444)]'>or continue with</h3>
                             </div>
                             <div className='h-[0.0625rem] bg-black w-[30%]'></div>
                         </div>
@@ -133,10 +133,10 @@ export default function Login() {
                         <SocialLogins />
 
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
-                            <span className='font-poppins text-base font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Don't have an account?</span>
+                            <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Don't have an account?</span>
 
                             <Link href="/user/signup">
-                                <span className='font-roboto text-base font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Sign Up</span>
+                                <span className='font-roboto text-[0.875rem] font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Sign Up</span>
                             </Link>
                         </div>
                     </div>

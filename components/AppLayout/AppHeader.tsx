@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import React, { useEffect } from 'react'
 import SearchInput from '../SearchInput'
-import Category from '../Category'
+import Category from '../CategoryLinks'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectHomeData } from '@/lib/features/navigation/navigationSlice'
 import SocialIcons from '../SocialIcons'
@@ -30,12 +30,12 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
     <div className='w-full flex flex-col items-center z-50 sticky top-0 bg-white'>
       <div className='h-[1.75rem] w-full bg-[#E8298A] hidden z-50 lg:flex justify-center items-center'>
         <div className='w-full max-w-[90rem] flex justify-between items-center h-full px-[1.5rem]'>
-          <div className='font-poppins text-[0.75rem] font-normal leading-[1.95rem] text-white'>
+          <div className='font-poppins text-[0.875rem]  font-normal leading-[1.95rem] text-white'>
             Call Us: {homeData?.phone_number}
           </div>
 
           <div>
-            <span className='font-poppins text-[0.75rem] font-normal leading-[1.95rem] text-white'>Our Big Little Event is now on | <span className='underline'>Shop up to 40% off</span></span>
+            <span className='font-poppins text-[0.875rem]  font-normal leading-[1.95rem] text-white'>Our Big Little Event is now on | <span className='underline'>Shop up to 40% off</span></span>
           </div>
 
           {

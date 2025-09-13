@@ -51,7 +51,7 @@ export default function ProductCategory() {
             <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
                 <div className='flex flex-row gap-x-[2rem]'>
                     <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-                        <CategoryFilter />
+                        <CategoryFilter page="category" />
                     </div>
 
                     <div className='flex flex-col justify-between w-full items-start'>
@@ -61,8 +61,8 @@ export default function ProductCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2.5rem] lg:h-[2rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
-                                    <span className='text-base'>Filter</span>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden'>
+                                    <span className='text-[0.875rem] '>Filter</span>
                                     <span>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -95,11 +95,15 @@ export default function ProductCategory() {
                             </div>
 
                             <div className='flex flex-col items-start justify-center lg:mt-[1rem]'>
-                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-custom-black'>{category?.name}</h2>
+                                <h2 className='text-[1.625rem] not-italic font-bold leading-[120%] text-custom-black'>{category?.name}</h2>
                                 <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
 
-                            <CategoryProducts />
+                            {
+                                category?.products && <CategoryProducts
+                                    products={category?.products}
+                                />
+                            }
                         </div>
 
                         {

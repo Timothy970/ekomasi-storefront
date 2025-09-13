@@ -12,7 +12,7 @@ export default function ProductBreadCrumb() {
     return (
         <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[3rem]">
             <div className="flex flex-wrap items-center space-x-[0.3rem]">
-                <Link href="/" className="underline text-custom-black font-roboto text-base font-semibold">
+                <Link href="/" className="underline text-custom-black font-roboto text-[0.875rem] font-semibold">
                     Home
                 </Link>
 
@@ -33,7 +33,7 @@ export default function ProductBreadCrumb() {
                     </svg>
                 </span>
 
-                <div className="capitalize text-custom-black font-roboto text-base font-semibold">
+                <div className="capitalize text-custom-black font-roboto text-[0.875rem] font-semibold">
                     {product?.name}
                 </div>
             </div>

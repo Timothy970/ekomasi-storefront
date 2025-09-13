@@ -21,7 +21,7 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
             </div>
 
             <div className="pt-4">
-                <h3 className="truncate text-custom-black font-roboto text-base font-semibold leading-6">
+                <h3 className="truncate text-custom-black font-roboto text-[0.875rem] font-semibold leading-6">
                     {product.name}
                 </h3>
                 <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
