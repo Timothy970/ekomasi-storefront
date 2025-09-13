@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getFeaturedProductsAsync, selectFeatured } from "@/lib/features/navigation/navigationSlice";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NowTrending({ title }: { title: string }) {
     const [index, setIndex] = useState(0);
@@ -78,8 +79,16 @@ export default function NowTrending({ title }: { title: string }) {
                                     ref={i === 0 ? cardRef : undefined}
                                     className="shrink-0 overflow-hidden mr-[1.5rem]"
                                 >
-                                    <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden">
-                                        <img src={p.urls[0]?.url} alt={p.name} className="w-full h-full object-cover rounded-md" />
+                                    <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden relative">
+                                        <Image
+                                            alt={p.name}
+                                            fill
+                                            src={p.urls[0]?.url}
+                                            className="rounded-md"
+                                            priority
+                                            style={{ objectFit: "cover" }}
+
+                                        />
                                     </div>
                                     <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
                                         <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>

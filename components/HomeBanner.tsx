@@ -62,19 +62,19 @@ export default function HomeBanner() {
                         className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 lg:bg-black/40 flex flex-col justify-center items-center text-center">
-                        <div className="bg-black/40 lg:bg-transparent p-4 w-[80%]">
-                            <h2 className="text-white text-center font-roboto text-4xl font-bold leading-[3rem] lg:text-[3.5rem]">
+                        <div className="bg-black/40 lg:bg-transparent p-4 w-[80%] lg:max-w-[55rem]">
+                            <h2 className="text-white text-center font-roboto text-[2rem] font-bold leading-[3rem] lg:text-[3.5rem]">
                                 {slides[current].title}
                             </h2>
-                            <p className="text-white text-center font-poppins text-base font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
+                            <p className="text-white text-center font-poppins text-[1.25rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
                                 {slides[current].description}
                             </p>
                         </div>
 
-                        <Button className="h-[3.3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem]">
-                            <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.5rem] text-white font-poppins text-base font-normal leading-[1.95rem]">
+                        <Button className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem]">
+                            <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
                                 {slides[current].buttonText}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">
                                     <path d="M1.70697 11.4496L7.41397 5.74264L1.70697 0.0356445L0.292969 1.44964L4.58597 5.74264L0.292969 10.0356L1.70697 11.4496Z" fill="white" />
                                 </svg>
                             </span>

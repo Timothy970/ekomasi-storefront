@@ -48,7 +48,7 @@ export default function CategorySlider() {
                                 onMouseLeave={handleMouseLeave}
                                 className="flex w-auto hover:font-semibold p-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
-                                <span className="text-[#031026] font-poppins font-semibold leading-[1.95rem]">
+                                <span className="text-[#031026] leading-[1.95rem]">
                                     {cat.name}
                                 </span>
                             </li>
