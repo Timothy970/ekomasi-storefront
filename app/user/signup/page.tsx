@@ -135,11 +135,11 @@ export default function SignUp() {
 
                 <div className="w-[50%] lg:min-w-[50%] lg:min-h-full hidden lg:block relative">
                     <Image
-                        src="/images/signup.svg"
+                        src="/images/registration.png"
                         alt="Logo"
                         fill
                         priority
-                        className="object-cover rounded-[3rem_0_0_3rem]"
+                        className="object-cover rounded-l-[3rem] rounded-r-none"
                     />
                 </div>
             </div>

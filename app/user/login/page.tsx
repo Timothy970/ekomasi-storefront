@@ -148,7 +148,7 @@ export default function Login() {
                         alt="Logo"
                         fill
                         priority
-                        className="object-cover rounded-[3rem_0_0_3rem]"
+                        className="object-cover rounded-l-[3rem] rounded-r-none"
                     />
                 </div>
             </div>
