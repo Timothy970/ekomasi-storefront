@@ -19,12 +19,12 @@ export default function PersonalInformation() {
             <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-base font-semibold'>First name</span>
-                    <Input placeholder='First name*' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='First name*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-base'>Last name</span>
-                    <Input placeholder='Last name*' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='Last name*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
             </div>
 
@@ -35,7 +35,7 @@ export default function PersonalInformation() {
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                         <path d="M18 0.5H2C0.897 0.5 0 1.397 0 2.5V14.5C0 15.603 0.897 16.5 2 16.5H18C19.103 16.5 20 15.603 20 14.5V2.5C20 1.397 19.103 0.5 18 0.5ZM18 2.5V3.011L10 9.234L2 3.012V2.5H18ZM2 14.5V5.544L9.386 11.289C9.56111 11.4265 9.77733 11.5013 10 11.5013C10.2227 11.5013 10.4389 11.4265 10.614 11.289L18 5.544L18.002 14.5H2Z" fill="black" />
                     </svg>
-                    <Input placeholder='Email Address*' className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='Email Address*' className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
             </div>
 
@@ -46,7 +46,7 @@ export default function PersonalInformation() {
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="14" height="21" viewBox="0 0 14 21" fill="none">
                         <path d="M12 0.5H2C0.897 0.5 0 1.397 0 2.5V18.5C0 19.603 0.897 20.5 2 20.5H12C13.103 20.5 14 19.603 14 18.5V2.5C14 1.397 13.103 0.5 12 0.5ZM2 15.499V3.5H12L12.002 15.499H2Z" fill="black" />
                     </svg>
-                    <Input placeholder='254123456789*' className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='254123456789*' className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
             </div>
 
@@ -54,7 +54,7 @@ export default function PersonalInformation() {
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[3rem] bg-white border border-black text-black'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-[#031026]'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -74,7 +74,7 @@ export default function PersonalInformation() {
                         <span>Ship</span>
                     </Button>
 
-                    <Button className='px-[3rem] min-w-[10rem] h-[3rem] bg-white border border-black text-black'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-[#031026]'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -97,28 +97,28 @@ export default function PersonalInformation() {
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-base font-semibold'>Country</span>
-                    <Input placeholder='Country/Region' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='Country/Region' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-base font-semibold'>Adress</span>
-                    <Input placeholder='Address*' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+                    <Input placeholder='Address*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-base font-semibold'>Apartment, suite, etc.(optional)</span>
-                    <Input placeholder='Address*' className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)]' />
+                    <Input placeholder='Address*' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.75rem]' />
                 </div>
 
                 <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                     <div className='flex flex-col gap-y-[0.5rem] w-full'>
                         <span className='text-base font-semibold'>City</span>
-                        <Input placeholder='City' className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)]' />
+                        <Input placeholder='City' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.75rem]' />
                     </div>
 
                     <div className='flex flex-col gap-y-[0.5rem] w-full'>
                         <span className='text-base font-semibold'>ZIP / Postal code (optional)</span>
-                        <Input placeholder='Postal code (optional)' className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)]' />
+                        <Input placeholder='Postal code (optional)' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.75rem]' />
                     </div>
                 </div>
 
@@ -137,8 +137,8 @@ export default function PersonalInformation() {
                     </div>
 
                     <div className='flex gap-x-[2rem]'>
-                        <Input className='h-[3rem] border-[rgba(0,0,0,0.40)]' />
-                        <Button className='border h-[3rem] bg-white text-black border-[rgba(0,0,0,0.40)]'>
+                        <Input className='h-[2rem] border-[rgba(0,0,0,0.40)] text-[0.75rem] text-[0.75rem]' />
+                        <Button className='border h-[2rem] bg-white text-[#031026] border-[rgba(0,0,0,0.40)]'>
                             Apply
                         </Button>
                     </div>
@@ -166,9 +166,9 @@ export default function PersonalInformation() {
                     </RadioGroup>
 
                     <div className='flex flex-col gap-y-[1rem]'>
-                        <Input placeholder='254123456789' className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border' />
+                        <Input placeholder='254123456789' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.75rem]' />
 
-                        <Button className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'>
+                        <Button className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE]'>
                             Pay now
                         </Button>
                     </div>

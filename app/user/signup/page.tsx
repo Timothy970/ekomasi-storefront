@@ -69,7 +69,7 @@ export default function SignUp() {
     return (
         <div className='h-screen w-screen flex flex-col lg:flex-row justify-center items-center px-[1.25rem]'>
             <div className='max-w-[90rem] w-full h-full max-h-[56.25rem] flex flex-row justify-center'>
-                <div className='w-full max-w-[22rem] lg:max-w-[42rem] flex justify-start items-start flex-col h-full px-0 lg:px-[4rem]'>
+                <div className='w-full max-w-[22rem] lg:max-w-[42rem] flex justify-start items-start flex-col h-full px-0 lg:px-[3rem]'>
                     <div className='w-full flex justify-center items-center lg:justify-start lg:h-auto'>
                         <Image
                             src={"/images/company-logo.svg"}
@@ -95,8 +95,8 @@ export default function SignUp() {
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 type='text'
                                 placeholder='Enter phone or email'
-                                className={`mt-[2rem] p-[0.75rem] font-poppins text-base font-normal leading-[195%] 
-                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.4rem] lg:h-[4rem]
+                                className={`mt-[2rem] p-[0.75rem] font-poppins text-[0.75rem] font-normal leading-[195%] 
+                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
                                     ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                 `}
                             />
@@ -107,7 +107,7 @@ export default function SignUp() {
                             <Button
                                 type="submit"
                                 variant="outline"
-                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.4rem] lg:h-[4rem]'
+                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[3rem]'
                             >
                                 Continue
                             </Button>
@@ -139,7 +139,7 @@ export default function SignUp() {
                         alt="Logo"
                         fill
                         priority
-                        className="object-cover rounded-[4rem_0_0_4rem]"
+                        className="object-cover rounded-[3rem_0_0_3rem]"
                     />
                 </div>
             </div>

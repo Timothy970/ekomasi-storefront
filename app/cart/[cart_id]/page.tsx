@@ -93,7 +93,7 @@ export default function Cart() {
   return (
     <Navigation>
       <div className='w-full mx-auto max-w-[90rem]'>
-        <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[4rem] md:gap-x-[2rem]'>
+        <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[3rem] md:gap-x-[2rem]'>
           <div className='flex flex-col w-full items-center justify-center md:w-[60%]'>
             <h2 className='text-[2.25rem] font-bold self-start'>Cart</h2>
 
@@ -145,7 +145,7 @@ export default function Cart() {
 
                       <div className='flex flex-row justify-between items-center w-full mt-[1rem] pr-[1rem]'>
                         <div className='flex justify-center items-center gap-x-[1rem] md:gap-x-[1.5rem]'>
-                          <Button className='h-[2.5rem] w-[2.5rem] border rounded-sm bg-white text-black'>-</Button>
+                          <Button className='h-[2.5rem] w-[2.5rem] border rounded-sm bg-white text-[#031026]'>-</Button>
                           <span>1</span>
                           <Button className='h-[2.5rem] w-[2.5rem]'>+</Button>
                         </div>
@@ -176,8 +176,8 @@ export default function Cart() {
               </div>
 
               <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
-                <Input placeholder='Promo Code' className='h-[3rem] max-w-[15rem] border-black' />
-                <Button className='h-[3rem] border rounded-md bg-white text-black'>
+                <Input placeholder='Promo Code' className='h-[2rem] max-w-[15rem] border-black text-[0.75rem]' />
+                <Button className='h-[2rem] border rounded-md bg-white text-[#031026]'>
                   Apply
                 </Button>
               </div>
@@ -186,19 +186,19 @@ export default function Cart() {
                 <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>
                   <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Subtotal</span>
-                    <span className='text-black text-base'>0</span>
+                    <span className='text-[#031026] text-base'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Estimated Shipping & Handling</span>
-                    <span className='text-black text-base'>0</span>
+                    <span className='text-[#031026] text-base'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Estimated Tax</span>
-                    <span className='text-black text-base'>0</span>
+                    <span className='text-[#031026] text-base'>0</span>
                   </div>
                   <div className='flex justify-between w-full'>
                     <span className='text-base text-[#444]'>Discount Total</span>
-                    <span className='text-black text-base'>0</span>
+                    <span className='text-[#031026] text-base'>0</span>
                   </div>
                 </div>
 
@@ -208,11 +208,11 @@ export default function Cart() {
                 </div>
 
                 <div className='w-full flex flex-col justify-between gap-y-[1rem] mt-[1.5rem] mb-[3rem]'>
-                  <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[3rem] text-base'>
+                  <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[2rem] text-base'>
                     Checkout
                   </Button>
 
-                  <Button onClick={() => router.push("/")} className='border border-black h-[3rem] text-base bg-white text-black'>
+                  <Button onClick={() => router.push("/")} className='border border-black h-[2rem] text-base bg-white text-[#031026]'>
                     Continue Shopping
                   </Button>
                 </div>
@@ -221,7 +221,7 @@ export default function Cart() {
           </div>
         </div>
 
-        <div className='px-[1rem] lg:px-[4rem]'>
+        <div className='px-[1rem] lg:px-[3rem]'>
           <h2 className='text-[1.5rem] font-bold'>Wishlist</h2>
           <p className='text-xs'>Want to view your favourites? <Link className='underline' href={`/user/signup`}>Join us</Link> or <Link className='underline' href={`/user/login`}>Sign in</Link></p>
         </div>

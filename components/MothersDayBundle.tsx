@@ -52,7 +52,7 @@ export default function MothersDayBundle() {
     };
 
     return (
-        <div className="relative w-full max-w-[90rem] mx-auto px-[1rem] lg:px-[4rem] overflow-hidden mt-[2rem] lg:mt-[5rem]">
+        <div className="relative w-full max-w-[90rem] mx-auto px-[1rem] lg:px-[3rem] overflow-hidden mt-[2rem] lg:mt-[5rem]">
             <div className="bg-black/40">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -82,7 +82,7 @@ export default function MothersDayBundle() {
                 </AnimatePresence>
             </div>
 
-            <div className="absolute bottom-[1rem] hidden lg:flex lg:bottom-[4rem] w-full justify-center items-center space-x-[1.47rem] px-[1rem] lg:px-[4rem] h-[1.5rem]">
+            <div className="absolute bottom-[1rem] hidden lg:flex lg:bottom-[3rem] w-full justify-center items-center space-x-[1.47rem] px-[1rem] lg:px-[3rem] h-[1.5rem]">
                 {slides.map((_, index) => (
                     <button
                         key={index}

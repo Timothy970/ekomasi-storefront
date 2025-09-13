@@ -10,7 +10,7 @@ export default function Exclusive() {
                         <path d="M5.96067 7.33468C6.71868 7.33468 7.33317 6.72019 7.33317 5.96218C7.33317 5.20417 6.71868 4.58968 5.96067 4.58968C5.20265 4.58968 4.58817 5.20417 4.58817 5.96218C4.58817 6.72019 5.20265 7.33468 5.96067 7.33468Z" fill="black" />
                     </svg>
                 </div>
-                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-black mt-[0.31rem]'>Exclusive Discounts</span>
+                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-[#031026] mt-[0.31rem]'>Exclusive Discounts</span>
             </div>
             <div className='flex flex-col items-center justify-center'>
                 <div className='flex justify-center items-center h-[2.5rem] w-[2.5rem] border border-black rounded-full'>
@@ -19,7 +19,7 @@ export default function Exclusive() {
                         <path d="M5.96067 7.33468C6.71868 7.33468 7.33317 6.72019 7.33317 5.96218C7.33317 5.20417 6.71868 4.58968 5.96067 4.58968C5.20265 4.58968 4.58817 5.20417 4.58817 5.96218C4.58817 6.72019 5.20265 7.33468 5.96067 7.33468Z" fill="black" />
                     </svg>
                 </div>
-                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-black mt-[0.31rem]'>Easily tracked deliveries and returns</span>
+                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-[#031026] mt-[0.31rem]'>Easily tracked deliveries and returns</span>
             </div>
             <div className='flex flex-col items-center justify-center'>
                 <div className='flex justify-center items-center h-[2.5rem] w-[2.5rem] border border-black rounded-full'>
@@ -30,7 +30,7 @@ export default function Exclusive() {
                         <path d="M6.83317 12.1667H13.4998C13.6677 12.1662 13.8315 12.115 13.9698 12.0198C14.1081 11.9247 14.2144 11.79 14.2748 11.6333L16.6332 5.5H14.8498L12.9248 10.5H7.3915L3.64984 1.525C3.52297 1.22089 3.30881 0.961203 3.03441 0.778763C2.76001 0.596323 2.43769 0.499317 2.10817 0.500004H0.166504V2.16667H2.10817L6.0665 11.65C6.12902 11.8022 6.23519 11.9325 6.37162 12.0244C6.50805 12.1163 6.66865 12.1658 6.83317 12.1667Z" fill="black" />
                     </svg>
                 </div>
-                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-black mt-[0.31rem]'>Speedy checkout</span>
+                <span className='text-center text-wrap font-poppins text-sm font-normal leading-[150%] text-[#031026] mt-[0.31rem]'>Speedy checkout</span>
             </div>
         </div>
     )

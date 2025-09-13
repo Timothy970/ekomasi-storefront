@@ -10,10 +10,10 @@ export default function HomeCategories() {
 
   return (
     <div className="w-full flex justify-center items-center mt-[2.5rem]">
-      <div className="max-w-[90rem] w-full px-[1rem] lg:px-[4rem]">
+      <div className="max-w-[90rem] w-full px-[1rem] lg:px-[3rem]">
         <div className="flex flex-col gap-y-[1rem]">
           <h2 className="text-2xl not-italic font-bold leading-[2.1rem]">Categories</h2>
-          <p className="text-black font-poppins text-sm font-normal leading-[1.3125rem]">
+          <p className="text-[#031026] font-poppins text-sm font-normal leading-[1.3125rem]">
             Discover our pushchairs, baby clothing, nursery furniture and more
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function HomeCategories() {
 
                   <div className="px-2 pb-3 flex flex-col gap-[1rem] mt-[0.75rem] w-full justify-center lg:items-center">
                     <h3 className="text-base font-bold lg:font-light leading-[1.5rem]">{category.name}</h3>
-                    <Button className="w-full hidden rounded-[2.5rem] lg:block bg-[#AF52DE] h-[3rem] max-w-[18rem] font-semibold">Shop Now</Button>
+                    <Button className="w-full hidden rounded-[2.5rem] lg:block bg-[#AF52DE] h-[2rem] max-w-[18rem] font-semibold">Shop Now</Button>
                   </div>
                 </div>
               </Link>

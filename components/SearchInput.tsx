@@ -7,18 +7,18 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     const inputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="h-[2.5rem] flex items-center max-w-[42rem] w-full relative">
+        <div className="h-[2rem] flex items-center w-full md:w-[30rem] relative ">
             <Input
                 ref={inputRef}
                 placeholder={placeHolderText}
-                className="w-full h-full pl-4 pr-10 rounded-lg border border-[#AAA] bg-white"
+                className="w-full h-full pl-4 pr-10 text-[0.75rem] rounded-lg border border-[#AAA] bg-white"
             />
 
             <div className="absolute right-2 h-full flex items-center cursor-pointer border-l border-[#AAA] w-[2.25rem] justify-center" onClick={() => inputRef.current?.focus()}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
-                    height="19"
+                    height="20"
                     viewBox="0 0 20 19"
                     fill="none"
                 >

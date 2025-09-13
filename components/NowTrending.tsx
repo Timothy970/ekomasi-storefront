@@ -56,11 +56,11 @@ export default function NowTrending({ title }: { title: string }) {
 
     return (
         <div className="w-full flex justify-center items-center mt-[2rem] lg:mt-[2.5rem] pb-4">
-            <div className="max-w-[90rem] w-full px-[1rem] lg:px-[4rem] bg-white">
+            <div className="max-w-[90rem] w-full px-[1rem] lg:px-[3rem] bg-white">
                 <div className="flex items-end justify-between gap-4 mb-[2rem]">
                     <div>
                         <h2 className="text-2xl font-bold leading-[2.1rem]">{title}</h2>
-                        <p className="pt-[0.5rem] text-black/70 text-sm leading-[1.3125rem]">
+                        <p className="pt-[0.5rem] text-[#031026]/70 text-sm leading-[1.3125rem]">
                             Tap the arrows to slide products. One row. Animated with Framer Motion.
                         </p>
                     </div>
@@ -73,7 +73,7 @@ export default function NowTrending({ title }: { title: string }) {
                         transition={{ type: "spring", stiffness: 380, damping: 40 }}
                     >
                         {featured?.map((p, i) => (
-                            <Link  key={i.toString()} href={`/products/${p.product_id}`}>
+                            <Link key={i.toString()} href={`/products/${p.product_id}`}>
                                 <div
                                     ref={i === 0 ? cardRef : undefined}
                                     className="shrink-0 overflow-hidden mr-[1.5rem]"
@@ -99,10 +99,10 @@ export default function NowTrending({ title }: { title: string }) {
                 {
                     canPrev || canNext && <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
                         <Button className="rounded-full border border-black" onClick={prev} variant="outline" size="icon" aria-label="Previous" disabled={!canPrev}>
-                            <ChevronLeft className="h-[3rem] w-[3rem] " />
+                            <ChevronLeft className="h-[2rem] w-[3rem] " />
                         </Button>
                         <Button className="rounded-full border border-black" onClick={next} variant="outline" size="icon" aria-label="Next" disabled={!canNext}>
-                            <ChevronRight className="h-[3rem] w-[3rem] rounded-full" />
+                            <ChevronRight className="h-[2rem] w-[3rem] rounded-full" />
                         </Button>
                     </div>
                 }

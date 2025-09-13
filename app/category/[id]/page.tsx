@@ -48,7 +48,7 @@ export default function ProductCategory() {
                 category?.image_url && <CategoryBanner imageUrl={category?.image_url} />
             }
 
-            <div className='px-[1rem] lg:px-[4rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
+            <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
                 <div className='flex flex-row gap-x-[2rem]'>
                     <div className='w-0 lg:w-auto lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                         <CategoryFilter />
@@ -61,7 +61,7 @@ export default function ProductCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-black h-[2.5rem] lg:h-[3rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-[#031026] h-[2.5rem] lg:h-[2rem] min-w-[10rem] rounded-none flex gap-x-[1rem] lg:hidden'>
                                     <span className='text-base'>Filter</span>
                                     <span>
                                         <svg
@@ -95,7 +95,7 @@ export default function ProductCategory() {
                             </div>
 
                             <div className='flex flex-col items-start justify-center lg:mt-[1rem]'>
-                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-black'>{category?.name}</h2>
+                                <h2 className='text-[2.25rem] not-italic font-bold leading-[120%] text-[#031026]'>{category?.name}</h2>
                                 <p className='mt-4'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                             </div>
 

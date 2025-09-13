@@ -10,13 +10,13 @@ export default function ProductBreadCrumb() {
     const segments = pathname.split("/").filter(Boolean);
 
     return (
-        <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[4rem]">
+        <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[3rem]">
             <div className="flex flex-wrap items-center space-x-[0.3rem]">
-                <Link href="/" className="underline text-black font-roboto text-base font-semibold">
+                <Link href="/" className="underline text-[#031026] font-roboto text-base font-semibold">
                     Home
                 </Link>
 
-                <span className="text-black">
+                <span className="text-[#031026]">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width={20}
@@ -33,7 +33,7 @@ export default function ProductBreadCrumb() {
                     </svg>
                 </span>
 
-                <div className="capitalize text-black font-roboto text-base font-semibold">
+                <div className="capitalize text-[#031026] font-roboto text-base font-semibold">
                     {product?.name}
                 </div>
             </div>

@@ -71,7 +71,7 @@ export default function HomeBanner() {
                             </p>
                         </div>
 
-                        <Button className="h-[3.4rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem]">
+                        <Button className="h-[3.3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.5rem] text-white font-poppins text-base font-normal leading-[1.95rem]">
                                 {slides[current].buttonText}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">
@@ -84,7 +84,7 @@ export default function HomeBanner() {
                 </motion.div>
             </AnimatePresence>
 
-            <div className="absolute right-[4rem] bottom-[4rem] flex justify-between items-center">
+            <div className="absolute right-[3rem] bottom-[3rem] flex justify-between items-center">
                 <button
                     onClick={prevSlide}
                     className="hidden lg:block"
@@ -106,7 +106,7 @@ export default function HomeBanner() {
             </div>
 
 
-            <div className="absolute bottom-[1rem] lg:bottom-[4rem] w-[10rem] lg:w-[25rem] flex justify-start items-center space-x-[1.47rem] px-[1rem] lg:px-[4rem] h-[1.5rem]">
+            <div className="absolute bottom-[1rem] lg:bottom-[3rem] w-[10rem] lg:w-[25rem] flex justify-start items-center space-x-[1.47rem] px-[1rem] lg:px-[3rem] h-[1.5rem]">
                 {slides.map((_, index) => (
                     <button
                         key={index}

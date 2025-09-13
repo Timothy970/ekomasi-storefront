@@ -28,7 +28,7 @@ const ProductQuantitySelect = forwardRef<HTMLButtonElement, ProductQuantitySelec
         }
 
         return (
-            <div className="text-black mt-[0.5rem]">
+            <div className="text-[#031026] mt-[0.5rem]">
                 <Select
                     value={String(quantity)}
                     onValueChange={(val) => handleValueChange(val)}

@@ -78,7 +78,7 @@ export default function ProductDetail() {
         return
       }
 
-      if(token) {
+      if (token) {
         router.push("/checkout/member")
       } else {
         router.push("/checkout/guest")
@@ -91,7 +91,7 @@ export default function ProductDetail() {
       <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem] bg-white'>
         <ProductBreadCrumb />
 
-        <div className='mt-[1.5rem] px-[1rem] lg:px-[4rem]'>
+        <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
           <div className='w-full flex flex-col lg:flex-row items-stretch'>
             {
               product && <div className='w-full h-full flex-1'>
@@ -145,9 +145,9 @@ export default function ProductDetail() {
                 />
               </div>
 
-              <Button onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[3rem]'>Add to cart</Button>
+              <Button onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[2rem]'>Add to cart</Button>
 
-              <Button onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[1rem] h-[2.5rem] lg:h-[3rem]'>Buy Now</Button>
+              <Button onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[1rem] h-[2.5rem] lg:h-[2rem]'>Buy Now</Button>
             </div>
 
           </div>
