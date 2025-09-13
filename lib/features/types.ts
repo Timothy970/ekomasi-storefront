@@ -247,24 +247,6 @@ export interface ProductResponse {
   status_code: number;
 };
 
-export interface CartItem {
-  price?: number;
-  product_id?: string;
-  product_name?: string;
-  quantity?: number;
-};
-
-export interface ViewCartResponse {
-  cart_items?: CartItem[];
-  discount?: number;
-  final?: number;
-  total?: number;
-  message?: string;
-  status_code?: number;
-  data?: any;
-};
-
-
 export interface AddToCartRequest {
   product_id: string;
   cart_id: string;
@@ -318,4 +300,43 @@ export interface LocationsResponse {
   data: LocationData
   message: string
   status_code: number
+}
+
+export interface ProductUrl {
+  image_id: string;
+  url: string;
+  is_primary: boolean;
+}
+
+export interface CartProduct {
+  product_id: string;
+  name: string;
+  description: string;
+  sku: string;
+  price: number;
+  category_id: string;
+  stock_quantity: number;
+  search_vector: string;
+  created_at: string;     // ISO date string
+  last_updated: string;   // ISO date string
+  urls: ProductUrl[];
+  product_variants: null | Record<string, any>; // adjust if variants have structure
+}
+
+export interface CartItem {
+  product: CartProduct;
+  quantity: number;
+}
+
+export interface CartData {
+  cart_items: CartItem[];
+  total: number;
+  discount: number;
+  final: number;
+}
+
+export interface ViewCartResponse {
+  data: CartData;
+  message: string;
+  status_code: number;
 }

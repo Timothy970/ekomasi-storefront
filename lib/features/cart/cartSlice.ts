@@ -1,12 +1,12 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { addToCart, createCart, getCart } from "./cartAPI";
-import { ViewCartResponse } from "../types";
+import { CartData } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
-	cart: ViewCartResponse | null;
+	cart: CartData | null;
 	cartId: string | null;
 }
 

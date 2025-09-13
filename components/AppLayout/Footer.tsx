@@ -19,7 +19,7 @@ export default function Footer() {
       </div>
 
       <div className="relative w-full flex flex-col justify-center items-center py-[3rem] lg:py-[5rem] z-20 h-auto">
-        <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[4rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
+        <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[3rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
           <div className='flex flex-col gap-y-[1.25rem] max-w-[20rem] md:max-w-full'>
             <Image
               src={"/images/company-logo.svg"}
@@ -30,12 +30,12 @@ export default function Footer() {
               className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 lg:hidden'
             />
             <div className='flex flex-col gap-y-[1.25rem]'>
-              <h2 className='text-white font-poppins text-base not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
+              <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
 
               <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
-                <Input className='text-white h-[2.5rem] lg:h-[3rem] text-base not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
+                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.875rem]  not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
 
-                <Button className='bg-white text-black h-[2.5rem] lg:h-[3rem] lg:w-[8rem]'>
+                <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[2rem] lg:w-[8rem]'>
                   Subscribe
                 </Button>
               </div>
@@ -46,8 +46,8 @@ export default function Footer() {
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full max-w-[60rem]'>
             {/* <div className='w-full'>
-              <h2 className='text-base not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
-              <ul className="flex flex-col list-none p-0 text-black font-sans text-base font-normal leading-[1.5rem]">
+              <h2 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
+              <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem]">
                 {categories?.map((cat) => (
                   <div key={cat.id} className='flex flex-col gap-y-[1rem] mb-[1rem]'>
                     <span className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{cat.name}</span>
@@ -58,7 +58,7 @@ export default function Footer() {
 
             {
               homeData?.social_links && <div className='w-full'>
-                <h2 className='text-base not-italic font-semibold leading-6 mb-[1rem]'>Follow Us</h2>
+                <h2 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Follow Us</h2>
                 <SocialLinksFooter social_links={homeData?.social_links} />
               </div>
             }
@@ -73,7 +73,7 @@ export default function Footer() {
 
         <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block lg:mb-[3rem]'></div>
 
-        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[4rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full md:min-h-[18rem] mb-[3rem]'>
+        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[3rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full md:min-h-[18rem] mb-[3rem]'>
           <div className='flex flex-row gap-x-[1rem]'>
             <div className='flex flex-row '>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

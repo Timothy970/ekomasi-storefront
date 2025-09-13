@@ -2,21 +2,18 @@
 import { selectProduct } from "@/lib/features/navigation/navigationSlice";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export default function ProductBreadCrumb() {
     const product = useAppSelector(selectProduct)
-    const pathname = usePathname();
-    const segments = pathname.split("/").filter(Boolean);
 
     return (
-        <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[4rem]">
+        <div className="text-sm text-gray-600 my-4 px-[1rem] lg:px-[3rem]">
             <div className="flex flex-wrap items-center space-x-[0.3rem]">
-                <Link href="/" className="underline text-black font-roboto text-base font-semibold">
+                <Link href="/" className="underline text-custom-black font-roboto text-[0.875rem] font-semibold">
                     Home
                 </Link>
 
-                <span className="text-black">
+                <span className="text-custom-black">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width={20}
@@ -33,7 +30,7 @@ export default function ProductBreadCrumb() {
                     </svg>
                 </span>
 
-                <div className="capitalize text-black font-roboto text-base font-semibold">
+                <div className="capitalize text-custom-black font-roboto text-[0.875rem] font-semibold">
                     {product?.name}
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import type {  SubCategoryProduct } from '@/lib/features/types'
+import type { SubCategoryProduct } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
 
 export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
@@ -21,13 +21,13 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
             </div>
 
             <div className="pt-4">
-                <h3 className="truncate text-black font-roboto text-base font-semibold leading-6">
+                <h3 className="truncate text-custom-black font-roboto text-[0.875rem] font-semibold leading-6">
                     {product.name}
                 </h3>
-                <p className="text-gray-600 font-poppins text-sm leading-[1.4rem] mt-1 line-clamp-2">
+                <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
                     {product.description}
                 </p>
-                <p className="mt-2 text-sm font-bold text-black">{product.price}</p>
+                <p className="mt-2 text-sm font-bold text-custom-black">{product.price}</p>
             </div>
         </div>
     )
