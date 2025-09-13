@@ -22,13 +22,13 @@ export default function Cart() {
 
   return (
     <Navigation>
-      <div className='w-full mx-auto max-w-[90rem] bg-red-500'>
+      <div className='w-full mx-auto max-w-[90rem]'>
         <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[3rem] md:gap-x-[2rem]'>
           <CartItems />
           <CartSummary />
         </div>
 
-        <div className='px-[1rem] lg:px-[3rem] bg-green-300'>
+        <div className='px-[1rem] lg:px-[3rem]'>
           <h2 className='text-[1.5rem] font-bold'>Wishlist</h2>
           <p className='text-xs'>Want to view your favourites? <Link className='underline' href={`/user/signup`}>Join us</Link> or <Link className='underline' href={`/user/login`}>Sign in</Link></p>
         </div>
