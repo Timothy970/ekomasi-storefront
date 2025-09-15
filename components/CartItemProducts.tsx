@@ -2,15 +2,17 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { CartItem } from '@/lib/features/types'
-import { useAppDispatch } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useParams, useRouter } from 'next/navigation'
-import { getCartAsync, updateCartAsync } from '@/lib/features/cart/cartSlice'
+import { getCartAsync, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
 
 export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
     const dispatch = useAppDispatch()
     const params = useParams<{ cart_id: string }>()
     const router = useRouter()
     const [productQuantity, setProductQuantity] = useState(item?.quantity)
+    const cartId = useAppSelector(selectCartId)
+    console.log(cartId, 'cartId')
 
     const refetchCart = () => {
         if (params?.cart_id) {

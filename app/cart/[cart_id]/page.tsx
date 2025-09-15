@@ -27,7 +27,7 @@ export default function Cart() {
         <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[3rem] md:gap-x-[2rem]'>
           <CartItems />
 
-          <div className='md:w-[40%]'>
+          <div className='w-full md:w-[40%]'>
             <CartSummary />
           </div>
         </div>

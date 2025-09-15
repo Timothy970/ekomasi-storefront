@@ -5,11 +5,14 @@ import { useRouter } from 'next/navigation'
 import { useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
+import { selectCart } from '@/lib/features/cart/cartSlice'
 
 export default function CartSummary({ }) {
     const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
+    const cart = useAppSelector(selectCart)
+    console.log(cart, 'cart')
 
     const handleContinueToCheckout = () => {
         if (token == null) {
@@ -18,11 +21,18 @@ export default function CartSummary({ }) {
             router.push("/checkout/member")
         }
     }
-    
+
     return (
         <div className='w-full mt-[2.25rem] md:mt-0'>
             <h2 className='text-[2rem] font-bold'>Cart Summary</h2>
-            <p className='mt-[0.5rem] text-[1.5rem]'>KES 140, 000</p>
+
+            <p className='mt-[0.5rem] text-[1.5rem]'>
+                {new Intl.NumberFormat("en-KE", {
+                    style: "currency",
+                    currency: "KES",
+                    minimumFractionDigits: 0, // or 2 if you want decimals
+                }).format(cart?.total ?? 0)}
+            </p>
 
             <div className='mt-[1.5rem] flex flex-col w-full'>
                 <div className='flex flex-row justify-between items-center w-full'>
@@ -58,7 +68,13 @@ export default function CartSummary({ }) {
 
                     <div className='w-full flex justify-between border-b border-black border-t py-[1rem]'>
                         <span>Total</span>
-                        <span>KES 140,000</span>
+                        <span>
+                            {new Intl.NumberFormat("en-KE", {
+                                style: "currency",
+                                currency: "KES",
+                                minimumFractionDigits: 0, // or 2 if you want decimals
+                            }).format(cart?.total ?? 0)}
+                        </span>
                     </div>
 
                     <div className='w-full flex flex-col justify-between gap-y-[1rem] mt-[1.5rem] mb-[3rem]'>
