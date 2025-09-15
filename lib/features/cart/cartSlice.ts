@@ -117,7 +117,6 @@ export const cartSlice = createAppSlice({
 		updateCartAsync: create.asyncThunk(
 			async ({ product_id, quantity, refetchCart }: { product_id: string, quantity: number, refetchCart: (cart_id: string) => void }) => {
 				const response = await updateCart({ product_id, quantity });
-				console.log(response, 'ressssss')
 
 				if (response.data?.cart_id) {
 					refetchCart(response.data?.cart_id)
