@@ -172,8 +172,6 @@ export default function PersonalInformation() {
                             Pay now
                         </Button>
                     </div>
-
-
                 </div>
             </div>
         </div>

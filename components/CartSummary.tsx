@@ -14,15 +14,17 @@ export default function CartSummary({ }) {
     const handleContinueToCheckout = () => {
         if (token == null) {
             setOpenGuestCheckoutModal(true)
+        } else {
+            router.push("/checkout/member")
         }
     }
     
     return (
-        <div className='w-full mt-[2.25rem] md:mt-0 md:w-[40%]'>
+        <div className='w-full mt-[2.25rem] md:mt-0'>
             <h2 className='text-[2rem] font-bold'>Cart Summary</h2>
             <p className='mt-[0.5rem] text-[1.5rem]'>KES 140, 000</p>
 
-            <div className='mt-[1.5rem] flex flex-col'>
+            <div className='mt-[1.5rem] flex flex-col w-full'>
                 <div className='flex flex-row justify-between items-center w-full'>
                     <span>Do you have a Promo Code ?</span>
                 </div>
