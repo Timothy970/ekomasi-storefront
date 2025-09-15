@@ -1,72 +1,80 @@
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from './ui/button'
 import { CartItem } from '@/lib/features/types'
-import { useAppDispatch } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useParams, useRouter } from 'next/navigation'
-import { getCartAsync, updateCartAsync } from '@/lib/features/cart/cartSlice'
+import { deleteProductFromCartAsync, getCartAsync, selectCart, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
 
 export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
     const dispatch = useAppDispatch()
     const params = useParams<{ cart_id: string }>()
     const router = useRouter()
-    const [productQuantity, setProductQuantity] = useState(item?.quantity)
+    const cartId = useAppSelector(selectCartId)
 
-    const refetchCart = () => {
+    const refetchCart = (cart_id: string) => {
         if (params?.cart_id) {
-            dispatch(getCartAsync(params?.cart_id))
+            dispatch(getCartAsync(cart_id))
         } else {
             router.push("/")
         }
     }
     const handlePlusBtn = () => {
         const newQuantity = (item?.quantity ?? 0) + 1
-        dispatch(
-            updateCartAsync({
-                product_id: item?.product_id,
-                quantity: newQuantity,
-                refetchCart,
-            })
-        )
-    }
 
-    const handleMinusBtn = () => {
-        if ((item?.quantity ?? 0) > 1) {
-            const newQuantity = item.quantity - 1
+        if (cartId) {
             dispatch(
                 updateCartAsync({
-                    product_id: item.product_id,
+                    product_id: item?.product.product_id,
                     quantity: newQuantity,
                     refetchCart,
+                    cart_id: cartId,
                 })
             )
         }
     }
 
+    const handleMinusBtn = () => {
+        if ((item?.quantity ?? 0) > 1) {
+            const newQuantity = item.quantity - 1
+
+            if (cartId) {
+                dispatch(
+                    updateCartAsync({
+                        product_id: item?.product.product_id,
+                        quantity: newQuantity,
+                        refetchCart,
+                        cart_id: cartId,
+                    })
+                )
+            }
+        }
+    }
+
     const handleDeleteBtn = () => {
-        // if ((item?.quantity ?? 0) > 1) {
-        //     const newQuantity = item.quantity - 1
-        //     dispatch(
-        //         updateCartAsync({
-        //             product_id: item.product_id,
-        //             quantity: newQuantity,
-        //             refetchCart,
-        //         })
-        //     )
-        // }
+        if (cartId) {
+            dispatch(
+                deleteProductFromCartAsync({
+                    product_id: item?.product.product_id,
+                    refetchCart,
+                    cart_id: cartId,
+                })
+            )
+        }
     }
 
     return (
         <div className='gap-x-[0.75rem] w-full flex justify-between items-start py-[0.75rem] border-b border-[rgba(0,0,0,0.40)]'>
-            <div className="relative w-[40%]  h-[10rem] md:h-[15rem]">
-                <Image
-                    // src={item?.image}
-                    src={"https://images.unsplash.com/photo-1612722432474-b971cdcea546?q=80&w=927&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
-                    alt="Example"
-                    fill
-                    className="object-cover"
-                />
-            </div>
+            {
+                item?.product?.urls?.length && <div className="relative w-[40%]  h-[10rem] md:h-[15rem]">
+                    <Image
+                        src={item?.product?.urls[0]?.url}
+                        alt="Example"
+                        fill
+                        className="object-cover"
+                    />
+                </div>
+            }
 
             <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
                 <span className='text-[1rem] font-semibold'>KES 13,000</span>

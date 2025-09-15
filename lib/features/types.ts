@@ -256,6 +256,7 @@ export interface AddToCartRequest {
 export interface CreateCartRequest {
   product_id: string;
   quantity: number;
+  cart_id?: string
 }
 
 export interface WishList {
@@ -365,4 +366,10 @@ export interface UserDetailsResponse {
   data: UserData
   message: string
   status_code: number
+}
+
+
+export interface DeleteCartRequest {
+  product_id: string;
+  cart_id: string
 }

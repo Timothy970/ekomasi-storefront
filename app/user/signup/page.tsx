@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Link from 'next/link'
 import SocialLogins from '@/components/SocialLogins'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { resetMessage, resetSuccess, selectMessage, selectUserToken, signUpUserAsync } from '@/lib/features/user/userSlice'
@@ -66,6 +65,16 @@ export default function SignUp() {
         }
     }, [token, router]);
 
+    const handleLogin = () => {
+        const redirect = searchParams.get("redirect")
+
+        if (redirect) {
+            router.push(`/user/login?redirect=${redirect}`);
+        } else {
+            router.push(`/user/login`);
+        }
+    }
+
     return (
         <div className='h-screen w-screen flex flex-col lg:flex-row justify-center items-center px-[1.25rem]'>
             <div className='max-w-[90rem] w-full h-full max-h-[56.25rem] flex flex-row justify-center'>
@@ -126,9 +135,9 @@ export default function SignUp() {
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
                             <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Already have an account?</span>
 
-                            <Link href="/user/login">
+                            <div onClick={handleLogin} className='cursor-pointer'>
                                 <span className='font-roboto text-[0.875rem] font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
-                            </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

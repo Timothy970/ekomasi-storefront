@@ -137,18 +137,22 @@ export default function ProductDetail() {
                 <ProductColors />
               </div>
 
-              <div className='mt-[0.75rem]'>
-                <h3 className='text-[0.875rem]'>Quantity</h3>
-                <ProductQuantitySelect
-                  setQuantity={setQuantity}
-                  quantity={quantity}
-                  ref={quantityRef}
-                  hasError={hasError}
-                  setHasError={setHasError}
-                />
-              </div>
+              {
+                product && product && product?.stock_quantity > 0 && <div className='mt-[0.75rem]'>
+                  <h3 className='text-[0.875rem]'>Quantity</h3>
+                  <ProductQuantitySelect
+                    setQuantity={setQuantity}
+                    quantity={quantity}
+                    ref={quantityRef}
+                    hasError={hasError}
+                    setHasError={setHasError}
+                  />
+                </div>
+              }
 
-              <Button onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[2rem]'>Add to cart</Button>
+              {
+                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[2rem]'>Add to cart</Button>
+              }
 
               <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2.5rem] lg:h-[2rem]'>Buy Now</Button>
             </div>
@@ -158,6 +162,6 @@ export default function ProductDetail() {
 
         <NowTrending title="You may also like" />
       </div>
-    </Navigation>
+    </Navigation >
   )
 }
