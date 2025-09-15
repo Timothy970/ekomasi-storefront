@@ -42,11 +42,11 @@ export default function CheckoutCartSummary() {
                 </div>
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
-                    <span className='text-custom-black text-[0.875rem]'>0</span>
+                    <span className='text-custom-black text-[0.875rem]'>16%</span>
                 </div>
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
-                    <span className='text-custom-black text-[0.875rem]'>0</span>
+                    <span className='text-custom-black text-[0.875rem]'>{cart?.discount?.toFixed()}</span>
                 </div>
             </div>
 

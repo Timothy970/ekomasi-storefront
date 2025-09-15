@@ -25,11 +25,11 @@ export default function CartSummary({ }) {
         <div className='w-full mt-[2.25rem] md:mt-0'>
             <h2 className='text-[2rem] font-bold'>Cart Summary</h2>
 
-            <p className='mt-[0.5rem] text-[1.5rem]'>
+            <p className='mt-[0.5rem] text-[1.5rem] uppercase'>
                 {new Intl.NumberFormat("en-KE", {
                     style: "currency",
                     currency: "KES",
-                    minimumFractionDigits: 0, // or 2 if you want decimals
+                    minimumFractionDigits: 0,
                 }).format(cart?.total ?? 0)}
             </p>
 
@@ -57,11 +57,11 @@ export default function CartSummary({ }) {
                         </div>
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
-                            <span className='text-custom-black text-[0.875rem]'>0</span>
+                            <span className='text-custom-black text-[0.875rem]'>16%</span>
                         </div>
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
-                            <span className='text-custom-black text-[0.875rem]'>0</span>
+                            <span className='text-custom-black text-[0.875rem]'>{cart?.discount?.toFixed()}</span>
                         </div>
                     </div>
 
@@ -71,7 +71,7 @@ export default function CartSummary({ }) {
                             {new Intl.NumberFormat("en-KE", {
                                 style: "currency",
                                 currency: "KES",
-                                minimumFractionDigits: 0, // or 2 if you want decimals
+                                minimumFractionDigits: 0,
                             }).format(cart?.total ?? 0)}
                         </span>
                     </div>

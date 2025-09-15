@@ -1,4 +1,3 @@
-// CountrySelect.tsx
 import {
     Select,
     SelectContent,
@@ -10,18 +9,19 @@ import { FormData } from "@/lib/features/types"
 import React from "react"
 
 const countries = [
-    { code: "KE", name: "Kenya" },
-    { code: "UG", name: "Uganda" },
-    { code: "TZ", name: "Tanzania" },
-    { code: "US", name: "United States" },
-    { code: "GB", name: "United Kingdom" },
-    { code: "DE", name: "Germany" },
+    { code: "Kenya", name: "Kenya" },
+    { code: "Uganda", name: "Uganda" },
+    { code: "Tanzania", name: "Tanzania" },
+    { code: "United States", name: "United States" },
+    { code: "United Kingdom", name: "United Kingdom" },
+    { code: "Germany", name: "Germany" },
 ]
 
 export default function CountrySelect({ formData, setFormData }: { formData: FormData, setFormData: React.Dispatch<React.SetStateAction<FormData>> }) {
     return (
         <Select
             value={formData.country}
+            required
             onValueChange={(val) =>
                 setFormData((prev: FormData) => ({ ...prev, country: val }))
             }

@@ -20,7 +20,7 @@ export default function Footer() {
 
       <div className="relative w-full flex flex-col justify-center items-center py-[3rem] lg:py-[5rem] z-20 h-auto">
         <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[3rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
-          <div className='flex flex-col gap-y-[1.25rem] max-w-[20rem] md:max-w-full'>
+          <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
               src={"/images/company-logo.svg"}
               alt="Logo"
@@ -33,7 +33,7 @@ export default function Footer() {
               <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
 
               <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
-                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.875rem]  not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
+                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
 
                 <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[2rem] lg:w-[8rem]'>
                   Subscribe
