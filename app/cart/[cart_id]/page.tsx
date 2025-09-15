@@ -10,7 +10,6 @@ import CartSummary from '@/components/CartSummary';
 import CartItems from '@/components/CartItems';
 import { selectUserToken } from '@/lib/features/user/userSlice';
 
-
 export default function Cart() {
   const params = useParams<{ cart_id: string }>()
   const dispatch = useAppDispatch()
@@ -27,7 +26,10 @@ export default function Cart() {
       <div className='w-full mx-auto max-w-[90rem]'>
         <div className='mt-[2.25rem] mb-[2.5rem] w-full flex flex-col md:flex-row justify-center md:items-start items-center mx-auto px-[1rem] lg:px-[3rem] md:gap-x-[2rem]'>
           <CartItems />
-          <CartSummary />
+
+          <div className='md:w-[40%]'>
+            <CartSummary />
+          </div>
         </div>
 
         {

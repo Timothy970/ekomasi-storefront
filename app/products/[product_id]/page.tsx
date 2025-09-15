@@ -26,6 +26,12 @@ export default function ProductDetail() {
   const createAndAdd = (cart_id: string) => {
     if (product?.product_id && cart_id) {
       dispatch(addToCartAsync({ product_id: product?.product_id, quantity, cart_id }))
+
+      if (cart_id) {
+        setTimeout(() => {
+          dispatch(getCartAsync(cart_id))
+        }, 2000)
+      }
     }
   }
 

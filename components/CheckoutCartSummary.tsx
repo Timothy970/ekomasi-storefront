@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import CartItems from './GuestCartItems'
+import GuestCartItems from './GuestCartItems'
 
 export default function CheckoutCartSummary() {
     return (
@@ -42,7 +42,7 @@ export default function CheckoutCartSummary() {
 
             <h2 className='text-[2rem] font-bold self-start mt-[1.5rem]'>Cart</h2>
 
-            <CartItems />
+            <GuestCartItems />
         </div>
     )
 }

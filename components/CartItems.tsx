@@ -5,7 +5,6 @@ import CartItemProducts from './CartItemProducts'
 
 export default function CartItems() {
     const cart = useAppSelector(selectCart)
-    // console.log(cart, 'cart')
 
     return (
         <div className='flex flex-col w-full items-center justify-center md:w-[60%]'>
@@ -30,7 +29,11 @@ export default function CartItems() {
             <div className='w-full flex flex-col gap-y-[0.5rem]'>
                 {
                     cart?.cart_items?.map((item, index) => {
-                        return <CartItemProducts key={index.toString()} item={item} /> 
+                        return <CartItemProducts
+                            hideBtns={false}
+                            key={index.toString()}
+                            item={item}
+                        />
                     })
                 }
             </div>
