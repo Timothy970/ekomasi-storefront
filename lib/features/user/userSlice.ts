@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { OtpRequestParams, SignInParams, SignUpParams, User, VerifyOtpParams } from "../types";
-import { requestOtp, signIn, signUpUser, verifyOtp } from "./userAPI";
+import { OtpRequestParams, SignInParams, SignUpParams, User, UserData, VerifyOtpParams } from "../types";
+import { getUserProfile, requestOtp, signIn, signUpUser, verifyOtp } from "./userAPI";
 
 interface UserSliceState {
 	user: User | null;
@@ -11,6 +11,7 @@ interface UserSliceState {
 	token: string | null;
 	success: boolean;
 	expiresIn: number | null;
+	userProfile: UserData | null;
 }
 
 const initialState: UserSliceState = {
@@ -22,6 +23,7 @@ const initialState: UserSliceState = {
 	googleStatus: "idle",
 	phoneOrEmailValue: "",
 	expiresIn: null,
+	userProfile: null,
 };
 
 export const userSlice = createAppSlice({
@@ -33,6 +35,16 @@ export const userSlice = createAppSlice({
 		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
+		}),
+		logout: create.reducer((state) => {
+			state.token = null
+			state.expiresIn = null
+			state.userProfile = null
+			state.phoneOrEmailValue = ""
+			state.googleStatus = "idle"
+			state.success = false
+			state.message = ""
+			state.status = "idle"
 		}),
 		signUpUserAsync: create.asyncThunk(
 			async (user: SignUpParams) => {
@@ -126,10 +138,39 @@ export const userSlice = createAppSlice({
 						state.success = true
 						state.message = action.payload?.message || "Verification successful"
 						state.token = action.payload?.data?.token ?? ""
-						state.expiresIn = action.payload?.data?.expires_in ?? 0
+						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
 						state.message = action.payload?.message || "Invalid or expired OTP"
+						state.expiresIn = null
+						state.token = null
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = "Invalid or expired OTP"
+				},
+			}
+		),
+		getUserProfileAsync: create.asyncThunk(
+			async (token: string) => {
+				const response = await getUserProfile(token)
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true
+						state.message = action.payload?.message
+						state.userProfile = action.payload.data
+					} else {
+						state.success = false
+						state.message = action.payload?.message || "Failed to get user profile."
 					}
 					state.status = "idle"
 				},
@@ -143,6 +184,8 @@ export const userSlice = createAppSlice({
 	}),
 	selectors: {
 		selectUser: (state: UserSliceState) => state.user || null,
+		selectExpiresIn: (state: UserSliceState) => state.expiresIn || null,
+		selectUserProfile: (state: UserSliceState) => state.userProfile || null,
 		selectStatus: (state: UserSliceState) => state.status,
 		selectSuccess: (state: UserSliceState) => state.success,
 		selectMessage: (state: UserSliceState) => state.message,
@@ -152,6 +195,6 @@ export const userSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync } = userSlice.actions; // Export actions
-export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue } = userSlice.selectors;
+export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout } = userSlice.actions; // Export actions
+export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn } = userSlice.selectors;
 export const userReducer = userSlice.reducer;

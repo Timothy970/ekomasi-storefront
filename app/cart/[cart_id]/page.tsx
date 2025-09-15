@@ -3,16 +3,18 @@ import Navigation from '@/components/Navigation'
 import React, { useEffect } from 'react'
 import NowTrending from '@/components/NowTrending';
 import Link from 'next/link';
-import { useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useParams } from 'next/navigation';
 import { getCartAsync } from '@/lib/features/cart/cartSlice';
 import CartSummary from '@/components/CartSummary';
 import CartItems from '@/components/CartItems';
+import { selectUserToken } from '@/lib/features/user/userSlice';
 
 
 export default function Cart() {
   const params = useParams<{ cart_id: string }>()
   const dispatch = useAppDispatch()
+  const token = useAppSelector(selectUserToken)
 
   useEffect(() => {
     if (params?.cart_id) {
@@ -28,10 +30,12 @@ export default function Cart() {
           <CartSummary />
         </div>
 
-        <div className='px-[1rem] lg:px-[3rem]'>
-          <h2 className='text-[1.5rem] font-bold'>Wishlist</h2>
-          <p className='text-xs'>Want to view your favourites? <Link className='underline' href={`/user/signup`}>Join us</Link> or <Link className='underline' href={`/user/login`}>Sign in</Link></p>
-        </div>
+        {
+          !token && <div className='px-[1rem] lg:px-[3rem]'>
+            <h2 className='text-[1.5rem] font-bold'>Wishlist</h2>
+            <p className='text-xs'>Want to view your favourites? <Link className='underline' href={`/user/signup`}>Join us</Link> or <Link className='underline' href={`/user/login`}>Sign in</Link></p>
+          </div>
+        }
 
         <NowTrending title="You may also like" />
       </div>
