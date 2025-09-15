@@ -4,8 +4,8 @@ import React, { useEffect } from 'react'
 import NowTrending from '@/components/NowTrending';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { useParams } from 'next/navigation';
-import { getCartAsync } from '@/lib/features/cart/cartSlice';
+import { useParams, useRouter } from 'next/navigation';
+import { getCartAsync, selectCart } from '@/lib/features/cart/cartSlice';
 import CartSummary from '@/components/CartSummary';
 import CartItems from '@/components/CartItems';
 import { selectUserToken } from '@/lib/features/user/userSlice';
@@ -14,12 +14,21 @@ export default function Cart() {
   const params = useParams<{ cart_id: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(selectUserToken)
+  const cart = useAppSelector(selectCart)
+  const router = useRouter()
 
   useEffect(() => {
     if (params?.cart_id) {
       dispatch(getCartAsync(params?.cart_id))
     }
   }, [params?.cart_id])
+
+
+  useEffect(() => {
+    if (!cart || cart && !cart?.cart_items) {
+      router.replace("/")
+    }
+  }, [cart])
 
   return (
     <Navigation>

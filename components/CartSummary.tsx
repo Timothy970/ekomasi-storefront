@@ -12,7 +12,6 @@ export default function CartSummary({ }) {
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
     const cart = useAppSelector(selectCart)
-    console.log(cart, 'cart')
 
     const handleContinueToCheckout = () => {
         if (token == null) {
