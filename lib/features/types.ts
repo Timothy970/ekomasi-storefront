@@ -373,3 +373,19 @@ export interface DeleteCartRequest {
   product_id: string;
   cart_id: string
 }
+
+export type FormData = {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    country: string
+    address: string
+    apartment: string
+    city: string
+    postalCode: string
+    voucher: string
+    paymentMethod: "card" | "paypal" | "mpesa" 
+    deliveryType: "Ship" | "Pickup"
+    promoApplied: boolean
+}
