@@ -1,4 +1,4 @@
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, ViewCartResponse } from "../types";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, DeleteCartRequest, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart(cart_id: string): Promise<ViewCartResponse> {
@@ -53,7 +53,7 @@ export async function createCart(data: CreateCartRequest): Promise<CreateCartRes
 export async function updateCart(data: CreateCartRequest): Promise<CreateCartResponse> {
     try {
         const response = await axios.patch(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/add`,
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/update/${data?.cart_id}`,
             {
                 product_id: data?.product_id,
                 quantity: data?.quantity
@@ -67,4 +67,17 @@ export async function updateCart(data: CreateCartRequest): Promise<CreateCartRes
     }
 }
 
-
+export async function deleteProductFromCart(data: DeleteCartRequest): Promise<CreateCartResponse> {
+    try {
+        const response = await axios.delete(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/remove/${data?.cart_id}`,
+            {
+                data: { product_id: data?.product_id },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
