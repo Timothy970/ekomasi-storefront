@@ -16,7 +16,6 @@ export default function Cart() {
   const token = useAppSelector(selectUserToken)
   const cart = useAppSelector(selectCart)
   const router = useRouter()
-  console.log(token)
 
   useEffect(() => {
     if (params?.cart_id) {
