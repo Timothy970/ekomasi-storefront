@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, getCart } from "./cartAPI";
+import { addToCart, createCart, getCart, updateCart } from "./cartAPI";
 import { CartData } from "../types";
 
 interface CartSliceState {
@@ -84,8 +84,42 @@ export const cartSlice = createAppSlice({
 			async ({ product_id, quantity, createAndAdd }: { product_id: string, quantity: number, createAndAdd: (cart_id: string) => void }) => {
 				const response = await createCart({ product_id, quantity });
 
-				if(response.data?.cart_id) {
+				if (response.data?.cart_id) {
 					createAndAdd(response.data?.cart_id)
+				}
+
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
+						state.success = true;
+						state.cartId = action.payload.data.cart_id
+
+
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+						state.cartId = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
+		updateCartAsync: create.asyncThunk(
+			async ({ product_id, quantity, refetchCart }: { product_id: string, quantity: number, refetchCart: (cart_id: string) => void }) => {
+				const response = await updateCart({ product_id, quantity });
+
+				if (response.data?.cart_id) {
+					refetchCart(response.data?.cart_id)
 				}
 
 				return response;
@@ -127,6 +161,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync } = cartSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync } = cartSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

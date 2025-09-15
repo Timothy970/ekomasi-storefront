@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/lib/features/user/userSlice";
 import type { AppStore } from "@/lib/store";
 import { makeStore } from "@/lib/store";
 import { setStore } from "@/lib/storeRef";
@@ -26,7 +27,22 @@ export const StoreProvider = ({ children }: Props) => {
       // configure listeners using the provided defaults
       // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
       const unsubscribe = setupListeners(storeRef.current.dispatch);
-      return unsubscribe;
+
+      const checkToken = () => {
+        const state = storeRef.current!.getState() as any;
+        const auth = state.user;
+
+        if (auth?.expiresAt && Date.now() >= auth.expiresAt) {
+          storeRef.current!.dispatch(logout());
+        }
+      };
+
+      const interval = setInterval(checkToken, 1000 * 30); // check every 30s
+
+      return () => {
+        unsubscribe();
+        clearInterval(interval);
+      };
     }
   }, []);
 

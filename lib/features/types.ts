@@ -326,6 +326,18 @@ export interface CartProduct {
 export interface CartItem {
   product: CartProduct;
   quantity: number;
+  product_id: string;
+  name: string;
+  description: string;
+  sku: string;
+  price: number;
+  category_id: string;
+  stock_quantity: number;
+  search_vector: string;
+  created_at: string;     // ISO date string
+  last_updated: string;   // ISO date string
+  urls: ProductUrl[];
+  product_variants: null | Record<string, any>; // adjust if variants have structure
 }
 
 export interface CartData {
@@ -339,4 +351,18 @@ export interface ViewCartResponse {
   data: CartData;
   message: string;
   status_code: number;
+}
+
+export interface UserData {
+  user_id: string
+  email: string
+  first_name: string
+  last_name: string
+  role: string
+}
+
+export interface UserDetailsResponse {
+  data: UserData
+  message: string
+  status_code: number
 }

@@ -12,18 +12,16 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
-import { selectUserToken } from '@/lib/features/user/userSlice'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
   const dispatch = useAppDispatch()
   const params = useParams<{ product_id: string }>()
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
   const cartId = useAppSelector(selectCartId)
   const quantityRef = useRef<HTMLButtonElement>(null)
   const [hasError, setHasError] = useState(false)
   const router = useRouter()
-  const token = useAppSelector(selectUserToken)
 
   const createAndAdd = (cart_id: string) => {
     if (product?.product_id && cart_id) {
@@ -78,21 +76,11 @@ export default function ProductDetail() {
         return
       }
 
-      if (token) {
-        router.push("/checkout/member")
-      } else {
-        router.push("/checkout/guest")
+      if (cartId) {
+        router.push(`/cart/${cartId}`)
       }
     })
   }
-
-  useEffect(() => {
-    if (product && product?.stock_quantity > 0) {
-      setQuantity(1)
-    } else {
-      setQuantity(0)
-    }
-  }), [product, product?.stock_quantity]
 
   return (
     <Navigation>
@@ -156,7 +144,7 @@ export default function ProductDetail() {
 
               <Button onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[2rem]'>Add to cart</Button>
 
-              <Button onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2.5rem] lg:h-[2rem]'>Buy Now</Button>
+              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2.5rem] lg:h-[2rem]'>Buy Now</Button>
             </div>
 
           </div>

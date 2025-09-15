@@ -1,4 +1,4 @@
-import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
+import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function signUpUser({ phone_number, email }: SignUpParams): Promise<SignUpResponse> {
@@ -67,4 +67,22 @@ export async function verifyOtp(data: VerifyOtpParams): Promise<VerifyOtpRespons
 }
 
 
+export async function getUserProfile(token: string): Promise<UserDetailsResponse | null> {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}user/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError;
+    throw err;
+  }
+}
 
