@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, getCart, updateCart } from "./cartAPI";
+import { addToCart, createCart, deleteProductFromCart, getCart, updateCart } from "./cartAPI";
 import { CartData } from "../types";
 
 interface CartSliceState {
@@ -115,11 +115,11 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		updateCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, refetchCart }: { product_id: string, quantity: number, refetchCart: (cart_id: string) => void }) => {
-				const response = await updateCart({ product_id, quantity });
+			async ({ product_id, quantity, refetchCart, cart_id }: { product_id: string, quantity: number, refetchCart: (cart_id: string) => void, cart_id: string }) => {
+				const response = await updateCart({ product_id, quantity, cart_id });
 
-				if (response.data?.cart_id) {
-					refetchCart(response.data?.cart_id)
+				if (cart_id) {
+					refetchCart(cart_id)
 				}
 
 				return response;
@@ -131,13 +131,9 @@ export const cartSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
 						state.success = true;
-						state.cartId = action.payload.data.cart_id
-
-
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
-						state.cartId = null
 					}
 					state.status = "idle";
 				},
@@ -148,8 +144,36 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		deleteProductFromCartAsync: create.asyncThunk(
+			async ({ product_id, refetchCart, cart_id }: { product_id: string, refetchCart: (cart_id: string) => void, cart_id: string }) => {
+				const response = await deleteProductFromCart({ product_id, cart_id });
 
+				if (cart_id) {
+					refetchCart(cart_id)
+				}
 
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
+						state.success = true;
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectStatus: (state: CartSliceState) => state.status,
@@ -161,6 +185,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync } = cartSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync } = cartSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

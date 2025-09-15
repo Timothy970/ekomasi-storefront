@@ -100,7 +100,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
             }
 
             {
-              cartId && token ? <Link href={`/cart/${cartId}`}>
+              cartId ? <Link href={`/cart/${cartId}`}>
                 <div className='flex justify-center items-center mr-[0.5rem] relative'>
                   {
                     cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
