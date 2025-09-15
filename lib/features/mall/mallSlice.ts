@@ -57,7 +57,6 @@ export const mallSlice = createAppSlice({
 		getLocationsAsync: create.asyncThunk(
 			async () => {
 				const response = await getLocations();
-				console.log(response, 'ress')
 				return response;
 			},
 			{
