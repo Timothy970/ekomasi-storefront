@@ -2,18 +2,9 @@
 import CheckoutCartSummary from '@/components/CheckoutCartSummary'
 import Navigation from '@/components/Navigation'
 import PersonalInformation from '@/components/PersonalInformation'
-import { getLocationsAsync } from '@/lib/features/mall/mallSlice'
-import { useAppDispatch } from '@/lib/hooks'
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export default function GuestCheckout() {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-
-  useEffect(() => {
-    dispatch(getLocationsAsync())
-  }, [dispatch, router])
 
   return (
     <Navigation>

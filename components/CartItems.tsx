@@ -20,12 +20,12 @@ export default function CartItems() {
                     </div>
 
                     <div className='flex items-center justify-start gap-x-[0.38rem]'>
-                        <span>KES | </span>
-                        <span className='font-semibold text-[1.25rem]'>
+                        <span>|</span>
+                        <span className='font-semibold text-[1.25rem] uppercase'>
                             {new Intl.NumberFormat("en-KE", {
                                 style: "currency",
                                 currency: "KES",
-                                minimumFractionDigits: 0, // or 2 if you want decimals
+                                minimumFractionDigits: 0,
                             }).format(cart?.total ?? 0)}
                         </span>
                     </div>
