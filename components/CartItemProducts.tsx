@@ -77,8 +77,16 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
             }
 
             <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[1rem] font-semibold'>KES 13,000</span>
+                <span className='font-semibold text-[1rem] uppercase'>
+                    {new Intl.NumberFormat("en-KE", {
+                        style: "currency",
+                        currency: "KES",
+                        minimumFractionDigits: 0,
+                    }).format(item?.product?.price ?? 0)}
+                </span>
+
                 <span className='text-[0.875rem] font-medium capitalize'>{item?.product?.name}</span>
+
                 <span className='text-[0.875rem] font-medium'>{item?.product?.description}</span>
 
                 <div className='flex flex-row w-full gap-x-[0.5rem]'>
@@ -104,7 +112,6 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
                         </Button>
                     </div>
                 }
-
             </div>
         </div>
     )

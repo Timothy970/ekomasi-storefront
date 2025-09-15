@@ -1,30 +1,134 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { useAppSelector } from '@/lib/hooks'
-import { selectLocations } from '@/lib/features/mall/mallSlice'
 import LocationDropdown from './LocationDropdown'
 import { Checkbox } from './ui/checkbox'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { selectUserProfile } from '@/lib/features/user/userSlice'
+import CountrySelect from './CountrySelect'
+import { CartItem, FormData } from '@/lib/features/types'
+import { selectCart } from '@/lib/features/cart/cartSlice'
 
 export default function PersonalInformation() {
-    const [deliveryType, setDeliveryType] = useState<'Ship' | 'Instore'>()
-    const locations = useAppSelector(selectLocations)
+    const [formData, setFormData] = useState<FormData>({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        country: '',
+        courier: '',
+        state: '',
+        address: '',
+        apartment: '',
+        city: '',
+        postalCode: '',
+        voucher: '',
+        paymentMethod: 'card',
+        deliveryType: 'Ship',
+        promoApplied: false,
+        deliveryCharge: '',
+    })
+    const profile = useAppSelector(selectUserProfile)
+    const cart = useAppSelector(selectCart)
+    const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+
+    useEffect(() => {
+        if (profile) {
+            setFormData((prev: FormData) => ({
+                ...prev,
+                email: profile.email ?? prev.email,
+                firstName: profile.first_name ?? prev.firstName,
+                lastName: profile.last_name ?? prev.lastName,
+            }));
+        }
+    }, [profile, setFormData]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        setErrors((prev) => ({ ...prev, [name]: "" })); // clear error on change
+    };
+
+    const validate = () => {
+        const newErrors: Partial<Record<keyof FormData, string>> = {};
+        if (!formData.firstName) newErrors.firstName = "First name is required";
+        if (!formData.lastName) newErrors.lastName = "Last name is required";
+        if (!formData.email) newErrors.email = "Email is required";
+        if (!formData.phone) newErrors.phone = "Phone number is required";
+        if (!formData.country) newErrors.country = "Country is required";
+        if (!formData.courier) newErrors.courier = "Courier is required";
+        if (!formData.state) newErrors.state = "State is required";
+        if (!formData.address) newErrors.address = "Address is required";
+        if (!formData.city) newErrors.city = "City is required";
+        if (!formData.deliveryCharge) newErrors.deliveryCharge = "Delivery charge is required";
+        return newErrors;
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const newErrors = validate();
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+        console.log("Form submitted ✅", formData);
+    };
+
+    const orderPayload = (formData: FormData, cartItems: CartItem[]) => {
+        return {
+            user_id: profile?.user_id ?? null,
+            is_guest_order: profile?.user_id ? false : true,
+            guest_personal_details: {
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+            },
+            guest_delivery_address: {
+                street: formData.address,
+                apartment: formData.apartment,
+                city: formData.city,
+                state: formData.state,
+                postal_code: formData.postalCode,
+                country: formData.country,
+            },
+            courier_details: formData.courier,
+            order_items: cart?.cart_items,
+            delivery_charge: formData?.deliveryCharge,
+        };
+    };
 
     return (
-        <div className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
+        <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-0'>
             <h2 className='text-[1.5rem] font-bold'>Personal Information</h2>
 
             <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-[0.875rem] font-semibold'>First name</span>
-                    <Input placeholder='First name*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+                    <Input
+                        name="firstName"
+                        value={formData.firstName}
+                        disabled={!!profile?.first_name}
+                        onChange={handleChange}
+                        required
+                        placeholder='First name*'
+                        className='p-[0.5rem] h-[2rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
+                    />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-[0.875rem]'>Last name</span>
-                    <Input placeholder='Last name*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+                    <Input
+                        name="lastName"
+                        required
+                        disabled={!!profile?.last_name}
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        placeholder='Last name*'
+                        className='p-[0.5rem] h-[2rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
+                    />
                 </div>
             </div>
 
@@ -35,7 +139,16 @@ export default function PersonalInformation() {
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                         <path d="M18 0.5H2C0.897 0.5 0 1.397 0 2.5V14.5C0 15.603 0.897 16.5 2 16.5H18C19.103 16.5 20 15.603 20 14.5V2.5C20 1.397 19.103 0.5 18 0.5ZM18 2.5V3.011L10 9.234L2 3.012V2.5H18ZM2 14.5V5.544L9.386 11.289C9.56111 11.4265 9.77733 11.5013 10 11.5013C10.2227 11.5013 10.4389 11.4265 10.614 11.289L18 5.544L18.002 14.5H2Z" fill="black" />
                     </svg>
-                    <Input placeholder='Email Address*' className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+
+                    <Input
+                        name="email"
+                        value={formData.email}
+                        required
+                        disabled={!!profile?.email}
+                        onChange={handleChange}
+                        placeholder='Email Address*'
+                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
+                    />
                 </div>
             </div>
 
@@ -46,7 +159,15 @@ export default function PersonalInformation() {
                     <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="14" height="21" viewBox="0 0 14 21" fill="none">
                         <path d="M12 0.5H2C0.897 0.5 0 1.397 0 2.5V18.5C0 19.603 0.897 20.5 2 20.5H12C13.103 20.5 14 19.603 14 18.5V2.5C14 1.397 13.103 0.5 12 0.5ZM2 15.499V3.5H12L12.002 15.499H2Z" fill="black" />
                     </svg>
-                    <Input placeholder='254123456789*' className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+
+                    <Input
+                        name="phone"
+                        value={formData.phone}
+                        required
+                        onChange={handleChange}
+                        placeholder='254123456789*'
+                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    />
                 </div>
             </div>
 
@@ -54,7 +175,7 @@ export default function PersonalInformation() {
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -74,7 +195,7 @@ export default function PersonalInformation() {
                         <span>Ship</span>
                     </Button>
 
-                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
+                    <Button disabled className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -97,34 +218,84 @@ export default function PersonalInformation() {
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Country</span>
-                    <Input placeholder='Country/Region' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+                    <CountrySelect formData={formData} setFormData={setFormData} />
+                </div>
+
+                <div className='flex flex-col gap-y-[0.5rem]'>
+                    <span className='text-[0.875rem] font-semibold'>State</span>
+                    <Input
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        required
+                        placeholder='State*'
+                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    />
+                </div>
+
+                <div className='flex flex-col gap-y-[0.5rem]'>
+                    <span className='text-[0.875rem] font-semibold'>Courier Details</span>
+                    <Input
+                        name="courier"
+                        value={formData.courier}
+                        onChange={handleChange}
+                        required
+                        placeholder='Courier details*'
+                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Adress</span>
-                    <Input placeholder='Address*' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+                    <Input
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                        placeholder='Address*'
+                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    />
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc.(optional)</span>
-                    <Input placeholder='Address*' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                    <Input
+                        name="apartment"
+                        value={formData.apartment}
+                        onChange={handleChange}
+                        placeholder='Apartment, suite, etc.(optional)'
+                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    />
                 </div>
 
                 <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                     <div className='flex flex-col gap-y-[0.5rem] w-full'>
                         <span className='text-[0.875rem] font-semibold'>City</span>
-                        <Input placeholder='City' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                        <Input
+                            name="city"
+                            value={formData.city}
+                            required
+                            onChange={handleChange}
+                            placeholder='City'
+                            className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        />
                     </div>
 
                     <div className='flex flex-col gap-y-[0.5rem] w-full'>
                         <span className='text-[0.875rem] font-semibold'>ZIP / Postal code (optional)</span>
-                        <Input placeholder='Postal code (optional)' className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                        <Input
+                            name="postalCode"
+                            value={formData.postalCode}
+                            onChange={handleChange}
+                            placeholder='Postal code (optional)'
+                            className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        />
                     </div>
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                    <LocationDropdown />
+                    <LocationDropdown formData={formData} setFormData={setFormData} />
                 </div>
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
@@ -137,43 +308,43 @@ export default function PersonalInformation() {
                     </div>
 
                     <div className='flex gap-x-[2rem]'>
-                        <Input className='h-[2rem] border-[rgba(0,0,0,0.40)] text-[0.875rem]  text-[0.875rem] ' />
+                        <Input className='h-[2rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
                         <Button className='border h-[2rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
                             Apply
                         </Button>
                     </div>
 
                     <RadioGroup defaultValue="card" className="flex flex-col gap-y-[1rem]">
-                        <div className="flex items-center space-x-2">
+                        {/* <div className="flex items-center space-x-2">
                             <RadioGroupItem value="card" id="card" />
                             <Label htmlFor="card">Credit or Debit Card</Label>
-                        </div>
+                        </div> */}
 
-                        <div className="flex items-center space-x-2">
+                        {/* <div className="flex items-center space-x-2">
                             <RadioGroupItem value="paypal" id="paypal" />
                             <Label htmlFor="paypal">Paypal</Label>
-                        </div>
+                        </div> */}
 
                         <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="mpesa" id="mpesa" />
+                            <RadioGroupItem value="mpesa" id="mpesa" checked />
                             <Label htmlFor="mpesa">Mpesa</Label>
                         </div>
 
-                        <div className="flex items-center space-x-2">
+                        {/* <div className="flex items-center space-x-2">
                             <RadioGroupItem value="airtel" id="airtel" />
                             <Label htmlFor="airtel">Airtel</Label>
-                        </div>
+                        </div> */}
                     </RadioGroup>
 
-                    <div className='flex flex-col gap-y-[1rem]'>
+                    <div className='flex flex-col gap-y-[1.5rem]'>
                         <Input placeholder='254123456789' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
 
-                        <Button className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE]'>
+                        <Button type='submit' className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE]'>
                             Pay now
                         </Button>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }
