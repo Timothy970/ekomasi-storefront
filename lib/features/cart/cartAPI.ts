@@ -50,4 +50,21 @@ export async function createCart(data: CreateCartRequest): Promise<CreateCartRes
     }
 }
 
+export async function updateCart(data: CreateCartRequest): Promise<CreateCartResponse> {
+    try {
+        const response = await axios.patch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/add`,
+            {
+                product_id: data?.product_id,
+                quantity: data?.quantity
+            },
+            {}
+        );
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
 
