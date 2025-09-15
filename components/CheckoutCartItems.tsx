@@ -3,7 +3,7 @@ import { useAppSelector } from '@/lib/hooks'
 import React from 'react'
 import CartItemProducts from './CartItemProducts'
 
-export default function GuestCartItems() {
+export default function ChekcoutCartItems() {
     const cart = useAppSelector(selectCart)
 
     return (
