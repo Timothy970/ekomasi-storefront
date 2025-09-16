@@ -15,7 +15,7 @@ export default function OrderDetailsFlow() {
     const stepIndex = orderFlow.indexOf(currentStatus)
 
     return (
-        <div className="w-full flex items-start justify-center mt-[2rem] md:mt-[2.5rem]">
+        <div className="w-full flex items-start justify-center mt-[2rem] md:mt-[2.5rem] px-[1rem] lg:px-[3rem]">
             {orderFlow.map((step, index) => {
                 let dotClass = ""
                 if (isCancelled) {

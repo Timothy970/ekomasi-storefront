@@ -25,28 +25,29 @@ export default function Order() {
                         </svg>
 
                         <p className='text-[0.875rem]'>Your Order Was Successfully Placed.</p>
-                        <p className='text-[0.875rem]'>Thank You!</p>
                     </div>
                 </div>
 
                 <div className='w-full flex items-center flex-col mt-[1rem]'>
-                    <h2 className='text-[1.5rem] font-bold'>Order Details</h2>
+                    <p className='text-[0.875rem]'>Thank You!</p>
+
+                    <h2 className='text-[1.5rem] font-bold mt-[1rem]'>Order Details</h2>
 
                     <p className='font-medium text-[1.125rem] mt-[1rem]'>Check your email for your order confirmation.</p>
 
-                    <div className='flex flex-col items-center mt-[1.5rem] gap-y-[0.75rem]'>
-                        <div className='flex text-custom-black'>
-                            <span>Your order: </span>
+                    <div className='flex flex-col items-center mt-[1.5rem] gap-y-[0.5rem]'>
+                        <div className='flex text-custom-black gap-x-[0.5rem]'>
+                            <span className='font-medium'>Your order: </span>
                             <span>376517596</span>
                         </div>
 
-                        <div className='flex text-custom-black'>
-                            <span>Order Date: </span>
+                        <div className='flex text-custom-black gap-x-[0.5rem]'>
+                            <span className='font-medium'>Order Date: </span>
                             <span>May 07, 2025 at 11:28 AM EAT</span>
                         </div>
 
-                        <div className='flex text-custom-black'>
-                            <span>Total: </span>
+                        <div className='flex text-custom-black gap-x-[0.5rem]'>
+                            <span className='font-medium'>Total: </span>
                             <span>KES 118340.06</span>
                         </div>
 
