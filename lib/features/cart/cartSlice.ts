@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, deleteProductFromCart, getCart, updateCart } from "./cartAPI";
-import { CartData } from "../types";
+import { addToCart, createCart, createMemberOrder, deleteProductFromCart, getCart, updateCart } from "./cartAPI";
+import { CartData, MemberOrderPayload } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -144,6 +144,37 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		createOrderAsync: create.asyncThunk(
+			async ({ data, token, redirectToOrderDetails }: { data: MemberOrderPayload, token: string, redirectToOrderDetails: (cart_id: string) => void }) => {
+				const response = await createMemberOrder(data, token);
+				console.log(response, 'ressssss')
+
+				// if (cart_id) {
+				// 	refetchCart(cart_id)
+				// }
+
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					// if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
+					// 	state.success = true;
+					// } else {
+					// 	state.message = action.payload?.message || "Failed to fetch variants";
+					// 	state.success = false;
+					// }
+					// state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 		deleteProductFromCartAsync: create.asyncThunk(
 			async ({ product_id, refetchCart, cart_id }: { product_id: string, refetchCart: (cart_id: string) => void, cart_id: string }) => {
 				const response = await deleteProductFromCart({ product_id, cart_id });
@@ -185,6 +216,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync } = cartSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync } = cartSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

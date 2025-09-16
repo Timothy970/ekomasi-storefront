@@ -1,4 +1,4 @@
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, DeleteCartRequest, ViewCartResponse } from "../types";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, MemberOrderPayload, OrderPayload, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart(cart_id: string): Promise<ViewCartResponse> {
@@ -75,6 +75,21 @@ export async function deleteProductFromCart(data: DeleteCartRequest): Promise<Cr
                 data: { product_id: data?.product_id },
             }
         );
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function createMemberOrder(data: MemberOrderPayload, token: string): Promise<CreateOrderResponse> {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
+            data,
+            {}
+        );
+        console.log(response, 'ressssss')
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

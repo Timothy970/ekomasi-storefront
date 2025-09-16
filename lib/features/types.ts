@@ -392,5 +392,56 @@ export interface FormData {
   paymentMethod: "card" | "paypal" | "mpesa"
   deliveryType: "Ship" | "Pickup"
   promoApplied: boolean
-  deliveryCharge: number| string
+  deliveryCharge: number | string
+}
+
+export interface OrderPayload {
+  user_id: string | null;
+  is_guest_order: boolean;
+  guest_personal_details: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+  };
+  guest_delivery_address: {
+    street: string;
+    apartment: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
+  courier_details: string;
+  order_items: {
+    product_id: string;
+    variant_id: string | null;
+    quantity: number;
+    unit_price: number;
+  }[];
+  delivery_charge: number;
+  delivery_address: string;
+};
+
+export interface MemberOrderPayload {
+  user_id: string | undefined;
+  is_guest_order: boolean;
+  guest_personal_details: {};
+  guest_delivery_address: {};
+  courier_details: string;
+  order_items: OrderItem[];
+  delivery_charge: number | string;
+  delivery_address: string;
+}
+
+export interface OrderItem {
+    product_id: string;
+    variant_id: string | null;
+    quantity: number;
+    unit_price: number;
+}
+
+
+export interface CreateOrderResponse {
+
 }
