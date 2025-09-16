@@ -3,6 +3,10 @@ ARG NODE_VERSION=24
 FROM node:${NODE_VERSION}-alpine AS build
 WORKDIR /app
 
+# Accept custom base URL
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+
 # Install dependencies
 COPY package*.json ./
 RUN npm ci
