@@ -48,7 +48,9 @@ export default function Cart() {
           </div>
         }
 
-        <NowTrending title="You may also like" />
+        <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
+          <NowTrending title="You may also like" />
+        </div>
       </div>
     </Navigation>
   )
