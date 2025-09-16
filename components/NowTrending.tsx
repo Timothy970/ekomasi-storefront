@@ -57,7 +57,7 @@ export default function NowTrending({ title }: { title: string }) {
 
     return (
         <div className="w-full flex justify-center items-center mt-[2rem] lg:mt-[2.5rem] pb-4">
-            <div className="max-w-[90rem] w-full px-[1rem] lg:px-[3rem] bg-white">
+            <div className="max-w-[90rem] w-full bg-white">
                 <div className="flex items-end justify-between gap-4 mb-[2rem]">
                     <div>
                         <h2 className="text-2xl font-bold leading-[2.1rem]">{title}</h2>

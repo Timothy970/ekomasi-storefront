@@ -12,7 +12,9 @@ export default function Home() {
     <Navigation>
       <HomeBanner />
       <HomeCategories />
-      <NowTrending title="Now Trending" />
+      <div className="px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full">
+        <NowTrending title="Now Trending" />
+      </div>
       <CustomerTestimonials />
       <TalkToUs />
       <MothersDayBundle />
