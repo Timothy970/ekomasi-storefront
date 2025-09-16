@@ -6,9 +6,4 @@ env:
     value: development
   - name: NEXT_PUBLIC_API_BASE_URL
     value: "https://api.uat.adenzo.co.ke/api/"
-  - name: NEXT_PUBLIC_GOOGLE_REDIRECT_URI
-    value: "" # must match the one in Google Cloud Console
-
-secrets:
-  - NEXT_PUBLIC_GOOGLE_CLIENT_ID
-  - NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
+ 
