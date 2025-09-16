@@ -7,7 +7,7 @@ import { Product } from '@/lib/features/types'
 
 export default function WishListProductCard({ product }: { product: Product }) {
     return (
-        <Link href={`/product/${product?.product_id}`}>
+        <Link href={`/products/${product?.product_id}`}>
             <div className="overflow-hidden flex flex-col justify-center items-center">
                 {
                     product && product?.urls !== undefined && product?.urls.length > 0 && <div className="relative w-full h-[15rem] sm:h-[20rem] md:h-[20rem]">
