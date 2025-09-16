@@ -8,14 +8,13 @@ export default function WishLists() {
     const wishLists = useAppSelector(selectWishLists)
 
     return (
-
         <div className='mt-[2rem] pb-[2rem]'>
             <div>
                 {wishLists?.map((wishlist: WishList, index: number) => {
                     return <div key={index.toString()} className="">
                         <h2 className='font-bold text-lg'>{wishlist?.name}</h2>
 
-                        <div className='mt-[1.5rem] grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[2rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                        <div className='mt-[1.5rem] grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[2rem] sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
                             {
                                 wishlist?.products.map((product: Product, index: number) => {
                                     return <WishListProductCard
