@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
@@ -53,9 +52,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [token, router])
 
   return (
-    <div className="flex flex-col w-full min-h-screen justify-start items-center z-0">
-      <div className="w-full  px-4 py-3 border-b flex items-center justify-between">
-        <div className="w-full max-w-[90rem] mx-auto flex flex-row items-center justify-between">
+    <div className="flex flex-col w-full min-h-screen justify-start items-center md:z-0">
+      <div className="w-full px-4 py-3 border-b flex items-center justify-between">
+        <div className="w-full max-w-[90rem] px-[1rem] lg:px-[3rem] mx-auto flex flex-row items-center justify-between">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -100,7 +99,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       <div className="flex w-full h-full justify-center items-start relative">
-        <div className="max-w-[90rem] w-full h-full flex flex-row">
+        <div className="max-w-[90rem] w-full h-full flex flex-row px-[1rem] lg:px-[3rem]">
           <aside className={`bg-white fixed top-0 left-0 h-full w-3/4 max-w-xs z-50 shadow-2xl transform transition-transform duration-300 md:relative md:translate-x-0 md:w-1/4 md:block ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="p-4 flex flex-col gap-2 w-full">
               {profile && (
@@ -123,7 +122,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <Link key={tab.name} href={tab.href}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
-                      className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-[#C9A0FF] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
+                      className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-[#804A9D29] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
                       onClick={() => setSidebarOpen(false)}
                     >
                       {tab.icon && tab.icon}
@@ -142,10 +141,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             />
           )}
 
-          <main className="flex-1 p-6 h-full">
-            <Card className="shadow-md h-full">
-              <CardContent className="p-6 h-full">{children}</CardContent>
-            </Card>
+          <main className="flex-1 p-[1rem] h-full">
+            <div className="md:p-6 h-full bg-white">{children}</div>
           </main>
         </div>
       </div>

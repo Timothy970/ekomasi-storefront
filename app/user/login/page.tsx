@@ -113,7 +113,7 @@ export default function Login() {
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 type='text'
                                 placeholder='Enter phone or email'
-                                className={`mt-[2rem] p-[0.75rem] text-[0.875rem]  font-poppins text-[0.875rem] font-normal leading-[195%] 
+                                className={`mt-[2rem] p-[0.75rem] text-[0.875rem] font-poppins font-normal leading-[195%] 
                                                             text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
                                                             ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                                         `}
