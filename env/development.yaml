@@ -9,7 +9,6 @@ env:
   - name: NEXT_PUBLIC_GOOGLE_REDIRECT_URI
     value: "" # must match the one in Google Cloud Console
 
-
 secrets:
   - NEXT_PUBLIC_GOOGLE_CLIENT_ID
   - NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
