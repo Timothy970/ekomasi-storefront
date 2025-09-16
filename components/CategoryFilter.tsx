@@ -3,17 +3,29 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect } from 'react'
 import Variant from './Variant'
 import { selectCategory } from '@/lib/features/navigation/navigationSlice'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
-export default function CategoryFilter({ page }: { page: string }) {
+interface CategoryFilterParam {
+    setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
+    page: string
+}
+
+export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFilterParam) {
     const dispatch = useAppDispatch()
     const variants = useAppSelector(selectVariants)
-
+    const router = useRouter()
     const category = useAppSelector(selectCategory)
 
     useEffect(() => {
         dispatch(getVariantsAsync())
     }, [])
+
+    const handleCategoryClick = (id: string) => {
+        if (id) {
+            setOpenFilterModal(false)
+            router.push(`/subcategory/${id}`)
+        }
+    }
 
     return (
         <div className='mt-4 lg:mt-0 w-full h-auto'>
@@ -24,9 +36,9 @@ export default function CategoryFilter({ page }: { page: string }) {
                             {
                                 category?.subcategories.map((cat, index) => {
                                     return <div key={index?.toString()}>
-                                        <Link href={`/subcategory/${cat?.id}`} className='w-full font-bold text-[0.875rem]'>
+                                        <div onClick={() => handleCategoryClick(cat?.id)} className='w-full text-custom-black font-semibold cursor-pointer text-[0.875rem] mb-2'>
                                             {cat?.name}
-                                        </Link>
+                                        </div>
                                     </div>
                                 })
                             }

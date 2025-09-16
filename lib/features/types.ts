@@ -90,6 +90,7 @@ export interface Category {
   image_url: string;
   subcategories: SubCategory[] | null;
   products: Product[] | null;
+  description: string
 }
 
 export interface Meta {
@@ -195,6 +196,7 @@ export interface SubcategoryProducts {
   parent_category_name: string;
   parent_category_image_url: string;
   products: SubCategoryProduct[];
+  description: string
 }
 
 export interface Pagination {
