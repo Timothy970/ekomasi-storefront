@@ -5,7 +5,7 @@ import { logout, userSlice } from "../features/user/userSlice";
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {

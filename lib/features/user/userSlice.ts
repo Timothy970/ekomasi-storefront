@@ -44,6 +44,7 @@ export const userSlice = createAppSlice({
 		}),
 		logout: create.reducer((state) => {
 			state.token = null
+			state.refresh_token = null
 			state.expiresIn = null
 			state.userProfile = null
 			state.phoneOrEmailValue = ""
@@ -144,12 +145,14 @@ export const userSlice = createAppSlice({
 						state.success = true
 						state.message = action.payload?.message || "Verification successful"
 						state.token = action.payload?.data?.token ?? ""
+						state.token = action.payload?.data?.refresh_token ?? ""
 						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
 						state.message = action.payload?.message || "Invalid or expired OTP"
 						state.expiresIn = null
 						state.token = null
+						state.refresh_token = null
 					}
 					state.status = "idle"
 				},
@@ -161,8 +164,8 @@ export const userSlice = createAppSlice({
 			}
 		),
 		getUserProfileAsync: create.asyncThunk(
-			async (token: string) => {
-				const response = await getUserProfile(token)
+			async () => {
+				const response = await getUserProfile()
 				return response
 			},
 			{

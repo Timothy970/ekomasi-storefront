@@ -1,3 +1,4 @@
+import api from "@/lib/utils/axios";
 import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
 import axios, { AxiosError } from "axios";
 
@@ -13,7 +14,7 @@ export async function signUpUser({ phone_number, email }: SignUpParams): Promise
             payload.email = email;
         }
 
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/signup`, payload);
+        const response = await api.post<SignUpResponse>("auth/signup", payload);
 
         return response.data;
     } catch (error) {
@@ -34,7 +35,7 @@ export async function signIn({ phone_number, email }: SignInParams): Promise<Sig
             payload.email = email;
         }
 
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/signin`, payload);
+        const response = await api.post<SignInResponse>("auth/signin", payload);
 
         return response.data;
     } catch (error) {
@@ -45,7 +46,7 @@ export async function signIn({ phone_number, email }: SignInParams): Promise<Sig
 
 export async function requestOtp(params: OtpRequestParams): Promise<OtpResponse> {
     try {
-        const response = await axios.post<OtpResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/resend-otp`, params)
+        const response = await api.post<OtpResponse>("auth/resend-otp", params);
 
         return response.data
     } catch (error: unknown) {
@@ -58,7 +59,7 @@ export async function requestOtp(params: OtpRequestParams): Promise<OtpResponse>
 
 export async function verifyOtp(data: VerifyOtpParams): Promise<VerifyOtpResponse> {
     try {
-        const response = await axios.post<VerifyOtpResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/verify-otp`, data)
+        const response = await api.post<VerifyOtpResponse>("auth/verify-otp", data);
 
         return response.data
     } catch (error: any) {
@@ -66,23 +67,14 @@ export async function verifyOtp(data: VerifyOtpParams): Promise<VerifyOtpRespons
     }
 }
 
+export async function getUserProfile(): Promise<UserDetailsResponse | null> {
+    try {
+        const response = await api.get<UserDetailsResponse>("user/me", { headers: { requiresAuth: true } });
 
-export async function getUserProfile(token: string): Promise<UserDetailsResponse | null> {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}user/me`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    const err = error as AxiosError;
-    throw err;
-  }
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
 }
 

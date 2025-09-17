@@ -42,6 +42,7 @@ export interface VerifyOtpParams {
 }
 
 export interface verfiyOtp {
+  refresh_token: string
   expires_in: number
   token: string
 }
@@ -51,6 +52,7 @@ export interface VerifyOtpResponse {
   status_code: number
   message: string
   token?: string
+  refresh_token?: string
 }
 
 export interface Image {
