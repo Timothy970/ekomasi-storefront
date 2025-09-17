@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, MemberOrderPayload, OrderPayload, UserOrdersResponse, ViewCartResponse } from "../types";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, MemberOrderPayload, Order, OrderPayload, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart(cart_id: string): Promise<ViewCartResponse> {
@@ -98,15 +98,28 @@ export async function createMemberOrder(data: MemberOrderPayload, token: string)
     }
 }
 
-
 export async function getUserOrders(): Promise<UserOrdersResponse> {
-  try {
-    const response = await api.get<UserOrdersResponse>("order/list-orders", {
-      headers: { requiresAuth: true },
-    });
-    return response.data;
-  } catch (error) {
-    const err = error as AxiosError<UserOrdersResponse>;
-    return err.response?.data ?? { status_code: 500, message: "Something went wrong", data: [] };
-  }
+    try {
+        const response = await api.get<UserOrdersResponse>("order/list-orders", {
+            headers: { requiresAuth: true },
+        });
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getUserOrder(order_id: string): Promise<UserOrderResponse> {
+    try {
+        const response = await api.get<UserOrderResponse>(`order/view`, {
+            params: { order_id },
+            headers: { requiresAuth: true },
+        });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
 }

@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createMemberOrder, deleteProductFromCart, getCart, getUserOrders, updateCart } from "./cartAPI";
+import { addToCart, createCart, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, updateCart } from "./cartAPI";
 import { CartData, MemberOrderPayload, Order } from "../types";
 
 interface CartSliceState {
@@ -9,6 +9,7 @@ interface CartSliceState {
 	cart: CartData | null;
 	cartId: string | null;
 	orders: Order[] | [],
+	order: Order | null,
 }
 
 const initialState: CartSliceState = {
@@ -17,7 +18,8 @@ const initialState: CartSliceState = {
 	success: false,
 	cart: null,
 	cartId: null,
-	orders: []
+	orders: [],
+	order: null,
 };
 
 export const cartSlice = createAppSlice({
@@ -234,11 +236,39 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		getOrderAsync: create.asyncThunk(
+			async (order_id: string) => {
+				const response = await getUserOrder(order_id);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data) {
+						state.success = true;
+						state.order = action.payload.data
+					} else {
+						state.message = action.payload?.message || "Failed to fetch cart";
+						state.success = false;
+						state.orders = []
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectStatus: (state: CartSliceState) => state.status,
 		selectCart: (state: CartSliceState) => state.cart,
 		selectUserOrders: (state: CartSliceState) => state.orders,
+		selectUserOrder: (state: CartSliceState) => state.order,
 		selectCartId: (state: CartSliceState) => state.cartId,
 		selectSuccess: (state: CartSliceState) => state.success,
 		selectMessage: (state: CartSliceState) => state.message,
@@ -246,6 +276,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync } = cartSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId, selectUserOrders } = cartSlice.selectors;
+export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync } = cartSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId, selectUserOrders, selectUserOrder } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

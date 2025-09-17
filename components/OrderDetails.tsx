@@ -1,21 +1,23 @@
+import { selectUserOrder } from '@/lib/features/cart/cartSlice'
+import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import React from 'react'
 
 export default function OrderDetails() {
-  const cart_items = [1, 2, 3, 4, 5]
+  const order = useAppSelector(selectUserOrder)
 
   return (
     <div className='mt-[2rem] md:mt-[2.5rem] w-full px-[1rem] lg:px-[3rem] flex flex-col md:flex-row md:justify-between'>
       <div className='w-full md:w-[50%]'>
         <h2 className='font-bold text-[1.25rem] mt-[1rem]'>Order Summary</h2>
 
-        <p className='text-[1.125rem] mt-[0.5rem]'>Arrives Thu, May 08 - Mon, May 12</p>
+        {/* <p className='text-[1.125rem] mt-[0.5rem]'>Arrives Thu, May 08 - Mon, May 12</p> */}
 
         <div className='w-full flex flex-col gap-y-[0.5rem] mt-[1.5rem]'>
           {
-            cart_items?.map((item, index) => {
-              return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex justify-start items-start border-b border-[rgba(0,0,0,0.40)] bg-red-400'>
-                <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0 bg-yellow-300">
+            order?.items?.map((item, index) => {
+              return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
+                <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0">
                   <Image
                     src={
                       'https://images.unsplash.com/photo-1612722432474-b971cdcea546?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
@@ -26,7 +28,7 @@ export default function OrderDetails() {
                   />
                 </div>
 
-                <div className='w-[60%] flex flex-col gap-y-[0.5rem] bg-green-400'>
+                <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
                   <span className='font-semibold text-[1rem] uppercase'>
                     KES 400
                   </span>
@@ -37,7 +39,7 @@ export default function OrderDetails() {
 
                   <div className='flex flex-row w-full gap-x-[0.5rem]'>
                     <span className='text-[0.875rem]'>Price:</span>
-                    <span className='text-[0.875rem] font-light'>100</span>
+                    <span className='text-[0.875rem] font-light'>{item?.unit_price}</span>
                   </div>
                 </div>
               </div>
@@ -46,9 +48,9 @@ export default function OrderDetails() {
         </div>
       </div>
 
-      <div className='w-full md:w-[30%] bg-purple-300 mt-[1rem]'>
+      <div className='w-full md:w-[30%] mt-[1rem]'>
         <div className='flex flex-col gap-y-[1rem]'>
-          <div className='flex w-full justify-between items-start border-t border-[#AAA] pt-[1.25rem]'>
+          <div className='flex w-full justify-between items-start md:border-t border-[#AAA] pt-[1.25rem]'>
             <h3 className='font-bold'>Address</h3>
 
             <div className='flex flex-col'>
@@ -102,7 +104,7 @@ export default function OrderDetails() {
             </div>
           </div>
 
-          <div className='flex flex-col gap-y-[0.5rem] w-full justify-between items-start border-t border-[#AAA] pt-[1.25rem]'>
+          <div className='flex flex-col gap-y-[0.5rem] w-full justify-between items-start pt-[1.25rem]'>
             <h3 className='font-bold'>Need Help?</h3>
 
             <div className='flex flex-col'>

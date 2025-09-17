@@ -464,3 +464,9 @@ export interface UserOrdersResponse {
   message: string;
   status_code: number;
 }
+
+export interface UserOrderResponse {
+  data: Order;
+  message: string;
+  status_code: number;
+}

@@ -19,8 +19,6 @@ export default function Orders() {
     const [ongoingOrders, setOngoingOrders] = useState<Order[]>([]);
     const [cancelledOrders, setCancelledOrders] = useState<Order[]>([]);
 
-    console.log(orders)
-
     useEffect(() => {
         if (token) {
             dispatch(getOrdersAsync())
