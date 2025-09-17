@@ -36,7 +36,7 @@ export default function SignUp() {
     }
 
     useEffect(() => {
-        if (message === "OTP sent") {
+        if (message === "Account created successfully. Please check your email/phone for activation.") {
             triggerToast(message, "success");
             const redirect = searchParams.get("redirect")
 
