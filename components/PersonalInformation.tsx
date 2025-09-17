@@ -11,6 +11,7 @@ import CountrySelect from './CountrySelect'
 import { FormData, OrderItem } from '@/lib/features/types'
 import { createOrderAsync, selectCart } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
@@ -108,6 +109,7 @@ export default function PersonalInformation({ page }: { page: string }) {
     };
 
     const redirectToOrderDetails = (order_id: string) => {
+        triggerToast("Order placed successfully!", "success");
         router.push(`/dashboard/orders/${order_id}`)
     }
 
