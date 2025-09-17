@@ -70,7 +70,6 @@ export async function verifyOtp(data: VerifyOtpParams): Promise<VerifyOtpRespons
 export async function getUserProfile(): Promise<UserDetailsResponse | null> {
     try {
         const response = await api.get<UserDetailsResponse>("user/me", { headers: { requiresAuth: true } });
-
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

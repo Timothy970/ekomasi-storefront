@@ -63,15 +63,16 @@ export const userSlice = createAppSlice({
 					state.status = "loading";
 				},
 				fulfilled: (state, action) => {
-					if (action.payload?.message == "OTP sent") {
-						state.phoneOrEmailValue = action.meta.arg.phone_number || action.meta.arg.email || ""
+					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
+						state.success = true;
+						state.message = "Account created successfully. Please check your email/phone for activation.";
+						state.phoneOrEmailValue = action.meta.arg.phone_number || action.meta.arg.email || "";
 					}
+
 					if (action.payload?.status_code == 409) {
 						state.message = "User with this email already exists"
 					}
-					if (action.payload?.status_code == 200) {
-						state.success = true;
-					}
+
 					state.status = "idle";
 				},
 				rejected: (state) => {
@@ -91,15 +92,12 @@ export const userSlice = createAppSlice({
 					state.status = "loading";
 				},
 				fulfilled: (state, action) => {
-					if (action.payload?.message == "OTP sent") {
+					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.phoneOrEmailValue = action.meta.arg.phone_number || action.meta.arg.email || ""
-						state.message = action.payload?.message
+						state.message = "OTP sent"
+						state.success = true;
 					}
 
-					if (action.payload?.status_code == 200) {
-						state.success =
-							true;
-					}
 					state.status = "idle";
 				},
 				rejected: (state) => {
@@ -141,15 +139,15 @@ export const userSlice = createAppSlice({
 					state.status = "loading"
 				},
 				fulfilled: (state, action) => {
-					if (action.payload?.status_code === 200) {
+					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.success = true
-						state.message = action.payload?.message || "Verification successful"
+						state.message = "Verification successful"
 						state.token = action.payload?.data?.token ?? ""
 						state.refresh_token = action.payload?.data?.refresh_token ?? ""
 						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
-						state.message = action.payload?.message || "Invalid or expired OTP"
+						state.message = "Invalid or expired OTP"
 						state.expiresIn = null
 						state.token = null
 						state.refresh_token = null
