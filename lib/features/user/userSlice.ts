@@ -9,6 +9,7 @@ interface UserSliceState {
 	googleStatus: "idle" | "loading" | "failed";
 	message: string;
 	token: string | null;
+	refresh_token: string | null;
 	success: boolean;
 	expiresIn: number | null;
 	userProfile: UserData | null;
@@ -19,6 +20,7 @@ const initialState: UserSliceState = {
 	status: "idle",
 	message: "",
 	token: "",
+	refresh_token: "",
 	success: false,
 	googleStatus: "idle",
 	phoneOrEmailValue: "",
@@ -36,8 +38,13 @@ export const userSlice = createAppSlice({
 		resetMessage: create.reducer((state) => {
 			state.message = "";
 		}),
+		setToken: create.reducer<{ token: string; refresh_token: string }>((state, action) => {
+			state.token = action.payload.token;
+			state.refresh_token = action.payload.refresh_token;
+		}),
 		logout: create.reducer((state) => {
 			state.token = null
+			state.refresh_token = null
 			state.expiresIn = null
 			state.userProfile = null
 			state.phoneOrEmailValue = ""
@@ -138,12 +145,14 @@ export const userSlice = createAppSlice({
 						state.success = true
 						state.message = action.payload?.message || "Verification successful"
 						state.token = action.payload?.data?.token ?? ""
+						state.refresh_token = action.payload?.data?.refresh_token ?? ""
 						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
 						state.message = action.payload?.message || "Invalid or expired OTP"
 						state.expiresIn = null
 						state.token = null
+						state.refresh_token = null
 					}
 					state.status = "idle"
 				},
@@ -155,8 +164,8 @@ export const userSlice = createAppSlice({
 			}
 		),
 		getUserProfileAsync: create.asyncThunk(
-			async (token: string) => {
-				const response = await getUserProfile(token)
+			async () => {
+				const response = await getUserProfile()
 				return response
 			},
 			{
@@ -190,11 +199,12 @@ export const userSlice = createAppSlice({
 		selectSuccess: (state: UserSliceState) => state.success,
 		selectMessage: (state: UserSliceState) => state.message,
 		selectUserToken: (state: UserSliceState) => state.token || null,
+		selectUserRefreshToken: (state: UserSliceState) => state.refresh_token || null,
 		selectPhoneOrEmailValue: (state: UserSliceState) => state.phoneOrEmailValue || "",
 	},
 });
 
 // Export actions and selectors
 export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout } = userSlice.actions; // Export actions
-export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn } = userSlice.selectors;
+export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;

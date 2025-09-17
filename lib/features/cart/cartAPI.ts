@@ -1,4 +1,5 @@
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, DeleteCartRequest, ViewCartResponse } from "../types";
+import api from "@/lib/utils/axios";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderPayload, MemberOrderPayload, Order, OrderPayload, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart(cart_id: string): Promise<ViewCartResponse> {
@@ -75,6 +76,62 @@ export async function deleteProductFromCart(data: DeleteCartRequest): Promise<Cr
                 data: { product_id: data?.product_id },
             }
         );
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function createMemberOrder(data: MemberOrderPayload): Promise<CreateOrderResponse> {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
+            data,
+            {}
+        );
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function createGuestOrder(data: GuestOrderPayload): Promise<CreateOrderResponse> {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
+            data,
+            {}
+        );
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getUserOrders(): Promise<UserOrdersResponse> {
+    try {
+        const response = await api.get<UserOrdersResponse>("order/list-orders", {
+            headers: { requiresAuth: true },
+        });
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getUserOrder(order_id: string): Promise<UserOrderResponse> {
+    try {
+        const response = await api.get<UserOrderResponse>(`order/view`, {
+            params: { order_id },
+            headers: { requiresAuth: true },
+        });
+
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

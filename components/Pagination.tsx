@@ -12,7 +12,7 @@ interface PaginationProps {
 
 export function Pagination({ meta, onPrev, onNext }: PaginationProps) {
   return (
-    <div className="flex w-full justify-center items-center gap-4 mt-8">
+    <div className="flex w-full justify-center items-center gap-4 mt-[2rem] md:mt-[2.5rem]">
       <Button
         variant="outline"
         className="bg-white text-custom-black h-[2rem] min-w-[10rem] border border-black text-[0.875rem] font-normal leading-[195%]"

@@ -1,39 +1,42 @@
 "use client";
+
 import { selectCategory } from "@/lib/features/navigation/navigationSlice";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
-export default function Breadcrumb() {
-    const category = useAppSelector(selectCategory)
+export default function CustomBreadcrumb() {
+  const category = useAppSelector(selectCategory);
 
-    return (
-        <div className="text-sm text-gray-600 my-4">
-            <div className="flex flex-wrap items-center space-x-[0.3rem]">
-                <Link href="/" className="underline text-custom-black font-roboto text-[0.875rem] font-semibold">
-                    Home
-                </Link>
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link
+              href="/"
+              className="text-custom-black font-roboto text-[0.875rem] font-semibold"
+            >
+              Home
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
 
-                <span className="text-custom-black">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={20}
-                        height={20}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-chevron-right-icon lucide-chevron-right"
-                    >
-                        <path d="M9 18l6-6-6-6" />
-                    </svg>
-                </span>
+        <BreadcrumbSeparator />
 
-                <div className="capitalize text-custom-black font-roboto text-[0.875rem] font-semibold">
-                    {category?.name}
-                </div>
-            </div>
-        </div>
-    );
+        <BreadcrumbItem>
+          <BreadcrumbPage className="capitalize text-custom-black font-roboto text-[0.875rem] font-semibold">
+            {category?.name}
+          </BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
 }

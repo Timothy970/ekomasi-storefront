@@ -4,12 +4,43 @@ import DashboardOrders from '@/components/DashboardOrders'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { getOrdersAsync, selectUserOrders } from '@/lib/features/cart/cartSlice'
+import { Order } from '@/lib/features/types'
+import { selectUserToken } from '@/lib/features/user/userSlice'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Orders() {
-    const [orders, setOrders] = useState([])
     const router = useRouter()
+    const token = useAppSelector(selectUserToken)
+    const dispatch = useAppDispatch()
+    const orders = useAppSelector(selectUserOrders)
+    const [ongoingOrders, setOngoingOrders] = useState<Order[]>([]);
+    const [cancelledOrders, setCancelledOrders] = useState<Order[]>([]);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(getOrdersAsync())
+        }
+    }, [token])
+
+    useEffect(() => {
+        if (orders?.length) {
+            const ongoing = orders.filter(
+                (order) => order.status === "pending" || order.status === "delivered"
+            );
+            const cancelled = orders.filter(
+                (order) => order.status === "canceled" || order.status === "returned"
+            );
+
+            setOngoingOrders(ongoing);
+            setCancelledOrders(cancelled);
+        } else {
+            setOngoingOrders([]);
+            setCancelledOrders([]);
+        }
+    }, [orders]);
 
     const handleStartShopping = () => {
         router.replace('/')
@@ -68,11 +99,11 @@ export default function Orders() {
                             </TabsList>
 
                             <TabsContent value="ongoing" className='w-full'>
-                                <DashboardOrders />
+                                <DashboardOrders orders={ongoingOrders} />
                             </TabsContent>
 
                             <TabsContent value="canceled" className='w-full'>
-                                <DashboardOrders />
+                                <DashboardOrders orders={cancelledOrders}  />
                             </TabsContent>
                         </Tabs>
                     }

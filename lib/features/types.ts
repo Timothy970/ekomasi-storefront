@@ -42,6 +42,7 @@ export interface VerifyOtpParams {
 }
 
 export interface verfiyOtp {
+  refresh_token: string
   expires_in: number
   token: string
 }
@@ -51,6 +52,7 @@ export interface VerifyOtpResponse {
   status_code: number
   message: string
   token?: string
+  refresh_token?: string
 }
 
 export interface Image {
@@ -90,6 +92,7 @@ export interface Category {
   image_url: string;
   subcategories: SubCategory[] | null;
   products: Product[] | null;
+  description: string
 }
 
 export interface Meta {
@@ -195,6 +198,7 @@ export interface SubcategoryProducts {
   parent_category_name: string;
   parent_category_image_url: string;
   products: SubCategoryProduct[];
+  description: string
 }
 
 export interface Pagination {
@@ -390,5 +394,95 @@ export interface FormData {
   paymentMethod: "card" | "paypal" | "mpesa"
   deliveryType: "Ship" | "Pickup"
   promoApplied: boolean
-  deliveryCharge: number| string
+  deliveryCharge: number | string
+}
+
+export interface OrderPayload {
+  user_id: string | null;
+  is_guest_order: boolean;
+  guest_personal_details: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+  };
+  guest_delivery_address: {
+    street: string;
+    apartment: string;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
+  courier_details: string;
+  order_items: {
+    product_id: string;
+    variant_id: string | null;
+    quantity: number;
+    unit_price: number;
+  }[];
+  delivery_charge: number;
+  delivery_address: string;
+};
+
+export interface MemberOrderPayload {
+  user_id: string | undefined;
+  is_guest_order: boolean;
+  guest_personal_details: {};
+  guest_delivery_address: {};
+  courier_details: string;
+  order_items: OrderItem[];
+  delivery_charge: number | string;
+  delivery_address: string;
+}
+
+export interface GuestOrderPayload {
+  user_id: null;
+  is_guest_order: boolean;
+  guest_personal_details: {};
+  guest_delivery_address: {};
+  courier_details: string;
+  order_items: OrderItem[];
+  delivery_charge: number | string;
+  delivery_address: string;
+}
+
+export interface OrderItem {
+  product_id: string;
+  variant_id: string | null;
+  quantity: number;
+  unit_price: number;
+}
+
+export interface CreateOrderData {
+  order_id: string
+}
+
+export interface CreateOrderResponse {
+  data: CreateOrderData;
+  message: string;
+  status_code: number;
+}
+
+export interface Order {
+  order_id: string;
+  delivery_id: string;
+  created_at: string;
+  status: string;
+  total_amount: number;
+  total_discount: number;
+  items: OrderItem[];
+}
+
+
+export interface UserOrdersResponse {
+  data: Order[];
+  message: string;
+  status_code: number;
+}
+
+export interface UserOrderResponse {
+  data: Order;
+  message: string;
+  status_code: number;
 }

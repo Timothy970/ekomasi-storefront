@@ -5,6 +5,7 @@ import PersonalInformation from '@/components/PersonalInformation'
 import React from 'react'
 
 export default function MemberCheckout() {
+ 
   return (
     <Navigation>
       <div className='w-full px-[1rem] lg:px-[3rem] mx-auto max-w-[90rem]'>
@@ -13,7 +14,7 @@ export default function MemberCheckout() {
             <CheckoutCartSummary />
           </div>
 
-          <PersonalInformation />
+          <PersonalInformation page="member" />
         </div>
       </div>
     </Navigation>

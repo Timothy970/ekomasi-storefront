@@ -32,7 +32,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
 
   useEffect(() => {
     if (token) {
-      dispatch(getUserProfileAsync(token))
+      dispatch(getUserProfileAsync())
     }
   }, [token, dispatch])
 

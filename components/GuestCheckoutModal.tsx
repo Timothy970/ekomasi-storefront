@@ -68,7 +68,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                     </div>
                 </div>
 
-                <div className='w-full flex flex-col justify-center items-center gap-y-[1rem] max-w-[23rem]'>
+                {/* <div className='w-full flex flex-col justify-center items-center gap-y-[1rem] max-w-[23rem]'>
                     <h2 className='font-bold text-[1.125rem]'>Check out as a Guest</h2>
                     <p className='text-center text-[1rem]'>You can create a free Adenzo Comfies Member Profile at any point during the checkout process.</p>
 
@@ -78,7 +78,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                         </svg>
                         <span>Continue as Guest</span>
                     </Button>
-                </div>
+                </div> */}
             </div>
         </div>
     )

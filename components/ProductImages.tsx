@@ -49,7 +49,7 @@ export default function ProductImages() {
                         >
                             <Image
                                 src={image?.url}
-                                alt="Example"
+                                alt=""
                                 fill
                                 className="object-cover rounded-md"
                             />
@@ -93,14 +93,16 @@ export default function ProductImages() {
                     </AnimatePresence>
                 }
 
-                <div className="absolute right-[1rem] bottom-[2rem] flex justify-between items-center gap-[0.5rem] z-10">
-                    <Button className="rounded-full border border-black" onClick={prevSlide} variant="outline" size="icon" aria-label="Previous">
-                        <ChevronLeft className="h-[2rem] w-[3rem]" />
-                    </Button>
-                    <Button className="rounded-full border border-black" onClick={nextSlide} variant="outline" size="icon" aria-label="Next">
-                        <ChevronRight className="h-[2rem] w-[3rem] rounded-full" />
-                    </Button>
-                </div>
+                {
+                    product && product?.urls && product?.urls?.length > 2 && <div className="absolute right-[1rem] bottom-[2rem] flex justify-between items-center gap-[0.5rem] z-10">
+                        <Button className="rounded-full border border-black" onClick={prevSlide} variant="outline" size="icon" aria-label="Previous">
+                            <ChevronLeft className="h-[2rem] w-[3rem]" />
+                        </Button>
+                        <Button className="rounded-full border border-black" onClick={nextSlide} variant="outline" size="icon" aria-label="Next">
+                            <ChevronRight className="h-[2rem] w-[3rem] rounded-full" />
+                        </Button>
+                    </div>
+                }
             </div>
         </div>
     )

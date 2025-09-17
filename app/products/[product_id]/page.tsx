@@ -30,7 +30,7 @@ export default function ProductDetail() {
       if (cart_id) {
         setTimeout(() => {
           dispatch(getCartAsync(cart_id))
-        }, 2000)
+        }, 1000)
       }
     }
   }
@@ -68,7 +68,7 @@ export default function ProductDetail() {
       if (cartId) {
         setTimeout(() => {
           dispatch(getCartAsync(cartId))
-        }, 2000)
+        }, 1000)
       }
     }
   }
@@ -94,7 +94,7 @@ export default function ProductDetail() {
         <ProductBreadCrumb />
 
         <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
-          <div className='w-full flex flex-col lg:flex-row items-stretch gap-x-[1rem]'>
+          <div className='w-full flex flex-col md:flex-row items-stretch gap-x-[1rem]'>
             {
               product && <div className='w-full h-full flex-1'>
                 <ProductImages />
@@ -102,22 +102,22 @@ export default function ProductDetail() {
             }
 
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
-              <h2 className='capitalize text-lg font-medium mt-[0.75rem] lg:mt-0'>{product?.name}</h2>
+              <h2 className='capitalize text-lg font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
 
               <span className='mt-[0.5rem] text-lg font-bold'>KES {product?.price}</span>
 
-              <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
+              {/* <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 <ProductStars />
                 <span>3.5 stars</span>
                 <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
                 <span>10 Reviews</span>
-              </div>
+              </div> */}
 
               <p className='text-[0.875rem] mt-[0.75rem] capitalize'>{product?.description}</p>
 
               {
                 product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[0.75rem]'>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+                  <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
                     <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
                   </svg>
                   <span>In Stock</span>
@@ -127,15 +127,15 @@ export default function ProductDetail() {
                 </div>
               }
 
-              <div className='flex items-center mt-[0.75rem]'>
+              {/* <div className='flex items-center mt-[0.75rem]'>
                 <span className='mr-2 font-semibold'>Brand:</span>
                 <span className='font-bold underline'>Tommee Tipee</span>
-              </div>
+              </div> */}
 
-              <div className='mt-[0.75rem]'>
+              {/* <div className='mt-[0.75rem]'>
                 <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
                 <ProductColors />
-              </div>
+              </div> */}
 
               {
                 product && product && product?.stock_quantity > 0 && <div className='mt-[0.75rem]'>
@@ -151,10 +151,10 @@ export default function ProductDetail() {
               }
 
               {
-                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2.5rem] lg:h-[2rem]'>Add to cart</Button>
+                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2rem]'>Add to cart</Button>
               }
 
-              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2.5rem] lg:h-[2rem]'>Buy Now</Button>
+              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2rem]'>Buy Now</Button>
             </div>
 
           </div>

@@ -1,6 +1,10 @@
+import { selectUserOrder } from "@/lib/features/cart/cartSlice"
+import { useAppSelector } from "@/lib/hooks"
 import React from "react"
 
 export default function OrderDetailsFlow() {
+    const order = useAppSelector(selectUserOrder)
+
     const orderFlow = [
         "Order Placed",
         "Pending Confirmation",

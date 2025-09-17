@@ -69,7 +69,7 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
                 item?.product?.urls?.length && <div className="relative w-[40%]  h-[10rem] md:h-[15rem]">
                     <Image
                         src={item?.product?.urls[0]?.url}
-                        alt="Example"
+                        alt=""
                         fill
                         className="object-cover"
                     />
