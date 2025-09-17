@@ -145,7 +145,7 @@ export const userSlice = createAppSlice({
 						state.success = true
 						state.message = action.payload?.message || "Verification successful"
 						state.token = action.payload?.data?.token ?? ""
-						state.token = action.payload?.data?.refresh_token ?? ""
+						state.refresh_token = action.payload?.data?.refresh_token ?? ""
 						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
@@ -199,11 +199,12 @@ export const userSlice = createAppSlice({
 		selectSuccess: (state: UserSliceState) => state.success,
 		selectMessage: (state: UserSliceState) => state.message,
 		selectUserToken: (state: UserSliceState) => state.token || null,
+		selectUserRefreshToken: (state: UserSliceState) => state.refresh_token || null,
 		selectPhoneOrEmailValue: (state: UserSliceState) => state.phoneOrEmailValue || "",
 	},
 });
 
 // Export actions and selectors
 export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout } = userSlice.actions; // Export actions
-export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn } = userSlice.selectors;
+export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;
