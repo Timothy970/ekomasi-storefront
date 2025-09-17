@@ -8,7 +8,7 @@ interface CategoryFilterModal {
 
 export default function CategoryFilterModal({ setOpenFilterModal, openFilterModal }: CategoryFilterModal) {
     return (
-        <div className={`block lg:hidden w-screen absolute inset-0 bg-white h-screen transform transition-transform duration-500 ease-in-out z-60 p-[1rem] ${openFilterModal ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className={`block lg:hidden w-screen absolute inset-0 bg-white h-screen overflow-y-scroll transform transition-transform duration-500 ease-in-out z-60 p-[1rem] ${openFilterModal ? "translate-x-0" : "-translate-x-full"}`}>
             <div className='flex w-full justify-between items-center'>
                 <span className='font-bold text-[1.25rem]'>Filters</span>
 
@@ -32,7 +32,7 @@ export default function CategoryFilterModal({ setOpenFilterModal, openFilterModa
             </div>
 
             <div className='w-full'>
-                <CategoryFilter page='category' />
+                <CategoryFilter setOpenFilterModal={setOpenFilterModal} page='category' />
             </div>
         </div>
     )

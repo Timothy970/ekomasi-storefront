@@ -1,13 +1,28 @@
+"use client"
 import Navigation from '@/components/Navigation'
 import OrderDetails from '@/components/OrderDetails'
 import OrderDetailsFlow from '@/components/OrderDetailsFlow'
-import React from 'react'
+import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice'
+import { selectUserProfile } from '@/lib/features/user/userSlice'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { useParams } from 'next/navigation'
+import React, { useEffect } from 'react'
 
 export default function Order() {
+    const params = useParams<{ id: string }>()
+    const dispatch = useAppDispatch()
+    const order = useAppSelector(selectUserOrder)
+    const profile = useAppSelector(selectUserProfile)
+
+    useEffect(() => {
+        if (params?.id) {
+            dispatch(getOrderAsync(params?.id));
+        }
+    }, [params?.id, dispatch]);
 
     return (
         <Navigation>
-            <div className='max-w-[90rem] w-full mx-auto flex flex-col items-center justify-center'>
+            <div className='max-w-[90rem] w-full mx-auto flex flex-col items-center justify-center mb-[2rem] md:mb-[2.5rem]'>
                 {/* <div className='w-full flex items-center justify-center bg-[#FF3B308F]'>
                     <div className='flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -38,28 +53,36 @@ export default function Order() {
                     <div className='flex flex-col items-center mt-[1.5rem] gap-y-[0.5rem]'>
                         <div className='flex text-custom-black gap-x-[0.5rem]'>
                             <span className='font-medium'>Your order: </span>
-                            <span>376517596</span>
+                            <span>{order?.order_id}</span>
                         </div>
 
-                        <div className='flex text-custom-black gap-x-[0.5rem]'>
-                            <span className='font-medium'>Order Date: </span>
-                            <span>May 07, 2025 at 11:28 AM EAT</span>
-                        </div>
+                        {
+                            order && <div className='flex text-custom-black gap-x-[0.5rem]'>
+                                <span className='font-medium'>Order Date: </span>
+                                <span>{new Date(order.created_at).toLocaleDateString()}</span>
+                            </div>
+                        }
 
                         <div className='flex text-custom-black gap-x-[0.5rem]'>
                             <span className='font-medium'>Total: </span>
-                            <span>KES 118340.06</span>
+                            <span className='uppercase font-medium'>
+                                {new Intl.NumberFormat("en-KE", {
+                                    style: "currency",
+                                    currency: "KES",
+                                    minimumFractionDigits: 0,
+                                }).format(order?.total_amount ?? 0)}
+                            </span>
                         </div>
 
-                        <p className='font-medium mt-[1rem] text-base'>We have sent the order confirmation details to jane.doe@gmail.com</p>
+                        {
+                            profile && <p className='font-medium mt-[1rem] text-base'>We have sent the order confirmation details to <span className='font-bold'>{profile?.email}</span></p>
+                        }
                     </div>
                 </div>
 
                 <OrderDetailsFlow />
-
                 <OrderDetails />
             </div>
-
         </Navigation>
     )
 }

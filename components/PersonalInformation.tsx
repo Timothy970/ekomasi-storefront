@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { useAppSelector } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import LocationDropdown from './LocationDropdown'
 import { Checkbox } from './ui/checkbox'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
-import { CartItem, FormData } from '@/lib/features/types'
-import { selectCart } from '@/lib/features/cart/cartSlice'
+import { FormData, OrderItem } from '@/lib/features/types'
+import { createOrderAsync, selectCart } from '@/lib/features/cart/cartSlice'
+import { useRouter } from 'next/navigation'
 
-export default function PersonalInformation() {
+export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -30,9 +31,12 @@ export default function PersonalInformation() {
         promoApplied: false,
         deliveryCharge: '',
     })
+    const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
     const profile = useAppSelector(selectUserProfile)
     const cart = useAppSelector(selectCart)
     const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+    const dispatch = useAppDispatch()
+    const router = useRouter()
 
     useEffect(() => {
         if (profile) {
@@ -44,6 +48,19 @@ export default function PersonalInformation() {
             }));
         }
     }, [profile, setFormData]);
+
+    useEffect(() => {
+        if (cart?.cart_items?.length) {
+            const mappedItems: OrderItem[] = cart.cart_items.map((item) => ({
+                product_id: item?.product.product_id,
+                variant_id: null,
+                quantity: item.quantity,
+                unit_price: item?.product.price,
+            }));
+
+            setOrderItems(mappedItems);
+        }
+    }, [cart]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -73,20 +90,53 @@ export default function PersonalInformation() {
             setErrors(newErrors);
             return;
         }
-        console.log("Form submitted ✅", formData);
+
+        let personalFormDetails = memberOrderPayload(formData)
+
+        if (page == "member" && profile && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
+            dispatch(createOrderAsync({ data: personalFormDetails, redirectToOrderDetails }))
+            return
+        }
+
+        let guestFormDetails = guestOrderPayload(formData)
+        // console.log(guestFormDetails, 'guestFormDetails')
+
+        // if (page == "guest") {
+        //     dispatch(createOrderAsync({ data: guestFormDetails, redirectToOrderDetails }))
+        //     return
+        // }
     };
 
-    const orderPayload = (formData: FormData, cartItems: CartItem[]) => {
+    const redirectToOrderDetails = (order_id: string) => {
+        router.push(`/dashboard/orders/${order_id}`)
+    }
+
+    const memberOrderPayload = (formData: FormData) => {
+        if (!profile?.user_id) return
+
+        return {
+            user_id: profile?.user_id,
+            is_guest_order: false,
+            guest_delivery_address: {},
+            guest_personal_details: {},
+            courier_details: formData.courier,
+            order_items: orderItems ?? [],
+            delivery_charge: formData?.deliveryCharge,
+            delivery_address: formData?.address,
+        };
+    };
+
+    const guestOrderPayload = (formData: FormData) => {
         return {
             user_id: profile?.user_id ?? null,
             is_guest_order: profile?.user_id ? false : true,
-            guest_personal_details: {
+            guest_personal_details: profile?.user_id ? {} : {
                 first_name: formData.firstName,
                 last_name: formData.lastName,
                 email: formData.email,
                 phone: formData.phone,
             },
-            guest_delivery_address: {
+            guest_delivery_address: profile?.user_id ? {} : {
                 street: formData.address,
                 apartment: formData.apartment,
                 city: formData.city,
@@ -95,8 +145,9 @@ export default function PersonalInformation() {
                 country: formData.country,
             },
             courier_details: formData.courier,
-            order_items: cart?.cart_items,
+            order_items: orderItems ?? [],
             delivery_charge: formData?.deliveryCharge,
+            delivery_address: formData?.address,
         };
     };
 
