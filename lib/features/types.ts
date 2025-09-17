@@ -447,3 +447,20 @@ export interface OrderItem {
 export interface CreateOrderResponse {
 
 }
+
+export interface Order {
+  order_id: string;
+  delivery_id: string;
+  created_at: string;
+  status: string;
+  total_amount: number;
+  total_discount: number;
+  items: OrderItem[];
+}
+
+
+export interface UserOrdersResponse {
+  data: Order[];
+  message: string;
+  status_code: number;
+}
