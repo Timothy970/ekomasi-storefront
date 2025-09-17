@@ -85,6 +85,7 @@ export default function NowTrending({ title }: { title: string }) {
                                             fill
                                             src={p.urls[0]?.url}
                                             className="rounded-md"
+                                            unoptimized
                                             priority
                                             style={{ objectFit: "cover" }}
 

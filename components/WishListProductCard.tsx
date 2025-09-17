@@ -18,6 +18,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                             style={{ objectFit: "cover" }}
                             className="h-full w-full"
                             priority
+                            unoptimized
                         />
                     </div>
                 }

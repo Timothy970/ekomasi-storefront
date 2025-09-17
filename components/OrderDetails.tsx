@@ -24,6 +24,7 @@ export default function OrderDetails() {
                     }
                     alt=""
                     fill
+                    unoptimized
                     className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
                   />
                 </div>

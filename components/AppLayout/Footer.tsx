@@ -25,6 +25,7 @@ export default function Footer() {
               src={"/images/company-logo.svg"}
               alt="Logo"
               width={150}
+              unoptimized
               height={25}
               priority={true}
               className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 lg:hidden'
@@ -136,6 +137,7 @@ export default function Footer() {
             width={150}
             height={25}
             priority={true}
+            unoptimized
             className='w-auto h-[5rem] shrink-0'
           />
         </div>

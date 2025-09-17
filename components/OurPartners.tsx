@@ -46,6 +46,7 @@ export default function Brands() {
                             <div className="relative w-32 h-16">
                                 <Image
                                     src={src}
+                                    unoptimized
                                     alt={`Brand ${i + 1}`}
                                     fill
                                     style={{ objectFit: "contain" }}

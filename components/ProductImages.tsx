@@ -51,6 +51,7 @@ export default function ProductImages() {
                                 src={image?.url}
                                 alt=""
                                 fill
+                                unoptimized
                                 className="object-cover rounded-md"
                             />
                         </div>

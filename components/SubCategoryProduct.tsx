@@ -14,6 +14,7 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
                         src={product.urls[0]?.url}
                         alt={product.name}
                         fill
+                        unoptimized
                         className="object-cover"
                     />
                 }

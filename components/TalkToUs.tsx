@@ -24,6 +24,7 @@ export default function TalkToUs() {
                                 src="/images/nursery-right.jpg"
                                 alt="Nursery Right"
                                 fill
+                                unoptimized
                                 style={{ objectFit: 'cover' }}
                                 priority
                             />
@@ -39,6 +40,7 @@ export default function TalkToUs() {
                             fill
                             style={{ objectFit: 'cover' }}
                             priority
+                            unoptimized
                         />
                     </div>
                     <p className='text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem]'>
