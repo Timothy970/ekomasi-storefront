@@ -8,7 +8,7 @@ import React from 'react'
 
 export default function MyDetails() {
   const profile = useAppSelector(selectUserProfile)
-  console.log(profile, 'profile')
+
   return (
     <Navigation>
       <DashboardLayout>

@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { OtpRequestParams, SignInParams, SignUpParams, User, UserData, VerifyOtpParams } from "../types";
-import { getUserProfile, requestOtp, signIn, signUpUser, verifyOtp } from "./userAPI";
+import { OtpRequestParams, SignInParams, SignUpParams, UpdateUserProfilePayload, User, UserData, VerifyOtpParams } from "../types";
+import { getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
 
 interface UserSliceState {
 	user: User | null;
@@ -190,6 +190,34 @@ export const userSlice = createAppSlice({
 				},
 			}
 		),
+		updateUserProfileAsync: create.asyncThunk(
+			async ({ data, fetchUserProfile }: { data: UpdateUserProfilePayload, fetchUserProfile: () => void }) => {
+				const response = await updateUserProfile({ data })
+				fetchUserProfile()
+
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true
+						state.message = action.payload?.message
+					} else {
+						state.success = false
+						state.message = action.payload?.message || "Failed to get user profile."
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = "Invalid or expired OTP"
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectUser: (state: UserSliceState) => state.user || null,
@@ -205,6 +233,6 @@ export const userSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout } = userSlice.actions; // Export actions
+export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync } = userSlice.actions; // Export actions
 export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;
