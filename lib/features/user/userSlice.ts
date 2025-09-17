@@ -9,6 +9,7 @@ interface UserSliceState {
 	googleStatus: "idle" | "loading" | "failed";
 	message: string;
 	token: string | null;
+	refresh_token: string | null;
 	success: boolean;
 	expiresIn: number | null;
 	userProfile: UserData | null;
@@ -19,6 +20,7 @@ const initialState: UserSliceState = {
 	status: "idle",
 	message: "",
 	token: "",
+	refresh_token: "",
 	success: false,
 	googleStatus: "idle",
 	phoneOrEmailValue: "",
@@ -35,6 +37,10 @@ export const userSlice = createAppSlice({
 		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
+		}),
+		setToken: create.reducer<{ token: string; refresh_token: string }>((state, action) => {
+			state.token = action.payload.token;
+			state.refresh_token = action.payload.refresh_token;
 		}),
 		logout: create.reducer((state) => {
 			state.token = null
