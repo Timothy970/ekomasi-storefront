@@ -364,6 +364,7 @@ export interface UserData {
   first_name: string
   last_name: string
   role: string
+  phone_number: string
 }
 
 export interface UserDetailsResponse {
@@ -485,4 +486,11 @@ export interface UserOrderResponse {
   data: Order;
   message: string;
   status_code: number;
+}
+
+export interface UpdateUserProfilePayload {
+    first_name: string
+    last_name: string
+    email: string
+    phone_number: string
 }

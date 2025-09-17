@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
+import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UpdateUserProfilePayload, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function signUpUser({ phone_number, email }: SignUpParams): Promise<SignUpResponse> {
@@ -70,6 +70,19 @@ export async function verifyOtp(data: VerifyOtpParams): Promise<VerifyOtpRespons
 export async function getUserProfile(): Promise<UserDetailsResponse | null> {
     try {
         const response = await api.get<UserDetailsResponse>("user/me", { headers: { requiresAuth: true } });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function updateUserProfile({ data }: { data: UpdateUserProfilePayload }): Promise<UserDetailsResponse | null> {
+    try {
+        const response = await api.patch<UserDetailsResponse>("user/me", data, {
+            headers: { requiresAuth: true },
+        });
 
         return response.data;
     } catch (error) {

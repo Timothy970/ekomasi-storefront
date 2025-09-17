@@ -109,7 +109,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       ? `${profile.first_name[0]}${profile.last_name[0]}`
                       : ""}
                   </div>
-                  <div className="text-black self-center">
+                  <div className="text-black self-center flex flex-col gap-x-[1rem] items-start justify-center">
                     <span className="text-[0.875rem]">Hi</span>
                     <span className="font-bold text-[1rem]">{profile?.first_name?.length ? profile?.first_name : ""}</span>
                   </div>
