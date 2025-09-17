@@ -4,15 +4,16 @@ const nextConfig: NextConfig = {
   output: "standalone",
   images: {
     remotePatterns: [
-      new URL('https://assets.example.com/account123/**'),
-      new URL('https://picsum.photos/**')
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
     ],
-    domains: [
-      'picsum.photos',
-      'storage.googleapis.com',
-      'images.unsplash.com'
-    ],
-  }
+  },
 };
 
 export default nextConfig;
