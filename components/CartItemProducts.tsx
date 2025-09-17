@@ -72,6 +72,7 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
                         alt=""
                         fill
                         className="object-cover"
+                        unoptimized
                     />
                 </div>
             }
