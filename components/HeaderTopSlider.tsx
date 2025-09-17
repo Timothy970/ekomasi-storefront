@@ -22,7 +22,7 @@ export default function HeaderTopSlider({
         <div
             onMouseEnter={() => hoveredCategoryId && handleMouseEnter(hoveredCategoryId)}
             onMouseLeave={handleMouseLeave}
-            className="w-full flex justify-center bg-white items-center absolute top-[2.438rem] lg:px-[3rem] left-0 overflow-hidden transition-all duration-200 ease-in-out z-50"
+            className="w-full flex justify-center bg-white items-center absolute border-b top-[2.438rem] lg:px-[3rem] left-0 overflow-hidden transition-all duration-200 ease-in-out z-50"
             style={{ height: hoveredCategoryId ? "23rem" : "0" }}
         >
             <div className="max-w-[90rem] w-full grid grid-cols-3 gap-y-[0.69rem] gap-x-[2rem] h-full pt-[1rem]">

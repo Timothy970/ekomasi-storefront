@@ -7,7 +7,6 @@ import Link from "next/link";
 
 export default function HomeCategories() {
   const categories = useAppSelector(selectCategories)
-  console.log(categories, 'categories')
 
   return (
     <div className="w-full flex justify-center items-center mt-[2.5rem]">

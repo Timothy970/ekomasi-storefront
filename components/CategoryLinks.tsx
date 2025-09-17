@@ -46,7 +46,7 @@ export default function CategorySlider() {
                                 key={cat.id}
                                 onMouseEnter={() => handleMouseEnter(cat.id)}
                                 onMouseLeave={handleMouseLeave}
-                                className="flex w-auto hover:font-semibold p-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
+                                className="flex w-auto p-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
                                 <span className="text-custom-black leading-[1.95rem]">
                                     {cat.name}

@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="absolute top-0 left-0 w-full h-full bg-black/90 z-10"></div>
 
       <div className="absolute inset-0 z-0">
-        <Image src="/images/footer-pattern.png" alt="Footer background" fill priority className="object-cover" />
+        <Image unoptimized src="/images/footer-pattern.png" alt="Footer background" fill priority className="object-cover" />
       </div>
 
       <div className="relative w-full flex flex-col justify-center items-center py-[3rem] lg:py-[5rem] z-20 h-auto">

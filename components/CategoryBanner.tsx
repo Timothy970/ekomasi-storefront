@@ -10,6 +10,7 @@ export default function CategoryBanner({ imageUrl }: { imageUrl: string }) {
           alt="category banner"
           fill
           priority
+          unoptimized
           className="object-cover z-0"
         />
       }
