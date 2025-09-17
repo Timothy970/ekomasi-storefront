@@ -67,7 +67,7 @@ export default function Orders() {
                                     strokeLinejoin="round"
                                 />
                             </svg>
-                            <p className='text-[1.5rem] font-bold'>MY ORDERS</p>
+                            <p className='text-[1.5rem] font-bold'>My Orders</p>
                         </div>
                     </div>
 
