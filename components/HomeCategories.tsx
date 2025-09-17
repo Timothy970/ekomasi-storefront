@@ -7,6 +7,7 @@ import Link from "next/link";
 
 export default function HomeCategories() {
   const categories = useAppSelector(selectCategories)
+  console.log(categories, 'categories')
 
   return (
     <div className="w-full flex justify-center items-center mt-[2.5rem]">
@@ -23,11 +24,12 @@ export default function HomeCategories() {
             {categories?.map((category) => (
               <Link key={category.id} href={`/category/${category?.id}`}>
                 <div className="overflow-hidden flex flex-col justify-center items-center">
-                  <div className="relative w-full h-auto min-h-[15.5rem] sm:min-h-[21rem] md:min-h-[21.875rem] rounded-none ">
+                  <div className="relative w-full h-auto min-h-[15.5rem] sm:min-h-[21rem] md:min-h-[21.875rem] rounded-none">
                     <Image
                       src={category?.image_url}
                       alt={category?.name}
                       fill
+                      unoptimized
                       style={{ objectFit: "cover" }}
                       className="rounded-none lg:rounded-tl-lg lg:rounded-tr-lg h-full w-full"
                       priority
