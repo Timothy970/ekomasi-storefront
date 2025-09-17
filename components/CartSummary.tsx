@@ -47,14 +47,14 @@ export default function CartSummary({ }) {
 
                 <div className='mt-[1.5rem]'>
                     <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>
-                        <div className='flex justify-between w-full'>
+                        {/* <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
                             <span className='text-custom-black text-[0.875rem]'>0</span>
                         </div>
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
                             <span className='text-custom-black text-[0.875rem]'>0</span>
-                        </div>
+                        </div> */}
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
                             <span className='text-custom-black text-[0.875rem]'>16%</span>

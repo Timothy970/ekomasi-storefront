@@ -14,7 +14,7 @@ export default function GuestCheckout() {
             <CheckoutCartSummary />
           </div>
 
-          <PersonalInformation />
+          <PersonalInformation page='guest' />
         </div>
       </div>
     </Navigation>

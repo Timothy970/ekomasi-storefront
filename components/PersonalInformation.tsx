@@ -6,11 +6,11 @@ import LocationDropdown from './LocationDropdown'
 import { Checkbox } from './ui/checkbox'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
+import { selectUserProfile } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
 import { FormData, OrderItem } from '@/lib/features/types'
 import { createOrderAsync, selectCart } from '@/lib/features/cart/cartSlice'
-
+import { useRouter } from 'next/navigation'
 
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
@@ -36,7 +36,7 @@ export default function PersonalInformation({ page }: { page: string }) {
     const cart = useAppSelector(selectCart)
     const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
     const dispatch = useAppDispatch()
-    const token = useAppSelector(selectUserToken)
+    const router = useRouter()
 
     useEffect(() => {
         if (profile) {
@@ -61,8 +61,6 @@ export default function PersonalInformation({ page }: { page: string }) {
             setOrderItems(mappedItems);
         }
     }, [cart]);
-    console.log(orderItems,'orderItems')
-    console.log(cart?.cart_items)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -94,15 +92,23 @@ export default function PersonalInformation({ page }: { page: string }) {
         }
 
         let personalFormDetails = memberOrderPayload(formData)
-        console.log(personalFormDetails, 'personalFormDetails')
-        if (page == "member" && profile && token && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
-            dispatch(createOrderAsync({ data: personalFormDetails, token, redirectToOrderDetails }))
 
+        if (page == "member" && profile && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
+            dispatch(createOrderAsync({ data: personalFormDetails, redirectToOrderDetails }))
+            return
         }
+
+        let guestFormDetails = guestOrderPayload(formData)
+        // console.log(guestFormDetails, 'guestFormDetails')
+
+        // if (page == "guest") {
+        //     dispatch(createOrderAsync({ data: guestFormDetails, redirectToOrderDetails }))
+        //     return
+        // }
     };
 
     const redirectToOrderDetails = (order_id: string) => {
-
+        router.push(`/dashboard/orders/${order_id}`)
     }
 
     const memberOrderPayload = (formData: FormData) => {
@@ -139,7 +145,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                 country: formData.country,
             },
             courier_details: formData.courier,
-            order_items: cart?.cart_items,
+            order_items: orderItems ?? [],
             delivery_charge: formData?.deliveryCharge,
             delivery_address: formData?.address,
         };

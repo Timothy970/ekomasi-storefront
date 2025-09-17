@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, updateCart } from "./cartAPI";
-import { CartData, MemberOrderPayload, Order } from "../types";
+import { addToCart, createCart, createGuestOrder, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, updateCart } from "./cartAPI";
+import { CartData, GuestOrderPayload, MemberOrderPayload, Order } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -102,8 +102,6 @@ export const cartSlice = createAppSlice({
 					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
 						state.success = true;
 						state.cartId = action.payload.data.cart_id
-
-
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
@@ -149,13 +147,12 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, token, redirectToOrderDetails }: { data: MemberOrderPayload, token: string, redirectToOrderDetails: (cart_id: string) => void }) => {
-				const response = await createMemberOrder(data, token);
-				console.log(response, 'ressssss')
+			async ({ data, redirectToOrderDetails }: { data: MemberOrderPayload, redirectToOrderDetails: (cart_id: string) => void }) => {
+				const response = await createMemberOrder(data);
 
-				// if (cart_id) {
-				// 	refetchCart(cart_id)
-				// }
+				if (response?.data?.order_id) {
+					redirectToOrderDetails(response?.data?.order_id)
+				}
 
 				return response;
 			},
@@ -164,13 +161,47 @@ export const cartSlice = createAppSlice({
 					state.status = "loading";
 				},
 				fulfilled: (state, action) => {
-					// if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
-					// 	state.success = true;
-					// } else {
-					// 	state.message = action.payload?.message || "Failed to fetch variants";
-					// 	state.success = false;
-					// }
-					// state.status = "idle";
+					if (action.payload?.status_code === 201 && action.payload.data.order_id) {
+						state.success = true;
+						state.cart = null
+						state.cartId = null
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
+		createGuestOrderAsync: create.asyncThunk(
+			async ({ data, redirectToOrderDetails }: { data: GuestOrderPayload, redirectToOrderDetails: (cart_id: string) => void }) => {
+				const response = await createGuestOrder(data);
+
+				if (response?.data?.order_id) {
+					redirectToOrderDetails(response?.data?.order_id)
+				}
+
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 201 && action.payload.data.order_id) {
+						state.success = true;
+						state.cart = null
+						state.cartId = null
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+					}
+					state.status = "idle";
 				},
 				rejected: (state, action) => {
 					state.status = "failed";

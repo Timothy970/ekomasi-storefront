@@ -436,16 +436,32 @@ export interface MemberOrderPayload {
   delivery_address: string;
 }
 
-export interface OrderItem {
-    product_id: string;
-    variant_id: string | null;
-    quantity: number;
-    unit_price: number;
+export interface GuestOrderPayload {
+  user_id: null;
+  is_guest_order: boolean;
+  guest_personal_details: {};
+  guest_delivery_address: {};
+  courier_details: string;
+  order_items: OrderItem[];
+  delivery_charge: number | string;
+  delivery_address: string;
 }
 
+export interface OrderItem {
+  product_id: string;
+  variant_id: string | null;
+  quantity: number;
+  unit_price: number;
+}
+
+export interface CreateOrderData {
+  order_id: string
+}
 
 export interface CreateOrderResponse {
-
+  data: CreateOrderData;
+  message: string;
+  status_code: number;
 }
 
 export interface Order {

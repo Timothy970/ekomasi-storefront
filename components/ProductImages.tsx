@@ -49,7 +49,7 @@ export default function ProductImages() {
                         >
                             <Image
                                 src={image?.url}
-                                alt="Example"
+                                alt=""
                                 fill
                                 className="object-cover rounded-md"
                             />
