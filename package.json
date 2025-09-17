@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NEXT_PUBLIC_API_BASE_URL=https://api.uat.adenzo.co.ke/api/ next build",
-    "devbuild": "next build",
     "start": "cross-env NEXT_PUBLIC_API_BASE_URL=https://api.uat.adenzo.co.ke/api/ next start"
   },
   "dependencies": {
