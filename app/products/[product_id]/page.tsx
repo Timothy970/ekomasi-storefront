@@ -5,13 +5,14 @@ import ProductColors from '@/components/ProductColors'
 import ProductQuantitySelect from '@/components/ProductQuantitySelect'
 import ProductStars from '@/components/ProductStars'
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -19,8 +20,6 @@ export default function ProductDetail() {
   const params = useParams<{ product_id: string }>()
   const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
   const cartId = useAppSelector(selectCartId)
-  const quantityRef = useRef<HTMLButtonElement>(null)
-  const [hasError, setHasError] = useState(false)
   const router = useRouter()
 
   const createAndAdd = (cart_id: string) => {
@@ -29,6 +28,7 @@ export default function ProductDetail() {
 
       if (cart_id) {
         setTimeout(() => {
+          triggerToast("Cart updated successfully!", "success");
           dispatch(getCartAsync(cart_id))
         }, 1000)
       }
@@ -42,14 +42,6 @@ export default function ProductDetail() {
   }, [dispatch, params?.product_id])
 
   const handleAddToCart = async () => {
-    if (quantity <= 0) {
-      setHasError(true)
-
-      quantityRef.current?.focus()
-      return
-    }
-    setHasError(false)
-
     if (!cartId && product?.product_id && quantity > 0) {
       dispatch(
         createCartAsync(
@@ -67,6 +59,7 @@ export default function ProductDetail() {
 
       if (cartId) {
         setTimeout(() => {
+          triggerToast("Cart updated successfully!", "success");
           dispatch(getCartAsync(cartId))
         }, 1000)
       }
@@ -75,13 +68,6 @@ export default function ProductDetail() {
 
   const handleBuyNow = async () => {
     handleAddToCart().then(() => {
-      if (quantity <= 0) {
-        setHasError(true)
-
-        quantityRef.current?.focus()
-        return
-      }
-
       if (cartId) {
         router.push(`/cart/${cartId}`)
       }
@@ -143,9 +129,6 @@ export default function ProductDetail() {
                   <ProductQuantitySelect
                     setQuantity={setQuantity}
                     quantity={quantity}
-                    ref={quantityRef}
-                    hasError={hasError}
-                    setHasError={setHasError}
                   />
                 </div>
               }
