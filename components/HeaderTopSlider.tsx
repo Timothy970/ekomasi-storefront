@@ -29,10 +29,10 @@ export default function HeaderTopSlider({
             className="w-full flex justify-center bg-white items-center absolute border-b top-[2.438rem] lg:px-[3rem] left-0 overflow-hidden transition-all duration-200 ease-in-out z-50"
             style={{ height: hoveredCategoryId ? "20rem" : "0" }}
         >
-            <div className="w-full h-full max-w-[90rem] flex flex-row">
-                <div className="w-full grid grid-cols-3 gap-y-[0.69rem] gap-x-[2rem] h-full pt-[1rem]">
+            <div className="w-full h-full max-w-[90rem] flex justify-between">
+                <div className="w-[27rem] flex flex-wrap content-start gap-y-[0.69rem]">
                     {subcategories.map((sub) => (
-                        <Link key={sub.id} href={`/subcategory/${sub.id}`}>
+                        <Link key={sub.id} href={`/subcategory/${sub.id}`} className="w-1/1">
                             <span className="text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
                                 {sub.name}
                             </span>
@@ -40,7 +40,7 @@ export default function HeaderTopSlider({
                     ))}
 
                     {subcategories.length <= 0 && hoveredCategory && (
-                        <div className="">
+                        <div className="w-1/1">
                             <Link href={`/category/${hoveredCategory.id}`}>
                                 <span className="text-custom-black font-poppins text-[0.875rem] font-normal leading-[1.95rem] hover:underline">
                                     Shop All
@@ -50,9 +50,11 @@ export default function HeaderTopSlider({
                     )}
                 </div>
 
-                {
-                    subCategory?.products && hoveredCategoryId && <TopSliderProducts />
-                }
+                {subCategory?.products && hoveredCategoryId && (
+                    <div className="flex-1 pl-6">
+                        <TopSliderProducts />
+                    </div>
+                )}
             </div>
         </div>
     );
