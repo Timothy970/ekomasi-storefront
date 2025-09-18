@@ -29,7 +29,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {product.urls?.[0]?.url && (
           <Image
             src={product.urls[0].url}
-            alt={product.name}
+            alt=""
             unoptimized
             fill
             className="object-cover"

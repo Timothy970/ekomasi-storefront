@@ -1,6 +1,6 @@
-import { selectCategories } from "@/lib/features/navigation/navigationSlice";
+import { getSubCategoryAsync, selectCategories } from "@/lib/features/navigation/navigationSlice";
 import { Category, SubCategory } from "@/lib/features/types";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import React, { useState, useRef, useEffect } from "react";
 import HeaderTopSlider from "./HeaderTopSlider";
 
@@ -10,6 +10,7 @@ export default function CategorySlider() {
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const categories = useAppSelector(selectCategories);
     const [hoveredCategory, setHoveredCategory] = useState<Category | undefined>();
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (hoveredCategoryId) {
@@ -26,6 +27,16 @@ export default function CategorySlider() {
             setSubcategories([]);
         }
     }, [hoveredCategoryId, categories]);
+
+    useEffect(() => {
+        if (subcategories?.length > 0 && hoveredCategoryId) {
+            const firstSubCategory = subcategories[0]
+
+            if (firstSubCategory?.id) {
+                dispatch(getSubCategoryAsync({ id: firstSubCategory?.id, page: 1, size: 2 }));
+            }
+        }
+    }, [subcategories, hoveredCategoryId])
 
     const handleMouseEnter = (id: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
