@@ -32,6 +32,7 @@ export default function Otp() {
                 alt="otp"
                 fill
                 priority
+                unoptimized
                 className="object-cover h-full w-full z-10 mx-auto"
             />
 
@@ -42,6 +43,7 @@ export default function Otp() {
                         alt="Logo"
                         width={150}
                         height={25}
+                        unoptimized
                         priority={true}
                         className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem]'
                     />

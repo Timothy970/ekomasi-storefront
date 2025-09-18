@@ -32,6 +32,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                 src={'https://images.unsplash.com/photo-1612722432474-b971cdcea546?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0'}
                 alt={firstItem?.product_id || 'Product Image'}
                 fill
+                unoptimized
                 className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
               />
             </div>
