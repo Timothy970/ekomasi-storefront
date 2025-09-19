@@ -16,7 +16,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
-        lastName: '',
+        lastName: 'Kiptoo',
         email: '',
         phone: '',
         country: '',
@@ -31,6 +31,7 @@ export default function PersonalInformation({ page }: { page: string }) {
         deliveryType: 'Ship',
         promoApplied: false,
         deliveryCharge: '',
+        paymentPhone: '',
     })
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
     const profile = useAppSelector(selectUserProfile)
@@ -75,6 +76,7 @@ export default function PersonalInformation({ page }: { page: string }) {
         if (!formData.lastName) newErrors.lastName = "Last name is required";
         if (!formData.email) newErrors.email = "Email is required";
         if (!formData.phone) newErrors.phone = "Phone number is required";
+        if (!formData.paymentPhone) newErrors.paymentPhone = "Payment Phone number is required";
         if (!formData.country) newErrors.country = "Country is required";
         if (!formData.courier) newErrors.courier = "Courier is required";
         if (!formData.state) newErrors.state = "State is required";
@@ -94,12 +96,22 @@ export default function PersonalInformation({ page }: { page: string }) {
 
         let personalFormDetails = memberOrderPayload(formData)
 
-        if (page == "member" && profile && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
-            dispatch(createOrderAsync({ data: personalFormDetails, redirectToOrderDetails }))
-            return
+        if (cart?.total) {
+            let extraPaymentPayload = {
+                phone: formData?.paymentPhone,
+                amount: cart?.total,
+                reference: "ADENZO",
+                description: "payment test",
+            }
+
+            if (page == "member" && profile && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
+                dispatch(createOrderAsync({ data: personalFormDetails, redirectToOrderDetails, extraPaymentPayload }))
+
+                return
+            }
         }
 
-        let guestFormDetails = guestOrderPayload(formData)
+        // let guestFormDetails = guestOrderPayload(formData)
         // console.log(guestFormDetails, 'guestFormDetails')
 
         // if (page == "guest") {
@@ -108,8 +120,13 @@ export default function PersonalInformation({ page }: { page: string }) {
         // }
     };
 
-    const redirectToOrderDetails = (order_id: string) => {
-        triggerToast("Order placed successfully!", "success");
+    const redirectToOrderDetails = (order_id: string, fail = false, message = '') => {
+        if (!fail) {
+            triggerToast("Order placed successfully and Payment request initiated successfully!", "success");
+        } else {
+            triggerToast(`${message}`, "success");
+        }
+
         router.push(`/dashboard/orders/${order_id}`)
     }
 
@@ -390,7 +407,13 @@ export default function PersonalInformation({ page }: { page: string }) {
                     </RadioGroup>
 
                     <div className='flex flex-col gap-y-[1.5rem]'>
-                        <Input placeholder='254123456789' className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] ' />
+                        <Input
+                            name="paymentPhone"
+                            value={formData.paymentPhone}
+                            onChange={handleChange}
+                            placeholder='254123456789'
+                            className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
+                        />
 
                         <Button type='submit' className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE]'>
                             Pay now

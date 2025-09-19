@@ -396,6 +396,7 @@ export interface FormData {
   deliveryType: "Ship" | "Pickup"
   promoApplied: boolean
   deliveryCharge: number | string
+  paymentPhone: string
 }
 
 export interface OrderPayload {
@@ -457,6 +458,31 @@ export interface OrderItem {
 
 export interface CreateOrderData {
   order_id: string
+  delivery_id: string,
+  total: number
+}
+
+export interface PaymentRequestPayload {
+  phone_number: string;
+  amount: number;
+  reference: string;
+  description: string;
+  order_id: string;
+  delivery_id: string;
+}
+
+export interface PaymentRequestResponse {
+  data: {
+    CheckoutRequestID: string;
+    CustomerMessage: string;
+    MerchantRequestID: string;
+    ResponseCode: string;
+    ResponseDescription: string;
+    errorCode?: string,
+    errorMessage?: string,
+  };
+  message: string;
+  status_code: number;
 }
 
 export interface CreateOrderResponse {
@@ -489,8 +515,8 @@ export interface UserOrderResponse {
 }
 
 export interface UpdateUserProfilePayload {
-    first_name: string
-    last_name: string
-    email: string
-    phone_number: string
+  first_name: string
+  last_name: string
+  email: string
+  phone_number: string
 }

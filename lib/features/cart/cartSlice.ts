@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createGuestOrder, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, updateCart } from "./cartAPI";
-import { CartData, GuestOrderPayload, MemberOrderPayload, Order } from "../types";
+import { addToCart, createCart, createGuestOrder, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
+import type { CartData, GuestOrderPayload, MemberOrderPayload, Order } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -147,11 +147,30 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails }: { data: MemberOrderPayload, redirectToOrderDetails: (cart_id: string) => void }) => {
+			async ({ data, redirectToOrderDetails, extraPaymentPayload }: { data: MemberOrderPayload, redirectToOrderDetails: (cart_id: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
 				const response = await createMemberOrder(data);
 
 				if (response?.data?.order_id) {
-					redirectToOrderDetails(response?.data?.order_id)
+					let paymentData = {
+						"phone_number": extraPaymentPayload?.phone,
+						"amount": response?.data?.total,
+						"reference": extraPaymentPayload?.reference,
+						"description": extraPaymentPayload?.description,
+						"order_id": response?.data?.order_id,
+						"delivery_id": response?.data?.delivery_id,
+					}
+
+					const paymentRes = await makePayment(paymentData)
+
+					if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
+						redirectToOrderDetails(response?.data?.order_id, false, '')
+					} else {
+						if (paymentRes?.data?.errorMessage) {
+							redirectToOrderDetails(response?.data?.order_id, false, paymentRes?.data?.errorMessage)
+						} else {
+							redirectToOrderDetails(response?.data?.order_id, true, 'Order succesfully placed!')
+						}
+					}
 				}
 
 				return response;

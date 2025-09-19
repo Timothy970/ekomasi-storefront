@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderPayload, MemberOrderPayload, Order, OrderPayload, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderPayload, MemberOrderPayload, Order, OrderPayload, PaymentRequestPayload, PaymentRequestResponse, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart(cart_id: string): Promise<ViewCartResponse> {
@@ -25,7 +25,6 @@ export async function addToCart(data: AddToCartRequest): Promise<any> {
             }
         );
 
-        console.log(response.data, "✅ added to cart");
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
@@ -87,6 +86,21 @@ export async function createMemberOrder(data: MemberOrderPayload): Promise<Creat
     try {
         const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
+            data,
+            {}
+        );
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function makePayment(data: PaymentRequestPayload): Promise<PaymentRequestResponse> {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}payment/pay`,
             data,
             {}
         );
