@@ -555,3 +555,19 @@ export interface UserAddressResponse {
   message: string;
   status_code: number;
 }
+
+export interface Suggestion {
+  id: string;
+  type: string;
+  display_name: string;
+  link: string;
+  image_url?: string;
+}
+
+export interface SuggestionsResponse {
+  data: {
+    suggestions: Suggestion[];
+  };
+  status_code: number;
+  message: string;
+}
