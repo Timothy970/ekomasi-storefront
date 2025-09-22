@@ -34,9 +34,9 @@ export default function Footer() {
               <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
 
               <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
-                <Input className='text-white h-[2.5rem] lg:h-[2rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
+                <Input className='text-white h-[2.5rem] lg:h-[3rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
 
-                <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[2rem] lg:w-[8rem]'>
+                <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[3rem] lg:w-[8rem]'>
                   Subscribe
                 </Button>
               </div>

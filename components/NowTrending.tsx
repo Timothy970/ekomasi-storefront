@@ -109,10 +109,10 @@ export default function NowTrending({ title }: { title: string }) {
                 {
                     canPrev || canNext && <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
                         <Button className="rounded-full border border-black" onClick={prev} variant="outline" size="icon" aria-label="Previous" disabled={!canPrev}>
-                            <ChevronLeft className="h-[2rem] w-[3rem] " />
+                            <ChevronLeft className="h-[3rem] w-[3rem] " />
                         </Button>
                         <Button className="rounded-full border border-black" onClick={next} variant="outline" size="icon" aria-label="Next" disabled={!canNext}>
-                            <ChevronRight className="h-[2rem] w-[3rem] rounded-full" />
+                            <ChevronRight className="h-[3rem] w-[3rem] rounded-full" />
                         </Button>
                     </div>
                 }

@@ -81,7 +81,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         onChange={handleChange}
                         disabled
                         placeholder='First name*'
-                        className='p-[0.5rem] h-[2rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
+                        className='p-[0.5rem] h-[3rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
                     />
                 </div>
 
@@ -93,7 +93,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         disabled
                         onChange={handleChange}
                         placeholder='Last name*'
-                        className='p-[0.5rem] h-[2rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
+                        className='p-[0.5rem] h-[3rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
                     />
                 </div>
             </div>
@@ -112,7 +112,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         disabled
                         onChange={handleChange}
                         placeholder='Email Address*'
-                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
+                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
                     />
                 </div>
             </div>
@@ -131,7 +131,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         disabled
                         onChange={handleChange}
                         placeholder='254123456789*'
-                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
             </div>
@@ -149,7 +149,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                     onChange={handleChange}
                     required
                     placeholder='Address*'
-                    className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                 />
             </div>
 
@@ -161,7 +161,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                     onChange={handleChange}
                     required
                     placeholder='Apartment, suite, etc.(optional)'
-                    className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                 />
             </div>
 
@@ -174,7 +174,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         required
                         onChange={handleChange}
                         placeholder='City'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -186,12 +186,12 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                         onChange={handleChange}
                         required
                         placeholder='Postal code (optional)'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
             </div>
 
-            <Button type='submit' className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]'>
+            <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]'>
                 Add new address
             </Button>
         </form>

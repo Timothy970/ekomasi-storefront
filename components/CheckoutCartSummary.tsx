@@ -25,8 +25,8 @@ export default function CheckoutCartSummary() {
             </div>
 
             <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
-                <Input placeholder='Promo Code' className='h-[2rem] max-w-[15rem] border-black text-[0.875rem] ' />
-                <Button className='h-[2rem] border rounded-md bg-white text-custom-black border-black'>
+                <Input placeholder='Promo Code' className='h-[3rem] max-w-[15rem] border-black text-[0.875rem] ' />
+                <Button className='h-[3rem] border rounded-md bg-white text-custom-black border-black'>
                     Apply
                 </Button>
             </div>
