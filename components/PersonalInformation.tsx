@@ -86,6 +86,22 @@ export default function PersonalInformation({ page }: { page: string }) {
         return newErrors;
     };
 
+    const memberOrderPayload = (formData: FormData) => {
+        if (!profile?.user_id) return
+
+        return {
+            user_id: profile?.user_id,
+            is_guest_order: false,
+            guest_delivery_address: {},
+            guest_personal_details: {},
+            courier_details: formData.courier ?? "",
+            order_items: orderItems ?? [],
+            delivery_charge: formData?.deliveryCharge ?? "",
+            delivery_address: formData?.address,
+        };
+    };
+
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors = validate();
@@ -96,9 +112,9 @@ export default function PersonalInformation({ page }: { page: string }) {
 
         let personalFormDetails = memberOrderPayload(formData)
 
-        if (cart?.total) {
+        if (cart?.total && personalFormDetails?.user_id && personalFormDetails?.courier_details) {
             let extraPaymentPayload = {
-                phone: formData?.paymentPhone,
+                phone: formData?.paymentPhone ?? "",
                 amount: cart?.total,
                 reference: "ADENZO",
                 description: "payment test",
@@ -129,21 +145,6 @@ export default function PersonalInformation({ page }: { page: string }) {
 
         router.push(`/dashboard/orders/${order_id}`)
     }
-
-    const memberOrderPayload = (formData: FormData) => {
-        if (!profile?.user_id) return
-
-        return {
-            user_id: profile?.user_id,
-            is_guest_order: false,
-            guest_delivery_address: {},
-            guest_personal_details: {},
-            courier_details: formData.courier,
-            order_items: orderItems ?? [],
-            delivery_charge: formData?.deliveryCharge,
-            delivery_address: formData?.address,
-        };
-    };
 
     const guestOrderPayload = (formData: FormData) => {
         return {
