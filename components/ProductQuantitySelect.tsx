@@ -32,7 +32,7 @@ const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-[3rem] border border-[rgba(0,0,0,0.40)]"
+          className="h-[2rem] border border-[rgba(0,0,0,0.40)]"
           onClick={handleDecrease}
           disabled={quantity <= 1}
         >
@@ -44,7 +44,7 @@ const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-[3rem] border border-[rgba(0,0,0,0.40)]"
+          className="h-[2rem] border border-[rgba(0,0,0,0.40)]"
           onClick={handleIncrease}
           disabled={quantity >= maxQuantity}
         >
