@@ -37,7 +37,7 @@ export default function HomeCategories() {
 
                   <div className="px-2 pb-3 flex flex-col gap-[1rem] mt-[0.75rem] w-full justify-center lg:items-center">
                     <h3 className="text-[0.875rem] font-bold lg:font-light leading-[1.5rem]">{category.name}</h3>
-                    <Button className="w-full hidden rounded-[2.5rem] lg:flex items-center justify-center bg-[#AF52DE] h-[2rem] max-w-[18rem] text-center font-semibold text-[0.875rem]">Shop Now</Button>
+                    <Button className="w-full hidden rounded-[2.5rem] lg:flex items-center justify-center bg-[#AF52DE] h-[3rem] max-w-[18rem] text-center font-semibold text-[0.875rem]">Shop Now</Button>
                   </div>
                 </div>
               </Link>

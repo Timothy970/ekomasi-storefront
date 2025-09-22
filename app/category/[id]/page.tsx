@@ -64,7 +64,7 @@ export default function ProductCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden'>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[3rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden'>
                                     <span className='text-[0.875rem] '>Filter</span>
                                     <span>
                                         <svg

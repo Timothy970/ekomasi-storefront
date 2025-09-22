@@ -384,19 +384,19 @@ export interface FormData {
   lastName: string
   email: string
   phone: string
-  country: string
-  courier: string
-  state: string
+  country?: string
+  courier?: string
+  state?: string
   address: string
   apartment: string
   city: string
   postalCode: string
-  voucher: string
-  paymentMethod: "card" | "paypal" | "mpesa"
-  deliveryType: "Ship" | "Pickup"
-  promoApplied: boolean
-  deliveryCharge: number | string
-  paymentPhone: string
+  voucher?: string
+  paymentMethod?: "card" | "paypal" | "mpesa"
+  deliveryType?: "Ship" | "Pickup"
+  promoApplied?: boolean
+  deliveryCharge?: number | string
+  paymentPhone?: string
 }
 
 export interface OrderPayload {
@@ -519,4 +519,39 @@ export interface UpdateUserProfilePayload {
   last_name: string
   email: string
   phone_number: string
+}
+
+export interface Address {
+  phone_number?: string
+  email?: string
+}
+
+export interface UserAddressPayload {
+  address: string;
+  apartment: string;
+  city: string;
+  country: string;
+  zip_code: string;
+}
+
+export interface MyAddress {
+  address: string;
+  address_id: string;
+  apartment?: string;
+  city: string;
+  country: string;
+  zip_code: string;
+}
+
+
+export interface UserAddressesResponse {
+  data: MyAddress[];
+  message: string;
+  status_code: number;
+}
+
+export interface UserAddressResponse {
+  data: MyAddress;
+  message: string;
+  status_code: number;
 }

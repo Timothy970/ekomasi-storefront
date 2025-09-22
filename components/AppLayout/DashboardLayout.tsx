@@ -20,8 +20,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { useAppSelector } from "@/lib/hooks";
-import { selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { logout, selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
 
 const dashboardTabs = [
   {
@@ -30,11 +30,21 @@ const dashboardTabs = [
     </svg>
   },
   { name: "Wishlist", href: "/dashboard/wishlist", icon: <Heart className="h-4 w-4" /> },
-  { name: "Gift cards & Vouchers", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
+  // { name: "Gift cards & Vouchers", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
   { name: "My details", href: "/dashboard/details", icon: <UserRound className="h-4 w-4" /> },
   { name: "My Address Book", href: "/dashboard/address", icon: <House className="h-4 w-4" /> },
-  { name: "Need Help ?", href: "/dashboard/help", icon: <ShieldQuestionMark className="h-4 w-4" /> },
-  { name: "Logout", href: "/logout", icon: null },
+  // {
+  //   name: "Need Help ?", href: "/dashboard/help", icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+  //     <path d="M9.99998 4.5C8.95702 4.50132 7.95716 4.91622 7.21968 5.6537C6.4822 6.39118 6.0673 7.39104 6.06598 8.434H8.06598C8.06598 7.367 8.93398 6.5 9.99998 6.5C11.066 6.5 11.934 7.367 11.934 8.434C11.934 9.032 11.453 9.466 10.718 10.06C10.4779 10.2481 10.2472 10.448 10.027 10.659C9.02898 11.656 8.99998 12.715 8.99998 12.833V13.5H11L10.999 12.867C11 12.851 11.032 12.481 11.44 12.074C11.59 11.924 11.779 11.774 11.975 11.616C12.754 10.985 13.933 10.032 13.933 8.434C13.9322 7.39106 13.5176 6.39104 12.7802 5.65347C12.0428 4.9159 11.0429 4.50106 9.99998 4.5ZM8.99998 14.5H11V16.5H8.99998V14.5Z" fill="black" />
+  //     <path d="M10 0.5C4.486 0.5 0 4.986 0 10.5C0 16.014 4.486 20.5 10 20.5C15.514 20.5 20 16.014 20 10.5C20 4.986 15.514 0.5 10 0.5ZM10 18.5C5.589 18.5 2 14.911 2 10.5C2 6.089 5.589 2.5 10 2.5C14.411 2.5 18 6.089 18 10.5C18 14.911 14.411 18.5 10 18.5Z" fill="black" />
+  //   </svg>
+  // },
+  {
+    name: "Logout", href: "/logout", icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19" fill="none">
+      <path d="M14 10.5V8.5H5V5.5L0 9.5L5 13.5V10.5H14Z" fill="black" />
+      <path d="M18 0.5H9C7.897 0.5 7 1.397 7 2.5V6.5H9V2.5H18V16.5H9V12.5H7V16.5C7 17.603 7.897 18.5 9 18.5H18C19.103 18.5 20 17.603 20 16.5V2.5C20 1.397 19.103 0.5 18 0.5Z" fill="black" />
+    </svg>
+  },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -44,6 +54,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const profile = useAppSelector(selectUserProfile)
   const token = useAppSelector(selectUserToken)
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (!token) {
@@ -99,12 +110,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       <div className="flex w-full h-full justify-center items-start relative">
-        <div className="max-w-[90rem] w-full h-full flex flex-row px-[1rem] lg:px-[3rem]">
+        <div className="max-w-[90rem] w-full h-full flex flex-row lg:px-[3rem]">
           <aside className={`bg-white fixed top-0 left-0 h-full w-3/4 max-w-xs z-50 shadow-2xl transform transition-transform duration-300 md:relative md:translate-x-0 md:w-1/4 md:block ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="p-4 flex flex-col gap-2 w-full">
               {profile && (
                 <div className="flex flex-row items-start space-y-2 gap-x-[1rem]">
-                  <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-[#C9A0FF] text-white text-[2rem] font-semibold">
+                  <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-[#C9A0FF] text-black text-[2rem] font-semibold">
                     {profile.first_name && profile.last_name
                       ? `${profile.first_name[0]}${profile.last_name[0]}`
                       : ""}
@@ -116,13 +127,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
               )}
 
-              {dashboardTabs.map((tab) => {
+              {dashboardTabs.map((tab, index) => {
                 const isActive = pathname === tab.href;
+
+                if (tab.name == 'Logout') {
+                  return <Button key={index?.toString()}
+                    variant={isActive ? "default" : "ghost"}
+                    className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${tab.name == 'Logout' ? 'underline' : ''} ${isActive ? "bg-[#804A9D29] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
+                    onClick={() => dispatch(logout())}
+                  >
+                    {tab.icon && tab.icon}
+                    {tab.name}
+                  </Button>
+                }
+
                 return (
                   <Link key={tab.name} href={tab.href}>
                     <Button
                       variant={isActive ? "default" : "ghost"}
-                      className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-[#804A9D29] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
+                      className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${tab.name == 'Logout' ? 'underline' : ''} ${isActive ? "bg-[#804A9D29] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
                       onClick={() => setSidebarOpen(false)}
                     >
                       {tab.icon && tab.icon}
