@@ -4,17 +4,15 @@ import { useRef, useState, useEffect } from "react";
 import SearchBackground from "./SearchBackground";
 import { useSearchModal } from "@/app/ClientLayout";
 import AutocompleteDropdown from "./AutocompleteDropdown";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { getSearchAutocompleteAsync, selectAutocomplete } from "@/lib/features/mall/mallSlice";
+import { useAppDispatch } from "@/lib/hooks";
+import { getSearchAutocompleteAsync } from "@/lib/features/mall/mallSlice";
 
 export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
     const inputRef = useRef<HTMLInputElement>(null);
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
-    const autocomplete = useAppSelector(selectAutocomplete);
     const dispatch = useAppDispatch();
     const [query, setQuery] = useState<string>("");
     const [debouncedQuery, setDebouncedQuery] = useState(query);
-    console.log(autocomplete, 'autocomplete')
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -41,7 +39,9 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setOpenSearchModal(true)}
-                    onBlur={() => setOpenSearchModal(false)}
+                    onBlur={() => {
+                        setTimeout(() => setOpenSearchModal(false), 200)
+                    }}
                     className="w-full h-full pl-4 pr-10 text-[0.875rem] rounded-lg border border-[#AAA] bg-white"
                 />
 

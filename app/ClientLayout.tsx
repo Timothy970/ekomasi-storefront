@@ -57,11 +57,11 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     return (
         <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
             <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-            <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                <main className="bg-white h-screen w-screen flex justify-between flex-col items-center z-0">
-                    {children}
-                </main>
-            </SearchContext.Provider>
+                <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
+                    <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                        {children}
+                    </main>
+                </SearchContext.Provider>
             </GuestCheckoutContext.Provider>
         </FilterContext.Provider>
     )

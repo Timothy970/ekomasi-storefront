@@ -27,6 +27,9 @@ export const mallSlice = createAppSlice({
 		resetSuccess: create.reducer((state) => {
 			state.success = false;
 		}),
+		resetSearchAutocomplete: create.reducer((state) => {
+			state.autocomplete = null;
+		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
 		}),
@@ -122,6 +125,6 @@ export const mallSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync } = mallSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync, resetSearchAutocomplete } = mallSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectVariants, selectLocations, selectAutocomplete } = mallSlice.selectors;
 export const mallReducer = mallSlice.reducer;
