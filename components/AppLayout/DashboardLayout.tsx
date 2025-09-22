@@ -30,7 +30,7 @@ const dashboardTabs = [
     </svg>
   },
   { name: "Wishlist", href: "/dashboard/wishlist", icon: <Heart className="h-4 w-4" /> },
-  { name: "Gift cards & Vouchers", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
+  // { name: "Gift cards & Vouchers", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
   { name: "My details", href: "/dashboard/details", icon: <UserRound className="h-4 w-4" /> },
   { name: "My Address Book", href: "/dashboard/address", icon: <House className="h-4 w-4" /> },
   { name: "Need Help ?", href: "/dashboard/help", icon: <ShieldQuestionMark className="h-4 w-4" /> },
@@ -99,12 +99,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       <div className="flex w-full h-full justify-center items-start relative">
-        <div className="max-w-[90rem] w-full h-full flex flex-row px-[1rem] lg:px-[3rem]">
+        <div className="max-w-[90rem] w-full h-full flex flex-row lg:px-[3rem]">
           <aside className={`bg-white fixed top-0 left-0 h-full w-3/4 max-w-xs z-50 shadow-2xl transform transition-transform duration-300 md:relative md:translate-x-0 md:w-1/4 md:block ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="p-4 flex flex-col gap-2 w-full">
               {profile && (
                 <div className="flex flex-row items-start space-y-2 gap-x-[1rem]">
-                  <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-[#C9A0FF] text-white text-[2rem] font-semibold">
+                  <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-[#C9A0FF] text-black text-[2rem] font-semibold">
                     {profile.first_name && profile.last_name
                       ? `${profile.first_name[0]}${profile.last_name[0]}`
                       : ""}

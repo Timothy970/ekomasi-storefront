@@ -8,6 +8,7 @@ import { toastReducer } from "./features/toast/toastSlice";
 import { mallReducer } from "./features/mall/mallSlice";
 import { cartReducer } from "./features/cart/cartSlice";
 import { wishListsReducer } from "./features/wishlist/wishlistSlice";
+import { addressReducer } from "./features/address/addressSlice";
 
 const persistConfig = { key: "user", storage: storage };
 
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   mall: mallReducer,
   cart: cartReducer,
   wishlists: wishListsReducer,
+  address: addressReducer,
 });
 
 const makeConfiguredStore = () => configureStore({

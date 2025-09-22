@@ -16,7 +16,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
-        lastName: 'Kiptoo',
+        lastName: '',
         email: '',
         phone: '',
         country: '',
@@ -27,7 +27,7 @@ export default function PersonalInformation({ page }: { page: string }) {
         city: '',
         postalCode: '',
         voucher: '',
-        paymentMethod: 'card',
+        paymentMethod: 'mpesa',
         deliveryType: 'Ship',
         promoApplied: false,
         deliveryCharge: '',
