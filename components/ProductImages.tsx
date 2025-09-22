@@ -97,10 +97,10 @@ export default function ProductImages() {
                 {
                     product && product?.urls && product?.urls?.length > 2 && <div className="absolute right-[1rem] bottom-[2rem] flex justify-between items-center gap-[0.5rem] z-10">
                         <Button className="rounded-full border border-black" onClick={prevSlide} variant="outline" size="icon" aria-label="Previous">
-                            <ChevronLeft className="h-[2rem] w-[3rem]" />
+                            <ChevronLeft className="h-[3rem] w-[3rem]" />
                         </Button>
                         <Button className="rounded-full border border-black" onClick={nextSlide} variant="outline" size="icon" aria-label="Next">
-                            <ChevronRight className="h-[2rem] w-[3rem] rounded-full" />
+                            <ChevronRight className="h-[3rem] w-[3rem] rounded-full" />
                         </Button>
                     </div>
                 }

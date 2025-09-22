@@ -50,7 +50,7 @@ export default function LocationDropdown({ onSelect, formData, setFormData }: Pr
             value={selectedId === null ? undefined : String(selectedId)}
             onValueChange={(val) => setSelectedId(Number(val))}
         >
-            <SelectTrigger className="w-full p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">
+            <SelectTrigger className="w-full p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">
                 <SelectValue placeholder="Select store..." />
             </SelectTrigger>
             <SelectContent className="">

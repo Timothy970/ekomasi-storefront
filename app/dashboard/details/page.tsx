@@ -32,5 +32,6 @@ export default function MyDetails() {
           <UpdateUserForm />
         </div>
       </DashboardLayout>
-    </Navigation>)
+    </Navigation>
+  )
 }

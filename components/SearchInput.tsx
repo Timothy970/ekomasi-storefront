@@ -7,7 +7,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     const inputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="h-[2rem] flex items-center w-full md:w-[30rem] relative ">
+        <div className="h-[2rem] flex items-center w-full md:w-[30rem] lg:w-[42rem] relative ">
             <Input
                 ref={inputRef}
                 placeholder={placeHolderText}

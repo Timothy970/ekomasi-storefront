@@ -21,7 +21,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
     <div className="w-full flex flex-col items-start justify-start space-y-4">
       {orders.map((order) => {
         const firstItem = order.items[0];
-        
+
         return (
           <div
             key={order.order_id}
@@ -65,7 +65,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                 </Link>
               </div>
 
-              <Button className="w-[6rem] h-[2rem] text-[0.875rem] my-[1rem]">Reorder</Button>
+              <Button className="w-[6rem] h-[3rem] text-[0.875rem] my-[1rem]">Reorder</Button>
             </div>
           </div>
         );

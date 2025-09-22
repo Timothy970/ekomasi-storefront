@@ -134,10 +134,10 @@ export default function ProductDetail() {
               }
 
               {
-                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[2rem]'>Add to cart</Button>
+                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'>Add to cart</Button>
               }
 
-              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[2rem]'>Buy Now</Button>
+              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'>Buy Now</Button>
             </div>
 
           </div>

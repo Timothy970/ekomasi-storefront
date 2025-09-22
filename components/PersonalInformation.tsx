@@ -16,7 +16,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
-        lastName: 'Kiptoo',
+        lastName: '',
         email: '',
         phone: '',
         country: '',
@@ -27,7 +27,7 @@ export default function PersonalInformation({ page }: { page: string }) {
         city: '',
         postalCode: '',
         voucher: '',
-        paymentMethod: 'card',
+        paymentMethod: 'mpesa',
         deliveryType: 'Ship',
         promoApplied: false,
         deliveryCharge: '',
@@ -184,7 +184,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         onChange={handleChange}
                         required
                         placeholder='First name*'
-                        className='p-[0.5rem] h-[2rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
+                        className='p-[0.5rem] h-[3rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
                     />
                 </div>
 
@@ -197,7 +197,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         value={formData.lastName}
                         onChange={handleChange}
                         placeholder='Last name*'
-                        className='p-[0.5rem] h-[2rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
+                        className='p-[0.5rem] h-[3rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
                     />
                 </div>
             </div>
@@ -217,7 +217,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         disabled={!!profile?.email}
                         onChange={handleChange}
                         placeholder='Email Address*'
-                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
+                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
                     />
                 </div>
             </div>
@@ -236,7 +236,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         required
                         onChange={handleChange}
                         placeholder='254123456789*'
-                        className='p-[0.5rem] h-[2rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
             </div>
@@ -245,7 +245,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[2rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[3rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -265,7 +265,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         <span>Ship</span>
                     </Button>
 
-                    <Button disabled className='px-[3rem] min-w-[10rem] h-[2rem] bg-white border border-black text-custom-black'>
+                    <Button disabled className='px-[3rem] min-w-[10rem] h-[3rem] bg-white border border-black text-custom-black'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -299,7 +299,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         onChange={handleChange}
                         required
                         placeholder='State*'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -311,7 +311,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         onChange={handleChange}
                         required
                         placeholder='Courier details*'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -323,7 +323,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         onChange={handleChange}
                         required
                         placeholder='Address*'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -334,7 +334,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                         value={formData.apartment}
                         onChange={handleChange}
                         placeholder='Apartment, suite, etc.(optional)'
-                        className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -347,7 +347,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                             required
                             onChange={handleChange}
                             placeholder='City'
-                            className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                            className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                         />
                     </div>
 
@@ -358,7 +358,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                             value={formData.postalCode}
                             onChange={handleChange}
                             placeholder='Postal code (optional)'
-                            className='p-[0.5rem] h-[2rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                            className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                         />
                     </div>
                 </div>
@@ -378,8 +378,8 @@ export default function PersonalInformation({ page }: { page: string }) {
                     </div>
 
                     <div className='flex gap-x-[2rem]'>
-                        <Input className='h-[2rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
-                        <Button className='border h-[2rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
+                        <Input className='h-[3rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                        <Button className='border h-[3rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
                             Apply
                         </Button>
                     </div>
@@ -412,10 +412,10 @@ export default function PersonalInformation({ page }: { page: string }) {
                             value={formData.paymentPhone}
                             onChange={handleChange}
                             placeholder='254123456789'
-                            className='p-[0.5rem] h-[2rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
+                            className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
                         />
 
-                        <Button type='submit' className='h-[2rem] md:max-w-[19rem] bg-[#AF52DE]'>
+                        <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'>
                             Pay now
                         </Button>
                     </div>
