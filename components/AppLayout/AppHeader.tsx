@@ -60,7 +60,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
         </div>
       </div>
 
-      <div className='w-full flex justify-center items-center z-50 bg-white border-b lg:border-none'>
+      <div className='w-full flex justify-center items-center z-[60] bg-white border-b lg:border-none'>
         <div className='bg- w-full h-[3.75rem] px-[1.25rem] lg:px-[3rem] flex flex-row items-center justify-between max-w-[90rem]'>
           <Link href={`/`}>
             <Image

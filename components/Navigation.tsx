@@ -34,7 +34,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
                 <Footer />
 
                 {
-                  <CategoryFilterModal
+                    <CategoryFilterModal
                         setOpenFilterModal={setOpenFilterModal}
                         openFilterModal={openFilterModal}
                     />
@@ -49,6 +49,5 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
                 }
             </div>
         </div>
-
     )
 }
