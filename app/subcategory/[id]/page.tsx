@@ -58,7 +58,7 @@ export default function SubCategory() {
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
-            behavior: "smooth", // smooth scroll
+            behavior: "smooth",
         })
     }
 

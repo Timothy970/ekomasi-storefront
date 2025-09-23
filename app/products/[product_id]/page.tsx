@@ -88,9 +88,9 @@ export default function ProductDetail() {
             }
 
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
-              <h2 className='capitalize text-lg font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
+              <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
 
-              <span className='mt-[0.5rem] text-lg font-bold'>KES {product?.price}</span>
+              <span className='mt-[0.5rem] text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
 
               {/* <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 <ProductStars />
@@ -99,17 +99,17 @@ export default function ProductDetail() {
                 <span>10 Reviews</span>
               </div> */}
 
-              <p className='text-[0.875rem] mt-[0.75rem] capitalize'>{product?.description}</p>
+              <p className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{product?.description}</p>
 
               {
-                product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[0.75rem]'>
+                product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
                   <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
                     <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
                   </svg>
-                  <span>In Stock</span>
-                </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[0.75rem] bg-[#EDEDF2] py-[2rem]'>
-                  <span>Sold Out:</span>
-                  <span>This product is currently unavailable</span>
+                  <span className='text-base'>In Stock</span>
+                </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[1.5rem] bg-[#EDEDF2] py-[2rem]'>
+                  <span className='text-base'>Sold Out:</span>
+                  <span className='text-base'>This product is currently unavailable</span>
                 </div>
               }
 
@@ -124,8 +124,8 @@ export default function ProductDetail() {
               </div> */}
 
               {
-                product && product && product?.stock_quantity > 0 && <div className='mt-[0.75rem]'>
-                  <h3 className='text-[0.875rem]'>Quantity</h3>
+                product && product && product?.stock_quantity > 0 && <div className='mt-[1.5rem]'>
+                  <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
                   <ProductQuantitySelect
                     setQuantity={setQuantity}
                     quantity={quantity}

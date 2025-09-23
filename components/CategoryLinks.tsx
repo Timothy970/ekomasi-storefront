@@ -108,8 +108,8 @@ export default function CategorySlider() {
             </div>
 
             <HeaderTopSlider
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
+                handleMouseEnter={() => handleMouseEnter(hoveredCategoryId!)}
+                handleMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
                 hoveredCategoryId={hoveredCategoryId}
                 subcategories={subcategories}
                 hoveredCategory={hoveredCategory}
