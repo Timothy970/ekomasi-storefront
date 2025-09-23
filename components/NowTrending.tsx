@@ -56,12 +56,12 @@ export default function NowTrending({ title }: { title: string }) {
     const prev = () => setIndex((i) => (i > 0 ? i - 1 : i));
 
     return (
-        <div className="w-full flex justify-center items-center mt-[2rem] lg:mt-[2.5rem] pb-4">
+        <div className="w-full flex justify-center items-start mt-[2rem] lg:mt-[5rem] lg:mb-[5rem] pb-4">
             <div className="max-w-[90rem] w-full bg-white">
                 <div className="flex items-end justify-between gap-4 mb-[2rem]">
                     <div>
-                        <h2 className="text-2xl font-bold leading-[2.1rem]">{title}</h2>
-                        <p className="pt-[0.5rem] text-custom-black/70 text-sm leading-[1.3125rem]">
+                        <h2 className="text-2xl lg:text-[2.25rem] font-bold leading-[2.1rem]">{title}</h2>
+                        <p className="mt-[1rem] text-custom-black/70 text-[1.25rem] leading-[1.3125rem]">
                             Tap the arrows to slide products. One row. Animated with Framer Motion.
                         </p>
                     </div>
@@ -79,26 +79,25 @@ export default function NowTrending({ title }: { title: string }) {
                                     ref={i === 0 ? cardRef : undefined}
                                     className="shrink-0 overflow-hidden mr-[1.5rem]"
                                 >
-                                    <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden relative">
+                                    <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden relative">
                                         <Image
                                             alt={p.name}
                                             fill
                                             src={p.urls[0]?.url}
-                                            className="rounded-md"
+                                            className="product-card rounded-md"
                                             unoptimized
                                             priority
                                             style={{ objectFit: "cover" }}
-
                                         />
                                     </div>
                                     <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
                                         <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>
                                             {p.name}
                                         </h3>
-                                        <h3 className="text-xs font-medium leading-[1.5rem] truncate" title={p.name}>
+                                        <h3 className="text-[0.875rem] font-medium leading-[1.5rem] truncate" title={p.name}>
                                             {p.name}
                                         </h3>
-                                        <span className="text-sm font-bold text-[1.125rem]">KES {p.price}</span>
+                                        <span className="text-[1.125rem] font-bold">KES {p.price}</span>
                                     </div>
                                 </div>
                             </Link>

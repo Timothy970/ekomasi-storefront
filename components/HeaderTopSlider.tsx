@@ -29,7 +29,7 @@ export default function HeaderTopSlider({
             className="w-full flex justify-center bg-white items-center absolute border-b top-[2.438rem] lg:px-[3rem] left-0 overflow-hidden transition-all duration-200 ease-in-out z-50"
             style={{ height: hoveredCategoryId ? "20rem" : "0" }}
         >
-            <div className="w-full h-full max-w-[90rem] flex justify-between">
+            <div className="w-full h-full max-w-[90rem] flex justify-between pt-[1rem]">
                 <div className="w-[27rem] flex flex-wrap content-start gap-y-[0.69rem]">
                     {subcategories.map((sub) => (
                         <Link key={sub.id} href={`/subcategory/${sub.id}`} className="w-1/1">

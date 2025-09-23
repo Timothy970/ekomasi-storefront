@@ -37,6 +37,18 @@ export default function MobileCategories() {
     return (
         <div className="h-full w-full">
             <ul className="mt-[1.25rem] space-y-4 h-full w-full">
+                <Link href={"/new-in"} className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
+                    <span className="text-custom-black font-poppins text-[0.875rem] font-medium leading-[1.5rem]">
+                        New In
+                    </span>
+                </Link>
+
+                <Link href={"/sales"} className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
+                    <span className="text-custom-black font-poppins text-[0.875rem] font-medium leading-[1.5rem]">
+                        Sales
+                    </span>
+                </Link>
+
                 {categories?.map((cat, index) => (
                     <li key={index} className="w-full">
                         <div className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
@@ -57,6 +69,18 @@ export default function MobileCategories() {
                         </div>
                     </li>
                 ))}
+
+                <Link href={"/blogs"} className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
+                    <span className="text-custom-black font-poppins text-[0.875rem] font-medium leading-[1.5rem]">
+                        Blogs
+                    </span>
+                </Link>
+
+                <Link href={"/about-us"} className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
+                    <span className="text-custom-black font-poppins text-[0.875rem] font-medium leading-[1.5rem]">
+                        About Us
+                    </span>
+                </Link>
             </ul>
 
             <SideBarSubcategory

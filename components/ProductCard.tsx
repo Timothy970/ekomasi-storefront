@@ -32,7 +32,7 @@ export default function ProductCard({ product }: { product: Product }) {
             alt=""
             unoptimized
             fill
-            className="object-cover"
+            className="product-card object-cover"
           />
         )}
       </div>
