@@ -2,7 +2,7 @@
 import Breadcrumb from '@/components/BreadCrumb'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFilter } from '@/app/ClientLayout';
 import { FilterSortBy } from '@/components/FilterSortBy'
 import { useParams } from 'next/navigation'
@@ -15,6 +15,7 @@ import CategoryProducts from '@/components/CategoryProducts'
 
 export default function SubCategory() {
     const { openFilterModal, setOpenFilterModal } = useFilter()
+    const [visible, setVisible] = useState(false)
     const params = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
     const pagination = useAppSelector(selectPagination)
@@ -25,6 +26,18 @@ export default function SubCategory() {
             dispatch(getSubCategoryAsync({ id: params.id, page: 1, size: 10 }));
         }
     }, [params?.id, dispatch]);
+
+    useEffect(() => {
+        const toggleVisibility = () => {
+            if (window.scrollY > 300) {
+                setVisible(true)
+            } else {
+                setVisible(false)
+            }
+        }
+        window.addEventListener("scroll", toggleVisibility)
+        return () => window.removeEventListener("scroll", toggleVisibility)
+    }, [])
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
@@ -41,6 +54,13 @@ export default function SubCategory() {
             );
         }
     };
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        })
+    }
 
     return (
         <Navigation>
@@ -64,7 +84,7 @@ export default function SubCategory() {
                                     <FilterSortBy />
                                 </div>
 
-                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[3rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden'>
+                                <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[3rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden rounded-none border-black'>
                                     <span className='text-[0.875rem] '>Filter</span>
                                     <span>
                                         <svg
@@ -89,7 +109,7 @@ export default function SubCategory() {
                                 </Button>
                             </div>
 
-                            <div className='w-full flex flex-row justify-between items-center mt-[1rem]'>
+                            <div className='w-full flex flex-row justify-between items-center mt-[2rem]'>
                                 <Breadcrumb />
 
                                 <div className='hidden lg:block'>
@@ -97,8 +117,8 @@ export default function SubCategory() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col items-start justify-center mt-[1rem]'>
-                                <h2 className='text-[1.25rem] not-italic font-bold leading-[120%] text-custom-black'>{subCategory?.name}</h2>
+                            <div className='flex flex-col items-start justify-center mt-[2rem]'>
+                                <h2 className='text-[1.25rem] lg:text-[3rem] not-italic font-bold leading-[120%] text-custom-black'>{subCategory?.name}</h2>
                                 <p className='mt-4'>{subCategory?.description}</p>
                             </div>
 
@@ -112,6 +132,35 @@ export default function SubCategory() {
                         {
                             pagination && subCategory?.products && <Pagination meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                         }
+
+                        <div onClick={scrollToTop} className='bg-[#804A9D] rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
+                            <svg
+                                width="40"
+                                height="40"
+                                viewBox="0 0 40 40"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <rect width="40" height="40" fill="url(#pattern0_14122_18188)" />
+                                <defs>
+                                    <pattern
+                                        id="pattern0_14122_18188"
+                                        patternContentUnits="objectBoundingBox"
+                                        width="1"
+                                        height="1"
+                                    >
+                                        <use href="#image0_14122_18188" transform="scale(0.0111111)" />
+                                    </pattern>
+                                    <image
+                                        id="image0_14122_18188"
+                                        width="90"
+                                        height="90"
+                                        preserveAspectRatio="none"
+                                        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAByklEQVR4nO2ZO07DQBRFhxSYgoVDRST6sAeKKCuCBSCU8iCjuAIhJ2Teb+4po8i+92j8Gb/WhBBCCCGEEEIIIYQQQmQAmIBH4B14Ax7m37xzlQK4BV75yQG4885XXfKCZBtIXpBsA8kLkm0gWbINJS9oZa98hdvzN/uV/9Gr3z9W8vdqPee/v55sVLhAnGQbSF6Q7JVwhVuAZBtIXpBsQzHoAWknRLINRQwvG8NLe1jZOBQfTrZnYUaRHaEoATJ0JVJBAmXx+go3WQ1ne2QaaTNyGHJT47TjOwwl23FbPY5sZ8ljyA4iubbsYJJryu74CrdfcUyv805DfU9mhO/Zzit5ipajG8BzlHL4yd62ngAb4DOCZGfZH8BN6yz6GEWyo+zZwab1BHiJJNnpmLvWG+D+JPt4uoSevIUYyN6eus6dd7ODZsUl9ygMnuq9zjH37XpfvhZoOFtLctgNSG80nDUgwqoiQIauRCpIoCzlixEwU9lCBM5WrggJMpYpQKKs6YOTLXO6wBmzpwmauUP4gBW6hA1WqVOoAWblbtcezkaj5HA2KqWGs9EpMZzNQurhbDZSDmczk2Y4K4QQQgghhBBCCCGEEEKI1p0veedw/5C01UgAAAAASUVORK5CYII="
+                                    />
+                                </defs>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>

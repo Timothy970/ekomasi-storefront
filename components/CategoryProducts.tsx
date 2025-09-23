@@ -3,7 +3,6 @@ import type { Product } from '@/lib/features/types'
 import ProductCard from './ProductCard'
 
 export default function CategoryProducts({ products }: { products: Product[] }) {
-
     return (
         <div className="mt-[2rem] lg:mt-[2.5rem]">
             {

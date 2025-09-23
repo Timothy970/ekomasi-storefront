@@ -77,11 +77,11 @@ export default function NowTrending({ title }: { title: string }) {
                             <Link key={i.toString()} href={`/products/${p.product_id}`}>
                                 <div
                                     ref={i === 0 ? cardRef : undefined}
-                                    className="shrink-0 overflow-hidden mr-[1.5rem]"
+                                    className="shrink-0 overflow-hidden mr-[1.5rem] "
                                 >
                                     <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden relative">
                                         <Image
-                                            alt={p.name}
+                                            alt={"trending"}
                                             fill
                                             src={p.urls[0]?.url}
                                             className="product-card rounded-md"
@@ -90,14 +90,17 @@ export default function NowTrending({ title }: { title: string }) {
                                             style={{ objectFit: "cover" }}
                                         />
                                     </div>
-                                    <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
-                                        <h3 className="text-[1rem] font-semibold leading-[1.5rem] truncate" title={p.name}>
+
+                                    <div className="pt-4 w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem]">
+                                        <h3 className="truncate text-[#666] font-roboto text-[0.875rem] font-semibold leading-6 capitalize">
                                             {p.name}
                                         </h3>
-                                        <h3 className="text-[0.875rem] font-medium leading-[1.5rem] truncate" title={p.name}>
-                                            {p.name}
-                                        </h3>
-                                        <span className="text-[1.125rem] font-bold">KES {p.price}</span>
+                                        <p className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
+                                            {p.description}
+                                        </p>
+                                        <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
+                                            KES {p.price}
+                                        </p>
                                     </div>
                                 </div>
                             </Link>

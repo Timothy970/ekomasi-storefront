@@ -12,20 +12,35 @@ import {
 export function FilterSortBy() {
   return (
     <Select>
-      <SelectTrigger className=" bg-white text-custom-black h-[3rem] min-w-[10rem] text-[0.875rem] ">
+      <SelectTrigger className="bg-white text-black h-[2rem] min-w-[10rem] text-[1rem] rounded-none border-black">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
 
-      <SelectContent>
+      <SelectContent className="rounded-none border border-none shadow-lg">
         <SelectGroup>
-          <SelectItem value="low to high">Price: low to high</SelectItem>
-          <SelectItem value="high to low">Price: high to low</SelectItem>
-          <SelectItem value="old to new">Date: old to new</SelectItem>
-          <SelectItem value="new to old">Date: new to old</SelectItem>
-          <SelectItem value="featured">Featured</SelectItem>
-          <SelectItem value="best sellers">Best Sellers</SelectItem>
-          <SelectItem value="a to z">Alphabetically: A-Z</SelectItem>
-          <SelectItem value="z to a">Alphabetically: Z-A</SelectItem>
+          {[
+            { value: "low to high", label: "Price: low to high" },
+            { value: "high to low", label: "Price: high to low" },
+            { value: "old to new", label: "Date: old to new" },
+            { value: "new to old", label: "Date: new to old" },
+            { value: "featured", label: "Featured" },
+            { value: "best sellers", label: "Best Sellers" },
+            { value: "a to z", label: "Alphabetically: A-Z" },
+            { value: "z to a", label: "Alphabetically: Z-A" },
+          ].map((item) => (
+            <SelectItem
+              key={item.value}
+              value={item.value}
+              className="
+                h-[2rem] px-3 text-[0.875rem] cursor-pointer
+                hover:text-purple-500
+                data-[highlighted]:bg-transparent
+                focus:bg-transparent
+              "
+            >
+              {item.label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
