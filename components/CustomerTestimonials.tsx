@@ -40,10 +40,10 @@ export default function CustomerTestimonials() {
             <div className="w-full max-w-[90rem] px-[1rem] lg:px-[3rem]">
                 <div className="flex items-end justify-between gap-4 mb-8 ">
                     <div>
-                        <h2 className="text-2xl font-bold leading-[2.1rem]">
+                        <h2 className="text-2xl lg:text-[2.25rem] font-bold leading-[2.1rem]">
                             Customer Testimonials
                         </h2>
-                        <p className="pt-2 text-custom-black/70 text-sm leading-[1.3125rem]">
+                        <p className="mt-[1rem] text-custom-black/70 text-sm lg:text-[1.125rem] leading-[1.3125rem]">
                             Tap the arrows to slide testimonials. Animated with Framer Motion.
                         </p>
                     </div>

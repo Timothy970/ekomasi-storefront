@@ -54,7 +54,7 @@ export default function HomeBanner() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="relative h-[34.375rem] md:h-[34.125rem]"
+                    className="relative h-[34.375rem] md:h-[34.125rem] lg:min-h-[75vh]"
                 >
                     <img
                         src={slides[current].image}
@@ -63,7 +63,7 @@ export default function HomeBanner() {
                     />
                     <div className="absolute inset-0 lg:bg-black/40 flex flex-col justify-center items-center text-center">
                         <div className="bg-black/40 lg:bg-transparent p-4 w-[80%] lg:max-w-[55rem]">
-                            <h2 className="text-white text-center font-roboto text-[2rem] font-bold leading-[3rem] lg:text-[3.5rem]">
+                            <h2 className="text-white text-center font-roboto text-[2rem] font-bold leading-[3rem] lg:leading-[4.2rem] lg:text-[3.5rem]">
                                 {slides[current].title}
                             </h2>
                             <p className="text-white text-center font-poppins text-[1.25rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
@@ -71,7 +71,7 @@ export default function HomeBanner() {
                             </p>
                         </div>
 
-                        <Button className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem]">
+                        <Button className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
                                 {slides[current].buttonText}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">
@@ -83,7 +83,7 @@ export default function HomeBanner() {
                 </motion.div>
             </AnimatePresence>
 
-            <div className="absolute w-full right-0 left-0 bottom-[3rem]">
+            <div className="absolute w-full right-0 left-0 bottom-[3rem] lg:bottom-[5.5rem]">
                 <div className="max-w-[90rem] mx-auto relative">
                     <div className="absolute right-[3rem] flex justify-between items-center">
                         <button
@@ -113,9 +113,7 @@ export default function HomeBanner() {
                                 onClick={() => setCurrent(index)}
                                 className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
                             >
-                                <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer ${current === index ? "bg-white" : "bg-[#F5F5F596]"}`}>
-
-                                </span>
+                                <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer bg-[#F5F5F596]`}></span>
                             </button>
                         ))}
                     </div>
