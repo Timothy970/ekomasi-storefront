@@ -142,7 +142,7 @@ export default function HomeCategories() {
                       fill
                       unoptimized
                       style={{ objectFit: "cover" }}
-                      className="rounded-none lg:rounded-tl-lg lg:rounded-tr-lg h-full w-full"
+                      className="product-card rounded-none lg:rounded-tl-lg lg:rounded-tr-lg h-full w-full"
                       priority
                     />
                   </div>

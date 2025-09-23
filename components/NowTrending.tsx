@@ -84,11 +84,10 @@ export default function NowTrending({ title }: { title: string }) {
                                             alt={p.name}
                                             fill
                                             src={p.urls[0]?.url}
-                                            className="rounded-md"
+                                            className="product-card rounded-md"
                                             unoptimized
                                             priority
                                             style={{ objectFit: "cover" }}
-
                                         />
                                     </div>
                                     <div className="flex flex-col gap-y-[0.5rem] pt-[1rem]">
