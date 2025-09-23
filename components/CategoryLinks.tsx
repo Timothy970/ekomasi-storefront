@@ -52,14 +52,14 @@ export default function CategorySlider() {
         <div className="w-full relative hidden lg:block">
             <div className="w-full lg:flex justify-center items-center flex-col h-auto bg-[rgba(148,35,117,0.08)] hidden">
                 <div className="max-w-[90rem] mx-auto">
-                    <ul className="flex flex-row list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem] gap-2 h-[2.438rem]">
-                        <Link href={"/new-in"} className="flex w-auto min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
+                    <ul className="flex flex-row list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem] gap-2 h-[2.438rem] overflow-x-scroll max-w-full">
+                        <Link href={"/new-in"} className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
                             <span className="text-custom-black leading-[1.95rem]">
                                 New In
                             </span>
                         </Link>
                         
-                        <Link href={"/sales"} className="flex w-auto min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
+                        <Link href={"/sales"} className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
                             <span className="text-custom-black leading-[1.95rem]">
                                 Sales
                             </span>
@@ -70,7 +70,7 @@ export default function CategorySlider() {
                                 key={cat.id}
                                 onMouseEnter={() => handleMouseEnter(cat.id)}
                                 onMouseLeave={handleMouseLeave}
-                                className="flex w-auto min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
+                                className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
                                 <span className="text-custom-black leading-[1.95rem]">
                                     {cat.name}
@@ -78,13 +78,13 @@ export default function CategorySlider() {
                             </li>
                         ))}
 
-                        <Link href={"/blogs"} className="flex w-auto min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
+                        <Link href={"/blogs"} className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
                             <span className="text-custom-black leading-[1.95rem]">
                                 Blogs
                             </span>
                         </Link>
 
-                        <Link href={"/about-us"} className="flex w-auto min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
+                        <Link href={"/about-us"} className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
                             <span className="text-custom-black leading-[1.95rem]">
                                 About Us
                             </span>

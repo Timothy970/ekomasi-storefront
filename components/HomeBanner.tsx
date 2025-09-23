@@ -54,7 +54,7 @@ export default function HomeBanner() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="relative h-[34.375rem] md:h-[34.125rem] lg:min-h-[75vh]"
+                    className="relative h-[70vh] lg:min-h-[75vh]"
                 >
                     <img
                         src={slides[current].image}
@@ -63,10 +63,10 @@ export default function HomeBanner() {
                     />
                     <div className="absolute inset-0 lg:bg-black/40 flex flex-col justify-center items-center text-center">
                         <div className="bg-black/40 lg:bg-transparent p-4 w-[80%] lg:max-w-[55rem]">
-                            <h2 className="text-white text-center font-roboto text-[2rem] font-bold leading-[3rem] lg:leading-[4.2rem] lg:text-[3.5rem]">
+                            <h2 className="text-white text-center font-roboto text-[2rem] lg:text-[3.5rem] font-bold leading-[3rem] lg:leading-[4.2rem]">
                                 {slides[current].title}
                             </h2>
-                            <p className="text-white text-center font-poppins text-[1.25rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
+                            <p className="text-white text-center font-poppins text-[1.125rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
                                 {slides[current].description}
                             </p>
                         </div>
