@@ -98,7 +98,7 @@ export default function ProductCategory() {
                             </div>
 
                             <div className='flex flex-col items-start justify-center mt-[1rem]'>
-                                <h2 className='text-[1.25rem] not-italic font-bold leading-[120%] text-custom-black'>{category?.name}</h2>
+                                <h2 className='text-[1.25rem] lg:text-[3rem] not-italic font-bold leading-[120%] text-custom-black'>{category?.name}</h2>
                                 <p className='mt-4'>{category?.description}</p>
                             </div>
 

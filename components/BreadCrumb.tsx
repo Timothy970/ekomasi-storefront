@@ -22,7 +22,7 @@ export default function CustomBreadcrumb() {
           <BreadcrumbLink asChild>
             <Link
               href="/"
-              className="text-custom-black font-roboto text-[0.875rem] font-semibold"
+              className="text-custom-black font-roboto text-[1rem] font-semibold"
             >
               Home
             </Link>
@@ -32,7 +32,7 @@ export default function CustomBreadcrumb() {
         <BreadcrumbSeparator />
 
         <BreadcrumbItem>
-          <BreadcrumbPage className="capitalize text-custom-black font-roboto text-[0.875rem] font-semibold">
+          <BreadcrumbPage className="capitalize text-custom-black font-roboto text-[1rem] font-semibold">
             {category?.name}
           </BreadcrumbPage>
         </BreadcrumbItem>

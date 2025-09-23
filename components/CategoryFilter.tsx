@@ -30,13 +30,13 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     return (
         <div className='mt-4 lg:mt-0 w-full h-auto'>
             {
-                category?.subcategories && page === "category" && <div className='w-full mb-[1.5rem]'>
+                category?.subcategories && page === "category" && <div className='w-full mb-[1.5rem] flex flex-col gap-y-[1rem]'>
                     {
                         category?.subcategories && <>
                             {
                                 category?.subcategories.map((cat, index) => {
                                     return <div key={index?.toString()}>
-                                        <div onClick={() => handleCategoryClick(cat?.id)} className='w-full text-custom-black font-semibold cursor-pointer text-[0.875rem] mb-2'>
+                                        <div onClick={() => handleCategoryClick(cat?.id)} className='w-full text-custom-black cursor-pointer text-[0.875rem] lg:text-[1rem] mb-2'>
                                             {cat?.name}
                                         </div>
                                     </div>
@@ -46,7 +46,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
                     }
                 </div>
             }
-            <div>
+            <div className='flex flex-col gap-y-[1.5rem]'>
                 {
                     variants?.map((variant, index) => {
                         return <Variant key={index?.toString()} variant={variant} />

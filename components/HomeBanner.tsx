@@ -54,7 +54,7 @@ export default function HomeBanner() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.5 }}
-                    className="relative h-[70vh] lg:min-h-[75vh]"
+                    className="relative h-[34.375rem] md:h-[30.125rem]"
                 >
                     <img
                         src={slides[current].image}

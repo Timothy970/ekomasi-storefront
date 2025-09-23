@@ -6,7 +6,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
     return (
         <div className='flex flex-col gap-y-[1rem] mb-[1rem]'>
             <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center h-[3rem] px-[0.5rem]'>
-                <h2 className='text-custom-black font-semibold text-[0.875rem] leading-[1.6875rem] capitalize'>{variant?.variant_type}</h2>
+                <h2 className='text-custom-black font-bold text-[0.875rem] lg:text-[1.125rem] leading-[1.6875rem] capitalize'>{variant?.variant_type}</h2>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -27,7 +27,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
                     variant?.variants?.map((item, index) => {
                         return <div key={index?.toString()}>
                             <div className='flex justify-start items-center gap-x-[0.5rem]'>
-                                <Checkbox className='border border-black h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]' />
+                                <Checkbox className='border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]' />
                                 <span className='text-custom-black font-normal text-[0.875rem] leading-[1.95rem] capitalize'>
                                     {item?.name}
                                 </span>
