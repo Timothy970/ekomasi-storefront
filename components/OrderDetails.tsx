@@ -17,15 +17,17 @@ export default function OrderDetails() {
           {
             order?.items?.map((item, index) => {
               return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
-                <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0">
-                  <Image
-                    src={item?.urls[0]?.url}
-                    alt=""
-                    fill
-                    unoptimized
-                    className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
-                  />
-                </div>
+                {
+                  item?.urls && <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0">
+                    <Image
+                      src={item?.urls[0]?.url}
+                      alt=""
+                      fill
+                      unoptimized
+                      className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
+                    />
+                  </div>
+                }
 
                 <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
                   <div className='flex text-custom-black gap-x-[0.5rem]'>

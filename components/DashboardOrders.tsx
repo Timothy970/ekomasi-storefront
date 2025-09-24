@@ -52,8 +52,8 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                     On {new Date(order.created_at).toLocaleDateString()}
                   </p>
                   <Dot />
-                  <span className={order.status === 'pending' ? 'text-yellow-500' : order.status === 'delivered' ? 'text-green-500' : 'text-red-500'}>
-                    {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                  <span className={order.order_status === 'pending' ? 'text-yellow-500' : order.order_status === 'delivered' ? 'text-green-500' : 'text-red-500'}>
+                    {order.order_status.charAt(0).toUpperCase() + order.order_status.slice(1)}
                   </span>
                 </div>
 

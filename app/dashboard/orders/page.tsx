@@ -28,10 +28,10 @@ export default function Orders() {
     useEffect(() => {
         if (orders?.length) {
             const ongoing = orders.filter(
-                (order) => order.status === "pending" || order.status === "delivered"
+                (order) => order.order_status === "pending" || order.order_status === "delivered"
             );
             const cancelled = orders.filter(
-                (order) => order.status === "canceled" || order.status === "returned"
+                (order) => order.order_status === "canceled" || order.order_status === "returned"
             );
 
             setOngoingOrders(ongoing);

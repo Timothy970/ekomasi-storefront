@@ -454,11 +454,11 @@ export interface OrderItem {
   variant_id: string | null;
   quantity: number;
   unit_price: number;
-  name: string;
-  description: string;
-  price: number;
-  stock_quantity: number;
-  urls: ProductImage[];
+  name?: string;
+  description?: string;
+  price?: number;
+  stock_quantity?: number;
+  urls?: ProductImage[];
 }
 
 export interface CreateOrderData {
