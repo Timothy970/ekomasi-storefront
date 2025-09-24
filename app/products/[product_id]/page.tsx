@@ -1,6 +1,5 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import ProductBreadCrumb from '@/components/ProductBreadCrumb'
 import ProductColors from '@/components/ProductColors'
 import ProductQuantitySelect from '@/components/ProductQuantitySelect'
 import ProductStars from '@/components/ProductStars'
@@ -13,6 +12,8 @@ import { getProductAsync, selectProduct } from '@/lib/features/navigation/naviga
 import { useParams, useRouter } from 'next/navigation'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
+import CustomBreadcrumb from '@/components/CustomBreadcrumb'
+import { Crumb } from '@/lib/features/types'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -21,6 +22,19 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
+  const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+
+  useEffect(() => {
+    if (product) {
+      let crumbs = []
+
+      crumbs?.push({
+        link: `/products/${product?.product_id}`,
+        name: product?.name
+      })
+      setBreadCrumb(crumbs)
+    }
+  }, [product])
 
   const createAndAdd = (cart_id: string) => {
     if (product?.product_id && cart_id) {
@@ -77,7 +91,9 @@ export default function ProductDetail() {
   return (
     <Navigation>
       <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem]'>
-        <ProductBreadCrumb />
+        <div className='my-4 px-[1rem] lg:px-[3rem]'>
+          <CustomBreadcrumb crumbs={breadCrumb} />
+        </div>
 
         <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
           <div className='w-full flex flex-col md:flex-row items-stretch gap-x-[1rem]'>
@@ -88,9 +104,9 @@ export default function ProductDetail() {
             }
 
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
-              <h2 className='capitalize text-lg font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
+              <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
 
-              <span className='mt-[0.5rem] text-lg font-bold'>KES {product?.price}</span>
+              <span className='mt-[0.5rem] text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
 
               {/* <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 <ProductStars />
@@ -99,17 +115,17 @@ export default function ProductDetail() {
                 <span>10 Reviews</span>
               </div> */}
 
-              <p className='text-[0.875rem] mt-[0.75rem] capitalize'>{product?.description}</p>
+              <p className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{product?.description}</p>
 
               {
-                product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[0.75rem]'>
+                product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
                   <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
                     <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
                   </svg>
-                  <span>In Stock</span>
-                </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[0.75rem] bg-[#EDEDF2] py-[2rem]'>
-                  <span>Sold Out:</span>
-                  <span>This product is currently unavailable</span>
+                  <span className='text-base'>In Stock</span>
+                </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[1.5rem] bg-[#EDEDF2] py-[2rem]'>
+                  <span className='text-base'>Sold Out:</span>
+                  <span className='text-base'>This product is currently unavailable</span>
                 </div>
               }
 
@@ -124,8 +140,8 @@ export default function ProductDetail() {
               </div> */}
 
               {
-                product && product && product?.stock_quantity > 0 && <div className='mt-[0.75rem]'>
-                  <h3 className='text-[0.875rem]'>Quantity</h3>
+                product && product && product?.stock_quantity > 0 && <div className='mt-[1.5rem]'>
+                  <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
                   <ProductQuantitySelect
                     setQuantity={setQuantity}
                     quantity={quantity}

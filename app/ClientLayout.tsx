@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import "@fontsource/league-spartan";
 import "@fontsource/league-spartan/400.css";
+import { useSearchParams } from "next/navigation";
 
 type FilterContextType = {
     openFilterModal: boolean
@@ -18,9 +19,15 @@ type GuestCheckoutContextType = {
     setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type QueryContextType = {
+    query: string;
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
+};
+
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
+const QueryContext = createContext<QueryContextType | undefined>(undefined);
 
 export function useFilter() {
     const ctx = useContext(FilterContext)
@@ -40,11 +47,19 @@ export function useSearchModal() {
     return ctx;
 }
 
+export function useFilterQuery() {
+    const ctx = useContext(QueryContext);
+    if (!ctx) throw new Error("SearchContext must be used within SearchContext");
+    return ctx;
+}
+
 export default function ClientLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const [mounted, setMounted] = useState(false);
     const [openFilterModal, setOpenFilterModal] = useState(false)
     const [openGuestCheckoutModal, setOpenGuestCheckoutModal] = useState(false);
     const [openSearchModal, setOpenSearchModal] = useState(false)
+    const searchParams = useSearchParams();
+    const [query, setQuery] = useState<string>(searchParams.toString());
 
     useEffect(() => {
         setMounted(true);
@@ -58,9 +73,11 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
         <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
             <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
                 <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                    <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
-                        {children}
-                    </main>
+                    <QueryContext.Provider value={{ query, setQuery }}>
+                        <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                            {children}
+                        </main>
+                    </QueryContext.Provider>
                 </SearchContext.Provider>
             </GuestCheckoutContext.Provider>
         </FilterContext.Provider>

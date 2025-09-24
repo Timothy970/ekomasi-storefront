@@ -12,6 +12,7 @@ export default function CategorySlider() {
     const categories = useAppSelector(selectCategories);
     const [hoveredCategory, setHoveredCategory] = useState<Category | undefined>();
     const dispatch = useAppDispatch()
+    const activeHoverRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (hoveredCategoryId) {
@@ -38,14 +39,27 @@ export default function CategorySlider() {
             }
         }
     }, [subcategories, hoveredCategoryId])
-
     const handleMouseEnter = (id: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setHoveredCategoryId(id);
-    };
 
-    const handleMouseLeave = () => {
-        timeoutRef.current = setTimeout(() => setHoveredCategoryId(null), 500);
+        activeHoverRef.current = id;
+
+        timeoutRef.current = setTimeout(() => {
+            if (activeHoverRef.current === id) {
+                setHoveredCategoryId(id);
+            }
+        }, 300);
+    };
+    const handleMouseLeave = (id: string) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+        activeHoverRef.current = null;
+
+        timeoutRef.current = setTimeout(() => {
+            if (!activeHoverRef.current) {
+                setHoveredCategoryId(null);
+            }
+        }, 500);
     };
 
     return (
@@ -58,7 +72,7 @@ export default function CategorySlider() {
                                 New In
                             </span>
                         </Link>
-                        
+
                         <Link href={"/sales"} className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
                             <span className="text-custom-black leading-[1.95rem]">
                                 Sales
@@ -69,7 +83,7 @@ export default function CategorySlider() {
                             <li
                                 key={cat.id}
                                 onMouseEnter={() => handleMouseEnter(cat.id)}
-                                onMouseLeave={handleMouseLeave}
+                                onMouseLeave={() => handleMouseLeave(cat.id)}
                                 className="flex w-auto xl:min-w-[7.3rem] px-[0.625rem] text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition"
                             >
                                 <span className="text-custom-black leading-[1.95rem]">
@@ -94,8 +108,8 @@ export default function CategorySlider() {
             </div>
 
             <HeaderTopSlider
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
+                handleMouseEnter={() => handleMouseEnter(hoveredCategoryId!)}
+                handleMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
                 hoveredCategoryId={hoveredCategoryId}
                 subcategories={subcategories}
                 hoveredCategory={hoveredCategory}

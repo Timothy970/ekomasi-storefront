@@ -571,3 +571,37 @@ export interface SuggestionsResponse {
   status_code: number;
   message: string;
 }
+
+export interface SearchResultsResponse {
+  data: {
+    filters: Filters;
+    pagination: Pagination;
+    products: Product[];
+  };
+  status_code: number;
+  message: string;
+}
+
+export interface Filters {
+  category_name: string;
+  product_name: string;
+  sort_by: string;
+  variant_name: string;
+  variant_value: string;
+}
+
+export interface SearchParams {
+  q?: string;
+  product_name?: string;
+  category_name?: string;
+  size?: number;
+  page?: number;
+  variant_name?: string;
+  variant_value?: string;
+  sort_by?: string;
+}
+
+export interface Crumb {
+  name: string
+  link: string
+}
