@@ -35,7 +35,7 @@ export default function CategorySlider() {
             const firstSubCategory = subcategories[0]
 
             if (firstSubCategory?.id) {
-                dispatch(getSubCategoryAsync({ id: firstSubCategory?.id, page: 1, size: 2 }));
+                dispatch(getSubCategoryAsync({ id: firstSubCategory?.id, page: 1, size: 2, query: '' }));
             }
         }
     }, [subcategories, hoveredCategoryId])

@@ -2,10 +2,11 @@
 import Navigation from '@/components/Navigation'
 import { getSearchResultsAsync, selectPagination, selectSearchResults } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '../ClientLayout'
+import { Crumb } from '@/lib/features/types'
 
 export default function search() {
     const dispatch = useAppDispatch()
@@ -13,6 +14,18 @@ export default function search() {
     const products = useAppSelector(selectSearchResults)
     const pagination = useAppSelector(selectPagination)
     const { query, setQuery } = useFilterQuery()
+    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+
+    useEffect(() => {
+        let crumbs = []
+
+        crumbs?.push({
+            link: ``,
+            name: "Search"
+        })
+        setBreadCrumb(crumbs)
+
+    }, [])
 
     useEffect(() => {
         if (query) {
@@ -55,6 +68,7 @@ export default function search() {
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
+                    crumbs={breadCrumb}
                 />
             }
         </Navigation>
