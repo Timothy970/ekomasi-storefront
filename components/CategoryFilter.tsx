@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 interface CategoryFilterParam {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
-    page: string
+    page: string,
 }
 
 export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFilterParam) {
@@ -49,7 +49,10 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
             <div className='flex flex-col gap-y-[1.5rem]'>
                 {
                     variants?.map((variant, index) => {
-                        return <Variant key={index?.toString()} variant={variant} />
+                        return <Variant
+                            key={index?.toString()}
+                            variant={variant}
+                        />
                     })
                 }
             </div>

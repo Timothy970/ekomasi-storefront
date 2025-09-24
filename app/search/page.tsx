@@ -5,36 +5,43 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect } from 'react'
 import { useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout'
+import { useFilterQuery } from '../ClientLayout'
 
 export default function search() {
     const dispatch = useAppDispatch()
     const searchParams = useSearchParams();
     const products = useAppSelector(selectSearchResults)
     const pagination = useAppSelector(selectPagination)
+    const { query, setQuery } = useFilterQuery()
 
     useEffect(() => {
-        const query = searchParams.toString();
         if (query) {
             dispatch(getSearchResultsAsync({ query }));
         }
-    }, [searchParams, dispatch]);
+    }, [query, dispatch]);
+
+    useEffect(() => {
+        const sp = searchParams.toString();
+        if (sp !== query) {
+            setQuery(sp);
+        }
+    }, [searchParams]);
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
-            const query = new URLSearchParams(searchParams);
-            query.set("page", String(pagination.page - 1));
-            query.set("size", String(pagination.size));
-
-            dispatch(getSearchResultsAsync({ query: query.toString() }));
+            const newQuery = new URLSearchParams(query);
+            newQuery.set('page', String(pagination.page - 1));
+            newQuery.set('size', String(pagination.size));
+            setQuery(newQuery.toString());
         }
     };
 
     const handleNext = () => {
         if (pagination?.has_next) {
-            const query = new URLSearchParams(searchParams);
-            query.set("page", String(pagination.page + 1));
-            query.set("size", String(pagination.size));
-            dispatch(getSearchResultsAsync({ query: query.toString() }));
+            const newQuery = new URLSearchParams(query);
+            newQuery.set('page', String(pagination.page + 1));
+            newQuery.set('size', String(pagination.size));
+            setQuery(newQuery.toString());
         }
     };
 

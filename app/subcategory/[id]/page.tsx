@@ -6,34 +6,38 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getSubCategoryAsync, selectPagination, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
 import CategoryBanner from '@/components/CategoryBanner'
 import ProductListingLayout from '@/components/ProductListingLayout'
+import { useFilterQuery } from '@/app/ClientLayout'
 
 export default function SubCategory() {
     const params = useParams<{ id: string }>()
     const dispatch = useAppDispatch()
     const pagination = useAppSelector(selectPagination)
     const subCategory = useAppSelector(selectSubCategory)
+    const { query, setQuery } = useFilterQuery()
 
     useEffect(() => {
         if (params?.id) {
-            dispatch(getSubCategoryAsync({ id: params.id, page: 1, size: 10 }));
+            dispatch(getSubCategoryAsync({ id: params.id, query }))
         }
-    }, [params?.id, dispatch]);
+    }, [params?.id, query, dispatch])
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
-            dispatch(
-                getSubCategoryAsync({ id: params.id, page: pagination.page - 1, size: pagination.size })
-            );
+            const newQuery = new URLSearchParams(query)
+            newQuery.set('page', String(pagination.page - 1))
+            newQuery.set('size', String(pagination.size))
+            setQuery(newQuery.toString())
         }
-    };
+    }
 
     const handleNext = () => {
         if (pagination?.has_next) {
-            dispatch(
-                getSubCategoryAsync({ id: params.id, page: pagination.page + 1, size: pagination.size })
-            );
+            const newQuery = new URLSearchParams(query)
+            newQuery.set('page', String(pagination.page + 1))
+            newQuery.set('size', String(pagination.size))
+            setQuery(newQuery.toString())
         }
-    };
+    }
 
     return (
         <Navigation>
@@ -42,10 +46,10 @@ export default function SubCategory() {
             }
 
             {
-                subCategory?.products  && pagination && <ProductListingLayout
+                subCategory?.products && pagination && <ProductListingLayout
                     listingDescription={subCategory?.description}
                     listingName={subCategory?.name}
-                    products={subCategory?.products }
+                    products={subCategory?.products}
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}

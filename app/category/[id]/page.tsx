@@ -6,34 +6,39 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getCategoryAsync, selectCategory, selectPagination } from '@/lib/features/navigation/navigationSlice'
 import { useParams } from 'next/navigation'
 import ProductListingLayout from '@/components/ProductListingLayout'
+import { useFilterQuery } from '@/app/ClientLayout'
 
 export default function ProductCategory() {
     const category = useAppSelector(selectCategory)
     const dispatch = useAppDispatch()
     const params = useParams<{ id: string }>()
     const pagination = useAppSelector(selectPagination)
+    const { query, setQuery } = useFilterQuery()
 
     useEffect(() => {
         if (params?.id) {
-            dispatch(getCategoryAsync({ id: params.id, page: 1, size: 10 }));
+            dispatch(getCategoryAsync({ id: params.id, query }))
         }
-    }, [params?.id, dispatch]);
+    }, [params?.id, query, dispatch])
+    console.log(query, 'queryyy')
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
-            dispatch(
-                getCategoryAsync({ id: params.id, page: pagination.page - 1, size: pagination.size })
-            );
+            const newQuery = new URLSearchParams(query)
+            newQuery.set('page', String(pagination.page - 1))
+            newQuery.set('size', String(pagination.size))
+            setQuery(newQuery.toString())
         }
-    };
+    }
 
     const handleNext = () => {
         if (pagination?.has_next) {
-            dispatch(
-                getCategoryAsync({ id: params.id, page: pagination.page + 1, size: pagination.size })
-            );
+            const newQuery = new URLSearchParams(query)
+            newQuery.set('page', String(pagination.page + 1))
+            newQuery.set('size', String(pagination.size))
+            setQuery(newQuery.toString())
         }
-    };
+    }
 
     return (
         <Navigation>

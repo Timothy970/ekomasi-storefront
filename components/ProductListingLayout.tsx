@@ -9,7 +9,24 @@ import CategoryProducts from './CategoryProducts'
 import type { Pagination, Product } from '@/lib/features/types'
 import { PaginationBtns } from './PaginationBytns'
 
-export default function ProductListingLayout({ products, listingDescription, listingName, pagination, handleNext, handlePrev }: { products: Product[], listingDescription: string, listingName: string, pagination: Pagination, handlePrev: () => void, handleNext: () => void }) {
+
+type ProductListingLayoutProps = {
+    products: Product[];
+    listingDescription: string;
+    listingName: string;
+    pagination: Pagination;
+    handlePrev: () => void;
+    handleNext: () => void;
+};
+
+export default function ProductListingLayout({
+    products,
+    listingDescription,
+    listingName,
+    pagination,
+    handleNext,
+    handlePrev,
+}: ProductListingLayoutProps) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
     const scrollToTop = () => {

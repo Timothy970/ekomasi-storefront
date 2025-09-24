@@ -32,7 +32,10 @@ export default function CategoryFilterModal({ setOpenFilterModal, openFilterModa
             </div>
 
             <div className='w-full'>
-                <CategoryFilter setOpenFilterModal={setOpenFilterModal} page='category' />
+                <CategoryFilter
+                    setOpenFilterModal={setOpenFilterModal}
+                    page='category'
+                />
             </div>
         </div>
     )
