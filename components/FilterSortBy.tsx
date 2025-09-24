@@ -1,5 +1,6 @@
-import * as React from "react"
+"use client"
 
+import * as React from "react"
 import {
   Select,
   SelectContent,
@@ -8,10 +9,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useFilterQuery } from "@/app/ClientLayout"
+import { usePathname, useRouter } from "next/navigation"
 
 export function FilterSortBy() {
+  const { query, setQuery } = useFilterQuery()
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const searchParams = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
+  const currentValue = searchParams.get("sort_by") ?? ""
+
+  const handleChange = (value: string) => {
+    const params = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
+
+    if (value) {
+      params.set("sort_by", value)
+    } else {
+      params.delete("sort_by")
+    }
+
+    const newQuery = "?" + params.toString()
+    setQuery(newQuery)
+
+    const newUrl = `${pathname}${newQuery}`
+    router.replace(newUrl, { scroll: false })
+  }
+
   return (
-    <Select>
+    <Select value={currentValue} onValueChange={handleChange}>
       <SelectTrigger className="bg-white text-black h-[2rem] min-w-[10rem] text-[1rem] rounded-none border-black">
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
@@ -19,14 +45,12 @@ export function FilterSortBy() {
       <SelectContent className="rounded-none border border-none shadow-lg">
         <SelectGroup>
           {[
-            { value: "low to high", label: "Price: low to high" },
-            { value: "high to low", label: "Price: high to low" },
-            { value: "old to new", label: "Date: old to new" },
-            { value: "new to old", label: "Date: new to old" },
-            { value: "featured", label: "Featured" },
-            { value: "best sellers", label: "Best Sellers" },
-            { value: "a to z", label: "Alphabetically: A-Z" },
-            { value: "z to a", label: "Alphabetically: Z-A" },
+            { value: "price:low-to-high", label: "Price: low to high" },
+            { value: "price:high-to-low", label: "Price: high to low" },
+            { value: "date:old-to-new", label: "Date: old to new" },
+            { value: "date:new-to-old", label: "Date: new to old" },
+            { value: "alphabetically:a-z", label: "Alphabetically: A-Z" },
+            { value: "alphabetically:z-a", label: "Alphabetically: Z-A" },
           ].map((item) => (
             <SelectItem
               key={item.value}

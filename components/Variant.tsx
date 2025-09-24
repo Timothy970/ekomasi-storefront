@@ -67,7 +67,6 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         router.replace(newUrl, { scroll: false })
     }
 
-
     return (
         <div className='flex flex-col gap-y-[1rem] mb-[1rem]'>
             <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center h-[3rem] px-[0.5rem]'>

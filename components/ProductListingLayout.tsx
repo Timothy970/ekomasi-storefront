@@ -4,11 +4,10 @@ import CategoryFilter from './CategoryFilter'
 import { useFilter } from '@/app/ClientLayout'
 import { FilterSortBy } from './FilterSortBy'
 import { Button } from './ui/button'
-import { Breadcrumb } from './ui/breadcrumb'
 import CategoryProducts from './CategoryProducts'
-import type { Pagination, Product } from '@/lib/features/types'
+import type { Crumb, Pagination, Product } from '@/lib/features/types'
 import { PaginationBtns } from './PaginationBytns'
-
+import CustomBreadcrumb from './CustomBreadcrumb'
 
 type ProductListingLayoutProps = {
     products: Product[];
@@ -17,6 +16,7 @@ type ProductListingLayoutProps = {
     pagination: Pagination;
     handlePrev: () => void;
     handleNext: () => void;
+    crumbs: Crumb[]
 };
 
 export default function ProductListingLayout({
@@ -26,6 +26,7 @@ export default function ProductListingLayout({
     pagination,
     handleNext,
     handlePrev,
+    crumbs,
 }: ProductListingLayoutProps) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
@@ -79,7 +80,7 @@ export default function ProductListingLayout({
                         </div>
 
                         <div className='w-full flex flex-row justify-between items-center mt-[2rem]'>
-                            <Breadcrumb />
+                            <CustomBreadcrumb crumbs={crumbs} />
 
                             <div className='hidden lg:block'>
                                 <FilterSortBy />

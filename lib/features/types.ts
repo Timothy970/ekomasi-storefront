@@ -600,3 +600,8 @@ export interface SearchParams {
   variant_value?: string;
   sort_by?: string;
 }
+
+export interface Crumb {
+  name: string
+  link: string
+}

@@ -1,12 +1,13 @@
 "use client"
 import CategoryBanner from '@/components/CategoryBanner'
 import Navigation from '@/components/Navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getCategoryAsync, selectCategory, selectPagination } from '@/lib/features/navigation/navigationSlice'
 import { useParams } from 'next/navigation'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
+import { Crumb } from '@/lib/features/types'
 
 export default function ProductCategory() {
     const category = useAppSelector(selectCategory)
@@ -14,13 +15,26 @@ export default function ProductCategory() {
     const params = useParams<{ id: string }>()
     const pagination = useAppSelector(selectPagination)
     const { query, setQuery } = useFilterQuery()
+    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+
+    useEffect(() => {
+        if (category) {
+            let crumbs = []
+
+            crumbs?.push({
+                link: '',
+                name: category?.name
+            })
+            setBreadCrumb(crumbs)
+        }
+
+    }, [category])
 
     useEffect(() => {
         if (params?.id) {
             dispatch(getCategoryAsync({ id: params.id, query }))
         }
     }, [params?.id, query, dispatch])
-    console.log(query, 'queryyy')
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
@@ -53,6 +67,7 @@ export default function ProductCategory() {
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
+                    crumbs={breadCrumb}
                 />
             }
         </Navigation>

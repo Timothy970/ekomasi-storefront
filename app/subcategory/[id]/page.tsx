@@ -1,12 +1,13 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getSubCategoryAsync, selectPagination, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
 import CategoryBanner from '@/components/CategoryBanner'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
+import { Crumb } from '@/lib/features/types'
 
 export default function SubCategory() {
     const params = useParams<{ id: string }>()
@@ -14,6 +15,24 @@ export default function SubCategory() {
     const pagination = useAppSelector(selectPagination)
     const subCategory = useAppSelector(selectSubCategory)
     const { query, setQuery } = useFilterQuery()
+    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+    
+    useEffect(() => {
+        if (subCategory) {
+            let crumbs = [
+                {
+                    link: `/category/${subCategory?.parent_id}`,
+                    name: 'Category'
+                }
+            ]
+            crumbs?.push({
+                link: '',
+                name: subCategory?.name
+            })
+            setBreadCrumb(crumbs)
+        }
+
+    }, [subCategory])
 
     useEffect(() => {
         if (params?.id) {
@@ -53,6 +72,7 @@ export default function SubCategory() {
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
+                    crumbs={breadCrumb}
                 />
             }
         </Navigation>
