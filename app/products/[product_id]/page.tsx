@@ -1,6 +1,5 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import ProductBreadCrumb from '@/components/ProductBreadCrumb'
 import ProductColors from '@/components/ProductColors'
 import ProductQuantitySelect from '@/components/ProductQuantitySelect'
 import ProductStars from '@/components/ProductStars'
@@ -13,6 +12,8 @@ import { getProductAsync, selectProduct } from '@/lib/features/navigation/naviga
 import { useParams, useRouter } from 'next/navigation'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
+import CustomBreadcrumb from '@/components/CustomBreadcrumb'
+import { Crumb } from '@/lib/features/types'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -21,6 +22,19 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
+  const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+
+  useEffect(() => {
+    if (product) {
+      let crumbs = []
+
+      crumbs?.push({
+        link: `/products/${product?.product_id}`,
+        name: product?.name
+      })
+      setBreadCrumb(crumbs)
+    }
+  }, [product])
 
   const createAndAdd = (cart_id: string) => {
     if (product?.product_id && cart_id) {
@@ -77,7 +91,9 @@ export default function ProductDetail() {
   return (
     <Navigation>
       <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem]'>
-        <ProductBreadCrumb />
+        <div className='my-4 px-[1rem] lg:px-[3rem]'>
+          <CustomBreadcrumb crumbs={breadCrumb} />
+        </div>
 
         <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
           <div className='w-full flex flex-col md:flex-row items-stretch gap-x-[1rem]'>

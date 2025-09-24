@@ -62,8 +62,8 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getCategoryAsync: create.asyncThunk(
-			async ({ id, page, size }: { id: string; page?: number; size?: number }) => {
-				const response = await getCategoryById(id, page, size);
+			async ({ id, page, size, query }: { id: string; page?: number; size?: number, query:string }) => {
+				const response = await getCategoryById(id, page, size, query);
 				return response;
 			},
 			{
@@ -90,8 +90,8 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getSubCategoryAsync: create.asyncThunk(
-			async ({ id, page, size }: { id: string; page?: number; size?: number }) => {
-				const response = await getSubCategoryById(id, page, size);
+			async ({ id, page, size, query }: { id: string; page?: number; size?: number, query: string }) => {
+				const response = await getSubCategoryById(id, page, size, query);
 				return response;
 			},
 			{

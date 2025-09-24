@@ -10,7 +10,7 @@ interface PaginationProps {
   onNext: () => void;
 }
 
-export function Pagination({ meta, onPrev, onNext }: PaginationProps) {
+export function PaginationBtns({ meta, onPrev, onNext }: PaginationProps) {
   return (
     <div className="flex w-full justify-center items-center gap-4 mt-[2rem] md:mt-[2.5rem]">
       <Button
