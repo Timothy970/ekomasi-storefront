@@ -6,23 +6,21 @@ export default function OrderDetailsFlow() {
     const order = useAppSelector(selectUserOrder)
 
     const orderFlow = [
-        "Order Placed",
-        "Pending Confirmation",
-        "Processing",
-        "Dispatched",
-        "Delivered",
+        "order placed",
+        "pending",
+        "processing",
+        "dispatched",
+        "delivered",
     ]
 
-    const currentStatus = "Delivered"
-    const isCancelled = false
-
-    const stepIndex = orderFlow.indexOf(currentStatus)
+    const stepIndex = orderFlow.indexOf(order?.order_status ?? '')
 
     return (
-        <div className="w-full flex items-start justify-center mt-[2rem] md:mt-[2.5rem] px-[1rem] lg:px-[3rem]">
+        <div className="w-full flex items-start justify-center mt-[2rem] md:mt-[5rem] px-[1rem] lg:px-[3rem]">
             {orderFlow.map((step, index) => {
                 let dotClass = ""
-                if (isCancelled) {
+
+                if (order?.order_status === "Cancelled") {
                     dotClass = "bg-red-500"
                 } else if (index <= stepIndex) {
                     dotClass = "bg-[#34C759] border-[0.19rem] border-[#34C759]"
@@ -31,32 +29,39 @@ export default function OrderDetailsFlow() {
                 }
 
                 let connectorClass = ""
-                if (isCancelled) {
-                    connectorClass = "bg-red-500"
+                if (order?.order_status === "Cancelled") {
+                    connectorClass = "bg-[#FF3B308F]"
                 } else if (index < stepIndex) {
+                    connectorClass = "bg-[#34C759]"
+                } else if (index === orderFlow.length - 1 && stepIndex === orderFlow.length - 1) {
                     connectorClass = "bg-[#34C759]"
                 } else {
                     connectorClass = "bg-black"
                 }
 
                 return (
-                    <div key={index} className="flex flex-col items-start flex-1 justify-start">
+                    <div key={index} className="flex flex-col items-center flex-1 justify-start">
                         <div className="flex items-center w-full">
-                            <div className={`w-[0.9rem] h-[0.9rem] rounded-full ${dotClass}`} />
+                            {index < orderFlow.length - 1 && (
+                                <div className={`h-[0.1875rem] ${connectorClass}`} />
+                            )}
+
+                            <div className="p-[0.5rem] rounded-full">
+                                <div className={`w-[0.9rem] h-[0.9rem] rounded-full ${dotClass}`} />
+                            </div>
 
                             {index < orderFlow.length - 1 && (
-                                <div className={`flex-1 h-[3px] ${connectorClass}`} />
+                                <div className={`flex-1 h-[0.1875rem] ${connectorClass}`} />
                             )}
 
                             {
-                                index === orderFlow.length - 1 &&
-                                stepIndex === orderFlow.length - 1 && (
-                                    <div className={`flex-1 h-[3px] ${connectorClass}`} />
+                                index === orderFlow.length - 1 && (
+                                    <div className={`flex-1 h-[0.1875rem] ${connectorClass}`} />
                                 )
                             }
                         </div>
 
-                        <p className={`text-xs mt-2 text-center ${index <= stepIndex ? "text-black" : "text-gray-400"}`}>{step}</p>
+                        <p className={`text-xs md:text-lg lg:text-[1.5rem] text-wrap mt-2 text-center font-bold text-black`}>{step}</p>
                     </div>
                 )
             })}

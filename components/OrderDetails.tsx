@@ -9,7 +9,7 @@ export default function OrderDetails() {
   return (
     <div className='mt-[2rem] md:mt-[2.5rem] w-full px-[1rem] lg:px-[3rem] flex flex-col md:flex-row md:justify-between'>
       <div className='w-full md:w-[50%]'>
-        <h2 className='font-bold text-[1.25rem] mt-[1rem]'>Order Summary</h2>
+        <h2 className='font-bold text-[1.5rem] mt-[1rem]'>Order Summary</h2>
 
         {/* <p className='text-[1.125rem] mt-[0.5rem]'>Arrives Thu, May 08 - Mon, May 12</p> */}
 
@@ -19,9 +19,7 @@ export default function OrderDetails() {
               return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                 <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0">
                   <Image
-                    src={
-                      'https://images.unsplash.com/photo-1612722432474-b971cdcea546?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                    }
+                    src={item?.urls[0]?.url}
                     alt=""
                     fill
                     unoptimized
@@ -30,17 +28,21 @@ export default function OrderDetails() {
                 </div>
 
                 <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
-                  <span className='font-semibold text-[1rem] uppercase'>
-                    KES 400
-                  </span>
+                  <div className='flex text-custom-black gap-x-[0.5rem]'>
+                    <span className='uppercase font-medium'>
+                      {new Intl.NumberFormat("en-KE", {
+                        style: "currency",
+                        currency: "KES",
+                        minimumFractionDigits: 0,
+                      }).format(order?.total_amount ?? 0)}
+                    </span>
+                  </div>
 
-                  <span className='text-[0.875rem] font-medium capitalize'>This is a test name</span>
-
-                  <span className='text-[0.875rem] font-medium'>This is a test description</span>
+                  <span className='text-[1.125rem] font-semibold capitalize'>{item?.name}</span>
 
                   <div className='flex flex-row w-full gap-x-[0.5rem]'>
-                    <span className='text-[0.875rem]'>Price:</span>
-                    <span className='text-[0.875rem] font-light'>{item?.unit_price}</span>
+                    <span className='text-[1.125rem]'>Qty:</span>
+                    <span className='text-[1.125rem] font-light'>{item?.stock_quantity}</span>
                   </div>
                 </div>
               </div>
@@ -51,16 +53,18 @@ export default function OrderDetails() {
 
       <div className='w-full md:w-[30%] mt-[1rem]'>
         <div className='flex flex-col gap-y-[1rem]'>
-          <div className='flex w-full justify-between items-start md:border-t border-[#AAA] pt-[1.25rem]'>
-            <h3 className='font-bold'>Address</h3>
+          <div className="flex w-full justify-between items-start md:border-t border-[#AAA] pt-[1.25rem]">
+            <h3 className="font-bold">Address</h3>
 
-            <div className='flex flex-col'>
-              <span>Jane Doe</span>
-              <span>Membley Estate</span>
-              <span>Canaan Court,CD216</span>
-              <span>Kiambu,KE</span>
-              <span>jane.doe@gmail.com</span>
-              <span>0797493262</span>
+            <div className="flex flex-col w-full justify-end text-end items-end">
+              {order?.user_address?.[0] && (
+                <div className="mb-2 text-[0.875rem] flex flex-col gap-y-[0.5rem] w-full">
+                  <span>{order.user_address[0].address}</span>
+                  <span>{order.user_address[0].appartment}, {order.user_address[0].address_id}</span>
+                  <span>{order.user_address[0].city}, {order.user_address[0].country}</span>
+                  <span>{order.user_address[0].zip_code}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -68,7 +72,7 @@ export default function OrderDetails() {
             <h3 className='font-bold'>Payment</h3>
 
             <div className='flex flex-col'>
-              <span>MPESA</span>
+              <span>{order?.payment_method}</span>
             </div>
           </div>
 
@@ -76,24 +80,24 @@ export default function OrderDetails() {
             <h3 className='font-bold'>Summary</h3>
 
             <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1rem]'>
-              <div className='flex justify-between w-full'>
+              {/* <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
                 <span className='text-custom-black text-[0.875rem]'>0</span>
-              </div>
+              </div> */}
 
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
-                <span className='text-custom-black text-[0.875rem]'>0</span>
+                <span className='text-custom-black text-[0.875rem]'>{order?.delivery_charge}</span>
               </div>
 
-              <div className='flex justify-between w-full'>
+              {/* <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
                 <span className='text-custom-black text-[0.875rem]'>16%</span>
-              </div>
+              </div> */}
 
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
-                <span className='text-custom-black text-[0.875rem]'>200</span>
+                <span className='text-custom-black text-[0.875rem]'>{order?.total_discount}</span>
               </div>
             </div>
 

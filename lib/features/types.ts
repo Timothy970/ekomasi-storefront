@@ -454,6 +454,11 @@ export interface OrderItem {
   variant_id: string | null;
   quantity: number;
   unit_price: number;
+  name: string;
+  description: string;
+  price: number;
+  stock_quantity: number;
+  urls: ProductImage[];
 }
 
 export interface CreateOrderData {
@@ -495,10 +500,22 @@ export interface Order {
   order_id: string;
   delivery_id: string;
   created_at: string;
-  status: string;
+  order_status: string;
   total_amount: number;
   total_discount: number;
   items: OrderItem[];
+  payment_method: string
+  delivery_charge: number
+  user_address: UserAddress[]
+}
+
+export interface UserAddress {
+  address: string;
+  address_id: string
+  appartment: string
+  city: string
+  country: string
+  zip_code: string
 }
 
 
