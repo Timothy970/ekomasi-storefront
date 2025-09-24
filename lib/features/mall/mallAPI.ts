@@ -1,4 +1,4 @@
-import { GetVariantsResponse, LocationsResponse, SuggestionsResponse } from "../types";
+import { GetVariantsResponse, LocationsResponse, SearchResultsResponse, SuggestionsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getVariants(): Promise<GetVariantsResponse> {
@@ -32,15 +32,21 @@ export async function getSearchAutocomplete(query: string): Promise<SuggestionsR
         return response.data;
     } catch (error) {
         const err = error as AxiosError<SuggestionsResponse>;
-        if (err.response?.data) {
-            return err.response.data;
-        }
-
-        return {
-            data: { suggestions: [] },
-            status_code: 500,
-            message: err.message || "Unexpected error",
-        };
+        return err.response?.data as SuggestionsResponse;
     }
 }
+
+export async function getSearchResults(query: string): Promise<SearchResultsResponse> {
+    try {
+        const response = await axios.get<SearchResultsResponse>(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}products/search?${query}`
+        );
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError<SearchResultsResponse>;
+        return err.response?.data as SearchResultsResponse;
+    }
+}
+
 

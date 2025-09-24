@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { LocationData, Suggestion, VariantGroup } from "../types";
-import { getLocations, getSearchAutocomplete, getVariants } from "./mallAPI";
+import { Filters, LocationData, Pagination, Product, Suggestion, VariantGroup } from "../types";
+import { getLocations, getSearchAutocomplete, getSearchResults, getVariants } from "./mallAPI";
 
 interface MallSliceState {
 	variants: VariantGroup[] | [];
@@ -9,7 +9,9 @@ interface MallSliceState {
 	success: boolean;
 	locations: LocationData | null;
 	autocomplete: Suggestion[] | null;
-	searchProducts: null;
+	searchResults: null | Product[];
+	searchFilters: Filters | null;
+	pagination: Pagination | null;
 }
 
 const initialState: MallSliceState = {
@@ -19,7 +21,9 @@ const initialState: MallSliceState = {
 	variants: [],
 	locations: null,
 	autocomplete: null,
-	searchProducts: null,
+	searchResults: null,
+	searchFilters: null,
+	pagination: null,
 };
 
 export const mallSlice = createAppSlice({
@@ -116,7 +120,8 @@ export const mallSlice = createAppSlice({
 		),
 		getSearchProductsAsync: create.asyncThunk(
 			async ({ query }: { query: string }) => {
-				return await getSearchAutocomplete(query);
+				const response = await getSearchAutocomplete(query);
+				return response;
 			},
 			{
 				pending: (state) => {
@@ -140,11 +145,44 @@ export const mallSlice = createAppSlice({
 				},
 			}
 		),
+		getSearchResultsAsync: create.asyncThunk(
+			async ({ query }: { query: string }) => {
+				const response = await getSearchResults(query);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.searchFilters = action.payload.data?.filters;
+						state.searchResults = action.payload.data?.products;
+						state.pagination = action.payload.data?.pagination;
+						state.success = true;
+					} else {
+						state.message = action.payload?.message || "Failed to fetch search results";
+						state.searchFilters = null
+						state.success = false;
+						state.searchResults = null;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 
 	}),
 	selectors: {
 		selectVariants: (state: MallSliceState) => state.variants,
 		selectAutocomplete: (state: MallSliceState) => state.autocomplete,
+		selectSearchResults: (state: MallSliceState) => state.searchResults,
+		selectPagination: (state: MallSliceState) => state.pagination,
+		selectSsearchFilters: (state: MallSliceState) => state.searchFilters,
 		selectStatus: (state: MallSliceState) => state.status,
 		selectSuccess: (state: MallSliceState) => state.success,
 		selectMessage: (state: MallSliceState) => state.message,
@@ -153,6 +191,6 @@ export const mallSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync, resetSearchAutocomplete, getSearchProductsAsync } = mallSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectVariants, selectLocations, selectAutocomplete } = mallSlice.selectors;
+export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync, resetSearchAutocomplete, getSearchProductsAsync, getSearchResultsAsync } = mallSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectVariants, selectLocations, selectAutocomplete, selectSearchResults, selectSsearchFilters, selectPagination } = mallSlice.selectors;
 export const mallReducer = mallSlice.reducer;
