@@ -78,11 +78,14 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
             }
 
             <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
-                <span className='font-semibold text-[1rem] uppercase'>
-                    {"KES " + new Intl.NumberFormat("en-KE", {
-                        minimumFractionDigits: 0,
-                    }).format(item?.product?.price ?? 0)}
-                </span>
+                <div className='flex justify-between items-center'>
+                    <span className='font-[600] text-[1rem]'>{item?.product?.category_name}</span>
+                    <span className='font-semibold text-[1rem] uppercase'>
+                        {"KES " + new Intl.NumberFormat("en-KE", {
+                            minimumFractionDigits: 0,
+                        }).format(item?.product?.price ?? 0)}
+                    </span>
+                </div>
 
                 <span className='text-[0.875rem] md:text-[1.125rem] capitalize font-[700]'>{item?.product?.name}</span>
 

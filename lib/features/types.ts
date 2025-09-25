@@ -322,10 +322,11 @@ export interface CartProduct {
   category_id: string;
   stock_quantity: number;
   search_vector: string;
-  created_at: string;     // ISO date string
-  last_updated: string;   // ISO date string
+  created_at: string;
+  last_updated: string;
   urls: ProductUrl[];
-  product_variants: null | Record<string, any>; // adjust if variants have structure
+  product_variants: null | Record<string, any>;
+  category_name: string;
 }
 
 export interface CartItem {
@@ -343,6 +344,7 @@ export interface CartItem {
   last_updated: string;   // ISO date string
   urls: ProductUrl[];
   product_variants: null | Record<string, any>; // adjust if variants have structure
+
 }
 
 export interface CartData {
