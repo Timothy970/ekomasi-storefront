@@ -13,9 +13,7 @@ export default function CheckoutCartSummary() {
             <h2 className='text-[2rem] font-bold self-start'>Cart Summary</h2>
 
             <p className='self-start font-bold text-[1.5rem] uppercase'>
-                {new Intl.NumberFormat("en-KE", {
-                    style: "currency",
-                    currency: "KES",
+                {"KES " + new Intl.NumberFormat("en-KE", {
                     minimumFractionDigits: 0,
                 }).format(cart?.total ?? 0)}
             </p>

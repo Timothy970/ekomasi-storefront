@@ -70,13 +70,11 @@ export default function Order() {
 
                         <div className='flex text-custom-black gap-x-[0.5rem]'>
                             <span className='font-medium'>Total: </span>
-                            <span className='uppercase font-medium'>
-                                {new Intl.NumberFormat("en-KE", {
-                                    style: "currency",
-                                    currency: "KES",
+                            <p className="uppercase font-medium'">
+                                {"KES " + new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
                                 }).format(order?.total_amount ?? 0)}
-                            </span>
+                            </p>
                         </div>
 
                         {

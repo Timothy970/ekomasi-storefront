@@ -32,9 +32,7 @@ export default function OrderDetails() {
                 <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
                   <div className='flex text-custom-black gap-x-[0.5rem]'>
                     <span className='uppercase font-medium'>
-                      {new Intl.NumberFormat("en-KE", {
-                        style: "currency",
-                        currency: "KES",
+                      {"KES " + new Intl.NumberFormat("en-KE", {
                         minimumFractionDigits: 0,
                       }).format(order?.total_amount ?? 0)}
                     </span>
