@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import SocialLogins from '@/components/SocialLogins'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { resetMessage, resetSuccess, selectMessage, selectUserToken, signUpUserAsync } from '@/lib/features/user/userSlice'
+import { resetMessage, resetSuccess, selectMessage, selectStatus, selectUserToken, signUpUserAsync } from '@/lib/features/user/userSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Exclusive from '@/components/Exclusive'
 import { triggerToast } from '@/app/utils/toastUtils'
+import LoadingIndicator from '@/components/LoadingIndicator'
 
 export default function SignUp() {
     const [phoneOrEmail, setPhoneOrEmail] = useState<string>("")
@@ -18,6 +19,7 @@ export default function SignUp() {
     const message = useAppSelector(selectMessage)
     const token = useAppSelector(selectUserToken)
     const searchParams = useSearchParams()
+    const status = useAppSelector(selectStatus)
 
     function handlePhoneOrEmail(e: React.FormEvent) {
         e.preventDefault()
@@ -119,6 +121,9 @@ export default function SignUp() {
                                 variant="outline"
                                 className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[3rem]'
                             >
+                                {
+                                    status == "loading" && <LoadingIndicator textColor="text-white" />
+                                }
                                 Continue
                             </Button>
                         </form>

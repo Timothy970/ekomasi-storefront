@@ -200,7 +200,6 @@ export const navigationSlice = createAppSlice({
 				},
 			}
 		),
-
 	}),
 	selectors: {
 		selectCategories: (state: NavigationSliceState) => state.categories || null,

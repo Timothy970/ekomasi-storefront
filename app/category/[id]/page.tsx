@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
 import { Crumb } from '@/lib/features/types'
+import { customeParser } from '@/lib/utils'
 
 export default function ProductCategory() {
     const category = useAppSelector(selectCategory)
@@ -61,7 +62,7 @@ export default function ProductCategory() {
             }
             {
                 category?.products && pagination && <ProductListingLayout
-                    listingDescription={category?.description}
+                    listingDescription={customeParser(category?.description)}
                     listingName={category?.name}
                     products={category?.products}
                     pagination={pagination}

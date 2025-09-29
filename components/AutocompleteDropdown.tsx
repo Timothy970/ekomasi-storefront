@@ -15,7 +15,7 @@ export default function AutocompleteDropdown() {
     return (
         <div className="absolute top-full left-0 w-full max-h-[23rem] overflow-y-auto bg-white border border-gray-200 rounded-md ">
             <ul>
-                {autocomplete?.map((item) => {
+                {autocomplete?.map((item, index) => {
                     let href = item.link;
 
                     switch (item.type) {
@@ -34,7 +34,7 @@ export default function AutocompleteDropdown() {
                     }
 
                     return (
-                        <li key={item.id}>
+                        <li key={index?.toString()}>
                             <Link
                                 href={href}
                                 className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition"

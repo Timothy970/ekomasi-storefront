@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/features/types";
+import { customeParser } from "@/lib/utils";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -54,9 +55,9 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="truncate text-[#666] font-roboto text-[0.875rem] font-semibold leading-6 capitalize">
           {product.name}
         </h3>
-        <p className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
-          {product.description}
-        </p>
+        <div className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
+          {customeParser(product.description)}
+        </div>
         <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
           KES {product.price}
         </p>

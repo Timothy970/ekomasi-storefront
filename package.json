@@ -21,6 +21,8 @@
     "axios": "^1.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dompurify": "^3.2.7",
+    "html-react-parser": "^5.2.6",
     "lucide-react": "^0.542.0",
     "moment": "^2.30.1",
     "motion": "^12.23.12",
@@ -36,8 +38,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "tailwindcss": "^4",
     "cross-env": "^10.0.0",
+    "tailwindcss": "^4",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5"
   }

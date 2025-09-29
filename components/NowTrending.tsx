@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getFeaturedProductsAsync, selectFeatured } from "@/lib/features/navigation/navigationSlice";
 import Link from "next/link";
 import Image from "next/image";
+import { customeParser } from "@/lib/utils";
 
 export default function NowTrending({ title }: { title: string }) {
     const [index, setIndex] = useState(0);
@@ -95,9 +96,9 @@ export default function NowTrending({ title }: { title: string }) {
                                         <h3 className="truncate text-[#666] font-roboto text-[0.875rem] font-semibold leading-6 capitalize">
                                             {p.name}
                                         </h3>
-                                        <p className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
-                                            {p.description}
-                                        </p>
+                                        <div className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
+                                            {customeParser(p.description)}
+                                        </div>
                                         <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
                                             KES {p.price}
                                         </p>

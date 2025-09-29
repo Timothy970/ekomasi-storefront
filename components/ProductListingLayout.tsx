@@ -11,7 +11,7 @@ import CustomBreadcrumb from './CustomBreadcrumb'
 
 type ProductListingLayoutProps = {
     products: Product[];
-    listingDescription: string;
+    listingDescription:  | React.ReactNode;
     listingName: string;
     pagination: Pagination;
     handlePrev: () => void;
@@ -93,7 +93,7 @@ export default function ProductListingLayout({
                             }
 
                             {
-                                listingDescription && <p className='mt-4'>{listingDescription}</p>
+                                listingDescription && <div className='mt-4'>{listingDescription}</div>
                             }
                         </div>
 

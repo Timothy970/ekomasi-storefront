@@ -9,9 +9,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
 import { FormData, OrderItem } from '@/lib/features/types'
-import { createOrderAsync, selectCart } from '@/lib/features/cart/cartSlice'
+import { createOrderAsync, selectCart, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
+import LoadingIndicator from './LoadingIndicator'
 
 export default function PersonalInformation({ page }: { page: string }) {
     const [formData, setFormData] = useState<FormData>({
@@ -39,6 +40,7 @@ export default function PersonalInformation({ page }: { page: string }) {
     const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
     const dispatch = useAppDispatch()
     const router = useRouter()
+    const status = useAppSelector(selectStatus)
 
     useEffect(() => {
         if (profile) {
@@ -416,7 +418,14 @@ export default function PersonalInformation({ page }: { page: string }) {
                             className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
                         />
 
-                        <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'>
+                        <Button
+                            disabled={status == "loading"}
+                            type='submit'
+                            className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'
+                        >
+                            {
+                                status == "loading" && <LoadingIndicator textColor="text-white" />
+                            }
                             Pay now
                         </Button>
                     </div>

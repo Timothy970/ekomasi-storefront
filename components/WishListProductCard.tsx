@@ -4,6 +4,7 @@ import React from 'react'
 import { Button } from './ui/button'
 import { Trash } from 'lucide-react'
 import { Product } from '@/lib/features/types'
+import { customeParser } from '@/lib/utils'
 
 export default function WishListProductCard({ product }: { product: Product }) {
     return (
@@ -25,7 +26,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
 
                 <div className=" pb-3 flex flex-col gap-y-1 mt-[0.75rem] w-full justify-center">
                     <h3 className="text-[0.875rem] text-custom-black capitalize">{product.name}</h3>
-                    <p className="text-[0.875rem] font-normal capitalize">{product.description}</p>
+                    <div className="text-[0.875rem] font-normal capitalize">{customeParser(product.description)}</div>
                     <p className="text-[0.875rem] font-semibold">KES {product.price}</p>
 
                     <div className='flex justify-between items-center mt-1'>

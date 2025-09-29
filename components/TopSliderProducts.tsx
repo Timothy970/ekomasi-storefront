@@ -3,6 +3,7 @@ import { useAppSelector } from '@/lib/hooks'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { customeParser } from '@/lib/utils'
 
 export default function TopSliderProducts() {
   const subCategory = useAppSelector(selectSubCategory)
@@ -30,9 +31,9 @@ export default function TopSliderProducts() {
                   {product.name}
                 </h3>
 
-                <p className="to-custom-black font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2 capitalize">
-                  {product.description}
-                </p>
+                <div className="to-custom-black font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2 capitalize">
+                  {customeParser(product.description)}
+                </div>
 
                 <span className='underline text-xs'>Read more</span>
 

@@ -28,9 +28,7 @@ export default function search() {
     }, [])
 
     useEffect(() => {
-        if (query) {
-            dispatch(getSearchResultsAsync({ query }));
-        }
+        dispatch(getSearchResultsAsync({ query }));
     }, [query, dispatch]);
 
     useEffect(() => {

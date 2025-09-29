@@ -10,10 +10,12 @@ import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
-import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
+import { addToCartAsync, createCartAsync, getCartAsync, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
+import LoadingIndicator from '@/components/LoadingIndicator'
+import { customeParser } from '@/lib/utils'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -23,6 +25,7 @@ export default function ProductDetail() {
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+  const status = useAppSelector(selectStatus)
 
   useEffect(() => {
     if (product) {
@@ -114,8 +117,9 @@ export default function ProductDetail() {
                 <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
                 <span>10 Reviews</span>
               </div> */}
-
-              <p className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{product?.description}</p>
+              {
+                product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customeParser(product?.description)}</div>
+              }
 
               {
                 product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
@@ -150,12 +154,26 @@ export default function ProductDetail() {
               }
 
               {
-                product && <Button disabled={product && product?.stock_quantity <= 0} onClick={handleAddToCart} className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'>Add to cart</Button>
+                product && <Button
+                  disabled={product && product?.stock_quantity <= 0 || status == "loading"}
+                  onClick={handleAddToCart}
+                  className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
+                >
+                  {
+                    status == "loading" && <LoadingIndicator textColor="text-white" />
+                  }
+                  Add to cart
+                </Button>
               }
 
-              <Button disabled={cartId ? false : true} onClick={handleBuyNow} className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'>Buy Now</Button>
+              <Button
+                disabled={cartId ? false : true}
+                onClick={handleBuyNow}
+                className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'
+              >
+                Buy Now
+              </Button>
             </div>
-
           </div>
         </div>
 

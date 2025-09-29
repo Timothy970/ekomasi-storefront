@@ -2,6 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import type { SubCategoryProduct } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
+import { customeParser } from '@/lib/utils'
 
 export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
     const router = useRouter()
@@ -25,9 +26,9 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
                 <h3 className="truncate text-custom-black font-roboto text-[0.875rem] font-semibold leading-6">
                     {product.name}
                 </h3>
-                <p className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
-                    {product.description}
-                </p>
+                <div className="text-gray-600 font-poppins text-sm leading-[1.3rem] mt-1 line-clamp-2">
+                    {customeParser(product.description)}
+                </div>
                 <p className="mt-2 text-sm font-bold text-custom-black">{product.price}</p>
             </div>
         </div>

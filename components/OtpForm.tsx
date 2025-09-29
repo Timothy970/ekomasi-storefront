@@ -3,9 +3,10 @@ import React, { useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { requestOtpAsync, selectMessage, selectPhoneOrEmailValue, verifyOtpAsync } from '@/lib/features/user/userSlice';
+import { requestOtpAsync, selectMessage, selectPhoneOrEmailValue, selectStatus, verifyOtpAsync } from '@/lib/features/user/userSlice';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
+import LoadingIndicator from './LoadingIndicator';
 
 export default function OtpForm() {
     const length = 4;
@@ -16,6 +17,7 @@ export default function OtpForm() {
     const message = useAppSelector(selectMessage)
     const router = useRouter();
     const searchParams = useSearchParams()
+    const status = useAppSelector(selectStatus)
 
     const focusAt = (idx: number) => {
         const el = inputsRef.current[idx];
@@ -168,7 +170,12 @@ export default function OtpForm() {
                 <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
             </div>
 
-            <Button onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>Continue</Button>
+            <Button disabled={status === "loading"} onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>
+                {
+                    status == "loading" && <LoadingIndicator textColor="text-white" />
+                }
+                Continue
+            </Button>
         </form>
     )
 }

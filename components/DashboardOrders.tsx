@@ -27,15 +27,17 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
             key={order.order_id}
             className="overflow-hidden cursor-pointer w-full flex flex-row border-b border-[rgba(0,0,0,0.40)] gap-x-[0.5rem]"
           >
-            <div className="relative w-1/3 h-[13.5rem] md:h-[20rem] max-h-[25rem] flex-shrink-0">
-              <Image
-                src={'https://images.unsplash.com/photo-1612722432474-b971cdcea546?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0'}
-                alt={firstItem?.product_id || 'Product Image'}
-                fill
-                unoptimized
-                className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
-              />
-            </div>
+            {
+              firstItem?.urls && <div className="relative w-1/3 h-[13.5rem] md:h-[20rem] max-h-[25rem] flex-shrink-0">
+                <Image
+                  src={firstItem?.urls[0]?.url}
+                  alt={''}
+                  fill
+                  unoptimized
+                  className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
+                />
+              </div>
+            }
 
             <div className="flex w-full flex-col pl-4 lg:flex-row">
               <div className="flex-1 flex flex-col gap-y-[0.88rem]">

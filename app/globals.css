@@ -131,3 +131,14 @@
     rgba(0, 0, 0, 0.20) 100%
   );
 }
+
+.hide-scrollbar {
+  overflow: auto; /* or scroll if you need scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+

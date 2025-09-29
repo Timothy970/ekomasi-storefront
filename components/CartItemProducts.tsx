@@ -5,6 +5,7 @@ import { CartItem } from '@/lib/features/types'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useParams, useRouter } from 'next/navigation'
 import { deleteProductFromCartAsync, getCartAsync, selectCart, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
+import { customeParser } from '@/lib/utils'
 
 export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
     const dispatch = useAppDispatch()
@@ -89,7 +90,7 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
 
                 <span className='text-[0.875rem] md:text-[1.125rem] capitalize font-[700]'>{item?.product?.name}</span>
 
-                <span className='text-[0.875rem] md:text-[1.125rem] font-medium'>{item?.product?.description}</span>
+                <div className='text-[0.875rem] md:text-[1.125rem] font-medium'>{customeParser(item?.product?.description)}</div>
 
                 {
                     item?.product && item?.product?.stock_quantity && item?.product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem]'>

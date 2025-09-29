@@ -2,33 +2,39 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
-
-const slides = [
-    {
-        id: 1,
-        title: "Excitement Starts Here: Welcome to Adenzo!",
-        description: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
-        image: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "Find the Perfect Gift",
-    },
-    {
-        id: 2,
-        title: "Excitement Starts Here:",
-        description: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
-        image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "Discover Our Collections",
-    },
-    {
-        id: 3,
-        title: "Because Dads Do It Too",
-        description: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
-        image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        buttonText: "Shop Travel Essentials",
-    },
-];
+import { useRouter } from "next/navigation";
+import { customeParser } from "@/lib/utils";
 
 export default function HomeBanner() {
     const [current, setCurrent] = useState(0);
+    const router = useRouter()
+
+    const slides = [
+        {
+            id: 1,
+            title: "Excitement Starts Here: Welcome to Adenzo!",
+            description: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
+            image: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            buttonText: "Find the Perfect Gift",
+            link: "/search",
+        },
+        {
+            id: 2,
+            title: "Excitement Starts Here:",
+            description: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
+            image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            buttonText: "Discover Our Collections",
+            link: "/search",
+        },
+        {
+            id: 3,
+            title: "Because Dads Do It Too",
+            description: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
+            image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            buttonText: "Shop Travel Essentials",
+            link: "/search",
+        },
+    ];
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -66,12 +72,12 @@ export default function HomeBanner() {
                             <h2 className="text-white text-center font-roboto text-[2rem] lg:text-[3.5rem] font-bold leading-[3rem] lg:leading-[4.2rem]">
                                 {slides[current].title}
                             </h2>
-                            <p className="text-white text-center font-poppins text-[1.125rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
-                                {slides[current].description}
-                            </p>
+                            <div className="text-white text-center font-poppins text-[1.125rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
+                                {customeParser(slides[current].description)}
+                            </div>
                         </div>
 
-                        <Button className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
+                        <Button onClick={() => router.push(slides[current].link)} className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
                                 {slides[current].buttonText}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">

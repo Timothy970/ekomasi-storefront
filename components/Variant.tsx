@@ -21,7 +21,8 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
         names.forEach((name, idx) => {
             if (name === variant.variant_type) {
-                values.push(vals[idx])
+                const splitValues = vals[idx].split("---")
+                values.push(...splitValues)
             }
         })
 
@@ -55,10 +56,10 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
             }
         })
 
-        newValues.forEach(v => {
+        if (newValues.length > 0) {
             searchParams.append("variant_name", variant.variant_type)
-            searchParams.append("variant_value", v)
-        })
+            searchParams.append("variant_value", newValues.join("---"))
+        }
 
         const newQuery = "?" + searchParams.toString()
         setQuery(newQuery)
