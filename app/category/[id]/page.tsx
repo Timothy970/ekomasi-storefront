@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getCategoryAsync, selectCategory, selectPagination } from '@/lib/features/navigation/navigationSlice'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
 import { Crumb } from '@/lib/features/types'
@@ -17,6 +17,8 @@ export default function ProductCategory() {
     const pagination = useAppSelector(selectPagination)
     const { query, setQuery } = useFilterQuery()
     const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+    const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
         if (category) {
@@ -34,7 +36,6 @@ export default function ProductCategory() {
     useEffect(() => {
         if (params?.id) {
             const initialQuery = "?size=10&page=1"
-            setQuery(initialQuery)
             dispatch(getCategoryAsync({ id: params.id, query: initialQuery }))
         }
     }, [params?.id, dispatch])
@@ -42,24 +43,25 @@ export default function ProductCategory() {
     useEffect(() => {
         if (params?.id) {
             dispatch(getCategoryAsync({ id: params.id, query }))
+
+            const formattedQuery = query.startsWith("?") ? query : `?${query}`
+
+            const newUrl = `${pathname}${formattedQuery}`
+            router.replace(newUrl, { scroll: false })
         }
-    }, [query, params?.id, dispatch])
+    }, [params?.id, query, dispatch])
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
-            const newQuery = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
-            newQuery.set('page', String(pagination.page - 1))
-            newQuery.set('size', String(pagination.size))
-            setQuery("?" + newQuery.toString())
+            const newPage = pagination.page - 1
+            setQuery(`?size=${pagination.size}&page=${newPage}`)
         }
     }
 
     const handleNext = () => {
         if (pagination?.has_next) {
-            const newQuery = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
-            newQuery.set('page', String(pagination.page + 1))
-            newQuery.set('size', String(pagination.size))
-            setQuery("?" + newQuery.toString())
+            const newPage = pagination.page + 1
+            setQuery(`?size=${pagination.size}&page=${newPage}`)
         }
     }
 

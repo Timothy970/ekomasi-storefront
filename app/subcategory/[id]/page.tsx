@@ -1,7 +1,7 @@
 "use client"
 import Navigation from '@/components/Navigation'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getSubCategoryAsync, selectPagination, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
 import CategoryBanner from '@/components/CategoryBanner'
@@ -17,6 +17,8 @@ export default function SubCategory() {
     const subCategory = useAppSelector(selectSubCategory)
     const { query, setQuery } = useFilterQuery()
     const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+    const router = useRouter()
+    const pathname = usePathname()
 
     useEffect(() => {
         if (subCategory) {
@@ -32,7 +34,6 @@ export default function SubCategory() {
             })
             setBreadCrumb(crumbs)
         }
-
     }, [subCategory])
 
     useEffect(() => {
@@ -43,27 +44,29 @@ export default function SubCategory() {
         }
     }, [params?.id, dispatch])
 
+
     useEffect(() => {
         if (params?.id) {
             dispatch(getSubCategoryAsync({ id: params.id, query }))
+
+            const formattedQuery = query.startsWith("?") ? query : `?${query}`
+
+            const newUrl = `${pathname}${formattedQuery}`
+            router.replace(newUrl, { scroll: false })
         }
     }, [params?.id, query, dispatch])
 
     const handlePrev = () => {
         if (pagination?.has_prev) {
-            const newQuery = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
-            newQuery.set('page', String(pagination.page - 1))
-            newQuery.set('size', String(pagination.size))
-            setQuery("?" + newQuery.toString())
+            const newPage = pagination.page - 1
+            setQuery(`?size=${pagination.size}&page=${newPage}`)
         }
     }
 
     const handleNext = () => {
         if (pagination?.has_next) {
-            const newQuery = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
-            newQuery.set('page', String(pagination.page + 1))
-            newQuery.set('size', String(pagination.size))
-            setQuery("?" + newQuery.toString())
+            const newPage = pagination.page + 1
+            setQuery(`?size=${pagination.size}&page=${newPage}`)
         }
     }
 

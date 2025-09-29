@@ -116,7 +116,7 @@ export interface CategoriesResponse {
 export interface CategoryResponse {
   data: {
     categories: Category[];
-    meta: Meta;
+    pagination: Pagination;
   };
   message: string;
   status_code: number;

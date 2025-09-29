@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, FeaturedProduct, HomeDataWrapper, Meta, Pagination, Product, SubcategoryProducts, } from "../types";
+import { Category, FeaturedProduct, HomeDataWrapper, Pagination, Product, SubcategoryProducts, } from "../types";
 import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getProduct, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
@@ -10,7 +10,6 @@ interface NavigationSliceState {
 	message: string;
 	success: boolean;
 	homeData: HomeDataWrapper | null;
-	meta: Meta | null;
 	pagination: Pagination | null;
 	featured: FeaturedProduct[] | null;
 	product: Product | null;
@@ -24,7 +23,6 @@ const initialState: NavigationSliceState = {
 	status: "idle",
 	message: "",
 	success: false,
-	meta: null,
 	pagination: null,
 	featured: null,
 	product: null,
@@ -75,11 +73,11 @@ export const navigationSlice = createAppSlice({
 					if (action.payload?.status_code === 200) {
 						state.success = true;
 						state.category = action.payload.data.categories[0];
-						state.meta = action.payload.data.meta;
+						state.pagination = action.payload.data.pagination;
 					} else {
 						state.success = false;
 						state.category = null;
-						state.meta = null;
+						state.pagination = null;
 					}
 				},
 				rejected: (state, action) => {
@@ -108,7 +106,7 @@ export const navigationSlice = createAppSlice({
 					} else {
 						state.success = false;
 						state.subcategory = null;
-						state.meta = null;
+						state.pagination = null;
 					}
 				},
 				rejected: (state, action) => {
@@ -207,7 +205,6 @@ export const navigationSlice = createAppSlice({
 		selectFeatured: (state: NavigationSliceState) => state.featured || null,
 		selectProduct: (state: NavigationSliceState) => state.product || null,
 		selectSubCategory: (state: NavigationSliceState) => state.subcategory || null,
-		selectMeta: (state: NavigationSliceState) => state.meta || null,
 		selectPagination: (state: NavigationSliceState) => state.pagination || null,
 		selectHomeData: (state: NavigationSliceState) => state.homeData?.data || null,
 		selectStatus: (state: NavigationSliceState) => state.status,
@@ -218,5 +215,5 @@ export const navigationSlice = createAppSlice({
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectMeta, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;
