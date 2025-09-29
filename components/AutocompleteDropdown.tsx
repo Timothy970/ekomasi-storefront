@@ -9,6 +9,7 @@ import { selectAutocomplete } from "@/lib/features/mall/mallSlice";
 export default function AutocompleteDropdown() {
     const { openSearchModal } = useSearchModal();
     const autocomplete = useAppSelector(selectAutocomplete);
+    console.log(autocomplete, 'autocomplete')
 
     if (!openSearchModal || autocomplete == null) return null;
 

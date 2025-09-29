@@ -13,9 +13,9 @@ export async function getCategories(): Promise<CategoriesResponse> {
 }
 
 
-export async function getCategoryById(id: string, page: number = 1, size: number = 10, query:string): Promise<CategoryResponse | null> {
+export async function getCategoryById(id: string, query:string): Promise<CategoryResponse | null> {
   try {
-    const response = await axios.get<CategoryResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/categories-products/${id}?${query}`, { params: { page, size } });
+    const response = await axios.get<CategoryResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/categories-products/${id}?${query}`);
 
     return response.data;
   } catch (error) {

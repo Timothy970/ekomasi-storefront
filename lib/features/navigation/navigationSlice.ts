@@ -62,8 +62,8 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getCategoryAsync: create.asyncThunk(
-			async ({ id, page, size, query }: { id: string; page?: number; size?: number, query:string }) => {
-				const response = await getCategoryById(id, page, size, query);
+			async ({ id, query }: { id: string; query:string }) => {
+				const response = await getCategoryById(id, query);
 				return response;
 			},
 			{
