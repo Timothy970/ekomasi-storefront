@@ -20,7 +20,6 @@ export default function Login() {
     const token = useAppSelector(selectUserToken)
     const searchParams = useSearchParams()
     const status = useAppSelector(selectStatus)
-    console.log(status)
 
     function handlePhoneOrEmail(e: React.FormEvent) {
         e.preventDefault()

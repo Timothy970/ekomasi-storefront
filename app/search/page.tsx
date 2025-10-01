@@ -61,7 +61,6 @@ export default function search() {
             triggerToast("No more products to display.", "info");
         }
     };
-    console.log(products, 'products')
 
     return (
         <Navigation>
