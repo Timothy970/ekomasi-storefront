@@ -10,7 +10,7 @@ import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
-import { addToCartAsync, createCartAsync, getCartAsync, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
+import { addToCartAsync, createCartAsync, getCartAsync, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
@@ -26,6 +26,8 @@ export default function ProductDetail() {
   const router = useRouter()
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
   const status = useAppSelector(selectStatus)
+  const cart = useAppSelector(selectCart)
+  const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
 
   useEffect(() => {
     if (product) {
@@ -162,7 +164,7 @@ export default function ProductDetail() {
                   {
                     status == "loading" && <LoadingIndicator textColor="text-white" />
                   }
-                  Add to cart
+                  {isInCart ? "Update Cart Item" : "Add to Cart"}
                 </Button>
               }
 

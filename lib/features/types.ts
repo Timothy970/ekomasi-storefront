@@ -344,7 +344,6 @@ export interface CartItem {
   last_updated: string;   // ISO date string
   urls: ProductUrl[];
   product_variants: null | Record<string, any>; // adjust if variants have structure
-
 }
 
 export interface CartData {
