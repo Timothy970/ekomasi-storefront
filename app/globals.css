@@ -124,7 +124,6 @@
 }
 
 .product-card {
-  border-radius: 0.5rem 0.5rem var(--Corner-Small, 0.5rem) var(--Corner-Small, 0.5rem);
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 0.20) 0%,

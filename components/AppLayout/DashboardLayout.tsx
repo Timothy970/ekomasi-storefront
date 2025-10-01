@@ -23,6 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout, selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
 import { selectCart } from "@/lib/features/cart/cartSlice";
+import { selectWishLists } from "@/lib/features/wishlist/wishlistSlice";
 
 const dashboardTabs = [
   {
@@ -57,6 +58,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter()
   const dispatch = useAppDispatch()
   const cart = useAppSelector(selectCart)
+  const wishlist = useAppSelector(selectWishLists)
 
   useEffect(() => {
     if (!token) {
@@ -156,8 +158,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           {tab.name}
                         </div>
                         {
-                          cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
-                            <span className='text-[0.875rem]'>{cart?.cart_items?.length}</span>
+                          wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 && <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
+                            <span className='text-[0.875rem]'>{wishlist[0]?.products?.length}</span>
                           </div>
                         }
                       </Button>

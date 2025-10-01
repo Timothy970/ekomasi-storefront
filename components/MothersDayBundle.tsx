@@ -53,7 +53,7 @@ export default function MothersDayBundle() {
     };
 
     return (
-        <div className="relative w-full max-w-[90rem] mx-auto px-[1rem] lg:px-[3rem] overflow-hidden mt-[2rem] lg:mt-[5rem]">
+        <div className="relative w-full mx-auto overflow-hidden">
             <div className="bg-black/40">
                 <AnimatePresence mode="wait">
                     <motion.div

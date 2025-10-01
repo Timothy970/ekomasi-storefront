@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function TalkToUs() {
     return (
-        <div className='w-full max-w-[90rem] mx-auto flex justify-center items-center mt-[2rem] lg:mt-[2.5rem] py-12 bg-[rgba(148,35,117,0.08)]'>
+        <div className='w-full mx-auto flex justify-center items-center mt-[2rem] lg:mt-[2.5rem] py-12 bg-[rgba(148,35,117,0.08)]'>
             <div className='max-w-[90rem] px-4 lg:px-[3rem] w-full md:flex md:flex-row-reverse gap-[3rem]'>
                 <div className='md:w-1/2'>
                     <div className="flex items-start justify-between gap-4 mb-8 w-full">

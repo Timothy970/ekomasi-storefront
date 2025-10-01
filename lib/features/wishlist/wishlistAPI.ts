@@ -46,7 +46,6 @@ export async function deleteProductFromWishList(product_id: string): Promise<Cre
     const response = await api.delete(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}wishlist/product/${product_id}`,
       {
-        data: { product_id },
         headers: {
           requiresAuth: true,
         },

@@ -21,7 +21,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     }, [])
 
     return (
-        <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || openGuestCheckoutModal ? 'overflow-hidden' : 'overscroll-auto'}`}>
+        <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || openGuestCheckoutModal ? 'overflow-hidden' : ''}`}>
             <div className='flex flex-col w-full z-0 justify-between h-full'>
                 <div className='w-full flex flex-col'>
                     <AppHeader isOpen={isOpen} setIsOpen={setIsOpen} />

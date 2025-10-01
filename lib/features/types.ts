@@ -237,6 +237,7 @@ export interface FeaturedProduct {
   created_at: string;
   last_updated: string;
   urls: ProductImage[];
+  category_name: string;
 }
 
 export interface FeaturedProductsResponse {
