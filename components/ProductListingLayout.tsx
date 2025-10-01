@@ -8,15 +8,17 @@ import CategoryProducts from './CategoryProducts'
 import type { Crumb, Pagination, Product } from '@/lib/features/types'
 import { PaginationBtns } from './PaginationBytns'
 import CustomBreadcrumb from './CustomBreadcrumb'
+import LoadingIndicator from './LoadingIndicator'
 
 type ProductListingLayoutProps = {
     products: Product[];
-    listingDescription:  | React.ReactNode;
+    listingDescription: | React.ReactNode;
     listingName: string;
     pagination: Pagination;
     handlePrev: () => void;
     handleNext: () => void;
-    crumbs: Crumb[]
+    crumbs: Crumb[];
+    status: string
 };
 
 export default function ProductListingLayout({
@@ -27,6 +29,7 @@ export default function ProductListingLayout({
     handleNext,
     handlePrev,
     crumbs,
+    status
 }: ProductListingLayoutProps) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
@@ -98,6 +101,16 @@ export default function ProductListingLayout({
                         </div>
 
                         {
+                            status === "loading" && <LoadingIndicator textColor="text-[#AF52DE]" />
+                        }
+
+                        {
+                            !products || products?.length <= 0 ? <div className='w-full mt-[2.5rem] font-[700] text-[2rem] flex items-center justify-center'>
+                                <p>No Produts Found!</p>
+                            </div> : <></>
+                        }
+
+                        {
                             products && <CategoryProducts
                                 products={products}
                             />
@@ -105,7 +118,7 @@ export default function ProductListingLayout({
                     </div>
 
                     {
-                        pagination && products && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
+                        pagination && products && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                     }
 
                     <div onClick={scrollToTop} className='bg-[#804A9D] rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>

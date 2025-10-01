@@ -3,12 +3,13 @@ import Navigation from '@/components/Navigation'
 import React, { useEffect, useState } from 'react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getSubCategoryAsync, selectPagination, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
+import { getSubCategoryAsync, selectPagination, selectStatus, selectSubCategory } from '@/lib/features/navigation/navigationSlice'
 import CategoryBanner from '@/components/CategoryBanner'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
 import { Crumb } from '@/lib/features/types'
 import { customeParser } from '@/lib/utils'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function SubCategory() {
     const params = useParams<{ id: string }>()
@@ -19,6 +20,7 @@ export default function SubCategory() {
     const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
     const router = useRouter()
     const pathname = usePathname()
+    const status = useAppSelector(selectStatus)
 
     useEffect(() => {
         if (subCategory) {
@@ -60,6 +62,8 @@ export default function SubCategory() {
         if (pagination?.has_prev) {
             const newPage = pagination.page - 1
             setQuery(`?size=${pagination.size}&page=${newPage}`)
+        } else {
+            triggerToast("You are already on the first page.", "info");
         }
     }
 
@@ -67,6 +71,8 @@ export default function SubCategory() {
         if (pagination?.has_next) {
             const newPage = pagination.page + 1
             setQuery(`?size=${pagination.size}&page=${newPage}`)
+        } else {
+            triggerToast("No more products to display.", "info");
         }
     }
 
@@ -89,6 +95,7 @@ export default function SubCategory() {
                     handlePrev={handlePrev}
                     handleNext={handleNext}
                     crumbs={breadCrumb}
+                    status={status}
                 />
             }
         </Navigation>

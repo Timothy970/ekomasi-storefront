@@ -1,6 +1,7 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addProductToWishList, getWishLists } from "./wishlistAPI";
+import { addProductToWishList, deleteProductFromWishList, getWishLists } from "./wishlistAPI";
 import { Pagination, WishList } from "../types";
+import { ToastType } from "../toast/toastSlice";
 
 interface WishListsSliceState {
 	status: "idle" | "loading" | "failed";
@@ -84,6 +85,35 @@ export const wishListsSlice = createAppSlice({
 				},
 			}
 		),
+		deleteProductFromWishListAsync: create.asyncThunk(
+			async ({ product_id, refetchWishList , triggerToast}: { product_id: string, refetchWishList: () => void, triggerToast: (message: string, type: ToastType) => void }) => {
+				const response = await deleteProductFromWishList(product_id);
+
+				refetchWishList()
+				triggerToast("Wishlist updated successfully!", "info")
+	
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
+						state.success = true;
+					} else {
+						state.message = action.payload?.message || "Failed to fetch variants";
+						state.success = false;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectStatus: (state: WishListsSliceState) => state.status,
@@ -95,6 +125,6 @@ export const wishListsSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getWishListsAsync, createWishListAsync } = wishListsSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getWishListsAsync, createWishListAsync, deleteProductFromWishListAsync } = wishListsSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectWishListPagination, selectWishLists } = wishListsSlice.selectors;
 export const wishListsReducer = wishListsSlice.reducer;

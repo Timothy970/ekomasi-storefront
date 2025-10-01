@@ -1,14 +1,87 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Trash } from 'lucide-react'
 import { Product } from '@/lib/features/types'
 import { customeParser } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { selectUserToken } from '@/lib/features/user/userSlice'
+import { deleteProductFromWishListAsync, getWishListsAsync, selectStatus as selectWishlistStatus } from '@/lib/features/wishlist/wishlistSlice'
+import LoadingIndicator from './LoadingIndicator'
+import { triggerToast } from '@/app/utils/toastUtils'
+import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 
 export default function WishListProductCard({ product }: { product: Product }) {
+    const router = useRouter()
+    const token = useAppSelector(selectUserToken)
+    const dispatch = useAppDispatch()
+    const status = useAppSelector(selectWishlistStatus)
+    const cartId = useAppSelector(selectCartId)
+    const [loading, setLoading] = useState(false)
+
+    const refetchWishList = () => {
+        if (token) {
+            dispatch(getWishListsAsync(token))
+        }
+    }
+
+    const createAndAdd = (cart_id: string) => {
+        if (product?.product_id && cart_id) {
+            dispatch(addToCartAsync({ product_id: product?.product_id, quantity: 1, cart_id }))
+
+            if (cart_id) {
+                setTimeout(() => {
+                    triggerToast("Cart updated successfully!", "success");
+                    dispatch(getCartAsync(cart_id))
+                }, 1000)
+            }
+        }
+    }
+
+    const handleAddTocart = (product: Product) => {
+        try {
+            if (!cartId && product?.product_id && product?.stock_quantity > 0) {
+                dispatch(
+                    createCartAsync(
+                        {
+                            product_id: product.product_id,
+                            quantity: 1,
+                            createAndAdd,
+                        }
+                    )
+                )
+            } else {
+                if (product?.product_id && cartId) {
+                    dispatch(addToCartAsync({ product_id: product?.product_id, quantity: 1, cart_id: cartId }))
+                }
+
+                if (cartId) {
+                    setTimeout(() => {
+                        triggerToast("Cart updated successfully!", "success");
+                        dispatch(getCartAsync(cartId))
+                    }, 1000)
+                }
+            }
+        } catch (err) {
+            triggerToast("Failed to add to cart", "error");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleRemoveWishlist = (id: string) => {
+        dispatch(
+            deleteProductFromWishListAsync({
+                product_id: id,
+                refetchWishList,
+                triggerToast,
+            })
+        )
+    }
+
     return (
-        <Link href={`/products/${product?.product_id}`}>
+        <div onClick={() => router.push(`/products/${product?.product_id}`)}>
             <div className="overflow-hidden flex flex-col justify-center items-center">
                 {
                     product && product?.urls !== undefined && product?.urls.length > 0 && <div className="relative w-full h-[15rem] sm:h-[20rem] md:h-[20rem]">
@@ -30,7 +103,16 @@ export default function WishListProductCard({ product }: { product: Product }) {
                     <p className="text-[0.875rem] font-semibold">KES {product.price}</p>
 
                     <div className='flex justify-between items-center mt-1'>
-                        <Button className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[3rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
+                        <Button
+                            onClick={(e) => {
+                                setLoading(true);
+                                product?.product_id ? handleAddTocart(product) : null
+                                e.stopPropagation();
+                            }}
+                            className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[3rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
+                            {
+                                loading && <LoadingIndicator textColor="text-white" />
+                            }
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
                                 <path d="M9.1665 18.3008C9.99493 18.3008 10.6665 17.6292 10.6665 16.8008C10.6665 15.9724 9.99493 15.3008 9.1665 15.3008C8.33808 15.3008 7.6665 15.9724 7.6665 16.8008C7.6665 17.6292 8.33808 18.3008 9.1665 18.3008Z" fill="white" />
                                 <path d="M16.1665 18.3008C16.9949 18.3008 17.6665 17.6292 17.6665 16.8008C17.6665 15.9724 16.9949 15.3008 16.1665 15.3008C15.3381 15.3008 14.6665 15.9724 14.6665 16.8008C14.6665 17.6292 15.3381 18.3008 16.1665 18.3008Z" fill="white" />
@@ -43,7 +125,15 @@ export default function WishListProductCard({ product }: { product: Product }) {
                             <span className='text-[0.875rem] hidden md:block'>Add to cart</span>
                         </Button>
 
-                        <Button className='bg-white border border-[#7A4597] h-[3rem] md:w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
+                        <Button
+                            onClick={(e) => {
+                                product?.product_id ? handleRemoveWishlist(product?.product_id) : null
+                                e.stopPropagation();
+                            }}
+                            className='bg-white border border-[#7A4597] h-[3rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
+                            {
+                                status == "loading" && <LoadingIndicator textColor="text-[#7A4597]" />
+                            }
                             Remove
                         </Button>
 
@@ -51,6 +141,6 @@ export default function WishListProductCard({ product }: { product: Product }) {
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     )
 }

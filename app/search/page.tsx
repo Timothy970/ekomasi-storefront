@@ -1,12 +1,13 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import { getSearchResultsAsync, selectPagination, selectSearchResults } from '@/lib/features/mall/mallSlice'
+import { getSearchResultsAsync, selectPagination, selectSearchResults, selectStatus } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '../ClientLayout'
 import { Crumb } from '@/lib/features/types'
+import { triggerToast } from '../utils/toastUtils'
 
 export default function search() {
     const dispatch = useAppDispatch()
@@ -15,6 +16,7 @@ export default function search() {
     const pagination = useAppSelector(selectPagination)
     const { query, setQuery } = useFilterQuery()
     const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+    const status = useAppSelector(selectStatus)
 
     useEffect(() => {
         let crumbs = []
@@ -44,6 +46,8 @@ export default function search() {
             newQuery.set('page', String(pagination.page - 1));
             newQuery.set('size', String(pagination.size));
             setQuery(newQuery.toString());
+        } else {
+            triggerToast("You are already on the first page.", "info");
         }
     };
 
@@ -53,8 +57,11 @@ export default function search() {
             newQuery.set('page', String(pagination.page + 1));
             newQuery.set('size', String(pagination.size));
             setQuery(newQuery.toString());
+        } else {
+            triggerToast("No more products to display.", "info");
         }
     };
+    console.log(products, 'products')
 
     return (
         <Navigation>
@@ -67,6 +74,7 @@ export default function search() {
                     handlePrev={handlePrev}
                     handleNext={handleNext}
                     crumbs={breadCrumb}
+                    status={status}
                 />
             }
         </Navigation>
