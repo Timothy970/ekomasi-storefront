@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout, selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
+import { selectCart } from "@/lib/features/cart/cartSlice";
 
 const dashboardTabs = [
   {
@@ -55,6 +56,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const token = useAppSelector(selectUserToken)
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const cart = useAppSelector(selectCart)
 
   useEffect(() => {
     if (!token) {
@@ -138,6 +140,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   >
                     {tab.icon && tab.icon}
                     {tab.name}
+                  </Button>
+                }
+
+                if (tab.name == 'Wishlist') {
+                  return <Button key={index?.toString()}
+                    variant={isActive ? "default" : "ghost"}
+                    className={`w-full justify-between rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-[#804A9D29] text-custom-black hover:bg-[#804A9D12]" : "hover:bg-muted"}`}
+                    onClick={() => dispatch(logout())}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      {tab.icon && tab.icon}
+                      {tab.name}
+                    </div>
+                    {
+
+                      cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
+                        <span className='text-[0.875rem]'>{cart?.cart_items?.length}</span>
+                      </div>
+
+                    }
                   </Button>
                 }
 

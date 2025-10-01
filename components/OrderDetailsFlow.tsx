@@ -61,7 +61,7 @@ export default function OrderDetailsFlow() {
                             }
                         </div>
 
-                        <p className={`text-xs md:text-lg lg:text-[1.5rem] text-wrap mt-2 text-center font-bold text-black`}>{step}</p>
+                        <p className={`text-xs md:text-lg lg:text-[1.5rem] text-wrap mt-2 capitalize text-center font-bold text-black`}>{step}</p>
                     </div>
                 )
             })}

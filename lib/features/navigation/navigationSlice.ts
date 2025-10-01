@@ -215,5 +215,5 @@ export const navigationSlice = createAppSlice({
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;
