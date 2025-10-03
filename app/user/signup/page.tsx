@@ -136,13 +136,13 @@ export default function SignUp() {
                             <div className='h-[0.0625rem] bg-black w-[30%]'></div>
                         </div>
 
-                        <SocialLogins />
+                        {/* <SocialLogins /> */}
 
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
                             <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Already have an account?</span>
 
                             <div onClick={handleLogin} className='cursor-pointer'>
-                                <span className='font-roboto text-[0.875rem] font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
+                                <span className='font-roboto text-[0.875rem] cursor-pointer font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
                             </div>
                         </div>
                     </div>

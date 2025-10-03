@@ -80,7 +80,7 @@ export default function CategorySlider() {
                             </span>
                         </Link>
 
-                        {categories?.map((cat) => (
+                        {categories?.slice(0, 6).map((cat) => (
                             <li
                                 key={cat.id}
                                 onMouseEnter={() => handleMouseEnter(cat.id)}

@@ -70,7 +70,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
               height={25}
               priority={true}
               unoptimized
-              className='w-[6.625rem] cursor-pointer lg:h-[2.438rem] lg:w-[9.75rem] h-[1.676rem] shrink-0'
+              className='w-[6.625rem] cursor-pointer lg:h-[3.338rem] lg:w-[10.75rem] h-[2.676rem] shrink-0'
             />
           </Link>
 

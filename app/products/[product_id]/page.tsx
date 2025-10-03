@@ -28,6 +28,8 @@ export default function ProductDetail() {
   const status = useAppSelector(selectStatus)
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
+  const [addToCartLoading, setAddToCartLoading] = useState(false)
+  const [buyNowLoading, setBuyNowLoading] = useState(true)
 
   useEffect(() => {
     if (product) {
@@ -61,6 +63,7 @@ export default function ProductDetail() {
   }, [dispatch, params?.product_id])
 
   const handleAddToCart = async () => {
+    setAddToCartLoading(true)
     if (!cartId && product?.product_id && quantity > 0) {
       dispatch(
         createCartAsync(
@@ -83,10 +86,16 @@ export default function ProductDetail() {
         }, 1000)
       }
     }
+    setTimeout(() => {
+      setAddToCartLoading(false)
+    }, 1000)
   }
 
   const handleBuyNow = async () => {
+    setBuyNowLoading(true)
+
     handleAddToCart().then(() => {
+      setBuyNowLoading(false)
       if (cartId) {
         router.push(`/cart/${cartId}`)
       }
@@ -157,12 +166,12 @@ export default function ProductDetail() {
 
               {
                 product && <Button
-                  disabled={product && product?.stock_quantity <= 0 || status == "loading"}
+                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading && buyNowLoading}
                   onClick={handleAddToCart}
                   className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
                 >
                   {
-                    status == "loading" && <LoadingIndicator textColor="text-white" />
+                    addToCartLoading && buyNowLoading && <LoadingIndicator textColor="text-white" />
                   }
                   {isInCart ? "Update Cart Item" : "Add to Cart"}
                 </Button>

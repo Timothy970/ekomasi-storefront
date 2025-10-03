@@ -110,6 +110,7 @@ export const userSlice = createAppSlice({
 		requestOtpAsync: create.asyncThunk(
 			async (params: OtpRequestParams) => {
 				const response = await requestOtp(params)
+				console.log(response)
 				return response
 			},
 			{

@@ -18,6 +18,10 @@ export default function OtpForm() {
     const router = useRouter();
     const searchParams = useSearchParams()
     const status = useAppSelector(selectStatus)
+    const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isPhone = (value: string) => /^\+?[0-9]{7,15}$/.test(value);
+
+    console.log(emailOrPhone)
 
     const focusAt = (idx: number) => {
         const el = inputsRef.current[idx];
@@ -85,9 +89,27 @@ export default function OtpForm() {
 
     const value = code.join("");
 
-    function handleRequestOtp() {
+    function checkType(value: string) {
+        if (isEmail(value)) return "email";
+        if (isPhone(value)) return "phone";
+        return "unknown";
+    }
+
+    function handleRequestOtp(e: React.FormEvent) {
+        e.preventDefault();
+
         if (emailOrPhone) {
-            dispatch(requestOtpAsync({ phone_number: emailOrPhone }))
+            if (checkType(emailOrPhone) == "email") {
+                dispatch(requestOtpAsync({ email: emailOrPhone }))
+            } else if (checkType(emailOrPhone) == "phone") {
+                dispatch(requestOtpAsync({ phone_number: emailOrPhone }))
+
+            } else {
+                triggerToast("No valid phone or email was found!", "error")
+            }
+
+        } else {
+            triggerToast("No valid phone or email was found!", "error")
         }
     }
 
@@ -167,7 +189,7 @@ export default function OtpForm() {
             </div>
 
             <div className='mt-[1.5rem]'>
-                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp}>Resend Code</button></p>
+                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp} className='underline h-[2rem]'>Resend Code</button></p>
             </div>
 
             <Button disabled={status === "loading"} onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>

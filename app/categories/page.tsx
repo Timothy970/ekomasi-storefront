@@ -1,0 +1,81 @@
+"use client"
+import Navigation from '@/components/Navigation'
+import { getSearchResultsAsync, selectPagination, selectSearchResults, selectStatus } from '@/lib/features/mall/mallSlice'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import React, { useEffect, useState } from 'react'
+import { useSearchParams } from "next/navigation";
+import ProductListingLayout from '@/components/ProductListingLayout'
+import { useFilterQuery } from '../ClientLayout'
+import { Crumb } from '@/lib/features/types'
+import { triggerToast } from '../utils/toastUtils'
+
+export default function categories() {
+    const dispatch = useAppDispatch()
+    const searchParams = useSearchParams();
+    const products = useAppSelector(selectSearchResults)
+    const pagination = useAppSelector(selectPagination)
+    const { query, setQuery } = useFilterQuery()
+    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
+    const status = useAppSelector(selectStatus)
+
+    useEffect(() => {
+        let crumbs = []
+
+        crumbs?.push({
+            link: ``,
+            name: "Categories"
+        })
+        setBreadCrumb(crumbs)
+
+    }, [])
+
+    useEffect(() => {
+        dispatch(getSearchResultsAsync({ query }));
+    }, [query, dispatch]);
+
+    useEffect(() => {
+        const sp = searchParams.toString();
+        if (sp !== query) {
+            setQuery(sp);
+        }
+    }, [searchParams]);
+
+    const handlePrev = () => {
+        if (pagination?.has_prev) {
+            const newQuery = new URLSearchParams(query);
+            newQuery.set('page', String(pagination.page - 1));
+            newQuery.set('size', String(pagination.size));
+            setQuery(newQuery.toString());
+        } else {
+            triggerToast("You are already on the first page.", "info");
+        }
+    };
+
+    const handleNext = () => {
+        if (pagination?.has_next) {
+            const newQuery = new URLSearchParams(query);
+            newQuery.set('page', String(pagination.page + 1));
+            newQuery.set('size', String(pagination.size));
+            setQuery(newQuery.toString());
+        } else {
+            triggerToast("No more products to display.", "info");
+        }
+    };
+
+    return (
+        <Navigation>
+            {
+                products && pagination && <ProductListingLayout
+                    listingDescription={""}
+                    listingName={"Categories"}
+                    products={products}
+                    pagination={pagination}
+                    handlePrev={handlePrev}
+                    handleNext={handleNext}
+                    crumbs={breadCrumb}
+                    status={status}
+                />
+            }
+        </Navigation>
+    )
+}

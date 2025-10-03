@@ -67,7 +67,7 @@ export default function NowTrending({ title }: { title: string }) {
   }, [maxIndex]);
 
   return (
-    <div className="w-full flex justify-center items-start mt-[2rem] lg:mt-[5rem] lg:mb-[5rem] pb-4">
+    <div className="w-full flex justify-center items-start mt-[2rem] lg:mt-[2.5rem] lg:mb-[2.5rem] pb-4">
       <div className="max-w-[90rem] w-full bg-white">
         <div className="flex items-end justify-between gap-4 mb-[2rem]">
           <div>
