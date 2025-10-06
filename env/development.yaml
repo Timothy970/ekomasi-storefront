@@ -7,4 +7,4 @@ env:
   - name: NEXT_PUBLIC_API_BASE_URL
     value: "https://api.uat.adenzo.co.ke/api/"
 
-    
+  
