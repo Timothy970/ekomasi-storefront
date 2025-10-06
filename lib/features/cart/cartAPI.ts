@@ -38,8 +38,8 @@ export async function createCart(data: CreateCartRequest): Promise<CreateCartRes
         const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}cart`,
             {
-                product_id: data?.product_id,
-                quantity: data?.quantity
+                // product_id: data?.product_id,
+                // quantity: data?.quantity
             },
             {}
         );
