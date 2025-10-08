@@ -1,10 +1,13 @@
 "use client"
+import { triggerToast } from '@/app/utils/toastUtils'
 import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import NowTrending from '@/components/NowTrending'
 import { Button } from '@/components/ui/button'
 import WishLists from '@/components/WishLists'
+import type { WishList } from '@/lib/features/types'
 import { selectUserToken } from '@/lib/features/user/userSlice'
+import { deleteProductFromWishList } from '@/lib/features/wishlist/wishlistAPI'
 import { getWishListsAsync, selectWishLists } from '@/lib/features/wishlist/wishlistSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
@@ -23,6 +26,56 @@ export default function WishList() {
       router.replace("/")
     }
   }, [token, router])
+
+  const refetchWishList = () => {
+    if (token) {
+      dispatch(getWishListsAsync(token));
+    }
+  };
+
+  const handleRemoveWishlist = async (id: string) => {
+    try {
+      const response = await deleteProductFromWishList(id);
+
+      if (response?.status_code == 200 || response?.status_code == 201) {
+        triggerToast("Product removed successfully.", "success");
+        refetchWishList();
+      } else {
+        triggerToast("Failed to remove product from wishlist.", "error");
+      }
+    } catch (error) {
+      triggerToast("An error occurred while removing the product.", "error");
+    }
+  };
+
+  const handleRemoveAll = async () => {
+    if (!wishList?.length) {
+      triggerToast("No wishlists to clear.", "error");
+      return;
+    }
+
+    const allProducts = wishList.flatMap((wl: WishList) => wl.products || []);
+
+    if (!allProducts.length) {
+      triggerToast("No products to remove.", "error");
+      return;
+    }
+
+    triggerToast("Removing all wishlist items...", "info");
+
+    try {
+      for (const product of allProducts) {
+        if (product.product_id) {
+          await handleRemoveWishlist(product.product_id);
+        }
+      }
+
+      triggerToast("All wishlist items removed successfully.", "success");
+      refetchWishList();
+    } catch (error) {
+      triggerToast("Failed to remove some wishlist items.", "error");
+    }
+  };
 
   return (
     <Navigation>
@@ -44,7 +97,7 @@ export default function WishList() {
                   <span>Share</span>
                 </Button>
 
-                <Button disabled={wishList?.length == 0} className='bg-white text-custom-black text-[0.875rem] h-[3rem] border border-black w-[10rem] md:rounded-[0.5rem]'>
+                <Button onClick={handleRemoveAll} disabled={wishList?.length == 0} className='bg-white text-custom-black text-[0.875rem] h-[3rem] border border-black w-[10rem] md:rounded-[0.5rem]'>
                   Clear All
                 </Button>
               </div>

@@ -2,12 +2,16 @@
 import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import UpdateUserForm from '@/components/UpdatUserForm'
-import { selectUserProfile } from '@/lib/features/user/userSlice'
-import { useAppSelector } from '@/lib/hooks'
-import React from 'react'
+import { getUserProfileAsync } from '@/lib/features/user/userSlice'
+import { useAppDispatch } from '@/lib/hooks'
+import React, { useEffect } from 'react'
 
 export default function MyDetails() {
-  const profile = useAppSelector(selectUserProfile)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getUserProfileAsync())
+  }, [])
 
   return (
     <Navigation>

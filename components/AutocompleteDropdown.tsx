@@ -7,7 +7,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { selectAutocomplete } from "@/lib/features/mall/mallSlice";
 
 export default function AutocompleteDropdown() {
-    const { openSearchModal } = useSearchModal();
+    const { openSearchModal, setOpenSearchModal } = useSearchModal();
     const autocomplete = useAppSelector(selectAutocomplete);
 
     if (!openSearchModal || autocomplete == null) return null;
@@ -37,7 +37,8 @@ export default function AutocompleteDropdown() {
                         <li key={index?.toString()}>
                             <Link
                                 href={href}
-                                className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100 transition"
+                                onClick={() => setOpenSearchModal(false)}
+                                className="block px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition"
                             >
                                 {item.display_name}
                             </Link>

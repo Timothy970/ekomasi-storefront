@@ -4,8 +4,10 @@ import { useRef, useState, useEffect } from "react";
 import SearchBackground from "./SearchBackground";
 import { useSearchModal } from "@/app/ClientLayout";
 import AutocompleteDropdown from "./AutocompleteDropdown";
-import { useAppDispatch } from "@/lib/hooks";
-import { getSearchAutocompleteAsync } from "@/lib/features/mall/mallSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { getSearchAutocompleteAsync, selectSearchTerm, setSearchTerm } from "@/lib/features/mall/mallSlice";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -13,16 +15,57 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     const dispatch = useAppDispatch();
     const [query, setQuery] = useState<string>("");
     const [debouncedQuery, setDebouncedQuery] = useState(query);
+    const searchTerm = useAppSelector(selectSearchTerm)
+    const [isFocused, setIsFocused] = useState(false);
+    const router = useRouter()
 
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedQuery(query);
         }, 400);
 
+        dispatch(setSearchTerm(query))
+
         return () => {
             clearTimeout(handler);
         };
     }, [query]);
+
+    useEffect(() => {
+        if (searchTerm) {
+            setQuery(searchTerm)
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleFocus = () => setIsFocused(true);
+        const handleBlur = () => setIsFocused(false);
+
+        const input = inputRef.current;
+        if (!input) return;
+
+        input.addEventListener('focus', handleFocus);
+        input.addEventListener('blur', handleBlur);
+
+        return () => {
+            input.removeEventListener('focus', handleFocus);
+            input.removeEventListener('blur', handleBlur);
+        };
+    }, []);
+
+    const handleClear = () => {
+        setQuery("");
+        dispatch(setSearchTerm(""));
+        inputRef.current?.focus();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && query.trim().length > 0) {
+            e.preventDefault();
+            setOpenSearchModal(false);
+            router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+        }
+    };
 
     useEffect(() => {
         if (debouncedQuery.trim().length > 0) {
@@ -39,15 +82,26 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => setOpenSearchModal(true)}
-                    onBlur={() => {
-                        setTimeout(() => setOpenSearchModal(false), 200)
-                    }}
+                    onKeyDown={handleKeyDown}
                     className="w-full h-full pl-4 pr-10 text-[0.875rem] rounded-lg border border-[#AAA] bg-white"
                 />
 
-                <div
+                {query ? (
+                    <div className="absolute right-2 h-full flex items-center cursor-pointer border-l border-[#AAA] w-[2.25rem] justify-center">
+                        <button
+                            type="button"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                handleClear();
+                            }}
+                            className="flex items-center justify-center text-gray-500 hover:text-black"
+                        >
+                            <X />
+                        </button>
+                    </div>
+                ) : <div
                     className="absolute right-2 h-full flex items-center cursor-pointer border-l border-[#AAA] w-[2.25rem] justify-center"
-                    onClick={() => inputRef.current?.focus()}
+                    onClick={() => !isFocused ? inputRef.current?.focus() : null}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -66,11 +120,16 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                         />
                     </svg>
                 </div>
+                }
 
-                {openSearchModal && <AutocompleteDropdown />}
+                {openSearchModal && query?.length > 0 && <AutocompleteDropdown />}
             </div>
 
-            <SearchBackground />
+
+
+            {
+                query?.length > 0 && <SearchBackground />
+            }
         </div>
     );
 }
