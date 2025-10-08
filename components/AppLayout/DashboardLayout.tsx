@@ -158,9 +158,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           {tab.name}
                         </div>
                         {
-                          wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 && <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
+                          wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
                             <span className='text-[0.875rem]'>{wishlist[0]?.products?.length}</span>
-                          </div>
+                          </div> : <span className='text-[0.875rem]'>{0}</span>
                         }
                       </Button>
                     </Link>

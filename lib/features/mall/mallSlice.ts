@@ -12,6 +12,7 @@ interface MallSliceState {
 	searchResults: null | Product[];
 	searchFilters: Filters | null;
 	pagination: Pagination | null;
+	searchTerm: string,
 }
 
 const initialState: MallSliceState = {
@@ -24,6 +25,7 @@ const initialState: MallSliceState = {
 	searchResults: null,
 	searchFilters: null,
 	pagination: null,
+	searchTerm: "",
 };
 
 export const mallSlice = createAppSlice({
@@ -38,6 +40,9 @@ export const mallSlice = createAppSlice({
 		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
+		}),
+		setSearchTerm: create.reducer<string>((state, action) => {
+			state.searchTerm = action.payload;
 		}),
 		getVariantsAsync: create.asyncThunk(
 			async () => {
@@ -187,10 +192,11 @@ export const mallSlice = createAppSlice({
 		selectSuccess: (state: MallSliceState) => state.success,
 		selectMessage: (state: MallSliceState) => state.message,
 		selectLocations: (state: MallSliceState) => state.locations,
+		selectSearchTerm: (state: MallSliceState) => state.searchTerm,
 	},
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync, resetSearchAutocomplete, getSearchProductsAsync, getSearchResultsAsync } = mallSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectVariants, selectLocations, selectAutocomplete, selectSearchResults, selectSsearchFilters, selectPagination } = mallSlice.selectors;
+export const { resetSuccess, resetMessage, setSearchTerm, getVariantsAsync, getLocationsAsync, getSearchAutocompleteAsync, resetSearchAutocomplete, getSearchProductsAsync, getSearchResultsAsync } = mallSlice.actions; // Export actions
+export const { selectStatus, selectSearchTerm, selectSuccess, selectMessage, selectVariants, selectLocations, selectAutocomplete, selectSearchResults, selectSsearchFilters, selectPagination } = mallSlice.selectors;
 export const mallReducer = mallSlice.reducer;

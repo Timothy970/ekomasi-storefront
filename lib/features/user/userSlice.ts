@@ -1,6 +1,7 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { OtpRequestParams, SignInParams, SignUpParams, UpdateUserProfilePayload, User, UserData, VerifyOtpParams } from "../types";
 import { getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
+import { ToastType } from "../toast/toastSlice";
 
 interface UserSliceState {
 	user: User | null;
@@ -190,9 +191,15 @@ export const userSlice = createAppSlice({
 			}
 		),
 		updateUserProfileAsync: create.asyncThunk(
-			async ({ data, fetchUserProfile }: { data: UpdateUserProfilePayload, fetchUserProfile: () => void }) => {
+			async ({ data, fetchUserProfile }: { data: UpdateUserProfilePayload, fetchUserProfile: (message: string, type: ToastType) => void }) => {
 				const response = await updateUserProfile({ data })
-				fetchUserProfile()
+
+				if (response?.status_code == 200) {
+					fetchUserProfile(response?.message, "success")
+				} else {
+					fetchUserProfile(response?.message || "Unable to update user profile", "error")
+
+				}
 
 				return response
 			},
