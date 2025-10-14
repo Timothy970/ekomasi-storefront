@@ -367,6 +367,7 @@ export interface UserData {
   last_name: string
   role: string
   phone_number: string
+  phone: string
 }
 
 export interface UserDetailsResponse {
@@ -581,6 +582,7 @@ export interface Suggestion {
   display_name: string;
   link: string;
   image_url?: string;
+  name: string;
 }
 
 export interface SuggestionsResponse {

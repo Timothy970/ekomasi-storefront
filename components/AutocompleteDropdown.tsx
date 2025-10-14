@@ -3,12 +3,15 @@
 import { useSearchModal } from "@/app/ClientLayout";
 import React from "react";
 import Link from "next/link";
-import { useAppSelector } from "@/lib/hooks";
-import { selectAutocomplete } from "@/lib/features/mall/mallSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { selectAutocomplete, setSearchTerm } from "@/lib/features/mall/mallSlice";
+import { useRouter } from "next/navigation";
 
 export default function AutocompleteDropdown() {
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
     const autocomplete = useAppSelector(selectAutocomplete);
+    const dispatch = useAppDispatch()
+    const router = useRouter()
 
     if (!openSearchModal || autocomplete == null) return null;
 
@@ -35,13 +38,16 @@ export default function AutocompleteDropdown() {
 
                     return (
                         <li key={index?.toString()}>
-                            <Link
-                                href={href}
-                                onClick={() => setOpenSearchModal(false)}
+                            <div
+                                onClick={() => {
+                                    dispatch(setSearchTerm(item?.name));
+                                    setOpenSearchModal(false)
+                                    router.push(`/search?q=${item?.name}`)
+                                }}
                                 className="block px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition"
                             >
                                 {item.display_name}
-                            </Link>
+                            </div>
                         </li>
                     );
                 })}

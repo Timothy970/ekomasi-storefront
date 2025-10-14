@@ -15,8 +15,8 @@ export async function getCategories(): Promise<CategoriesResponse> {
 
 export async function getCategoryById(id: string, query:string): Promise<CategoryResponse | null> {
   try {
-    const response = await axios.get<CategoryResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/categories-products/${id}?${query}`);
-
+    const response = await axios.get<CategoryResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/categories-products/${id}${query}`);
+    
     return response.data;
   } catch (error) {
     const err = error as AxiosError<CategoryResponse>;

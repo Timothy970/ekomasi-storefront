@@ -37,26 +37,25 @@ export default function ProductCategory() {
 
     useEffect(() => {
         if (params?.id) {
-            const initialQuery = "?size=10&page=1"
-            dispatch(getCategoryAsync({ id: params.id, query: initialQuery }))
-        }
-    }, [params?.id, dispatch])
-
-    useEffect(() => {
-        if (params?.id) {
-            dispatch(getCategoryAsync({ id: params.id, query }))
-
             const formattedQuery = query.startsWith("?") ? query : `?${query}`
+            dispatch(getCategoryAsync({ id: params.id, query: formattedQuery }))
 
             const newUrl = `${pathname}${formattedQuery}`
             router.replace(newUrl, { scroll: false })
         }
     }, [params?.id, query, dispatch])
 
+    const updateQueryParam = (param: string, value: string | number) => {
+        const searchParams = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
+        searchParams.set(param, value.toString())
+        return `?${searchParams.toString()}`
+    }
+
     const handlePrev = () => {
         if (pagination?.has_prev) {
             const newPage = pagination.page - 1
-            setQuery(`?size=${pagination.size}&page=${newPage}`)
+            const updatedQuery = updateQueryParam("page", newPage)
+            setQuery(updatedQuery)
         } else {
             triggerToast("You are already on the first page.", "info");
         }
@@ -65,7 +64,8 @@ export default function ProductCategory() {
     const handleNext = () => {
         if (pagination?.has_next) {
             const newPage = pagination.page + 1
-            setQuery(`?size=${pagination.size}&page=${newPage}`)
+            const updatedQuery = updateQueryParam("page", newPage)
+            setQuery(updatedQuery)
         } else {
             triggerToast("No more products to display.", "info");
         }

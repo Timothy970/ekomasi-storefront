@@ -21,8 +21,6 @@ export default function OtpForm() {
     const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     const isPhone = (value: string) => /^\+?[0-9]{7,15}$/.test(value);
 
-    console.log(emailOrPhone)
-
     const focusAt = (idx: number) => {
         const el = inputsRef.current[idx];
         if (el) el.focus();

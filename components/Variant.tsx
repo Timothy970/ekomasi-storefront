@@ -70,10 +70,11 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
     return (
         <div className='flex flex-col gap-y-[1rem] mb-[1rem]'>
-            <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center h-[3rem] px-[0.5rem]'>
+            <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center py-[1rem] min-h-[3rem] px-[0.5rem]'>
                 <h2 className='text-custom-black font-bold text-[0.875rem] lg:text-[1.125rem] leading-[1.6875rem] capitalize'>
                     {variant?.variant_type}
                 </h2>
+                
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                     strokeLinejoin="round">
