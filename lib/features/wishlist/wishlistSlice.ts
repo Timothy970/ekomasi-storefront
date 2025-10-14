@@ -5,6 +5,7 @@ import { ToastType } from "../toast/toastSlice";
 
 interface WishListsSliceState {
 	status: "idle" | "loading" | "failed";
+	deleteStatus: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
 	wishLists: WishList[] | null;
@@ -13,6 +14,7 @@ interface WishListsSliceState {
 
 const initialState: WishListsSliceState = {
 	status: "idle",
+	deleteStatus: "idle",
 	message: "",
 	success: false,
 	wishLists: null,
@@ -86,17 +88,17 @@ export const wishListsSlice = createAppSlice({
 			}
 		),
 		deleteProductFromWishListAsync: create.asyncThunk(
-			async ({ product_id, refetchWishList , triggerToast}: { product_id: string, refetchWishList: () => void, triggerToast: (message: string, type: ToastType) => void }) => {
+			async ({ product_id, refetchWishList, triggerToast }: { product_id: string, refetchWishList: () => void, triggerToast: (message: string, type: ToastType) => void }) => {
 				const response = await deleteProductFromWishList(product_id);
 
 				refetchWishList()
 				triggerToast("Wishlist updated successfully!", "info")
-	
+
 				return response;
 			},
 			{
 				pending: (state) => {
-					state.status = "loading";
+					state.deleteStatus = "loading";
 				},
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
@@ -105,10 +107,10 @@ export const wishListsSlice = createAppSlice({
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
 					}
-					state.status = "idle";
+					state.deleteStatus = "idle";
 				},
 				rejected: (state, action) => {
-					state.status = "failed";
+					state.deleteStatus = "failed";
 					state.message = action.error?.message || "Something went wrong";
 					state.success = false;
 				},
@@ -117,6 +119,7 @@ export const wishListsSlice = createAppSlice({
 	}),
 	selectors: {
 		selectStatus: (state: WishListsSliceState) => state.status,
+		selectDeleteStatus: (state: WishListsSliceState) => state.deleteStatus,
 		selectSuccess: (state: WishListsSliceState) => state.success,
 		selectMessage: (state: WishListsSliceState) => state.message,
 		selectWishLists: (state: WishListsSliceState) => state.wishLists,
@@ -124,7 +127,6 @@ export const wishListsSlice = createAppSlice({
 	},
 });
 
-// Export actions and selectors
 export const { resetSuccess, resetMessage, getWishListsAsync, createWishListAsync, deleteProductFromWishListAsync } = wishListsSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectWishListPagination, selectWishLists } = wishListsSlice.selectors;
+export const { selectStatus, selectSuccess, selectMessage, selectDeleteStatus, selectWishListPagination, selectWishLists } = wishListsSlice.selectors;
 export const wishListsReducer = wishListsSlice.reducer;
