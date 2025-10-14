@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { addToCart, createCart, createGuestOrder, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
-import type { CartData, GuestOrderPayload, MemberOrderPayload, Order } from "../types";
+import type { CartData, GuestOrderPayload, MemberOrderPayload, Order, Pagination } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -10,6 +10,7 @@ interface CartSliceState {
 	cartId: string | null;
 	orders: Order[] | [],
 	order: Order | null,
+	pagination: Pagination| null;
 }
 
 const initialState: CartSliceState = {
@@ -20,6 +21,7 @@ const initialState: CartSliceState = {
 	cartId: null,
 	orders: [],
 	order: null,
+	pagination: null,
 };
 
 export const cartSlice = createAppSlice({
@@ -271,7 +273,7 @@ export const cartSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200 && action.payload.data) {
 						state.success = true;
-						state.orders = action.payload.data
+						state.orders = action.payload.data?.orders
 					} else {
 						state.message = action.payload?.message || "Failed to fetch cart";
 						state.success = false;

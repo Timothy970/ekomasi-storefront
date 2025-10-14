@@ -54,7 +54,6 @@ export default function PersonalInformation({ page }: { page: string }) {
         { key: "deliveryCharge", label: "Delivery Charge" },
         { key: "paymentPhone", label: "Payment Phone Number" },
     ];
-    console.log(profile)
 
     useEffect(() => {
         setIsFormValid(isFormComplete(formData));

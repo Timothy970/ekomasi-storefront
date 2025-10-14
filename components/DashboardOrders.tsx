@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from './ui/button';
-import { useRouter } from 'next/navigation';
 import { Order } from '@/lib/features/types';
 
 interface DashboardOrdersProps {
@@ -11,8 +10,6 @@ interface DashboardOrdersProps {
 }
 
 export default function DashboardOrders({ orders }: DashboardOrdersProps) {
-  const router = useRouter();
-
   if (!orders || orders.length === 0) {
     return <p className="text-sm text-gray-500">No orders to display.</p>;
   }

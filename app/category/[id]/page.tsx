@@ -21,7 +21,6 @@ export default function ProductCategory() {
     const router = useRouter()
     const pathname = usePathname()
     const status = useAppSelector(selectStatus)
-    console.log(query, 'query')
 
     useEffect(() => {
         if (category) {

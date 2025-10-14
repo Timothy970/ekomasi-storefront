@@ -352,6 +352,7 @@ export interface CartData {
   total: number;
   discount: number;
   final: number;
+  estimated_tax: number;
 }
 
 export interface ViewCartResponse {
@@ -521,9 +522,13 @@ export interface UserAddress {
   zip_code: string
 }
 
+export interface OrderData {
+  pagination: Pagination;
+  orders: Order[]
+}
 
 export interface UserOrdersResponse {
-  data: Order[];
+  data: OrderData;
   message: string;
   status_code: number;
 }

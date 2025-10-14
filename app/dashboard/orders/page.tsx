@@ -27,12 +27,8 @@ export default function Orders() {
 
     useEffect(() => {
         if (orders?.length) {
-            const ongoing = orders.filter(
-                (order) => order.order_status === "pending" || order.order_status === "delivered"
-            );
-            const cancelled = orders.filter(
-                (order) => order.order_status === "canceled" || order.order_status === "returned"
-            );
+            const ongoing = orders.filter((order) => order.order_status === "pending" || order.order_status === "delivered");
+            const cancelled = orders.filter((order) => order.order_status === "canceled" || order.order_status === "returned");
 
             setOngoingOrders(ongoing);
             setCancelledOrders(cancelled);
@@ -103,7 +99,7 @@ export default function Orders() {
                             </TabsContent>
 
                             <TabsContent value="canceled" className='w-full'>
-                                <DashboardOrders orders={cancelledOrders}  />
+                                <DashboardOrders orders={cancelledOrders} />
                             </TabsContent>
                         </Tabs>
                     }
