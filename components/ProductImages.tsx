@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice';
 import { selectUserToken } from '@/lib/features/user/userSlice';
-import { createWishListAsync, selectStatus } from '@/lib/features/wishlist/wishlistSlice';
+import { createWishListAsync, getWishListsAsync, selectStatus } from '@/lib/features/wishlist/wishlistSlice';
 import LoadingIndicator from './LoadingIndicator';
 import { triggerToast } from '@/app/utils/toastUtils';
 
@@ -35,6 +35,7 @@ export default function ProductImages() {
         if (token) {
             dispatch(createWishListAsync({ token, product_id })).then(() => {
                 dispatch(getProductAsync(product_id))
+                dispatch(getWishListsAsync(token))
                 triggerToast("Product was added to wishlist successfully!", "success");
             })
         }

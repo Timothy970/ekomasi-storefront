@@ -79,18 +79,18 @@ export default function Orders() {
 
                     {
                         orders?.length > 0 && <Tabs defaultValue="ongoing" className="w-full bg-white">
-                            <TabsList className="border-b gap-x-[1rem] rounded-none bg-white border-none">
+                            <TabsList className="border-b gap-x-[1rem] rounded-none bg-white border-none text-wrap">
                                 <TabsTrigger
                                     value="ongoing"
-                                    className="data-[state=active]:border-b-2 data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
                                 >
                                     ONGOING / DELIVERED
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="canceled"
-                                    className="data-[state=active]:border-b-2 data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
                                 >
-                                    CANCELED / RETURNED
+                                    CANCELLED / RETURNED
                                 </TabsTrigger>
                             </TabsList>
 

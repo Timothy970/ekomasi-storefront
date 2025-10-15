@@ -12,10 +12,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
-  Gift,
   Heart,
   House,
-  ShieldQuestionMark,
   UserRound,
   Menu,
   X,
@@ -68,8 +66,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center md:z-0">
-      <div className="w-full px-4 py-3 border-b flex items-center justify-between">
-        <div className="w-full max-w-[90rem] px-[1rem] lg:px-[3rem] mx-auto flex flex-row items-center justify-between">
+      <div className="w-full px-[1rem] py-3 border-b flex items-center justify-between">
+        <div className="w-full max-w-[90rem] lg:px-[3rem] mx-auto flex flex-row items-center justify-between">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -191,7 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
 
           <main className="flex-1 p-[1rem] h-full">
-            <div className="md:p-6 h-full bg-white">{children}</div>
+            <div className="md:p-6 h-full">{children}</div>
           </main>
         </div>
       </div>
