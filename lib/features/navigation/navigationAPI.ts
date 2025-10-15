@@ -1,3 +1,4 @@
+import api from "@/lib/utils/axios";
 import { CategoriesResponse, Category, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
@@ -13,10 +14,10 @@ export async function getCategories(): Promise<CategoriesResponse> {
 }
 
 
-export async function getCategoryById(id: string, query:string): Promise<CategoryResponse | null> {
+export async function getCategoryById(id: string, query: string): Promise<CategoryResponse | null> {
   try {
     const response = await axios.get<CategoryResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/categories-products/${id}${query}`);
-    
+
     return response.data;
   } catch (error) {
     const err = error as AxiosError<CategoryResponse>;
@@ -67,7 +68,10 @@ export async function getFeaturedProducts(): Promise<FeaturedProductsResponse | 
 
 export async function getProduct(product_id: string): Promise<ProductResponse | null> {
   try {
-    const response = await axios.get<ProductResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}product/${product_id}`);
+    const response = await api.get<ProductResponse>(`product/${product_id}`, {
+      headers: { requiresAuth: true },
+    });
+    console.log(response, 'resssssss')
 
     return response.data;
   } catch (error) {

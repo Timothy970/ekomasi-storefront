@@ -18,6 +18,7 @@ export default function ProductImages() {
     const token = useAppSelector(selectUserToken)
     const dispatch = useAppDispatch()
     const wishStatus= useAppSelector(selectStatus)
+    console.log(product, 'product')
 
     const prevSlide = () => {
         const urlsLength = product?.urls?.length ? product?.urls.length - 1 : 0;
@@ -44,11 +45,11 @@ export default function ProductImages() {
     return (
         <div className="w-full h-full flex flex-row justify-between">
             {
-                product?.urls?.length && <div className="w-[30%] flex flex-col gap-y-[1rem] p-2">
+                product?.urls?.length && <div className="w-auto flex flex-col gap-y-[1rem] hide-scrollbar max-h-[43rem] overflow-y-scroll pr-[1rem]">
                     {product?.urls.map((image, index) => (
                         <div
                             key={index.toString()}
-                            className={`relative w-full h-[8rem] rounded-md overflow-hidden cursor-pointer transition-all
+                            className={`relative w-full h-[6.25rem] min-w-[6.25rem] min-h-[6.25rem] max-h-[6.25rem] rounded-md overflow-hidden cursor-pointer transition-all
                           ${index === current ? "border border-[#E8298A] scale-105" : "opacity-70 hover:opacity-100"}`}
                             onClick={() => setCurrent(index)}
                         >
@@ -64,7 +65,7 @@ export default function ProductImages() {
                 </div>
             }
 
-            <div className="relative w-[65%] overflow-hidden">
+            <div className="relative w-full max-h-[43rem] overflow-hidden">
                 {
                     token && product?.product_id && <div className="absolute inset-0 flex flex-col justify-start items-center text-center z-10">
                         <div className="p-4 h-full w-full flex justify-start">

@@ -14,7 +14,7 @@ type ProductListingLayoutProps = {
     products: Product[];
     listingDescription: | React.ReactNode;
     listingName: string;
-    pagination: Pagination;
+    pagination: Pagination | null;
     handlePrev: () => void;
     handleNext: () => void;
     crumbs: Crumb[];
@@ -120,7 +120,7 @@ export default function ProductListingLayout({
                     </div>
 
                     {
-                        pagination && products && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
+                        pagination && products?.length > 0 && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                     }
 
                     <div onClick={scrollToTop} className='bg-[#804A9D] rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
