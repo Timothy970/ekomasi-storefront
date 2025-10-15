@@ -71,7 +71,6 @@ export async function getProduct(product_id: string): Promise<ProductResponse | 
     const response = await api.get<ProductResponse>(`product/${product_id}`, {
       headers: { requiresAuth: true },
     });
-    console.log(response, 'resssssss')
 
     return response.data;
   } catch (error) {
