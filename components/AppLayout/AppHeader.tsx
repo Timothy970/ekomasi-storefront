@@ -28,7 +28,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
 
   useEffect(() => {
     if (cartId) {
-      dispatch(getCartAsync(cartId))
+      dispatch(getCartAsync({cart_id: cartId}))
     }
   }, [cartId, dispatch])
 

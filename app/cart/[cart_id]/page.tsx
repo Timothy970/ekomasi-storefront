@@ -19,10 +19,9 @@ export default function Cart() {
 
   useEffect(() => {
     if (params?.cart_id) {
-      dispatch(getCartAsync(params?.cart_id))
+      dispatch(getCartAsync({ cart_id: params?.cart_id }))
     }
   }, [params?.cart_id])
-
 
   useEffect(() => {
     if (!cart || cart && !cart?.cart_items) {

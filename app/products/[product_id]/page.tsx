@@ -50,7 +50,7 @@ export default function ProductDetail() {
       if (cart_id) {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync(cart_id))
+          dispatch(getCartAsync({ cart_id }))
         }, 1000)
       }
     }
@@ -82,7 +82,7 @@ export default function ProductDetail() {
       if (cartId) {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync(cartId))
+          dispatch(getCartAsync({ cart_id: cartId }))
         }, 1000)
       }
     }
