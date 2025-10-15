@@ -7,7 +7,7 @@ import { customeParser } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
-import { deleteProductFromWishListAsync, getWishListsAsync, selectStatus as selectWishlistStatus } from '@/lib/features/wishlist/wishlistSlice'
+import { deleteProductFromWishListAsync, getWishListsAsync, selectDeleteStatus } from '@/lib/features/wishlist/wishlistSlice'
 import LoadingIndicator from './LoadingIndicator'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
@@ -16,7 +16,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
     const router = useRouter()
     const token = useAppSelector(selectUserToken)
     const dispatch = useAppDispatch()
-    const status = useAppSelector(selectWishlistStatus)
+    const status = useAppSelector(selectDeleteStatus)
     const cartId = useAppSelector(selectCartId)
     const [loading, setLoading] = useState(false)
 

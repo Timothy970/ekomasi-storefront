@@ -30,7 +30,7 @@ export default function Order() {
                                 <path d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z" fill="black" />
                             </svg>
 
-                            <p className='text-[0.875rem] lg:text[1.125rem]'>Your Order Was Cancelled.</p>
+                            <p className='text-[0.875rem]'>Your Order Was Cancelled.</p>
                         </div>
                     </div>
 
@@ -43,34 +43,34 @@ export default function Order() {
                                 <path d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z" fill="black" />
                             </svg>
 
-                            <p className='text-[0.875rem] lg:text[1.125rem]'>Your Order Was Successfully Placed.</p>
+                            <p className='text-[0.875rem]'>Your Order Was Successfully Placed.</p>
                         </div>
                     </div>
                 }
 
                 <div className='w-full flex items-center flex-col mt-[1rem] lg:mt-[2.5rem]'>
-                    <p className='text-[1rem]'>Thank You!</p>
+                    <p className='text-[0.875rem]'>Thank You!</p>
 
-                    <h2 className='text-[1.5rem] lg:text-[3rem] font-bold mt-[1rem]'>Order Details</h2>
+                    <h2 className='text-[1.125rem] lg:text-[1.5rem] font-bold mt-[1rem]'>Order Details</h2>
 
-                    <p className='font-semibold text-[1.125rem] mt-[1rem] lg:mt-[1.5rem] text-center'>Check your email for your order confirmation.</p>
+                    <p className='font-semibold text-base lg:text-[1.125rem] mt-[1rem] lg:mt-[1.5rem] text-center'>Check your email for your order confirmation.</p>
 
                     <div className='flex flex-col items-center mt-[0.5rem] gap-y-[0.5rem]'>
                         <div className='flex text-custom-black gap-x-[0.5rem]'>
-                            <span className='font-medium text-[1.125rem]'>Your order: </span>
-                            <span className='text-[1.125rem]'>{order?.order_id}</span>
+                            <span className='font-medium text-base lg:text-[1.125rem]'>Your order: </span>
+                            <span className='font font-medium text-[1.125rem]'>{order?.order_id}</span>
                         </div>
 
                         {
-                            order && <div className='flex text-custom-black gap-x-[0.5rem] text-[1.125rem]'>
-                                <span className='font-medium'>Order Date: </span>
+                            order && <div className='flex text-custom-black items-center justify-center gap-x-[0.5rem] text-[1.125rem]'>
+                                <span className='font-medium text-[0.875rem]'>Order Date: </span>
                                 <span>{new Date(order.created_at).toLocaleDateString()}</span>
                             </div>
                         }
 
                         <div className='flex text-custom-black gap-x-[0.5rem]'>
                             <span className='font-medium'>Total: </span>
-                            <p className="uppercase font-medium'">
+                            <p className="uppercase font-medium">
                                 {"KES " + new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
                                 }).format(order?.total_amount ?? 0)}
@@ -78,7 +78,7 @@ export default function Order() {
                         </div>
 
                         {
-                            profile && <p className='font-medium mt-[1rem] text-base'>We have sent the order confirmation details to <span className='font-bold'>{profile?.email}</span></p>
+                            profile && <p className='font-medium mt-[1rem] text-center text-wrap text-[0.875rem] lg:text-base'>We have sent the order confirmation details to <span className='font-bold'>{profile?.email}</span></p>
                         }
                     </div>
                 </div>

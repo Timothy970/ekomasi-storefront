@@ -32,16 +32,25 @@ export default function CheckoutCartSummary() {
             <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1.5rem]'>
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
-                    <span className='text-custom-black text-[0.875rem]'>0</span>
+                    <span className='text-custom-black text-[0.875rem]'>
+                        {"KES " + new Intl.NumberFormat("en-KE", {
+                            minimumFractionDigits: 0,
+                        }).format(cart?.total ?? 0)}
+                    </span>
                 </div>
+                
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
                     <span className='text-custom-black text-[0.875rem]'>0</span>
                 </div>
+
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
-                    <span className='text-custom-black text-[0.875rem]'>16%</span>
+                    <span className='text-custom-black text-[0.875rem]'>
+                        {cart?.estimated_tax}
+                    </span>
                 </div>
+
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
                     <span className='text-custom-black text-[0.875rem]'>{cart?.discount?.toFixed()}</span>

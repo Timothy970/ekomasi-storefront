@@ -142,7 +142,7 @@ export default function HomeCategories() {
             </svg>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[0.938rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 items-stretch">
+          <div className="grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[0.938rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-stretch">
             {categories?.slice(0, 10)?.map((category) => (
               <Link key={category.id} href={`/category/${category?.id}`}>
                 <div className="overflow-hidden flex flex-col justify-center items-center">

@@ -35,12 +35,35 @@ export default function PersonalInformation({ page }: { page: string }) {
         paymentPhone: '',
     })
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+    const [isFormValid, setIsFormValid] = useState(false);
     const profile = useAppSelector(selectUserProfile)
     const cart = useAppSelector(selectCart)
-    const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
     const dispatch = useAppDispatch()
     const router = useRouter()
     const status = useAppSelector(selectStatus)
+    const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
+        { key: "firstName", label: "First Name" },
+        { key: "lastName", label: "Last Name" },
+        { key: "email", label: "Email" },
+        { key: "phone", label: "Phone Number" },
+        { key: "country", label: "Country" },
+        { key: "courier", label: "Courier" },
+        { key: "state", label: "State" },
+        { key: "address", label: "Address" },
+        { key: "city", label: "City" },
+        { key: "deliveryCharge", label: "Delivery Charge" },
+        { key: "paymentPhone", label: "Payment Phone Number" },
+    ];
+
+    useEffect(() => {
+        setIsFormValid(isFormComplete(formData));
+    }, [formData]);
+
+    useEffect(() => {
+        if (!cart) {
+            router.replace("/")
+        }
+    }, [cart]);
 
     useEffect(() => {
         if (profile) {
@@ -49,6 +72,8 @@ export default function PersonalInformation({ page }: { page: string }) {
                 email: profile.email ?? prev.email,
                 firstName: profile.first_name ?? prev.firstName,
                 lastName: profile.last_name ?? prev.lastName,
+                phone: profile.phone ?? prev.phone,
+                paymentPhone: profile.phone ?? prev.paymentPhone,
             }));
         }
     }, [profile, setFormData]);
@@ -69,23 +94,50 @@ export default function PersonalInformation({ page }: { page: string }) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setErrors((prev) => ({ ...prev, [name]: "" })); // clear error on change
     };
 
-    const validate = () => {
-        const newErrors: Partial<Record<keyof FormData, string>> = {};
-        if (!formData.firstName) newErrors.firstName = "First name is required";
-        if (!formData.lastName) newErrors.lastName = "Last name is required";
-        if (!formData.email) newErrors.email = "Email is required";
-        if (!formData.phone) newErrors.phone = "Phone number is required";
-        if (!formData.paymentPhone) newErrors.paymentPhone = "Payment Phone number is required";
-        if (!formData.country) newErrors.country = "Country is required";
-        if (!formData.courier) newErrors.courier = "Courier is required";
-        if (!formData.state) newErrors.state = "State is required";
-        if (!formData.address) newErrors.address = "Address is required";
-        if (!formData.city) newErrors.city = "City is required";
-        if (!formData.deliveryCharge) newErrors.deliveryCharge = "Delivery charge is required";
-        return newErrors;
+    const isFormComplete = (form: FormData): boolean => {
+        for (const { key } of REQUIRED_FIELDS) {
+            const value = form[key];
+            if (
+                value === undefined ||
+                value === null ||
+                (Array.isArray(value) && value.length === 0) ||
+                (typeof value === "string" && value.trim() === "")
+            ) {
+                return false;
+            }
+        }
+
+        if ((!form.email || form.email.trim() === "") && (!form.phone || form.phone.trim() === "")) {
+            return false;
+        }
+
+        return true;
+    };
+
+
+    const validateForm = (form: FormData): boolean => {
+        for (const { key, label } of REQUIRED_FIELDS) {
+            const value = form[key];
+
+            if (
+                value === undefined ||
+                value === null ||
+                (Array.isArray(value) && value.length === 0) ||
+                (typeof value === "string" && value.trim() === "")
+            ) {
+                triggerToast(`${label} is required.`, "error");
+                return false;
+            }
+        }
+
+        if ((!form.email || form.email.trim() === "") && (!form.phone || form.phone.trim() === "")) {
+            triggerToast("Either Email or Phone Number is required.", "error");
+            return false;
+        }
+
+        return true;
     };
 
     const memberOrderPayload = (formData: FormData) => {
@@ -106,12 +158,9 @@ export default function PersonalInformation({ page }: { page: string }) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const newErrors = validate();
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if (!validateForm(formData)) {
             return;
         }
-
         let personalFormDetails = memberOrderPayload(formData)
 
         if (cart?.total && personalFormDetails?.user_id && personalFormDetails?.courier_details) {
@@ -236,6 +285,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                     <Input
                         name="phone"
                         value={formData.phone}
+                        disabled={!!profile?.phone}
                         required
                         onChange={handleChange}
                         placeholder='254123456789*'
@@ -421,7 +471,13 @@ export default function PersonalInformation({ page }: { page: string }) {
                         <Button
                             disabled={status == "loading"}
                             type='submit'
-                            className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE]'
+                            onClick={() => {
+                                if (!isFormValid) {
+                                    triggerToast("Please fill out all required fields before continuing.", "error");
+                                    return;
+                                }
+                            }}
+                            className={`h-[3rem] md:max-w-[19rem] bg-[#AF52DE] ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                             {
                                 status == "loading" && <LoadingIndicator textColor="text-white" />

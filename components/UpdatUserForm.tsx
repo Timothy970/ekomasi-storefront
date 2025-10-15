@@ -47,7 +47,7 @@ export default function UpdateUserForm() {
                 first_name: profile.first_name || "",
                 last_name: profile.last_name || "",
                 email: profile.email || "",
-                phone_number: profile.phone_number || "",
+                phone_number: profile.phone || "",
             })
         }
     }, [profile])
@@ -62,7 +62,7 @@ export default function UpdateUserForm() {
 
             <div className="max-w-md flex flex-col gap-y-[1rem]">
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">First Name*:</label>
+                    <label className="mb-1 font-semibold">First Name<span className="text-red-400">*</span>:</label>
                     <Input
                         value={formData.first_name}
                         onChange={e => handleChange("first_name", e.target.value)}
@@ -71,7 +71,7 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">Last Name*:</label>
+                    <label className="mb-1 font-semibold">Last Name<span className="text-red-400">*</span>:</label>
                     <Input
                         value={formData.last_name}
                         onChange={e => handleChange("last_name", e.target.value)}
@@ -80,7 +80,7 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col gap-y-[0.5rem]">
-                    <span className="text-[0.875rem] font-semibold">Email*:</span>
+                    <span className="text-[0.875rem] font-semibold">Email<span className="text-red-400">*</span>:</span>
                     <div className="relative">
                         <svg
                             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
@@ -108,7 +108,7 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">Phone Number*:</label>
+                    <label className="mb-1 font-semibold">Phone Number<span className="text-red-400">*</span>:</label>
                     <Input
                         placeholder="0797493262"
                         value={formData.phone_number}

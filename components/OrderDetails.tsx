@@ -16,15 +16,16 @@ export default function OrderDetails() {
         <div className='w-full flex flex-col gap-y-[0.5rem] mt-[1.5rem]'>
           {
             order?.items?.map((item, index) => {
-              return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
+              return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex pb-[1.5rem] md:gap-x-[2rem] justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                 {
-                  item?.urls && <div className="relative w-1/3 h-[13.5rem] md:h-[15rem] max-h-[15rem] flex-shrink-0">
+                  item?.urls &&
+                  <div className="relative w-1/3 h-[13.5rem] min-w-[9rem] max-w-[6rem] max-h-[9rem] md:min-w-[12rem] md:max-w-[12rem] md:max-h-[12rem] flex-shrink-0">
                     <Image
                       src={item?.urls[0]?.url}
-                      alt=""
+                      alt={''}
                       fill
                       unoptimized
-                      className="object-cover max-h-[70%] sm:max-h-[80%] md:max-h-[70%] lg:max-h-[80%]"
+                      className="object-cover h-full w-full"
                     />
                   </div>
                 }
@@ -80,20 +81,20 @@ export default function OrderDetails() {
             <h3 className='font-bold'>Summary</h3>
 
             <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1rem]'>
-              {/* <div className='flex justify-between w-full'>
+              <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
                 <span className='text-custom-black text-[0.875rem]'>0</span>
-              </div> */}
+              </div>
 
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
                 <span className='text-custom-black text-[0.875rem]'>{order?.delivery_charge}</span>
               </div>
 
-              {/* <div className='flex justify-between w-full'>
+              <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
                 <span className='text-custom-black text-[0.875rem]'>16%</span>
-              </div> */}
+              </div>
 
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
@@ -104,7 +105,7 @@ export default function OrderDetails() {
             <div className='w-full flex justify-between border-b border-black border-t py-[1rem]'>
               <span>Total</span>
               <span>
-                1000
+                {order?.total_amount}
               </span>
             </div>
           </div>

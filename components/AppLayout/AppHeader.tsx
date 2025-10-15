@@ -10,7 +10,8 @@ import Link from 'next/link'
 import { getCartAsync, selectCart, selectCartId } from '@/lib/features/cart/cartSlice'
 import { getUserProfileAsync, selectUserToken } from '@/lib/features/user/userSlice'
 import { useRouter } from 'next/navigation'
-
+import { selectWishLists } from '@/lib/features/wishlist/wishlistSlice'
+import Icons from '../ui/custom-icons'
 interface AppHeaderProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,6 +24,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
   const cartId = useAppSelector(selectCartId)
   const token = useAppSelector(selectUserToken)
   const router = useRouter()
+  const wishlist = useAppSelector(selectWishLists)
 
   useEffect(() => {
     if (cartId) {
@@ -91,13 +93,17 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
 
             {
               token ? <Link href={`/dashboard/wishlist`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 34 31" fill="none">
-                  <path d="M16.9998 2.65917C15.1838 0.98934 12.8068 0.0625776 10.3398 0.0625C9.03404 0.0638595 7.74143 0.323433 6.53637 0.826281C5.33131 1.32913 4.23758 2.06532 3.31814 2.9925C-0.603528 6.93083 -0.601862 13.0908 3.32147 17.0125L15.5415 29.2325C15.8248 29.7308 16.3715 30.0525 16.9998 30.0525C17.2578 30.05 17.5116 29.987 17.7409 29.8686C17.9701 29.7502 18.1684 29.5797 18.3198 29.3708L30.6781 17.0125C34.6015 13.0892 34.6015 6.93083 30.6748 2.98583C29.7558 2.06036 28.663 1.32566 27.4591 0.823972C26.2552 0.322283 24.964 0.0634993 23.6598 0.0625C21.1929 0.0629033 18.816 0.989621 16.9998 2.65917ZM28.3181 5.3425C30.9231 7.96083 30.9248 12.0508 28.3215 14.6558L16.9998 25.9775L5.67814 14.6558C3.0748 12.0508 3.07647 7.96083 5.6748 5.34917C6.94147 4.08917 8.59814 3.39583 10.3398 3.39583C12.0815 3.39583 13.7315 4.08917 14.9881 5.34583L15.8215 6.17917C15.9761 6.33408 16.1598 6.45697 16.362 6.54082C16.5642 6.62467 16.7809 6.66784 16.9998 6.66784C17.2187 6.66784 17.4354 6.62467 17.6376 6.54082C17.8398 6.45697 18.0235 6.33408 18.1781 6.17917L19.0115 5.34583C21.5315 2.83083 25.8015 2.8375 28.3181 5.3425Z" fill="black" />
-                </svg>
-              </Link> :
-                <svg onClick={handleIcons} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 34 31" fill="none">
-                  <path d="M16.9998 2.65917C15.1838 0.98934 12.8068 0.0625776 10.3398 0.0625C9.03404 0.0638595 7.74143 0.323433 6.53637 0.826281C5.33131 1.32913 4.23758 2.06532 3.31814 2.9925C-0.603528 6.93083 -0.601862 13.0908 3.32147 17.0125L15.5415 29.2325C15.8248 29.7308 16.3715 30.0525 16.9998 30.0525C17.2578 30.05 17.5116 29.987 17.7409 29.8686C17.9701 29.7502 18.1684 29.5797 18.3198 29.3708L30.6781 17.0125C34.6015 13.0892 34.6015 6.93083 30.6748 2.98583C29.7558 2.06036 28.663 1.32566 27.4591 0.823972C26.2552 0.322283 24.964 0.0634993 23.6598 0.0625C21.1929 0.0629033 18.816 0.989621 16.9998 2.65917ZM28.3181 5.3425C30.9231 7.96083 30.9248 12.0508 28.3215 14.6558L16.9998 25.9775L5.67814 14.6558C3.0748 12.0508 3.07647 7.96083 5.6748 5.34917C6.94147 4.08917 8.59814 3.39583 10.3398 3.39583C12.0815 3.39583 13.7315 4.08917 14.9881 5.34583L15.8215 6.17917C15.9761 6.33408 16.1598 6.45697 16.362 6.54082C16.5642 6.62467 16.7809 6.66784 16.9998 6.66784C17.2187 6.66784 17.4354 6.62467 17.6376 6.54082C17.8398 6.45697 18.0235 6.33408 18.1781 6.17917L19.0115 5.34583C21.5315 2.83083 25.8015 2.8375 28.3181 5.3425Z" fill="black" />
-                </svg>
+                <div className='flex justify-center items-center relative mr-[0.5rem]'>
+                  <Icons.HeartIcon />
+                  {
+                    wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                      <span className='text-xs'>{wishlist[0]?.products?.length}</span>
+                    </div> : <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                      <span className='text-xs'>0</span>
+                    </div>
+                  }
+                </div>
+              </Link> : <Icons.HeartIcon onClick={handleIcons} />
             }
 
             {

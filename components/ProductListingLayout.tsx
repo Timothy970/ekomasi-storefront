@@ -43,7 +43,7 @@ export default function ProductListingLayout({
     return (
         <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
             <div className='flex flex-row lg:gap-x-[2rem]'>
-                <div className='lg:sticky lg:top-[10rem] hidden pt-[1rem] lg:block lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+                <div className='lg:sticky lg:top-[10rem] hidden pt-[1rem] lg:block lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] pb-[12rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                     <CategoryFilter
                         setOpenFilterModal={setOpenFilterModal}
                         page="category"
@@ -101,17 +101,19 @@ export default function ProductListingLayout({
                         </div>
 
                         {
-                            status === "loading" && <LoadingIndicator textColor="text-[#AF52DE]" />
+                            status === "loading" && <div className='mt-[2.5rem]'>
+                                <LoadingIndicator textColor="text-[#AF52DE]" />
+                            </div>
                         }
 
                         {
-                            !products || products?.length <= 0 ? <div className='w-full mt-[2.5rem] font-[700] text-[2rem] flex items-center justify-center'>
+                            !products || products?.length <= 0 ? <div className='w-full h-full mt-[2.5rem] font-[700] text-[2rem] flex items-center justify-center'>
                                 <p>No Produts Found!</p>
                             </div> : <></>
                         }
 
                         {
-                            products && <CategoryProducts
+                            products && status !== "loading" && <CategoryProducts
                                 products={products}
                             />
                         }

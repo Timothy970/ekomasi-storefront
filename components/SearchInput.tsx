@@ -7,7 +7,7 @@ import AutocompleteDropdown from "./AutocompleteDropdown";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getSearchAutocompleteAsync, selectSearchTerm, setSearchTerm } from "@/lib/features/mall/mallSlice";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -18,13 +18,12 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     const searchTerm = useAppSelector(selectSearchTerm)
     const [isFocused, setIsFocused] = useState(false);
     const router = useRouter()
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedQuery(query);
         }, 400);
-
-        dispatch(setSearchTerm(query))
 
         return () => {
             clearTimeout(handler);
@@ -32,10 +31,18 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     }, [query]);
 
     useEffect(() => {
+        const q = searchParams.get("q");
+        if (q) {
+            setQuery(q);
+            dispatch(setSearchTerm(q));
+        }
+    }, [searchParams, dispatch]);
+
+    useEffect(() => {
         if (searchTerm) {
             setQuery(searchTerm)
         }
-    }, [])
+    }, [searchTerm])
 
     useEffect(() => {
         const handleFocus = () => setIsFocused(true);
