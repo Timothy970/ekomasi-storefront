@@ -2,6 +2,7 @@ import axios from "axios";
 import { getStore } from "@/lib/storeRef";
 import { showToast } from "@/lib/features/toast/toastSlice";
 import { logout, userSlice } from "../features/user/userSlice";
+import { HTTP_STATUS } from "../utils";
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -41,7 +42,7 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if (status === 401) {
+        if (status === HTTP_STATUS.UNAUTHORIZED) {
             getStore().dispatch(
                 showToast({
                     message: "Invalid email or phone number.",
@@ -56,10 +57,7 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if (
-            (status === 403 || status === 401) &&
-            !originalRequest._retry
-        ) {
+        if ((status === HTTP_STATUS.FORBIDDEN) && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -101,7 +99,7 @@ api.interceptors.response.use(
         }
 
         switch (status) {
-            case 400:
+            case HTTP_STATUS.BAD_REQUEST:
                 getStore().dispatch(
                     showToast({
                         message:
@@ -112,7 +110,7 @@ api.interceptors.response.use(
                 );
                 break;
 
-            case 404:
+            case HTTP_STATUS.NOT_FOUND:
                 getStore().dispatch(
                     showToast({
                         message: "Resource not found.",
@@ -121,7 +119,7 @@ api.interceptors.response.use(
                 );
                 break;
 
-            case 500:
+            case HTTP_STATUS.SERVER_ERROR:
                 getStore().dispatch(
                     showToast({
                         message: "Server error — please try again later.",
