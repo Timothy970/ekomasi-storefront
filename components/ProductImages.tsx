@@ -65,7 +65,7 @@ export default function ProductImages() {
     }
 
     return (
-        <div className="w-full h-full flex flex-row justify-between">
+        <div className="w-full h-full flex flex-row justify-between gap-x-[1rem]">
             {
                 product?.urls?.length && <div className="w-auto flex flex-col gap-y-[1rem] hide-scrollbar max-h-[43rem] overflow-y-scroll pr-[1rem]">
                     {product?.urls.map((image, index) => (
