@@ -41,6 +41,7 @@ export default function PersonalInformation({ page }: { page: string }) {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const status = useAppSelector(selectStatus)
+
     const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
         { key: "firstName", label: "First Name" },
         { key: "lastName", label: "Last Name" },
@@ -115,7 +116,6 @@ export default function PersonalInformation({ page }: { page: string }) {
 
         return true;
     };
-
 
     const validateForm = (form: FormData): boolean => {
         for (const { key, label } of REQUIRED_FIELDS) {

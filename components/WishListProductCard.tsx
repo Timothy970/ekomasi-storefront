@@ -33,7 +33,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
             if (cart_id) {
                 setTimeout(() => {
                     triggerToast("Cart updated successfully!", "success");
-                    dispatch(getCartAsync(cart_id))
+                    dispatch(getCartAsync({cart_id: cart_id}))
                 }, 1000)
             }
         }
@@ -59,7 +59,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                 if (cartId) {
                     setTimeout(() => {
                         triggerToast("Cart updated successfully!", "success");
-                        dispatch(getCartAsync(cartId))
+                        dispatch(getCartAsync({cart_id: cartId}))
                     }, 1000)
                 }
             }

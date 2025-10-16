@@ -354,6 +354,7 @@ export interface CartData {
   discount: number;
   final: number;
   estimated_tax: number;
+  delivery_charge: number;
 }
 
 export interface ViewCartResponse {

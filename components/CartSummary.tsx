@@ -1,25 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { useRouter } from 'next/navigation'
-import { useAppSelector } from '@/lib/hooks'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
-import { selectCart } from '@/lib/features/cart/cartSlice'
+import { getCartAsync, selectCart } from '@/lib/features/cart/cartSlice'
+import CartSummaryLocationDropdown from './CartSummaryLocationDropdown'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function CartSummary({ }) {
+    const [selectedId, setSelectedId] = useState<number | null>(null);
     const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
     const cart = useAppSelector(selectCart)
+    const dispatch = useAppDispatch()
+    const params = useParams<{ cart_id: string }>()
+    const searchParams = useSearchParams();
 
     const handleContinueToCheckout = () => {
+        if (!selectedId) {
+            triggerToast("Please select store to order from.", "error")
+            return
+        }
+
         if (token == null) {
             setOpenGuestCheckoutModal(true)
         } else {
-            router.push("/checkout/member")
+            router.push(`/checkout/member?location_id=${selectedId}`)
         }
     }
+
+    useEffect(() => {
+        if (params?.cart_id && selectedId) {
+            dispatch(getCartAsync({ cart_id: params?.cart_id, location_id: selectedId }))
+        }
+    }, [selectedId, params?.cart_id])
+
+    useEffect(() => {
+        const locationIdFromUrl = searchParams.get("location_id");
+
+        if (locationIdFromUrl) {
+            const idNum = Number(locationIdFromUrl);
+            setSelectedId(idNum);
+
+            if (params?.cart_id) {
+                dispatch(getCartAsync({ cart_id: params.cart_id, location_id: idNum }));
+            }
+        } else if (params?.cart_id) {
+            dispatch(getCartAsync({ cart_id: params.cart_id }));
+        }
+    }, [params?.cart_id]);
 
     return (
         <div className='w-full mt-[2.25rem] md:mt-0'>
@@ -54,9 +86,14 @@ export default function CartSummary({ }) {
                             </span>
                         </div>
 
+                        <CartSummaryLocationDropdown
+                            selectedId={selectedId}
+                            setSelectedId={setSelectedId}
+                        />
+
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
-                            <span className='text-custom-black text-[0.875rem]'>0</span>
+                            <span className='text-custom-black text-[0.875rem]'>{cart?.delivery_charge}</span>
                         </div>
 
                         <div className='flex justify-between w-full'>

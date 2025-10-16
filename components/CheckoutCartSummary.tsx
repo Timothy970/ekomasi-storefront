@@ -38,10 +38,10 @@ export default function CheckoutCartSummary() {
                         }).format(cart?.total ?? 0)}
                     </span>
                 </div>
-                
+
                 <div className='flex justify-between w-full'>
                     <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
-                    <span className='text-custom-black text-[0.875rem]'>0</span>
+                    <span className='text-custom-black text-[0.875rem]'>{cart?.delivery_charge}</span>
                 </div>
 
                 <div className='flex justify-between w-full'>

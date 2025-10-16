@@ -2,6 +2,7 @@ import axios from "axios";
 import { getStore } from "@/lib/storeRef";
 import { showToast } from "@/lib/features/toast/toastSlice";
 import { logout, userSlice } from "../features/user/userSlice";
+import { HTTP_STATUS } from "../utils";
 
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -25,13 +26,38 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Response interceptor: handle 403 and refresh token
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        const status = error.response?.status;
 
-        if (error.response?.status === 403 && !originalRequest._retry || error.response?.status === 401 && !originalRequest._retry) {
+        if (!status) {
+            getStore().dispatch(
+                showToast({
+                    message: "Network error — please check your connection.",
+                    type: "error",
+                })
+            );
+            return Promise.reject(error);
+        }
+
+        if (status === HTTP_STATUS.UNAUTHORIZED) {
+            getStore().dispatch(
+                showToast({
+                    message: "Invalid email or phone number.",
+                    type: "error",
+                })
+            );
+
+            setTimeout(() => {
+                window.location.href = "/user/signup";
+            }, 2000);
+
+            return Promise.reject(error);
+        }
+
+        if ((status === HTTP_STATUS.FORBIDDEN) && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -40,31 +66,77 @@ api.interceptors.response.use(
 
                 if (!refreshToken) throw new Error("No refresh token available");
 
-                const { data } = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}auth/refresh-token`, {
-                    refresh_token: refreshToken,
-                });
-
-                // Update Redux store with new token info
-                getStore().dispatch(
-                    userSlice.actions.setToken({ token: data.token, refresh_token: data.refresh_token })
+                const { data } = await axios.post(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}auth/refresh-token`,
+                    { refresh_token: refreshToken }
                 );
 
-                // Retry original request
-                if (originalRequest.headers?.Authorization) {
-                    originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
-                }
+                getStore().dispatch(
+                    userSlice.actions.setToken({
+                        token: data.token,
+                        refresh_token: data.refresh_token,
+                    })
+                );
 
+                originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
                 return api(originalRequest);
             } catch (refreshError) {
                 console.error("Refresh token failed", refreshError);
 
-                // Optionally show toast
                 getStore().dispatch(
-                    showToast({ message: "Session expired. Please log in again.", type: "error" })
+                    showToast({
+                        message: "Session expired. Please log in again.",
+                        type: "error",
+                    })
                 );
 
                 getStore().dispatch(logout());
+
+                setTimeout(() => {
+                    window.location.href = "/user/signup";
+                }, 2000);
             }
+        }
+
+        switch (status) {
+            case HTTP_STATUS.BAD_REQUEST:
+                getStore().dispatch(
+                    showToast({
+                        message:
+                            error.response?.data?.message ||
+                            "Bad request — please check your input.",
+                        type: "error",
+                    })
+                );
+                break;
+
+            case HTTP_STATUS.NOT_FOUND:
+                getStore().dispatch(
+                    showToast({
+                        message: "Resource not found.",
+                        type: "error",
+                    })
+                );
+                break;
+
+            case HTTP_STATUS.SERVER_ERROR:
+                getStore().dispatch(
+                    showToast({
+                        message: "Server error — please try again later.",
+                        type: "error",
+                    })
+                );
+                break;
+
+            default:
+                getStore().dispatch(
+                    showToast({
+                        message:
+                            error.response?.data?.message ||
+                            `Unexpected error (${status}). Please try again.`,
+                        type: "error",
+                    })
+                );
         }
 
         return Promise.reject(error);

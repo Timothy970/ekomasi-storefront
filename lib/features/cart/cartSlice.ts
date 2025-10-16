@@ -10,7 +10,7 @@ interface CartSliceState {
 	cartId: string | null;
 	orders: Order[] | [],
 	order: Order | null,
-	pagination: Pagination| null;
+	pagination: Pagination | null;
 }
 
 const initialState: CartSliceState = {
@@ -35,8 +35,8 @@ export const cartSlice = createAppSlice({
 			state.message = "";
 		}),
 		getCartAsync: create.asyncThunk(
-			async (cart_id: string) => {
-				const response = await getCart(cart_id);
+			async ({ cart_id, location_id }: { cart_id: string, location_id?: number }) => {
+				const response = await getCart({ cart_id, location_id });
 				return response;
 			},
 			{

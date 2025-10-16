@@ -41,9 +41,9 @@ export default function ProductListingLayout({
     }
 
     return (
-        <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem] relative'>
+        <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem]'>
             <div className='flex flex-row lg:gap-x-[2rem]'>
-                <div className='lg:sticky lg:top-[10rem] hidden pt-[1rem] lg:block lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] pb-[12rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+                <div className='sticky lg:top-[10rem] hidden pt-[1rem] lg:block lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] pb-[12rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                     <CategoryFilter
                         setOpenFilterModal={setOpenFilterModal}
                         page="category"

@@ -50,7 +50,7 @@ export default function ProductDetail() {
       if (cart_id) {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync(cart_id))
+          dispatch(getCartAsync({ cart_id }))
         }, 1000)
       }
     }
@@ -82,7 +82,7 @@ export default function ProductDetail() {
       if (cartId) {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync(cartId))
+          dispatch(getCartAsync({ cart_id: cartId }))
         }, 1000)
       }
     }
@@ -122,37 +122,41 @@ export default function ProductDetail() {
 
               <span className='mt-[0.5rem] text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
 
-              {/* <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
+              <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 <ProductStars />
                 <span>3.5 stars</span>
                 <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
                 <span>10 Reviews</span>
-              </div> */}
+              </div>
               {
                 product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customeParser(product?.description)}</div>
               }
 
               {
-                product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
-                  <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
-                    <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
-                  </svg>
-                  <span className='text-base'>In Stock</span>
-                </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[1.5rem] bg-[#EDEDF2] py-[2rem]'>
-                  <span className='text-base'>Sold Out:</span>
-                  <span className='text-base'>This product is currently unavailable</span>
-                </div>
+                status !== "loading" && <>
+                  {
+                    product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
+                      <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+                        <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
+                      </svg>
+                      <span className='text-base'>In Stock</span>
+                    </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[1.5rem] bg-[#EDEDF2] py-[2rem]'>
+                      <span className='text-base'>Sold Out:</span>
+                      <span className='text-base'>This product is currently unavailable</span>
+                    </div>
+                  }
+                </>
               }
 
-              {/* <div className='flex items-center mt-[0.75rem]'>
+              <div className='flex items-center mt-[0.75rem]'>
                 <span className='mr-2 font-semibold'>Brand:</span>
                 <span className='font-bold underline'>Tommee Tipee</span>
-              </div> */}
+              </div>
 
-              {/* <div className='mt-[0.75rem]'>
+              <div className='mt-[0.75rem]'>
                 <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
                 <ProductColors />
-              </div> */}
+              </div>
 
               {
                 product && product && product?.stock_quantity > 0 && <div className='mt-[1.5rem]'>
