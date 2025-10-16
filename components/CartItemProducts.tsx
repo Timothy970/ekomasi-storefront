@@ -15,7 +15,7 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
 
     const refetchCart = (cart_id: string) => {
         if (params?.cart_id) {
-            dispatch(getCartAsync(cart_id))
+            dispatch(getCartAsync({cart_id}))
         } else {
             router.push("/")
         }
