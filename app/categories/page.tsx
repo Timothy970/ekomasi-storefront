@@ -65,10 +65,10 @@ export default function categories() {
     return (
         <Navigation>
             {
-                products && pagination && <ProductListingLayout
+                <ProductListingLayout
                     listingDescription={""}
                     listingName={"Categories"}
-                    products={products}
+                    products={products ?? []}
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}

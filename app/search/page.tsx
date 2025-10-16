@@ -65,10 +65,10 @@ export default function search() {
     return (
         <Navigation>
             {
-                products && pagination && <ProductListingLayout
+                <ProductListingLayout
                     listingDescription={""}
                     listingName={"Search"}
-                    products={products}
+                    products={products ?? []}
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}

@@ -14,20 +14,19 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
     useEffect(() => {
         const searchParams = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
+        const variants = searchParams.getAll("variant")
 
         const values: string[] = []
-        const names = searchParams.getAll("variant_name")
-        const vals = searchParams.getAll("variant_value")
-
-        names.forEach((name, idx) => {
-            if (name === variant.variant_type) {
-                const splitValues = vals[idx].split("---")
-                values.push(...splitValues)
+        variants.forEach(v => {
+            const [name, value] = v.split("--")
+            if (name === variant.variant_type && value) {
+                values.push(value)
             }
         })
 
         setCheckedValues(values)
     }, [query, variant.variant_type])
+
 
     const handleToggle = (value: string) => {
         const isChecked = checkedValues.includes(value)
@@ -43,23 +42,18 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
         const searchParams = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
 
-        const names = searchParams.getAll("variant_name")
-        const vals = searchParams.getAll("variant_value")
-
-        searchParams.delete("variant_name")
-        searchParams.delete("variant_value")
-
-        names.forEach((name, idx) => {
-            if (name !== variant.variant_type) {
-                searchParams.append("variant_name", name)
-                searchParams.append("variant_value", vals[idx])
-            }
+        const variants = searchParams.getAll("variant").filter(v => {
+            const [name] = v.split("--")
+            return name !== variant.variant_type
         })
 
-        if (newValues.length > 0) {
-            searchParams.append("variant_name", variant.variant_type)
-            searchParams.append("variant_value", newValues.join("---"))
-        }
+        searchParams.delete("variant")
+
+        variants.forEach(v => searchParams.append("variant", v))
+
+        newValues.forEach(v => {
+            searchParams.append("variant", `${variant.variant_type}--${v}`)
+        })
 
         const newQuery = "?" + searchParams.toString()
         setQuery(newQuery)
@@ -68,13 +62,14 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         router.replace(newUrl, { scroll: false })
     }
 
+
     return (
         <div className='flex flex-col gap-y-[1rem] mb-[1rem]'>
             <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center py-[1rem] min-h-[3rem] px-[0.5rem]'>
                 <h2 className='text-custom-black font-bold text-[0.875rem] lg:text-[1.125rem] leading-[1.6875rem] capitalize'>
                     {variant?.variant_type}
                 </h2>
-                
+
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
                     strokeLinejoin="round">

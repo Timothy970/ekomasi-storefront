@@ -87,10 +87,10 @@ export default function SubCategory() {
             }
 
             {
-                subCategory?.products && pagination && <ProductListingLayout
-                    listingDescription={customeParser(subCategory?.description)}
-                    listingName={subCategory?.name}
-                    products={subCategory?.products}
+                <ProductListingLayout
+                    listingDescription={subCategory?.description ? customeParser(subCategory?.description) : ""}
+                    listingName={subCategory?.name ?? ""}
+                    products={subCategory?.products ?? []}
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}

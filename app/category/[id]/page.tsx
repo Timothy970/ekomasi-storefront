@@ -77,11 +77,11 @@ export default function ProductCategory() {
                 category?.image_url && <CategoryBanner title={category?.name} description={category?.description} imageUrl={category?.image_url} />
             }
             {
-                category?.products && pagination && <ProductListingLayout
-                    listingDescription={customeParser(category?.description)}
-                    listingName={category?.name}
-                    products={category?.products}
-                    pagination={pagination}
+                <ProductListingLayout
+                    listingDescription={category?.description ? customeParser(category?.description) : ""}
+                    listingName={category?.name ?? ""}
+                    products={category?.products ?? []}
+                    pagination={pagination??null}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
                     crumbs={breadCrumb}

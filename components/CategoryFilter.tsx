@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState, useRef } from 'react'
 import Variant from './Variant'
 import { selectCategory } from '@/lib/features/navigation/navigationSlice'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import PriceRangeSlider from './PriceRangeSlider'
 import { Button } from './ui/button'
+import { useFilterQuery } from '@/app/ClientLayout'
 
 interface CategoryFilterParam {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,6 +20,9 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     const router = useRouter()
     const category = useAppSelector(selectCategory)
     const searchParams = useSearchParams()
+    const { query, setQuery } = useFilterQuery()
+    const pathname = usePathname()
+
     const [priceRange, setPriceRange] = useState<[number, number]>([
         Number(searchParams.get("minPrice")) || 0,
         Number(searchParams.get("maxPrice")) || 1000,
@@ -35,9 +39,15 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
 
         debounceRef.current = setTimeout(() => {
             const params = new URLSearchParams(window.location.search)
+            
             params.set("minPrice", values[0].toString())
             params.set("maxPrice", values[1].toString())
-            router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false })
+
+            const newQuery = "?" + params.toString()
+            setQuery(newQuery)
+
+            const newUrl = `${pathname}${newQuery}`
+            router.replace(newUrl, { scroll: false })
         }, 400)
     }
 
