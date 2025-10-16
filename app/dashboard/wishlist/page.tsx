@@ -20,9 +20,7 @@ export default function WishList() {
   const router = useRouter()
 
   useEffect(() => {
-    if (token) {
-      dispatch(getWishListsAsync(token))
-    } else {
+    if (!token) {
       router.replace("/")
     }
   }, [token, router])
