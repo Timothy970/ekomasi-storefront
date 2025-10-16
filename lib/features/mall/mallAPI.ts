@@ -39,7 +39,7 @@ export async function getSearchAutocomplete(query: string): Promise<SuggestionsR
 export async function getSearchResults(query: string): Promise<SearchResultsResponse> {
     try {
         const response = await axios.get<SearchResultsResponse>(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}products/search?${query}`
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}products/search${query}`
         );
 
         return response.data;
