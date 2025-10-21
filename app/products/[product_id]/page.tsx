@@ -10,7 +10,7 @@ import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
-import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectBuyNowCart, selectBuyNowCartId, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
+import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
@@ -29,7 +29,6 @@ export default function ProductDetail() {
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
   const [addToCartLoading, setAddToCartLoading] = useState(false)
-  const [buyNowLoading, setBuyNowLoading] = useState(true)
 
   useEffect(() => {
     if (product) {
@@ -204,12 +203,12 @@ export default function ProductDetail() {
 
               {
                 product && <Button
-                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading && buyNowLoading}
+                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading}
                   onClick={handleAddToCart}
                   className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
                 >
                   {
-                    addToCartLoading && buyNowLoading && <LoadingIndicator textColor="text-white" />
+                    addToCartLoading && <LoadingIndicator textColor="text-white" />
                   }
                   {isInCart ? "Update Cart Item" : "Add to Cart"}
                 </Button>
