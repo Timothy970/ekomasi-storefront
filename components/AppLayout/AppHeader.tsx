@@ -82,7 +82,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
             />
           </Link>
 
-          <div className='hidden lg:block'>
+          <div className='hidden lg:block mx-[1rem]'>
             <SearchInput placeHolderText="Search for products, brands and more" />
           </div>
 

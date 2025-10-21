@@ -68,7 +68,7 @@ export default function NowTrending({ title }: { title: string }) {
 
   return (
     <div className="w-full flex justify-center items-start mt-[2rem] lg:mt-[2.5rem] lg:mb-[2.5rem] pb-4">
-      <div className="max-w-[90rem] w-full bg-white">
+      <div className="max-w-[90rem] w-full">
         <div className="flex items-end justify-between gap-4 mb-[2rem]">
           <div>
             <h2 className="text-2xl lg:text-[2.25rem] font-bold leading-[2.1rem]">
@@ -79,11 +79,11 @@ export default function NowTrending({ title }: { title: string }) {
 
         <div
           ref={containerRef}
-          className="overflow-x-scroll scroll-smooth"
+          className="overflow-x-auto scroll-smooth hide-scrollbar"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           <motion.div
-            className="flex flex-nowrap"
+            className="flex flex-nowrap gap-[0.5rem]"
             animate={{ x: -(index * (cardW + GAP_PX)) }}
             transition={{ type: "spring", stiffness: 380, damping: 40 }}
           >
@@ -91,27 +91,29 @@ export default function NowTrending({ title }: { title: string }) {
               <Link key={i.toString()} href={`/products/${p.product_id}`}>
                 <div
                   ref={i === 0 ? cardRef : undefined}
-                  className="shrink-0 overflow-hidden mr-[1.5rem]"
+                  className="shrink-0 overflow-hidden bg-white w-[10rem] sm:w-[13rem] md:w-[16rem] mr-[1rem]"
                 >
-                  <div className="h-[13.5rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem] w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem] overflow-hidden relative">
+                  <div className="h-[13.5rem] sm:h-[14rem] md:h-[15rem] lg:h-[16rem] overflow-hidden relative">
                     <Image
                       alt={"trending"}
                       fill
                       src={p.urls[0]?.url}
-                      className="product-card rounded-md"
+                      className="product-card rounded-t-md"
                       unoptimized
                       priority
                       style={{ objectFit: "cover" }}
                     />
                   </div>
 
-                  <div className="pt-4 w-[13.5rem] sm:w-[20rem] md:w-[20rem] lg:w-[22rem]">
-                    <h3 className="truncate text-[#666] font-roboto text-[0.875rem] font-semibold leading-6 capitalize">
+                  <div className="pt-4 ">
+                    <h3 className="text-[0.875rem] lg:text-base font-bold lg:font-light leading-[1.5rem]">
                       {p.category_name}
                     </h3>
-                    <div className="text-custom-black font-[600] text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
+
+                    <div className="text-custom-black font-[600] text-[0.875rem] lg:text-base leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
                       {customeParser(p.name)}
                     </div>
+
                     <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
                       {"KES " +
                         new Intl.NumberFormat("en-KE", {
