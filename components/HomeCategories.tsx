@@ -133,7 +133,7 @@ export default function HomeCategories() {
         </div>
 
         <div className="mt-[5rem] pb-[1rem] relative">
-          <div className="absolute -right-[1rem] lg:-right-[2rem] top-2 w-full flex items-start justify-end h-[50%]">
+          <div className="absolute -right-[1rem] z-50 pointer-events-none lg:-right-[2rem] top-2 w-full flex items-start justify-end h-[50%]">
             <svg className="mt-[4.18rem]" xmlns="http://www.w3.org/2000/svg" width="70" height="66" viewBox="0 0 70 66" fill="none">
               <path d="M14.6907 63.1617C15.086 63.1531 15.5705 63.1398 16.1344 63.1202C17.8463 63.0604 20.288 62.9399 23.193 62.6951C29.0152 62.2043 36.6452 61.2196 43.9772 59.2563C51.3559 57.2805 58.1932 54.3747 62.6427 50.1865C64.8427 48.1155 66.4261 45.7626 67.2387 43.0735C68.0495 40.3909 68.1321 37.2468 67.1389 33.5257C65.863 28.7454 63.4983 25.9801 60.7847 24.3812C58.0118 22.7475 54.6717 22.215 51.3096 22.3062C47.9577 22.397 44.7297 23.1037 42.315 23.8033C41.1141 24.1513 40.1296 24.4929 39.4504 24.7453C39.1113 24.8714 38.849 24.9748 38.6751 25.0453C38.5885 25.0804 38.5239 25.1074 38.4826 25.1248C38.462 25.1334 38.4464 25.1402 38.4377 25.1439C38.4339 25.1456 38.4313 25.1469 38.4301 25.1474L38.4292 25.1469L35.9484 26.227L35.6451 23.5395L35.6456 23.5387C35.6454 23.5373 35.645 23.5337 35.6444 23.529L35.6106 23.2749C35.5849 23.089 35.5443 22.81 35.4841 22.4531C35.3636 21.7386 35.1673 20.7151 34.8689 19.501C34.269 17.0598 33.2697 13.9109 31.6739 10.9627C30.0731 8.0054 27.942 5.37929 25.1402 3.79512C22.398 2.24473 18.8182 1.57933 14.0348 2.86603C10.7409 3.75208 8.36424 5.29291 6.65403 7.25934C4.93184 9.23964 3.79913 11.7529 3.16666 14.7C1.88968 20.6509 2.71223 28.0868 4.50348 35.5291C6.28385 42.9261 8.96615 50.1126 11.2152 55.4685C12.3377 58.1415 13.3479 60.3482 14.0757 61.8831C14.3128 62.3831 14.5196 62.8117 14.6907 63.1617Z" stroke="#ADD1CB" strokeWidth="4" />
             </svg>
@@ -142,11 +142,11 @@ export default function HomeCategories() {
             </svg>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[0.938rem] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-stretch">
+          <div className="grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[0.938rem] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 items-stretch">
             {categories?.slice(0, 10)?.map((category) => (
               <Link key={category.id} href={`/category/${category?.id}`}>
                 <div className="overflow-hidden flex flex-col justify-center items-center">
-                  <div className="relative w-full h-auto min-h-[15.5rem] sm:min-h-[21rem] md:min-h-[21.875rem]">
+                  <div className="relative w-full h-auto min-h-[18rem] sm:min-h-[18rem] md:min-h-[20rem]">
                     <Image
                       src={category?.image_url}
                       alt={category?.name}
