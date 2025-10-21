@@ -7,7 +7,9 @@ interface CartSliceState {
 	message: string;
 	success: boolean;
 	cart: CartData | null;
+	buyNowCart: CartData | null;
 	cartId: string | null;
+	buyNowcartId: string | null;
 	orders: Order[] | [],
 	order: Order | null,
 	pagination: Pagination | null;
@@ -18,6 +20,8 @@ const initialState: CartSliceState = {
 	message: "",
 	success: false,
 	cart: null,
+	buyNowCart: null,
+	buyNowcartId: null,
 	cartId: null,
 	orders: [],
 	order: null,
@@ -61,6 +65,33 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		getBuyNowCartAsync: create.asyncThunk(
+			async ({ cart_id, location_id }: { cart_id: string, location_id?: number }) => {
+				const response = await getCart({ cart_id, location_id });
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data) {
+						state.success = true;
+						state.buyNowCart = action.payload.data
+					} else {
+						state.message = action.payload?.message || "Failed to fetch buy now cart";
+						state.success = false;
+						state.buyNowCart = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 		addToCartAsync: create.asyncThunk(
 			async ({ product_id, quantity, cart_id }: { product_id: string, quantity: number, cart_id: string }) => {
 				const response = await addToCart({ product_id, quantity, cart_id });
@@ -74,8 +105,35 @@ export const cartSlice = createAppSlice({
 					if (action.payload?.status_code === 200) {
 						state.success = true;
 					} else {
-						state.message = action.payload?.message || "Failed to fetch variants";
+						state.message = action.payload?.message;
 						state.success = false;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
+		addToBuyNowCartAsync: create.asyncThunk(
+			async ({ product_id, quantity, cart_id }: { product_id: string, quantity: number, cart_id: string }) => {
+				const response = await addToCart({ product_id, quantity, cart_id });
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.buyNowCart = action.payload.data
+					} else {
+						state.message = action.payload?.message;
+						state.success = false;
+						state.buyNowCart = null
 					}
 					state.status = "idle";
 				},
@@ -105,9 +163,41 @@ export const cartSlice = createAppSlice({
 						state.success = true;
 						state.cartId = action.payload.data.cart_id
 					} else {
-						state.message = action.payload?.message || "Failed to fetch variants";
+						state.message = action.payload?.message;
 						state.success = false;
 						state.cartId = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
+		createBuyNowCartAsync: create.asyncThunk(
+			async ({ product_id, quantity, createAndAddBuyNowCart }: { product_id: string, quantity: number, createAndAddBuyNowCart: (cart_id: string) => void }) => {
+				const response = await createCart({ product_id, quantity });
+
+				if (response.data?.cart_id) {
+					createAndAddBuyNowCart(response.data?.cart_id)
+				}
+
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data.cart_id) {
+						state.success = true;
+						state.buyNowcartId = action.payload.data.cart_id
+					} else {
+						state.message = action.payload?.message;
+						state.success = false;
+						state.buyNowcartId = null
 					}
 					state.status = "idle";
 				},
@@ -185,7 +275,9 @@ export const cartSlice = createAppSlice({
 					if (action.payload?.status_code === 201 && action.payload.data.order_id) {
 						state.success = true;
 						state.cart = null
+						state.buyNowCart = null
 						state.cartId = null
+						state.buyNowcartId = null
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
@@ -319,6 +411,8 @@ export const cartSlice = createAppSlice({
 	selectors: {
 		selectStatus: (state: CartSliceState) => state.status,
 		selectCart: (state: CartSliceState) => state.cart,
+		selectBuyNowCart: (state: CartSliceState) => state.buyNowCart,
+		selectBuyNowCartId: (state: CartSliceState) => state.buyNowcartId,
 		selectUserOrders: (state: CartSliceState) => state.orders,
 		selectUserOrder: (state: CartSliceState) => state.order,
 		selectCartId: (state: CartSliceState) => state.cartId,
@@ -328,6 +422,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, addToCartAsync, createCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync } = cartSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectCart, selectCartId, selectUserOrders, selectUserOrder } = cartSlice.selectors;
+export const { resetSuccess, resetMessage, getCartAsync, getBuyNowCartAsync, addToCartAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync } = cartSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

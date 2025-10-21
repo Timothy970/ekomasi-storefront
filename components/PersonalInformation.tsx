@@ -8,13 +8,13 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
-import { FormData, OrderItem } from '@/lib/features/types'
-import { createOrderAsync, selectCart, selectStatus } from '@/lib/features/cart/cartSlice'
+import { CartData, FormData, OrderItem } from '@/lib/features/types'
+import { createOrderAsync, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from './LoadingIndicator'
 
-export default function PersonalInformation({ page }: { page: string }) {
+export default function PersonalInformation({ page, cart }: { page: string, cart: CartData }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -37,7 +37,6 @@ export default function PersonalInformation({ page }: { page: string }) {
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
     const [isFormValid, setIsFormValid] = useState(false);
     const profile = useAppSelector(selectUserProfile)
-    const cart = useAppSelector(selectCart)
     const dispatch = useAppDispatch()
     const router = useRouter()
     const status = useAppSelector(selectStatus)
@@ -132,9 +131,16 @@ export default function PersonalInformation({ page }: { page: string }) {
             }
         }
 
-        if ((!form.email || form.email.trim() === "") && (!form.phone || form.phone.trim() === "")) {
+        if ((!form.email || form.email.trim() === "") && (!form.paymentPhone || form.paymentPhone.trim() === "")) {
             triggerToast("Either Email or Phone Number is required.", "error");
             return false;
+        }
+
+        if (form?.paymentPhone && form?.paymentPhone.trim() !== "") {
+            if (!form.paymentPhone.trim().startsWith("254")) {
+                triggerToast("Phone number must start with 254.", "error");
+                return false;
+            }
         }
 
         return true;
@@ -482,7 +488,7 @@ export default function PersonalInformation({ page }: { page: string }) {
                             {
                                 status == "loading" && <LoadingIndicator textColor="text-white" />
                             }
-                            Pay now
+                            Place Order
                         </Button>
                     </div>
                 </div>
