@@ -5,16 +5,21 @@ import PersonalInformation from '@/components/PersonalInformation'
 import React from 'react'
 
 export default function GuestCheckout() {
+  const cart = null
+
+  if (!cart) {
+    return <></>
+  }
 
   return (
     <Navigation>
       <div className='w-full px-[1rem] lg:px-[3rem] mx-auto max-w-[90rem]'>
         <div className='w-full flex flex-col md:flex-row-reverse md:gap-x-[2rem] mt-[2] lg:mt-[2.5rem]'>
           <div className='w-full'>
-            <CheckoutCartSummary />
+            <CheckoutCartSummary cart={cart} />
           </div>
 
-          <PersonalInformation page='guest' />
+          <PersonalInformation cart={cart} page='guest' />
         </div>
       </div>
     </Navigation>
