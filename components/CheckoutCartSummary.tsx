@@ -2,11 +2,9 @@ import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import ChekcoutCartItems from './CheckoutCartItems'
-import { useAppSelector } from '@/lib/hooks'
-import { selectCart } from '@/lib/features/cart/cartSlice'
+import { CartData } from '@/lib/features/types'
 
-export default function CheckoutCartSummary() {
-    const cart = useAppSelector(selectCart)
+export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
 
     return (
         <div className='flex flex-col w-full items-center justify-center'>

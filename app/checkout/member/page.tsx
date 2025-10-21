@@ -2,19 +2,28 @@
 import CheckoutCartSummary from '@/components/CheckoutCartSummary'
 import Navigation from '@/components/Navigation'
 import PersonalInformation from '@/components/PersonalInformation'
+import { selectCart } from '@/lib/features/cart/cartSlice'
+import { useAppSelector } from '@/lib/hooks'
 import React from 'react'
 
 export default function MemberCheckout() {
- 
+  const cart = useAppSelector(selectCart)
+
+  if (!cart) {
+    return <></>
+  }
+
   return (
     <Navigation>
       <div className='w-full px-[1rem] lg:px-[3rem] mx-auto max-w-[90rem]'>
         <div className='w-full flex flex-col md:flex-row-reverse md:gap-x-[2rem] mt-[2] lg:mt-[2.5rem]'>
           <div className='w-full'>
-            <CheckoutCartSummary />
+            <CheckoutCartSummary cart={cart} />
           </div>
 
-          <PersonalInformation page="member" />
+          {
+            cart && <PersonalInformation page="member" cart={cart} />
+          }
         </div>
       </div>
     </Navigation>

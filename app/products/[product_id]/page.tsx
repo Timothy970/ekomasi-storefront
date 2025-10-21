@@ -1,7 +1,7 @@
 "use client"
 import Navigation from '@/components/Navigation'
 import ProductColors from '@/components/ProductColors'
-import ProductQuantitySelect from '@/components/ProductQuantitySelect'
+import ProductQuantity from '@/components/ProductQuantity'
 import ProductStars from '@/components/ProductStars'
 import { Button } from '@/components/ui/button'
 import React, { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
-import { addToCartAsync, createCartAsync, getCartAsync, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
+import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
@@ -29,7 +29,6 @@ export default function ProductDetail() {
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
   const [addToCartLoading, setAddToCartLoading] = useState(false)
-  const [buyNowLoading, setBuyNowLoading] = useState(true)
 
   useEffect(() => {
     if (product) {
@@ -51,6 +50,20 @@ export default function ProductDetail() {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
           dispatch(getCartAsync({ cart_id }))
+        }, 1000)
+      }
+    }
+  }
+
+  const createAndAddBuyNowCart = (cart_id: string) => {
+    if (product?.product_id && cart_id) {
+      dispatch(addToBuyNowCartAsync({ product_id: product?.product_id, quantity, cart_id }))
+
+      if (cart_id) {
+        setTimeout(() => {
+          triggerToast("Cart updated successfully!", "success");
+          dispatch(getBuyNowCartAsync({ cart_id }))
+          router.push("/checkout/member/buy-now")
         }, 1000)
       }
     }
@@ -91,15 +104,30 @@ export default function ProductDetail() {
     }, 1000)
   }
 
-  const handleBuyNow = async () => {
-    setBuyNowLoading(true)
+  const handleAddToBuyNowCart = async () => {
+    if (product?.product_id && quantity > 0) {
+      dispatch(
+        createBuyNowCartAsync(
+          {
+            product_id: product.product_id,
+            quantity,
+            createAndAddBuyNowCart,
+          }
+        )
+      )
+    } else {
+      triggerToast("Please select a valid quantity", 'error');
+    }
+  }
 
-    handleAddToCart().then(() => {
-      setBuyNowLoading(false)
-      if (cartId) {
-        router.push(`/cart/${cartId}`)
-      }
-    })
+  useEffect(() => {
+    if (!product) {
+      router.replace("/")
+    }
+  }, [product])
+
+  if (!product) {
+    return <></>
   }
 
   return (
@@ -132,21 +160,25 @@ export default function ProductDetail() {
                 product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customeParser(product?.description)}</div>
               }
 
-              {
-                status !== "loading" && <>
-                  {
-                    product && product?.stock_quantity && product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem] mt-[1.5rem]'>
-                      <svg xmlns="http://www.w3.org/1000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+              <div className='mt-[1.5rem] min-h-[2.5rem]'>
+                {status !== "loading" ? (
+                  product && product?.stock_quantity && product?.stock_quantity > 0 ? (
+                    <div className='flex items-center gap-x-[0.5rem]'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
                         <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
                       </svg>
                       <span className='text-base'>In Stock</span>
-                    </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] mt-[1.5rem] bg-[#EDEDF2] py-[2rem]'>
+                    </div>
+                  ) : (
+                    <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
                       <span className='text-base'>Sold Out:</span>
                       <span className='text-base'>This product is currently unavailable</span>
                     </div>
-                  }
-                </>
-              }
+                  )
+                ) : (
+                  <div className='bg-gray-100 animate-pulse h-full w-full'></div>
+                )}
+              </div>
 
               <div className='flex items-center mt-[0.75rem]'>
                 <span className='mr-2 font-semibold'>Brand:</span>
@@ -161,29 +193,29 @@ export default function ProductDetail() {
               {
                 product && product && product?.stock_quantity > 0 && <div className='mt-[1.5rem]'>
                   <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
-                  <ProductQuantitySelect
+                  <ProductQuantity
                     setQuantity={setQuantity}
                     quantity={quantity}
+                    handleAddToCart={handleAddToCart}
                   />
                 </div>
               }
 
               {
                 product && <Button
-                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading && buyNowLoading}
+                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading}
                   onClick={handleAddToCart}
                   className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
                 >
                   {
-                    addToCartLoading && buyNowLoading && <LoadingIndicator textColor="text-white" />
+                    addToCartLoading && <LoadingIndicator textColor="text-white" />
                   }
                   {isInCart ? "Update Cart Item" : "Add to Cart"}
                 </Button>
               }
 
               <Button
-                disabled={cartId ? false : true}
-                onClick={handleBuyNow}
+                onClick={handleAddToBuyNowCart}
                 className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'
               >
                 Buy Now

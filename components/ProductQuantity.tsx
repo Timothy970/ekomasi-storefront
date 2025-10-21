@@ -6,24 +6,28 @@ import { Minus, Plus } from "lucide-react"
 import { useAppSelector } from "@/lib/hooks"
 import { selectProduct } from "@/lib/features/navigation/navigationSlice"
 
-type ProductQuantitySelectProps = {
+type ProductQuantityProps = {
   quantity: number
   setQuantity: React.Dispatch<React.SetStateAction<number>>
+  handleAddToCart: () => void
 }
 
-const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
+const ProductQuantity: React.FC<ProductQuantityProps> = ({
   quantity,
   setQuantity,
+  handleAddToCart
 }) => {
   const product = useAppSelector(selectProduct)
   const maxQuantity = product?.stock_quantity ?? 0
 
-  const handleIncrease = () => {
+  const handleIncrease = async () => {
     setQuantity((prev) => Math.min(prev + 1, maxQuantity))
+    handleAddToCart()
   }
 
-  const handleDecrease = () => {
+  const handleDecrease = async () => {
     setQuantity((prev) => Math.max(prev - 1, 1))
+    handleAddToCart()
   }
 
   return (
@@ -32,7 +36,7 @@ const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-[2rem] border border-[rgba(0,0,0,0.40)]"
+          className="h-[2rem] border border-[rgba(0,0,0,0.40)] cursor-pointer"
           onClick={handleDecrease}
           disabled={quantity <= 1}
         >
@@ -44,7 +48,7 @@ const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-[2rem] border border-[rgba(0,0,0,0.40)]"
+          className="h-[2rem] border border-[rgba(0,0,0,0.40)] cursor-pointer"
           onClick={handleIncrease}
           disabled={quantity >= maxQuantity}
         >
@@ -55,4 +59,4 @@ const ProductQuantitySelect: React.FC<ProductQuantitySelectProps> = ({
   )
 }
 
-export default ProductQuantitySelect
+export default ProductQuantity
