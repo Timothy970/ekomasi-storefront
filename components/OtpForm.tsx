@@ -1,9 +1,9 @@
 "use client"
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { requestOtpAsync, selectMessage, selectPhoneOrEmailValue, selectStatus, verifyOtpAsync } from '@/lib/features/user/userSlice';
+import { requestOtpAsync, resetStatus, selectMessage, selectOtpResendExpiry, selectPhoneOrEmailValue, selectStatus, setOtpResendExpiry, verifyOtpAsync } from '@/lib/features/user/userSlice';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
 import LoadingIndicator from './LoadingIndicator';
@@ -18,6 +18,9 @@ export default function OtpForm() {
     const router = useRouter();
     const searchParams = useSearchParams()
     const status = useAppSelector(selectStatus)
+    const [resendAvailable, setResendAvailable] = useState(true)
+    const [secondsLeft, setSecondsLeft] = useState(0)
+    const otpResendExpiry = useAppSelector(selectOtpResendExpiry)
     const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     const isPhone = (value: string) => /^\+?[0-9]{7,15}$/.test(value);
 
@@ -35,7 +38,6 @@ export default function OtpForm() {
             return;
         }
 
-        // If user typed multiple digits (mobile keyboards) spread across fields
         const digits = val.split("");
         const next = [...code];
         let i = idx;
@@ -50,9 +52,8 @@ export default function OtpForm() {
 
     const handleKeyDown = (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Backspace") {
-            if (code[idx]) return; // let default clear when not empty
+            if (code[idx]) return;
             if (idx > 0) {
-                // move left and clear previous
                 const prev = [...code];
                 prev[idx - 1] = "";
                 setCode(prev);
@@ -60,15 +61,56 @@ export default function OtpForm() {
                 e.preventDefault();
             }
         }
+
         if (e.key === "ArrowLeft" && idx > 0) {
             focusAt(idx - 1);
             e.preventDefault();
         }
+
         if (e.key === "ArrowRight" && idx < length - 1) {
             focusAt(idx + 1);
             e.preventDefault();
         }
+
+        if (e.key === "Enter") {
+            const otpValue = code.join("").trim();
+
+            if (otpValue.length === length) {
+                handleSubmit(e as any);
+            } else {
+                triggerToast(`Please enter all ${length} digits of the code`, "error");
+                const firstEmpty = code.findIndex((c) => c === "");
+                if (firstEmpty !== -1) focusAt(firstEmpty);
+            }
+
+            e.preventDefault();
+        }
     };
+
+    useEffect(() => {
+        if (!otpResendExpiry) {
+            setResendAvailable(true)
+            setSecondsLeft(0)
+            return
+        }
+
+        const checkResend = () => {
+            const now = Date.now()
+            if (now >= otpResendExpiry) {
+                setResendAvailable(true)
+                setSecondsLeft(0)
+                dispatch(setOtpResendExpiry(null))
+            } else {
+                setResendAvailable(false)
+                setSecondsLeft(Math.ceil((otpResendExpiry - now) / 1000))
+            }
+        }
+
+        checkResend()
+        const interval = setInterval(checkResend, 1000)
+
+        return () => clearInterval(interval)
+    }, [otpResendExpiry, dispatch])
 
     const handlePaste = (idx: number) => (e: React.ClipboardEvent<HTMLInputElement>) => {
         const pasted = e.clipboardData.getData("text").replace(/\D/g, "");
@@ -96,12 +138,18 @@ export default function OtpForm() {
     function handleRequestOtp(e: React.FormEvent) {
         e.preventDefault();
 
+        if (!resendAvailable) {
+            triggerToast("Wait for 60 minutes to elapse to request a new OTP!", "error")
+            return
+        }
+
         if (emailOrPhone) {
             if (checkType(emailOrPhone) == "email") {
                 dispatch(requestOtpAsync({ email: emailOrPhone }))
+                dispatch(setOtpResendExpiry(Date.now() + 60000))
             } else if (checkType(emailOrPhone) == "phone") {
                 dispatch(requestOtpAsync({ phone_number: emailOrPhone }))
-
+                dispatch(setOtpResendExpiry(Date.now() + 60000))
             } else {
                 triggerToast("No valid phone or email was found!", "error")
             }
@@ -137,27 +185,41 @@ export default function OtpForm() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        const phoneRegex = /^[0-9]{7,15}$/ // simple phone check: digits only, 7–15 chars
+        const otpValue = value?.trim();
 
-        if (emailRegex.test(emailOrPhone) && value) {
-            dispatch(verifyOtpAsync({ email: emailOrPhone, otp: value }))
+        if (otpValue?.length !== length) {
+            triggerToast(`Please enter all ${length} digits of the code`, "error");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{7,15}$/; // simple phone check
+
+        if (emailRegex.test(emailOrPhone)) {
+            dispatch(verifyOtpAsync({ email: emailOrPhone, otp: otpValue }))
                 .unwrap()
-                .then((res: { message: string; }) => {
+                .then((res: { message: string }) => {
                     handleToastRedirect(res?.message, "/");
+                    dispatch(resetStatus())
                 })
                 .catch(() => {
                     handleToastRedirect("Invalid or expired OTP", "");
+                    dispatch(resetStatus())
+                    dispatch(resetStatus())
                 });
-        } else if (phoneRegex.test(emailOrPhone) && value) {
-            dispatch(verifyOtpAsync({ phone_number: emailOrPhone, otp: value }))
+        } else if (phoneRegex.test(emailOrPhone)) {
+            dispatch(verifyOtpAsync({ phone_number: emailOrPhone, otp: otpValue }))
                 .unwrap()
-                .then((res: { message: string; }) => {
+                .then((res: { message: string }) => {
                     handleToastRedirect(res?.message, "/");
+                    dispatch(resetStatus())
                 })
                 .catch(() => {
                     handleToastRedirect("Invalid or expired OTP", "");
+                    dispatch(resetStatus())
                 });
+        } else {
+            triggerToast("Invalid phone or email format", "error");
         }
     };
 
@@ -187,10 +249,25 @@ export default function OtpForm() {
             </div>
 
             <div className='mt-[1.5rem]'>
-                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>You didn’t receive any code? <button onClick={handleRequestOtp} className='underline h-[2rem]'>Resend Code</button></p>
+                <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>
+                    You didn’t receive any code? {" "}
+                    <button
+                        style={{ cursor: !resendAvailable ? 'not-allowed' : 'pointer' }}
+                        disabled={!resendAvailable}
+                        onClick={handleRequestOtp}
+                        className='underline h-[2rem]'
+                    >
+                        {resendAvailable ? 'Resend Code' : `Resend in ${secondsLeft}s`}
+                    </button>
+                </p>
             </div>
 
-            <Button disabled={status === "loading"} onClick={handleSubmit} variant="outline" className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'>
+            <Button
+                disabled={status === "loading" || !resendAvailable}
+                onClick={handleSubmit}
+                variant="outline"
+                className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'
+            >
                 {
                     status == "loading" && <LoadingIndicator textColor="text-white" />
                 }

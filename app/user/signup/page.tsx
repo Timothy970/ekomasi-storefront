@@ -25,15 +25,16 @@ export default function SignUp() {
         e.preventDefault()
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        const phoneRegex = /^[0-9]{7,15}$/ // simple phone check: digits only, 7–15 chars
+        const phoneRegex = /^[0-9]{12}$/
 
         if (emailRegex.test(phoneOrEmail)) {
             setError("")
             dispatch(signUpUserAsync({ email: phoneOrEmail }))
         } else if (phoneRegex.test(phoneOrEmail)) {
+            setError("")
             dispatch(signUpUserAsync({ phone_number: phoneOrEmail }))
         } else {
-            setError("Please enter a valid email or phone number")
+            setError("Please enter a valid email or 12-digit phone number (e.g. 254XXXXXXXXX)")
         }
     }
 
@@ -57,7 +58,8 @@ export default function SignUp() {
         }
 
         if (message === "User with this email already exists") {
-            router.push("/user/login");
+            triggerToast(message, "error");
+            dispatch(resetMessage())
         }
     }, [message, router])
 
@@ -105,13 +107,36 @@ export default function SignUp() {
                             <Input
                                 value={phoneOrEmail}
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
+                                onBlur={() => {
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                                    let value = phoneOrEmail.trim()
+
+                                    if (!emailRegex.test(value)) {
+                                        value = value.replace(/\D/g, '')
+
+                                        if (value.startsWith('0')) {
+                                            value = value.substring(1)
+                                        }
+
+                                        if (value && !value.startsWith('254')) {
+                                            value = '254' + value
+                                        }
+
+                                        if (value.length > 12) {
+                                            value = value.slice(0, 12)
+                                        }
+
+                                        setPhoneOrEmail(value)
+                                    }
+                                }}
                                 type='text'
                                 placeholder='Enter phone or email'
-                                className={`mt-[2rem] p-[0.75rem] font-poppins text-[0.875rem]  font-normal leading-[195%] 
+                                className={`mt-[2rem] p-[0.75rem] font-poppins text-[0.875rem] font-normal leading-[195%]
                                     text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
                                     ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                 `}
                             />
+
                             {error && (
                                 <p className="mt-2 text-sm text-red-500 font-poppins">{error}</p>
                             )}

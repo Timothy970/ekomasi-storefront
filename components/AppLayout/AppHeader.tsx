@@ -109,8 +109,8 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
                     </div>
                   }
                 </div>
-              </Link> : <div className='flex justify-center items-center relative mr-[0.5rem]'>
-                <Icons.HeartIcon onClick={handleIcons} />
+              </Link> : <div onClick={handleIcons} className='flex justify-center items-center relative mr-[0.5rem]'>
+                <Icons.HeartIcon />
 
                 <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                   <span className='text-xs'>0</span>
