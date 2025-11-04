@@ -19,7 +19,7 @@ export default function GuestCheckout() {
             <CheckoutCartSummary cart={cart} />
           </div>
 
-          <PersonalInformation cart={cart} page='guest' />
+          <PersonalInformation cart={cart} page='guest' isBuyNow={false} />
         </div>
       </div>
     </Navigation>
