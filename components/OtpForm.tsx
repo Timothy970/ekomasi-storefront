@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { requestOtpAsync, resetStatus, selectMessage, selectOtpResendExpiry, selectPhoneOrEmailValue, selectStatus, setOtpResendExpiry, verifyOtpAsync } from '@/lib/features/user/userSlice';
+import { requestOtpAsync, resetStatus, selectMessage, selectOtpResendExpiry, selectPhoneOrEmailValue, selectStatus, selectUserToken, setOtpResendExpiry, verifyOtpAsync } from '@/lib/features/user/userSlice';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
 import LoadingIndicator from './LoadingIndicator';
@@ -23,6 +23,7 @@ export default function OtpForm() {
     const otpResendExpiry = useAppSelector(selectOtpResendExpiry)
     const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     const isPhone = (value: string) => /^\+?[0-9]{7,15}$/.test(value);
+    const token = useAppSelector(selectUserToken)
 
     const focusAt = (idx: number) => {
         const el = inputsRef.current[idx];
@@ -86,6 +87,12 @@ export default function OtpForm() {
             e.preventDefault();
         }
     };
+
+    useEffect(() => {
+        if (token) {
+            router.replace('/');
+        }
+    }, [token, router]);
 
     useEffect(() => {
         if (!otpResendExpiry) {
@@ -170,9 +177,9 @@ export default function OtpForm() {
                 const redirect = searchParams.get("redirect")
 
                 if (redirect) {
-                    router.push(`/checkout/member`);
+                    router.replace(`/checkout/member`);
                 } else {
-                    router.push(successRedirect);
+                    router.replace(successRedirect);
                 }
             }
         } else {
@@ -263,7 +270,7 @@ export default function OtpForm() {
             </div>
 
             <Button
-                disabled={status === "loading" || !resendAvailable}
+                disabled={status === "loading"}
                 onClick={handleSubmit}
                 variant="outline"
                 className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'

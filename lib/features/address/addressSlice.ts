@@ -120,7 +120,7 @@ export const addressSlice = createAppSlice({
 					state.status = "loading"
 				},
 				fulfilled: (state, action) => {
-					if (action.payload?.status_code === 201) {
+					if (action.payload?.status_code === 200) {
 						state.success = true
 						state.message = action.payload?.message
 						state.address = action.payload.data
@@ -139,14 +139,13 @@ export const addressSlice = createAppSlice({
 		),
 	}),
 	selectors: {
-		selectAddress: (state: addressSliceState) => state.address || null,
+		selectAddress: (state: addressSliceState) => state.address,
 		selectStatus: (state: addressSliceState) => state.status,
 		selectSuccess: (state: addressSliceState) => state.success,
 		selectMessage: (state: addressSliceState) => state.message,
 	},
 });
 
-// Export actions and selectors
-export const { getUserAddressAsync, createUserAddressAsync, updateUserAddressAsync, deleteUserAddressAsync } = addressSlice.actions; // Export actions
+export const { getUserAddressAsync, createUserAddressAsync, updateUserAddressAsync, deleteUserAddressAsync } = addressSlice.actions;
 export const { selectAddress, selectStatus, selectSuccess, selectMessage } = addressSlice.selectors;
 export const addressReducer = addressSlice.reducer;
