@@ -8,7 +8,6 @@ import React from 'react'
 
 export default function buynow() {
   const buyNowCart = useAppSelector(selectBuyNowCart)
-  console.log(buyNowCart,'buyNowCart')
 
   if (!buyNowCart) {
     return <></>

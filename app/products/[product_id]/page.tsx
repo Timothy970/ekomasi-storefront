@@ -56,18 +56,16 @@ export default function ProductDetail() {
   }
 
   const createAndAddBuyNowCart = (cart_id: string) => {
-    if (product?.product_id && cart_id) {
-      dispatch(addToBuyNowCartAsync({ product_id: product?.product_id, quantity, cart_id }))
+    if (!product?.product_id || !cart_id) return;
 
-      if (cart_id) {
-        setTimeout(() => {
-          triggerToast("Cart updated successfully!", "success");
-          dispatch(getBuyNowCartAsync({ cart_id }))
-          router.push("/checkout/member/buy-now")
-        }, 1000)
-      }
-    }
-  }
+    dispatch(addToBuyNowCartAsync({ product_id: product.product_id, quantity, cart_id }));
+
+    setTimeout(() => {
+      triggerToast("Cart updated successfully!", "success");
+      dispatch(getBuyNowCartAsync({ cart_id }));
+      router.push("/checkout/member/buy-now");
+    }, 1000);
+  };
 
   useEffect(() => {
     if (params?.product_id) {
