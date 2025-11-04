@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Address, MyAddress, UserAddressPayload } from "../types";
+import { MyAddress, UserAddressPayload } from "../types";
 import { deleteUserAddress, editUserAddress, getUserAddress, postUserAddress } from "./addressAPI";
 
 interface addressSliceState {
