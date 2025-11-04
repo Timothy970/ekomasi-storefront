@@ -2,6 +2,7 @@ import { selectUserOrder } from '@/lib/features/cart/cartSlice'
 import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import React from 'react'
+import { format, addDays } from "date-fns";
 
 export default function OrderDetails() {
   const order = useAppSelector(selectUserOrder)
@@ -11,8 +12,21 @@ export default function OrderDetails() {
       <div className='w-full md:w-[50%]'>
         <h2 className='font-bold text-[1.5rem] mt-[1rem]'>Order Summary</h2>
 
-        {/* <p className='text-[1.125rem] mt-[0.5rem]'>Arrives Thu, May 08 - Mon, May 12</p> */}
+        <p className="text-[1.125rem] mt-[0.5rem]">
+          {(() => {
+            if (!order?.created_at) return "Arrives soon";
 
+            const createdDate = new Date(order.created_at);
+            const startDate = addDays(createdDate, 10);
+            const endDate = addDays(createdDate, 14);
+
+            const formattedStart = format(startDate, "EEE, MMM dd");
+            const formattedEnd = format(endDate, "EEE, MMM dd");
+
+            return `Arrives ${formattedStart} - ${formattedEnd}`;
+          })()}
+        </p>
+        
         <div className='w-full flex flex-col gap-y-[0.5rem] mt-[1.5rem]'>
           {
             order?.items?.map((item, index) => {
@@ -58,14 +72,18 @@ export default function OrderDetails() {
             <h3 className="font-bold">Address</h3>
 
             <div className="flex flex-col w-full justify-end text-end items-end">
-              {order?.user_address?.[0] && (
-                <div className="mb-2 text-[0.875rem] flex flex-col gap-y-[0.5rem] w-full">
-                  <span>{order.user_address[0].address}</span>
-                  <span>{order.user_address[0].appartment}, {order.user_address[0].address_id}</span>
-                  <span>{order.user_address[0].city}, {order.user_address[0].country}</span>
-                  <span>{order.user_address[0].zip_code}</span>
+              {
+                order?.guest_delivery_address && <div className="mb-2 text-[0.875rem] flex flex-col gap-y-[0.5rem] w-full">
+                  <span>{order.guest_delivery_address.street}</span>
+                  <span>{order.guest_delivery_address.apartment}</span>
+                  <span>
+                    {order.guest_delivery_address.city}, {order.guest_delivery_address.state}
+                  </span>
+                  <span>
+                    {order.guest_delivery_address.postal_code}, {order.guest_delivery_address.country}
+                  </span>
                 </div>
-              )}
+              }
             </div>
           </div>
 

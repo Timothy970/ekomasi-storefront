@@ -13,6 +13,7 @@ export default function Order() {
     const dispatch = useAppDispatch()
     const order = useAppSelector(selectUserOrder)
     const profile = useAppSelector(selectUserProfile)
+    console.log(order, 'order')
 
     useEffect(() => {
         if (params?.id) {
