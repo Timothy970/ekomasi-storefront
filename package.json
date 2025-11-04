@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NEXT_PUBLIC_API_BASE_URL=https://api.ecom.development.roamtech.whitemire-technologies.com/api/ next build",
-    "start": "cross-env NEXT_PUBLIC_API_BASE_URL=https://api.ecom.development.roamtech.whitemire-technologies.com/api/ next start"
+    "start": "cross-env NEXT_PUBLIC_API_BASE_URL=https://api.ecom.development.roamtech.whitemire-technologies.com/api/ next start",
+    "local_build": "next build"
   },
   "dependencies": {
     "@fontsource/league-spartan": "^5.2.6",
