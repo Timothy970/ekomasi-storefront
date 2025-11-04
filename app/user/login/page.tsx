@@ -25,7 +25,7 @@ export default function Login() {
         e.preventDefault();
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[0-9]{12}$/;
+        const phoneRegex = /^[0-9]{12}$/;  // 254XXXXXXXXX (12 digits for Kenyan numbers)
 
         if (emailRegex.test(phoneOrEmail)) {
             setError("");

@@ -2,7 +2,6 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { OtpRequestParams, SignInParams, SignUpParams, UpdateUserProfilePayload, User, UserData, VerifyOtpParams } from "../types";
 import { getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
 import { ToastType } from "../toast/toastSlice";
-import { PayloadAction } from "@reduxjs/toolkit";
 
 interface UserSliceState {
 	user: User | null;
@@ -45,7 +44,7 @@ export const userSlice = createAppSlice({
 		setOtpResendExpiry: create.reducer<number | null>((state, action) => {
 			state.otpResendExpiry = action.payload
 		}),
-		resetOtpResendExpiry: create.reducer<number | null>((state) => {
+		resetOtpResendExpiry: create.reducer((state) => {
 			state.otpResendExpiry = null
 		}),
 		resetMessage: create.reducer((state) => {
@@ -170,7 +169,7 @@ export const userSlice = createAppSlice({
 				rejected: (state, action) => {
 					state.status = "failed"
 					state.success = false
-					state.message = "Unable to vefify OTP at the moment please try again later."
+					state.message = "Unable to verify OTP at the moment please try again later."
 				},
 			}
 		),
@@ -246,7 +245,7 @@ export const userSlice = createAppSlice({
 		selectUserToken: (state: UserSliceState) => state.token || null,
 		selectUserRefreshToken: (state: UserSliceState) => state.refresh_token || null,
 		selectPhoneOrEmailValue: (state: UserSliceState) => state.phoneOrEmailValue || "",
-		selectOtpResendExpiry: (state: UserSliceState) => state.otpResendExpiry || "",
+		selectOtpResendExpiry: (state: UserSliceState) => state.otpResendExpiry ?? null,
 	},
 });
 

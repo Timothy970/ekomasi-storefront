@@ -146,7 +146,7 @@ export default function OtpForm() {
         e.preventDefault();
 
         if (!resendAvailable) {
-            triggerToast("Wait for 60 minutes to elapse to request a new OTP!", "error")
+            triggerToast("Wait for 60 seconds to elapse to request a new OTP!", "error")
             return
         }
 
@@ -211,7 +211,6 @@ export default function OtpForm() {
                 })
                 .catch(() => {
                     handleToastRedirect("Invalid or expired OTP", "");
-                    dispatch(resetStatus())
                     dispatch(resetStatus())
                 });
         } else if (phoneRegex.test(emailOrPhone)) {
