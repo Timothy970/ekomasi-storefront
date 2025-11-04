@@ -7,6 +7,7 @@ import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlic
 import { createUserAddressAsync, getUserAddressAsync } from '@/lib/features/address/addressSlice'
 import { Button } from './ui/button'
 import CountrySelect from './CountrySelect'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 type AddNewAddressProps = {
     addNewAdress: boolean;
@@ -54,24 +55,28 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const refetchAddress = () => {
-        if (token) {
-            dispatch(getUserAddressAsync())
-            setAddNewAdress(false)
+    const refetchAddress = (status: string) => {
+        if (status === 'success') {
+            triggerToast("Address updated successfully!", "success");
+        } else {
+            triggerToast("Address update failed!", "error");
         }
-    }
+
+        dispatch(getUserAddressAsync());
+        setAddNewAdress(false);
+    };
 
     return (
         <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
             <h2 className='text-[1.5rem] font-bold'>Add new Address</h2>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Country</span>
+                <span className='text-[0.875rem] font-semibold'>Country <span className='text-red-500'> *</span></span>
                 <CountrySelect formData={formData} setFormData={setFormData} />
             </div>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Adress</span>
+                <span className='text-[0.875rem] font-semibold'>Adress <span className='text-red-500'> *</span></span>
                 <Input
                     name="address"
                     value={formData.address}
@@ -83,20 +88,20 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
             </div>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc.(optional)</span>
+                <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc. <span className='text-red-500'> *</span></span>
                 <Input
                     name="apartment"
                     value={formData.apartment}
                     onChange={handleChange}
                     required
-                    placeholder='Apartment, suite, etc.(optional)'
+                    placeholder='Apartment, suite, etc.'
                     className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                 />
             </div>
 
             <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>City</span>
+                    <span className='text-[0.875rem] font-semibold'>City <span className='text-red-500'> *</span></span>
                     <Input
                         name="city"
                         value={formData.city}
@@ -108,13 +113,13 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>ZIP / Postal code (optional)</span>
+                    <span className='text-[0.875rem] font-semibold'>ZIP / Postal code <span className='text-red-500'> *</span></span>
                     <Input
                         name="postalCode"
                         value={formData.postalCode}
                         onChange={handleChange}
                         required
-                        placeholder='Postal code (optional)'
+                        placeholder='Postal code'
                         className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>

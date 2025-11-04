@@ -27,9 +27,14 @@ export const addressSlice = createAppSlice({
 			state.message = "";
 		}),
 		createUserAddressAsync: create.asyncThunk(
-			async ({ data, refetchAddress }: { data: UserAddressPayload, refetchAddress: () => void }) => {
+			async ({ data, refetchAddress }: { data: UserAddressPayload, refetchAddress: (status: string) => void }) => {
 				const response = await postUserAddress(data)
-				refetchAddress()
+
+				if (response?.status_code === 201 || response?.status_code === 200) {
+					refetchAddress('success')
+				} else {
+					refetchAddress('error')
+				}
 				return response
 			},
 			{
@@ -55,9 +60,15 @@ export const addressSlice = createAppSlice({
 			}
 		),
 		updateUserAddressAsync: create.asyncThunk(
-			async ({ data, refetchAddress, address_id }: { data: UserAddressPayload, refetchAddress: () => void, address_id: string }) => {
+			async ({ data, refetchAddress, address_id }: { data: UserAddressPayload, refetchAddress: (status: string) => void, address_id: string }) => {
 				const response = await editUserAddress(data, address_id)
-				refetchAddress()
+
+				if (response?.status_code === 201) {
+					refetchAddress('success')
+				} else {
+					refetchAddress('error')
+				}
+
 				return response
 			},
 			{
