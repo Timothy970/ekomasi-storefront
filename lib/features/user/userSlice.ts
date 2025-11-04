@@ -14,6 +14,7 @@ interface UserSliceState {
 	success: boolean;
 	expiresIn: number | null;
 	userProfile: UserData | null;
+	otpResendExpiry: number | null
 }
 
 const initialState: UserSliceState = {
@@ -27,6 +28,7 @@ const initialState: UserSliceState = {
 	phoneOrEmailValue: "",
 	expiresIn: null,
 	userProfile: null,
+	otpResendExpiry: null,
 };
 
 export const userSlice = createAppSlice({
@@ -35,6 +37,15 @@ export const userSlice = createAppSlice({
 	reducers: (create) => ({
 		resetSuccess: create.reducer((state) => {
 			state.success = false;
+		}),
+		resetStatus: create.reducer((state) => {
+			state.status = "idle";
+		}),
+		setOtpResendExpiry: create.reducer<number | null>((state, action) => {
+			state.otpResendExpiry = action.payload
+		}),
+		resetOtpResendExpiry: create.reducer((state) => {
+			state.otpResendExpiry = null
 		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
@@ -142,23 +153,23 @@ export const userSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.success = true
-						state.message = "Verification successful"
-						state.token = action.payload?.data?.token ?? ""
-						state.refresh_token = action.payload?.data?.refresh_token ?? ""
+						state.message = action.payload.message
+						state.token = action.payload?.data?.token
+						state.refresh_token = action.payload?.data?.refresh_token
 						state.expiresIn = Date.now() + action.payload?.data?.expires_in * 1000
 					} else {
 						state.success = false
-						state.message = "Invalid or expired OTP"
+						state.message = action.payload.message
 						state.expiresIn = null
 						state.token = null
 						state.refresh_token = null
 					}
 					state.status = "idle"
 				},
-				rejected: (state) => {
+				rejected: (state, action) => {
 					state.status = "failed"
 					state.success = false
-					state.message = "Invalid or expired OTP"
+					state.message = "Unable to verify OTP at the moment please try again later."
 				},
 			}
 		),
@@ -234,10 +245,11 @@ export const userSlice = createAppSlice({
 		selectUserToken: (state: UserSliceState) => state.token || null,
 		selectUserRefreshToken: (state: UserSliceState) => state.refresh_token || null,
 		selectPhoneOrEmailValue: (state: UserSliceState) => state.phoneOrEmailValue || "",
+		selectOtpResendExpiry: (state: UserSliceState) => state.otpResendExpiry ?? null,
 	},
 });
 
 // Export actions and selectors
-export const { signUpUserAsync, signInUserAsync, resetSuccess, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync } = userSlice.actions; // Export actions
-export const { selectUser, selectStatus, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
+export const { signUpUserAsync, signInUserAsync, resetSuccess, resetStatus, setOtpResendExpiry, resetOtpResendExpiry, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync } = userSlice.actions; // Export actions
+export const { selectUser, selectStatus, selectOtpResendExpiry, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;

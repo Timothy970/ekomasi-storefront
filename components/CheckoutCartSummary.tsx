@@ -5,7 +5,6 @@ import ChekcoutCartItems from './CheckoutCartItems'
 import { CartData } from '@/lib/features/types'
 
 export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
-
     return (
         <div className='flex flex-col w-full items-center justify-center'>
             <h2 className='text-[2rem] font-bold self-start'>Cart Summary</h2>
@@ -13,7 +12,7 @@ export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
             <p className='self-start font-bold text-[1.5rem] uppercase'>
                 {"KES " + new Intl.NumberFormat("en-KE", {
                     minimumFractionDigits: 0,
-                }).format(cart?.total ?? 0)}
+                }).format(cart?.final ?? 0)}
             </p>
 
             <div className='flex flex-row justify-between items-center w-full mt-[1.5rem]'>

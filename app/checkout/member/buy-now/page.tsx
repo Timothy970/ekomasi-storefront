@@ -22,7 +22,7 @@ export default function buynow() {
           </div>
 
           {
-            buyNowCart && <PersonalInformation cart={buyNowCart} page="member" />
+            buyNowCart && <PersonalInformation cart={buyNowCart} page="member" isBuyNow={true} />
           }
         </div>
       </div>

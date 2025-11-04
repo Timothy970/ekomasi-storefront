@@ -6,15 +6,24 @@ import LocationDropdown from './LocationDropdown'
 import { Checkbox } from './ui/checkbox'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { selectUserProfile } from '@/lib/features/user/userSlice'
+import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
 import { CartData, FormData, OrderItem } from '@/lib/features/types'
 import { createOrderAsync, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from './LoadingIndicator'
+import { getUserAddressAsync, selectAddress } from '@/lib/features/address/addressSlice'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { ArrowUpRight } from 'lucide-react'
 
-export default function PersonalInformation({ page, cart }: { page: string, cart: CartData }) {
+export default function PersonalInformation({ page, cart, isBuyNow }: { page: string, cart: CartData, isBuyNow: boolean }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -22,7 +31,6 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         phone: '',
         country: '',
         courier: '',
-        state: '',
         address: '',
         apartment: '',
         city: '',
@@ -40,6 +48,8 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
     const dispatch = useAppDispatch()
     const router = useRouter()
     const status = useAppSelector(selectStatus)
+    const token = useAppSelector(selectUserToken)
+    const address = useAppSelector(selectAddress)
 
     const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
         { key: "firstName", label: "First Name" },
@@ -47,8 +57,6 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         { key: "email", label: "Email" },
         { key: "phone", label: "Phone Number" },
         { key: "country", label: "Country" },
-        { key: "courier", label: "Courier" },
-        { key: "state", label: "State" },
         { key: "address", label: "Address" },
         { key: "city", label: "City" },
         { key: "deliveryCharge", label: "Delivery Charge" },
@@ -58,6 +66,12 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
     useEffect(() => {
         setIsFormValid(isFormComplete(formData));
     }, [formData]);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(getUserAddressAsync())
+        }
+    }, [token])
 
     useEffect(() => {
         if (!cart) {
@@ -95,6 +109,59 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const handlePhoneBlur = (name: string) => {
+        setFormData((prev) => {
+            let phone = prev[name as keyof FormData] as string;
+
+            if (!phone) return prev;
+
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phone)) return prev;
+
+            phone = phone.trim().replace(/\D/g, ""); // keep digits only
+
+            if (phone.startsWith("0")) {
+                phone = phone.substring(1);
+            }
+
+            if (phone && !phone.startsWith("254")) {
+                phone = "254" + phone;
+            }
+
+            if (phone.length > 12) {
+                phone = phone.slice(0, 12);
+            }
+
+            return { ...prev, [name]: phone };
+        });
+    };
+
+    useEffect(() => {
+        setFormData((prev) => {
+            const currentPhone = prev?.paymentPhone ?? "";
+            let phone = currentPhone.trim().replace(/\D/g, "");
+
+            if (!phone.startsWith("254")) {
+                phone = "254" + phone.replace(/^0+/, "");
+            }
+
+            return { ...prev, paymentPhone: phone };
+        });
+    }, [profile]);
+
+    useEffect(() => {
+        if (address && address.length > 0) {
+            const first = address[0];
+            setFormData((prev) => ({
+                ...prev,
+                address: first.address ?? "",
+                apartment: first.apartment ?? "",
+                city: first.city ?? "",
+                country: first.country ?? "",
+                postalCode: first.zip_code ?? "",
+            }));
+        }
+    }, [address]);
 
     const isFormComplete = (form: FormData): boolean => {
         for (const { key } of REQUIRED_FIELDS) {
@@ -152,15 +219,26 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         return {
             user_id: profile?.user_id,
             is_guest_order: false,
-            guest_delivery_address: {},
-            guest_personal_details: {},
+            guest_delivery_address: {
+                street: formData?.address,
+                apartment: formData?.apartment,
+                city: formData?.city,
+                state: "",
+                postal_code: formData?.postalCode,
+                country: formData?.country,
+            },
+            guest_personal_details: {
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                email: formData.email,
+                phone: formData.phone,
+            },
             courier_details: formData.courier ?? "",
             order_items: orderItems ?? [],
             delivery_charge: formData?.deliveryCharge ?? "",
             delivery_address: formData?.address,
         };
     };
-
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -169,7 +247,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         }
         let personalFormDetails = memberOrderPayload(formData)
 
-        if (cart?.total && personalFormDetails?.user_id && personalFormDetails?.courier_details) {
+        if (cart?.total && personalFormDetails?.user_id) {
             let extraPaymentPayload = {
                 phone: formData?.paymentPhone ?? "",
                 amount: cart?.total,
@@ -217,7 +295,6 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                 street: formData.address,
                 apartment: formData.apartment,
                 city: formData.city,
-                state: formData.state,
                 postal_code: formData.postalCode,
                 country: formData.country,
             },
@@ -232,79 +309,88 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
         <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
             <h2 className='text-[1.5rem] font-bold'>Personal Information</h2>
 
-            <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
-                <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>First name</span>
-                    <Input
-                        name="firstName"
-                        value={formData.firstName}
-                        disabled={!!profile?.first_name}
-                        onChange={handleChange}
-                        required
-                        placeholder='First name*'
-                        className='p-[0.5rem] h-[3rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
-                    />
+            {
+                !profile?.first_name || !profile?.last_name ? <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
+                    {
+                        !profile?.first_name && <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                            <span className='text-[0.875rem] font-semibold'>First name</span>
+                            <Input
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                required
+                                placeholder='First name*'
+                                className='p-[0.5rem] h-[2.5rem] text-[0.875rem] border border-[rgba(0,0,0,0.40)] '
+                            />
+                        </div>
+                    }
+
+                    {
+                        !profile?.last_name && <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                            <span className='text-[0.875rem]'>Last name</span>
+                            <Input
+                                name="lastName"
+                                required
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                placeholder='Last name*'
+                                className='p-[0.5rem] h-[2.5rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
+                            />
+                        </div>
+                    }
+                </div> : <></>
+            }
+
+            {
+                ((profile?.phone && profile?.email) || !profile?.email) && <div className='flex flex-col gap-y-[0.5rem]'>
+                    <span className='text-[0.875rem] font-semibold'>Email address</span>
+
+                    <div className='relative'>
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
+                            <path d="M18 0.5H2C0.897 0.5 0 1.397 0 2.5V14.5C0 15.603 0.897 16.5 2 16.5H18C19.103 16.5 20 15.603 20 14.5V2.5C20 1.397 19.103 0.5 18 0.5ZM18 2.5V3.011L10 9.234L2 3.012V2.5H18ZM2 14.5V5.544L9.386 11.289C9.56111 11.4265 9.77733 11.5013 10 11.5013C10.2227 11.5013 10.4389 11.4265 10.614 11.289L18 5.544L18.002 14.5H2Z" fill="black" />
+                        </svg>
+
+                        <Input
+                            name="email"
+                            value={formData.email}
+                            required
+                            disabled={!!profile?.email}
+                            onChange={handleChange}
+                            placeholder='Email Address*'
+                            className='p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
+                        />
+                    </div>
                 </div>
+            }
 
-                <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem]'>Last name</span>
-                    <Input
-                        name="lastName"
-                        required
-                        disabled={!!profile?.last_name}
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        placeholder='Last name*'
-                        className='p-[0.5rem] h-[3rem] border text-[0.875rem] border-[rgba(0,0,0,0.40)]'
-                    />
+            {
+
+                ((profile?.phone && profile?.email) || !profile?.phone) && <div className='flex flex-col gap-y-[0.5rem]'>
+                    <span className='text-[0.875rem] font-semibold'>Phone Number</span>
+
+                    <div className='relative'>
+                        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="14" height="21" viewBox="0 0 14 21" fill="none">
+                            <path d="M12 0.5H2C0.897 0.5 0 1.397 0 2.5V18.5C0 19.603 0.897 20.5 2 20.5H12C13.103 20.5 14 19.603 14 18.5V2.5C14 1.397 13.103 0.5 12 0.5ZM2 15.499V3.5H12L12.002 15.499H2Z" fill="black" />
+                        </svg>
+
+                        <Input
+                            name="phone"
+                            value={formData.phone}
+                            disabled={!!profile?.phone}
+                            required
+                            onChange={handleChange}
+                            placeholder='254123456789*'
+                            className='p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Email address</span>
-
-                <div className='relative'>
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
-                        <path d="M18 0.5H2C0.897 0.5 0 1.397 0 2.5V14.5C0 15.603 0.897 16.5 2 16.5H18C19.103 16.5 20 15.603 20 14.5V2.5C20 1.397 19.103 0.5 18 0.5ZM18 2.5V3.011L10 9.234L2 3.012V2.5H18ZM2 14.5V5.544L9.386 11.289C9.56111 11.4265 9.77733 11.5013 10 11.5013C10.2227 11.5013 10.4389 11.4265 10.614 11.289L18 5.544L18.002 14.5H2Z" fill="black" />
-                    </svg>
-
-                    <Input
-                        name="email"
-                        value={formData.email}
-                        required
-                        disabled={!!profile?.email}
-                        onChange={handleChange}
-                        placeholder='Email Address*'
-                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)] '
-                    />
-                </div>
-            </div>
-
-            <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Phone Number</span>
-
-                <div className='relative'>
-                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="14" height="21" viewBox="0 0 14 21" fill="none">
-                        <path d="M12 0.5H2C0.897 0.5 0 1.397 0 2.5V18.5C0 19.603 0.897 20.5 2 20.5H12C13.103 20.5 14 19.603 14 18.5V2.5C14 1.397 13.103 0.5 12 0.5ZM2 15.499V3.5H12L12.002 15.499H2Z" fill="black" />
-                    </svg>
-
-                    <Input
-                        name="phone"
-                        value={formData.phone}
-                        disabled={!!profile?.phone}
-                        required
-                        onChange={handleChange}
-                        placeholder='254123456789*'
-                        className='p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                    />
-                </div>
-            </div>
+            }
 
             <div className='flex flex-col gap-y-[1.5rem]'>
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[3rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
+                    <Button className='px-[3rem] min-w-[10rem] h-[2.5rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -324,7 +410,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                         <span>Ship</span>
                     </Button>
 
-                    <Button disabled className='px-[3rem] min-w-[10rem] h-[3rem] bg-white border border-black text-custom-black'>
+                    <Button disabled className='px-[3rem] min-w-[10rem] h-[2.5rem] bg-white border border-black text-custom-black'>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -345,34 +431,76 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                     </Button>
                 </div>
 
+                {address && address.length > 0 ? (
+                    <div className="flex flex-col gap-y-[0.5rem]">
+                        <span className="text-[0.875rem] font-semibold">Saved Address</span>
+
+                        <div className='flex gap-x-[0.5rem]'>
+                            <Select
+                                defaultValue={address[0].address_id}
+                                onValueChange={(value) => {
+                                    const selected = address.find((a) => a.address_id === value);
+                                    if (selected) {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            address: selected.address ?? "",
+                                            apartment: selected.apartment ?? "",
+                                            city: selected.city ?? "",
+                                            country: selected.country ?? "",
+                                            postalCode: selected.zip_code ?? "",
+                                        }));
+                                    }
+                                }}
+                            >
+                                <SelectTrigger className="w-full h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]">
+                                    <SelectValue placeholder="Choose an address" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {address.map((addr) => (
+                                        <SelectItem key={addr.address_id} value={addr.address_id}>
+                                            {addr.address}, {addr.city}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <Button
+                                onClick={() => router.push("/dashboard/address")}
+                                className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                            >
+                                <ArrowUpRight />
+                                <span>Edit Address</span>
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-between">
+                        <p className="text-[0.875rem] text-gray-600">No saved addresses found.</p>
+                        <Button
+                            onClick={() => router.push("/dashboard/address")}
+                            className="text-[#AF52DE] text-[0.75rem] underline h-[2.5rem] hover:bg-[#AF52DE]"
+                        >
+                            <ArrowUpRight />
+                            <span>Add Address</span>
+                        </Button>
+                    </div>
+                )}
+
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Country</span>
                     <CountrySelect formData={formData} setFormData={setFormData} />
                 </div>
-
-                <div className='flex flex-col gap-y-[0.5rem]'>
-                    <span className='text-[0.875rem] font-semibold'>State</span>
-                    <Input
-                        name="state"
-                        value={formData.state}
-                        onChange={handleChange}
-                        required
-                        placeholder='State*'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                    />
-                </div>
-
+                {/* 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Courier Details</span>
                     <Input
                         name="courier"
                         value={formData.courier}
                         onChange={handleChange}
-                        required
                         placeholder='Courier details*'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
-                </div>
+                </div> */}
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Adress</span>
@@ -382,7 +510,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                         onChange={handleChange}
                         required
                         placeholder='Address*'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -393,7 +521,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                         value={formData.apartment}
                         onChange={handleChange}
                         placeholder='Apartment, suite, etc.(optional)'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -406,7 +534,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                             required
                             onChange={handleChange}
                             placeholder='City'
-                            className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                            className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                         />
                     </div>
 
@@ -417,14 +545,14 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                             value={formData.postalCode}
                             onChange={handleChange}
                             placeholder='Postal code (optional)'
-                            className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                            className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                         />
                     </div>
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                    <LocationDropdown formData={formData} setFormData={setFormData} />
+                    <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
                 </div>
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
@@ -432,37 +560,37 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                     <p className='text-[0.875rem]a'>Please select your preferred payment option</p>
 
                     <div className='flex gap-x-[0.5rem] items-center'>
-                        <Checkbox className='h-[1.125rem] w-[1.125rem]' />
+                        <Checkbox disabled className='h-[1.125rem] w-[1.125rem]' />
                         <p className='text-[0.875rem]'>Do you have a gift card, product voucher, or promo code?</p>
                     </div>
 
                     <div className='flex gap-x-[2rem]'>
-                        <Input className='h-[3rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
-                        <Button className='border h-[3rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
+                        <Input className='h-[2.5rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                        <Button disabled className='border h-[2.5rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
                             Apply
                         </Button>
                     </div>
 
-                    <RadioGroup defaultValue="card" className="flex flex-col gap-y-[1rem]">
-                        {/* <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="card" id="card" />
+                    <RadioGroup defaultValue="mpesa" className="flex flex-col gap-y-[1rem]">
+                        <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                            <RadioGroupItem value="card" id="card" disabled />
                             <Label htmlFor="card">Credit or Debit Card</Label>
-                        </div> */}
+                        </div>
 
-                        {/* <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="paypal" id="paypal" />
+                        <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                            <RadioGroupItem value="paypal" id="paypal" disabled />
                             <Label htmlFor="paypal">Paypal</Label>
-                        </div> */}
+                        </div>
 
                         <div className="flex items-center space-x-2">
                             <RadioGroupItem value="mpesa" id="mpesa" checked />
                             <Label htmlFor="mpesa">Mpesa</Label>
                         </div>
 
-                        {/* <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="airtel" id="airtel" />
+                        <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                            <RadioGroupItem value="airtel" id="airtel" disabled />
                             <Label htmlFor="airtel">Airtel</Label>
-                        </div> */}
+                        </div>
                     </RadioGroup>
 
                     <div className='flex flex-col gap-y-[1.5rem]'>
@@ -470,8 +598,9 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                             name="paymentPhone"
                             value={formData.paymentPhone}
                             onChange={handleChange}
+                            onBlur={() => handlePhoneBlur("paymentPhone")}
                             placeholder='254123456789'
-                            className='p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
+                            className='p-[0.5rem] h-[2.5rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem] '
                         />
 
                         <Button
@@ -483,7 +612,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
                                     return;
                                 }
                             }}
-                            className={`h-[3rem] md:max-w-[19rem] bg-[#AF52DE] ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
+                            className={`h-[2.5rem] md:max-w-[19rem] bg-[#AF52DE] ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                             {
                                 status == "loading" && <LoadingIndicator textColor="text-white" />

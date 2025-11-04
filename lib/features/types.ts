@@ -386,13 +386,12 @@ export interface DeleteCartRequest {
 }
 
 export interface FormData {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
+  firstName?: string
+  lastName?: string
+  email?: string
+  phone?: string
   country?: string
   courier?: string
-  state?: string
   address: string
   apartment: string
   city: string
@@ -512,7 +511,15 @@ export interface Order {
   items: OrderItem[];
   payment_method: string
   delivery_charge: number
-  user_address: UserAddress[]
+  user_address: UserAddress[];
+  guest_delivery_address: {
+    street: string;
+    apartment: string;
+    city: string;
+    postal_code: string;
+    country: string;
+    state: string;
+  }
 }
 
 export interface UserAddress {
@@ -569,7 +576,6 @@ export interface MyAddress {
   country: string;
   zip_code: string;
 }
-
 
 export interface UserAddressesResponse {
   data: MyAddress[];

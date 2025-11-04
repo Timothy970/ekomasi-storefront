@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Address, MyAddress, UserAddressPayload } from "../types";
+import { MyAddress, UserAddressPayload } from "../types";
 import { deleteUserAddress, editUserAddress, getUserAddress, postUserAddress } from "./addressAPI";
 
 interface addressSliceState {
@@ -27,9 +27,14 @@ export const addressSlice = createAppSlice({
 			state.message = "";
 		}),
 		createUserAddressAsync: create.asyncThunk(
-			async ({ data, refetchAddress }: { data: UserAddressPayload, refetchAddress: () => void }) => {
+			async ({ data, refetchAddress }: { data: UserAddressPayload, refetchAddress: (status: string) => void }) => {
 				const response = await postUserAddress(data)
-				refetchAddress()
+
+				if (response?.status_code === 201 || response?.status_code === 200) {
+					refetchAddress('success')
+				} else {
+					refetchAddress('error')
+				}
 				return response
 			},
 			{
@@ -55,9 +60,15 @@ export const addressSlice = createAppSlice({
 			}
 		),
 		updateUserAddressAsync: create.asyncThunk(
-			async ({ data, refetchAddress, address_id }: { data: UserAddressPayload, refetchAddress: () => void, address_id: string }) => {
+			async ({ data, refetchAddress, address_id }: { data: UserAddressPayload, refetchAddress: (status: string) => void, address_id: string }) => {
 				const response = await editUserAddress(data, address_id)
-				refetchAddress()
+
+				if (response?.status_code === 201) {
+					refetchAddress('success')
+				} else {
+					refetchAddress('error')
+				}
+
 				return response
 			},
 			{
@@ -120,7 +131,7 @@ export const addressSlice = createAppSlice({
 					state.status = "loading"
 				},
 				fulfilled: (state, action) => {
-					if (action.payload?.status_code === 201) {
+					if (action.payload?.status_code === 200) {
 						state.success = true
 						state.message = action.payload?.message
 						state.address = action.payload.data
@@ -139,14 +150,13 @@ export const addressSlice = createAppSlice({
 		),
 	}),
 	selectors: {
-		selectAddress: (state: addressSliceState) => state.address || null,
+		selectAddress: (state: addressSliceState) => state.address,
 		selectStatus: (state: addressSliceState) => state.status,
 		selectSuccess: (state: addressSliceState) => state.success,
 		selectMessage: (state: addressSliceState) => state.message,
 	},
 });
 
-// Export actions and selectors
-export const { getUserAddressAsync, createUserAddressAsync, updateUserAddressAsync, deleteUserAddressAsync } = addressSlice.actions; // Export actions
+export const { getUserAddressAsync, createUserAddressAsync, updateUserAddressAsync, deleteUserAddressAsync } = addressSlice.actions;
 export const { selectAddress, selectStatus, selectSuccess, selectMessage } = addressSlice.selectors;
 export const addressReducer = addressSlice.reducer;

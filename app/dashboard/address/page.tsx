@@ -58,7 +58,6 @@ export default function Address() {
             {
               addNewAdress && <AddNewAdress
                 setAddNewAdress={setAddNewAdress}
-                addNewAdress={addNewAdress}
               />
             }
           </div>
@@ -67,7 +66,6 @@ export default function Address() {
             {
               editAdress && editAdressDetails && <EditAdress
                 setEditAdress={setEditAdress}
-                editAdress={editAdress}
                 editAdressDetails={editAdressDetails}
               />
             }
