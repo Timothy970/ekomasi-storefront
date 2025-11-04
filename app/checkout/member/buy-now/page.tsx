@@ -8,6 +8,7 @@ import React from 'react'
 
 export default function buynow() {
   const buyNowCart = useAppSelector(selectBuyNowCart)
+  console.log(buyNowCart,'buyNowCart')
 
   if (!buyNowCart) {
     return <></>
@@ -22,7 +23,7 @@ export default function buynow() {
           </div>
 
           {
-            buyNowCart && <PersonalInformation cart={buyNowCart} page="member" />
+            buyNowCart && <PersonalInformation cart={buyNowCart} page="member" isBuyNow={true} />
           }
         </div>
       </div>

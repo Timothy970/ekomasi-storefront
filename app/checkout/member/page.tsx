@@ -22,7 +22,7 @@ export default function MemberCheckout() {
           </div>
 
           {
-            cart && <PersonalInformation page="member" cart={cart} />
+            cart && <PersonalInformation page="member" cart={cart} isBuyNow={false} />
           }
         </div>
       </div>

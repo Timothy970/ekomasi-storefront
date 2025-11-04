@@ -10,21 +10,23 @@ import { getLocationsAsync, selectLocations } from "@/lib/features/mall/mallSlic
 import React, { useEffect, useMemo } from "react";
 import { DeliveryLocation, FormData } from "@/lib/features/types";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getCartAsync, selectCartId } from "@/lib/features/cart/cartSlice";
+import { getBuyNowCartAsync, getCartAsync, selectBuyNowCartId, selectCartId } from "@/lib/features/cart/cartSlice";
 
 type Props = {
     onSelect?: (loc: DeliveryLocation | undefined) => void;
     setFormData: React.Dispatch<React.SetStateAction<FormData>>
-    formData: FormData
+    formData: FormData;
+    isBuyNow: boolean
 };
 
-export default function LocationDropdown({ onSelect, formData, setFormData }: Props) {
+export default function LocationDropdown({ onSelect, formData, setFormData, isBuyNow }: Props) {
     const [selectedId, setSelectedId] = React.useState<number | null>(null);
     const locations = useAppSelector(selectLocations)
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams();
     const cartId = useAppSelector(selectCartId);
+    const buyNowCartId = useAppSelector(selectBuyNowCartId)
 
     const selected = useMemo(
         () => locations?.locations?.find((l) => l.id === selectedId) ?? undefined,
@@ -42,8 +44,14 @@ export default function LocationDropdown({ onSelect, formData, setFormData }: Pr
                 deliveryCharge: selected.charge,
             }));
 
-            if (selectedId && cartId) {
-                dispatch(getCartAsync({ cart_id: cartId, location_id: selectedId }));
+            if (isBuyNow) {
+                if (buyNowCartId && selectedId) {
+                    dispatch(getBuyNowCartAsync({ cart_id: buyNowCartId, location_id: selectedId }));
+                }
+            } else {
+                if (cartId && selectedId) {
+                    dispatch(getCartAsync({ cart_id: cartId, location_id: selectedId }));
+                }
             }
         }
     }, [selected, onSelect, setFormData]);

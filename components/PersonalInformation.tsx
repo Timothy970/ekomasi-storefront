@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select"
 import { ArrowUpRight } from 'lucide-react'
 
-export default function PersonalInformation({ page, cart }: { page: string, cart: CartData }) {
+export default function PersonalInformation({ page, cart, isBuyNow }: { page: string, cart: CartData, isBuyNow: boolean }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -552,7 +552,7 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
                     <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                    <LocationDropdown formData={formData} setFormData={setFormData} />
+                    <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
                 </div>
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
