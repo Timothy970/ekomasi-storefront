@@ -2,57 +2,79 @@
 import React, { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import type { FormData } from '@/lib/features/types'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
+import { useAppDispatch } from '@/lib/hooks'
 import { createUserAddressAsync, getUserAddressAsync } from '@/lib/features/address/addressSlice'
 import { Button } from './ui/button'
 import CountrySelect from './CountrySelect'
 import { triggerToast } from '@/app/utils/toastUtils'
 
 type AddNewAddressProps = {
-    addNewAdress: boolean;
     setAddNewAdress: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAddressProps) {
-    const profile = useAppSelector(selectUserProfile)
-    const token = useAppSelector(selectUserToken)
+export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
+    const [isFormValid, setIsFormValid] = useState(false);
     const dispatch = useAppDispatch()
     const [formData, setFormData] = useState<FormData>({
         address: '',
         apartment: '',
         city: '',
         postalCode: '',
+        country: '',
     })
 
-    useEffect(() => {
-        if (profile) {
-            setFormData((prev: FormData) => ({
-                ...prev,
-            }));
+    const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
+        { key: "country", label: "Country" },
+        { key: "address", label: "Address" },
+        { key: "city", label: "City" },
+        { key: "postalCode", label: "Postal Code" },
+        { key: "postalCode", label: "Postal Code" },
+        { key: "apartment", label: "Apartment, suite, etc." },];
+
+    const isFormComplete = (form: FormData): boolean => {
+        for (const { key } of REQUIRED_FIELDS) {
+            const value = form[key];
+            if (
+                value === undefined ||
+                value === null ||
+                (Array.isArray(value) && value.length === 0) ||
+                (typeof value === "string" && value.trim() === "")
+            ) {
+                return false;
+            }
         }
-    }, [profile, setFormData]);
+        return true;
+    };
+
+    const validateForm = (form: FormData): boolean => {
+        for (const { key, label } of REQUIRED_FIELDS) {
+            const value = form[key];
+
+            if (
+                value === undefined ||
+                value === null ||
+                (Array.isArray(value) && value.length === 0) ||
+                (typeof value === "string" && value.trim() === "")
+            ) {
+                triggerToast(`${label} is required.`, "error");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    useEffect(() => {
+        setIsFormValid(isFormComplete(formData));
+    }, [formData]);
 
     const addressPayload = (formData: FormData) => {
         return {
-            address: formData?.address,
+            address: formData.address,
             apartment: formData.apartment,
-            city: formData?.city,
-            country: formData?.country ? formData?.country : "",
-            zip_code: formData?.postalCode,
+            city: formData.city,
+            country: formData.country ?? "",
+            zip_code: formData.postalCode,
         };
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        let addressFormDetails = addressPayload(formData)
-        dispatch(createUserAddressAsync({ data: addressFormDetails, refetchAddress }))
-        return
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const refetchAddress = (status: string) => {
@@ -61,22 +83,35 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
         } else {
             triggerToast("Address update failed!", "error");
         }
-
         dispatch(getUserAddressAsync());
         setAddNewAdress(false);
     };
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!validateForm(formData)) return;
+
+        const addressFormDetails = addressPayload(formData);
+        dispatch(createUserAddressAsync({ data: addressFormDetails, refetchAddress }));
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
     return (
         <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
-            <h2 className='text-[1.5rem] font-bold'>Add new Address</h2>
+            <h2 className='text-[1.5rem] font-bold'>Add New Address</h2>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Country <span className='text-red-500'> *</span></span>
+                <span className='text-[0.875rem] font-semibold'>Country <span className='text-red-500'>*</span></span>
                 <CountrySelect formData={formData} setFormData={setFormData} />
             </div>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Adress <span className='text-red-500'> *</span></span>
+                <span className='text-[0.875rem] font-semibold'>Address <span className='text-red-500'>*</span></span>
                 <Input
                     name="address"
                     value={formData.address}
@@ -88,7 +123,9 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
             </div>
 
             <div className='flex flex-col gap-y-[0.5rem]'>
-                <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc. <span className='text-red-500'> *</span></span>
+                <span className='text-[0.875rem] font-semibold'>
+                    Apartment, suite, etc. <span className='text-red-500'>*</span>
+                </span>
                 <Input
                     name="apartment"
                     value={formData.apartment}
@@ -99,9 +136,10 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                 />
             </div>
 
+
             <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>City <span className='text-red-500'> *</span></span>
+                    <span className='text-[0.875rem] font-semibold'>City <span className='text-red-500'>*</span></span>
                     <Input
                         name="city"
                         value={formData.city}
@@ -113,7 +151,7 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>ZIP / Postal code <span className='text-red-500'> *</span></span>
+                    <span className='text-[0.875rem] font-semibold'>ZIP / Postal code <span className='text-red-500'>*</span></span>
                     <Input
                         name="postalCode"
                         value={formData.postalCode}
@@ -125,8 +163,8 @@ export default function AddNewAdress({ setAddNewAdress, addNewAdress }: AddNewAd
                 </div>
             </div>
 
-            <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]'>
-                Add new address
+            <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]' disabled={!isFormValid}>
+                Add New Address
             </Button>
         </form>
     )

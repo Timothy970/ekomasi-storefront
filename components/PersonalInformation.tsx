@@ -50,8 +50,6 @@ export default function PersonalInformation({ page, cart }: { page: string, cart
     const status = useAppSelector(selectStatus)
     const token = useAppSelector(selectUserToken)
     const address = useAppSelector(selectAddress)
-    // console.log(profile, 'profile')
-
 
     const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
         { key: "firstName", label: "First Name" },
