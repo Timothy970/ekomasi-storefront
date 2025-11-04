@@ -80,14 +80,17 @@ export async function deleteProductFromCart(data: DeleteCartRequest): Promise<Cr
     }
 }
 
-export async function createMemberOrder(data: MemberOrderPayload): Promise<CreateOrderResponse> {
+export async function createOrder(data: MemberOrderPayload, page: "member" | "guest"): Promise<CreateOrderResponse> {
     try {
-        const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
-            data,
-            {}
+        const response = await api.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}order/create/new`, data,
+            {
+                headers: {
+                    requiresAuth: page === "member",
+                },
+            }
         );
 
+        console.log(response, "ressss");
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

@@ -2,13 +2,17 @@
 import CheckoutCartSummary from '@/components/CheckoutCartSummary'
 import Navigation from '@/components/Navigation'
 import PersonalInformation from '@/components/PersonalInformation'
+import { selectCart } from '@/lib/features/cart/cartSlice'
+import { useAppSelector } from '@/lib/hooks'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function GuestCheckout() {
-  const cart = null
+  const cart = useAppSelector(selectCart)
+  const router = useRouter()
 
   if (!cart) {
-    return <></>
+    return router.replace("/")
   }
 
   return (

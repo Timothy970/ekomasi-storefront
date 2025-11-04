@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createGuestOrder, createMemberOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
+import { addToCart, createCart, createGuestOrder, createOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
 import type { CartData, GuestOrderPayload, MemberOrderPayload, Order, Pagination } from "../types";
 
 interface CartSliceState {
@@ -239,8 +239,8 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails, extraPaymentPayload }: { data: MemberOrderPayload, redirectToOrderDetails: (cart_id: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
-				const response = await createMemberOrder(data);
+			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, page:string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
+				const response = await createOrder(data, page);
 
 				if (response?.data?.order_id) {
 					let paymentData = {
@@ -255,12 +255,12 @@ export const cartSlice = createAppSlice({
 					const paymentRes = await makePayment(paymentData)
 
 					if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
-						redirectToOrderDetails(response?.data?.order_id, false, '')
+						redirectToOrderDetails(response?.data?.order_id, page, false, '')
 					} else {
 						if (paymentRes?.data?.errorMessage) {
-							redirectToOrderDetails(response?.data?.order_id, false, paymentRes?.data?.errorMessage)
+							redirectToOrderDetails(response?.data?.order_id, page, false, paymentRes?.data?.errorMessage)
 						} else {
-							redirectToOrderDetails(response?.data?.order_id, true, 'Order succesfully placed!')
+							redirectToOrderDetails(response?.data?.order_id, page, true, 'Order succesfully placed!')
 						}
 					}
 				}

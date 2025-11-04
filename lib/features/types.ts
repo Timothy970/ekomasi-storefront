@@ -393,6 +393,7 @@ export interface FormData {
   country?: string
   courier?: string
   address: string
+  state?: string
   apartment: string
   city: string
   postalCode: string
@@ -433,7 +434,6 @@ export interface OrderPayload {
 };
 
 export interface MemberOrderPayload {
-  user_id: string | undefined;
   is_guest_order: boolean;
   guest_personal_details: {};
   guest_delivery_address: {};
