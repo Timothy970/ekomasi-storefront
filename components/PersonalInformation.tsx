@@ -102,9 +102,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         if (cart?.cart_items?.length) {
             const mappedItems: OrderItem[] = cart.cart_items.map((item) => ({
                 product_id: item?.product.product_id,
-                // variant_id: null,
                 quantity: item.quantity,
-                // unit_price: item?.product.price,
             }));
 
             setOrderItems(mappedItems);

@@ -21,7 +21,7 @@ export default function BuyNow() {
                     </p>
                     <a
                         href="/"
-                        className="mt-4 px-5 py-2.5 rounded-full bg-[#AF52DE] text-white hover:bg-[AF52DE] transition-colors"
+                        className="mt-4 px-5 py-2.5 rounded-full bg-[#AF52DE] text-white transition-colors"
                     >
                         Continue Shopping
                     </a>

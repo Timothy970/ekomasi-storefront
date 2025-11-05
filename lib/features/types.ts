@@ -403,7 +403,7 @@ export interface FormData {
   deliveryType?: "Ship" | "Pickup"
   promoApplied?: boolean
   paymentPhone?: string;
-  deliveryLocationId?: number|string;
+  deliveryLocationId?: number | string;
 }
 
 export interface OrderPayload {
@@ -437,8 +437,8 @@ export interface MemberOrderPayload {
   guest_personal_details: {
     email?: string;
     phone?: string;
-    last_name?:string
-    first_name?:string
+    last_name?: string
+    first_name?: string
   };
   guest_delivery_address: {};
   order_items: OrderItem[];

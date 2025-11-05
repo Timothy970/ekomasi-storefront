@@ -14,7 +14,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     const dispatch = useAppDispatch()
     const { openFilterModal, setOpenFilterModal } = useFilter()
     const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
-    const { isBuyNow, setIsBuyNow } = useIsBuyNow()
+    const { isBuyNow } = useIsBuyNow()
 
     useEffect(() => {
         dispatch(getCategoriesAsync())

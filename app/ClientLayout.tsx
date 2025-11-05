@@ -48,7 +48,7 @@ export function useGuestCheckout() {
 }
 export function useIsBuyNow() {
     const ctx = useContext(IsBuyNowContext);
-    if (!ctx) throw new Error("useIsBuyNow must be used within GuestCheckoutProvider");
+    if (!ctx) throw new Error("useIsBuyNow must be used within IsBuyNowProvider");
     return ctx;
 }
 
