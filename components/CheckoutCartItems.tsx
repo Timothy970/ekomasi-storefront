@@ -1,10 +1,12 @@
-import { selectCart } from '@/lib/features/cart/cartSlice'
-import { useAppSelector } from '@/lib/hooks'
 import React from 'react'
 import CartItemProducts from './CartItemProducts'
+import { CartData } from '@/lib/features/types'
 
-export default function ChekcoutCartItems() {
-    const cart = useAppSelector(selectCart)
+type CartProps = {
+    cart: CartData
+}
+
+export default function ChekcoutCartItems({ cart }: CartProps) {
 
     return (
         <div className='flex flex-col w-full items-center justify-center'>

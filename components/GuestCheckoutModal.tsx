@@ -1,13 +1,22 @@
 import React from 'react'
 import { Button } from './ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { X } from 'lucide-react'
+
 interface GuestCheckoutModal {
     setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>
     openGuestCheckoutModal: boolean
+    isBuyNow: boolean
 }
-export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal }: GuestCheckoutModal) {
+
+export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal, isBuyNow }: GuestCheckoutModal) {
     const router = useRouter()
+    const searchParams = useSearchParams();
+    const locationId = searchParams.get("location_id");
+
+    const appendLocation = (url: string) => {
+        return locationId ? `${url}${url.includes("?") ? "&" : "?"}location_id=${locationId}` : url;
+    };
 
     if (!openGuestCheckoutModal) {
         return <></>
@@ -16,18 +25,22 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
     const handleLogin = () => {
         setOpenGuestCheckoutModal(false)
         const redirectUrl = encodeURIComponent("/checkout/member")
-        router.push(`/user/login?redirect=${redirectUrl}`)
+        router.push(appendLocation(`/user/login?redirect=${redirectUrl}`));
     }
 
     const handleCreateAccount = () => {
         const redirectUrl = encodeURIComponent("/checkout/member")
         setOpenGuestCheckoutModal(false)
-        router.push(`/user/signup?redirect=${redirectUrl}`)
+        router.push(appendLocation(`/user/signup?redirect=${redirectUrl}`));
     }
 
     const handleGuestCheckout = () => {
         setOpenGuestCheckoutModal(false)
-        router.push("/checkout/guest")
+        if (isBuyNow) {
+            router.push(appendLocation("/checkout/guest/buy-now"))
+        } else {
+            router.push(appendLocation("/checkout/guest"))
+        }
     }
 
     return (
@@ -68,7 +81,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                     </div>
                 </div>
 
-                {/* <div className='w-full flex flex-col justify-center items-center gap-y-[1rem] max-w-[23rem]'>
+                <div className='w-full flex flex-col justify-center items-center gap-y-[1rem] max-w-[23rem]'>
                     <h2 className='font-bold text-[1.125rem]'>Check out as a Guest</h2>
                     <p className='text-center text-[1rem]'>You can create a free Adenzo Comfies Member Profile at any point during the checkout process.</p>
 
@@ -78,7 +91,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                         </svg>
                         <span>Continue as Guest</span>
                     </Button>
-                </div> */}
+                </div>
             </div>
         </div>
     )

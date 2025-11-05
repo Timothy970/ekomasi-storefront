@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,8 +21,28 @@ export default function UpdateUserForm() {
         phone_number: "",
     })
 
+    const formatPhoneForDisplay = (phone: string) => {
+        if (phone.startsWith("254") && phone.length === 12) {
+            return "0" + phone.slice(3)
+        }
+        return phone
+    }
+
+    const normalizePhoneForSave = (phone: string) => {
+        let val = phone.trim()
+        if (val.startsWith("0")) {
+            val = "254" + val.slice(1)
+        }
+        return val.replace(/\s+/g, "")
+    }
+
     const handleChange = (field: string, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }))
+    }
+
+    const isValidKenyanPhone = (phone: string) => {
+        const regex = /^254\d{9}$/; 
+        return regex.test(phone);
     }
 
     const fetchUserProfile = (message: string, type: ToastType) => {
@@ -38,7 +58,14 @@ export default function UpdateUserForm() {
             return
         }
 
-        dispatch(updateUserProfileAsync({ data: formData, fetchUserProfile }))
+        const normalizedPhone = normalizePhoneForSave(phone_number)
+
+        if (!isValidKenyanPhone(normalizedPhone)) {
+            triggerToast("Please enter a valid Kenyan phone number starting with 0 or 254.", "error")
+            return
+        }
+
+        dispatch(updateUserProfileAsync({ data: { ...formData, phone_number: normalizedPhone }, fetchUserProfile }))
     }
 
     useEffect(() => {
@@ -47,10 +74,33 @@ export default function UpdateUserForm() {
                 first_name: profile.first_name || "",
                 last_name: profile.last_name || "",
                 email: profile.email || "",
-                phone_number: profile.phone || "",
+                phone_number: formatPhoneForDisplay(profile.phone || ""),
             })
         }
     }, [profile])
+
+    const isFormComplete = useMemo(() => {
+        return (
+            formData.first_name.trim() !== "" &&
+            formData.last_name.trim() !== "" &&
+            formData.email.trim() !== "" &&
+            formData.phone_number.trim() !== "" &&
+            isValidKenyanPhone(normalizePhoneForSave(formData.phone_number))
+        )
+    }, [formData])
+
+    const isFormChanged = useMemo(() => {
+        if (!profile) return true
+
+        const normalizedProfilePhone = normalizePhoneForSave(profile.phone || "")
+
+        return (
+            formData.first_name !== (profile.first_name || "") ||
+            formData.last_name !== (profile.last_name || "") ||
+            formData.email !== (profile.email || "") ||
+            normalizePhoneForSave(formData.phone_number) !== normalizedProfilePhone
+        )
+    }, [formData, profile])
 
     return (
         <div className="space-y-4 w-full">
@@ -62,7 +112,9 @@ export default function UpdateUserForm() {
 
             <div className="max-w-md flex flex-col gap-y-[1rem]">
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">First Name <span className="text-red-400">*</span></label>
+                    <label className="mb-1 font-semibold">
+                        First Name <span className="text-red-400">*</span>
+                    </label>
                     <Input
                         value={formData.first_name}
                         onChange={e => handleChange("first_name", e.target.value)}
@@ -71,7 +123,9 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">Last Name <span className="text-red-400">*</span></label>
+                    <label className="mb-1 font-semibold">
+                        Last Name <span className="text-red-400">*</span>
+                    </label>
                     <Input
                         value={formData.last_name}
                         onChange={e => handleChange("last_name", e.target.value)}
@@ -80,7 +134,9 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col gap-y-[0.5rem]">
-                    <span className="text-[0.875rem] font-semibold">Email <span className="text-red-400">*</span></span>
+                    <span className="text-[0.875rem] font-semibold">
+                        Email <span className="text-red-400">*</span>
+                    </span>
                     <div className="relative">
                         <svg
                             className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
@@ -108,7 +164,9 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">Phone Number <span className="text-red-400">*</span></label>
+                    <label className="mb-1 font-semibold">
+                        Phone Number <span className="text-red-400">*</span>
+                    </label>
                     <Input
                         placeholder="0797493262"
                         value={formData.phone_number}
@@ -120,6 +178,7 @@ export default function UpdateUserForm() {
                 <Button
                     className="bg-[#AF52DE] h-[2.5rem] mt-[1rem]"
                     onClick={handleSubmit}
+                    disabled={!isFormComplete || !isFormChanged}
                 >
                     Update
                 </Button>

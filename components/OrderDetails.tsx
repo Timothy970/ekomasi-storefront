@@ -1,11 +1,13 @@
-import { selectUserOrder } from '@/lib/features/cart/cartSlice'
-import { useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import React from 'react'
 import { format, addDays } from "date-fns";
+import { Order } from '@/lib/features/types';
 
-export default function OrderDetails() {
-  const order = useAppSelector(selectUserOrder)
+type OrderDetailsProps = {
+  order: Order
+}
+
+export default function OrderDetails({ order }: OrderDetailsProps) {
 
   return (
     <div className='mt-[2rem] md:mt-[2.5rem] w-full px-[1rem] lg:px-[3rem] flex flex-col md:flex-row md:justify-between'>
@@ -26,7 +28,7 @@ export default function OrderDetails() {
             return `Arrives ${formattedStart} - ${formattedEnd}`;
           })()}
         </p>
-        
+
         <div className='w-full flex flex-col gap-y-[0.5rem] mt-[1.5rem]'>
           {
             order?.items?.map((item, index) => {
@@ -101,7 +103,7 @@ export default function OrderDetails() {
             <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem] mt-[1rem]'>
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
-                <span className='text-custom-black text-[0.875rem]'>0</span>
+                <span className='text-custom-black text-[0.875rem]'>{order?.sub_total}</span>
               </div>
 
               <div className='flex justify-between w-full'>

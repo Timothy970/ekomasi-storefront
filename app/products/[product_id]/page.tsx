@@ -16,6 +16,8 @@ import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import { customeParser } from '@/lib/utils'
+import { selectUserToken } from '@/lib/features/user/userSlice'
+import { useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -29,6 +31,9 @@ export default function ProductDetail() {
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
   const [addToCartLoading, setAddToCartLoading] = useState(false)
+  const token = useAppSelector(selectUserToken)
+  const { setOpenGuestCheckoutModal } = useGuestCheckout()
+  const { setIsBuyNow } = useIsBuyNow()
 
   useEffect(() => {
     if (product) {
@@ -63,7 +68,12 @@ export default function ProductDetail() {
     setTimeout(() => {
       triggerToast("Cart updated successfully!", "success");
       dispatch(getBuyNowCartAsync({ cart_id }));
-      router.push("/checkout/member/buy-now");
+
+      if (token) {
+        router.push("/checkout/member/buy-now");
+      } else {
+        setOpenGuestCheckoutModal(true)
+      }
     }, 1000);
   };
 
@@ -113,7 +123,9 @@ export default function ProductDetail() {
           }
         )
       )
+      setIsBuyNow(true)
     } else {
+      setIsBuyNow(false)
       triggerToast("Please select a valid quantity", 'error');
     }
   }

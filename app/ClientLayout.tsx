@@ -19,6 +19,11 @@ type GuestCheckoutContextType = {
     setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type isBuyNowContextType = {
+    isBuyNow: boolean;
+    setIsBuyNow: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 type QueryContextType = {
     query: string;
     setQuery: React.Dispatch<React.SetStateAction<string>>;
@@ -26,6 +31,7 @@ type QueryContextType = {
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
+const IsBuyNowContext = createContext<isBuyNowContextType | undefined>(undefined);
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 const QueryContext = createContext<QueryContextType | undefined>(undefined);
 
@@ -38,6 +44,11 @@ export function useFilter() {
 export function useGuestCheckout() {
     const ctx = useContext(GuestCheckoutContext);
     if (!ctx) throw new Error("useGuestCheckout must be used within GuestCheckoutProvider");
+    return ctx;
+}
+export function useIsBuyNow() {
+    const ctx = useContext(IsBuyNowContext);
+    if (!ctx) throw new Error("useIsBuyNow must be used within IsBuyNowProvider");
     return ctx;
 }
 
@@ -57,6 +68,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const [mounted, setMounted] = useState(false);
     const [openFilterModal, setOpenFilterModal] = useState(false)
     const [openGuestCheckoutModal, setOpenGuestCheckoutModal] = useState(false);
+    const [isBuyNow, setIsBuyNow] = useState(false);
     const [openSearchModal, setOpenSearchModal] = useState(false)
     const searchParams = useSearchParams();
     const [query, setQuery] = useState<string>(searchParams.toString());
@@ -71,15 +83,17 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
 
     return (
         <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-            <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-                <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                    <QueryContext.Provider value={{ query, setQuery }}>
-                        <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
-                            {children}
-                        </main>
-                    </QueryContext.Provider>
-                </SearchContext.Provider>
-            </GuestCheckoutContext.Provider>
+            <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
+                <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
+                    <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
+                        <QueryContext.Provider value={{ query, setQuery }}>
+                            <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                                {children}
+                            </main>
+                        </QueryContext.Provider>
+                    </SearchContext.Provider>
+                </GuestCheckoutContext.Provider>
+            </IsBuyNowContext.Provider>
         </FilterContext.Provider>
     )
 }

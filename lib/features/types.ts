@@ -355,6 +355,7 @@ export interface CartData {
   final: number;
   estimated_tax: number;
   delivery_charge: number;
+  sub_total: number;
 }
 
 export interface ViewCartResponse {
@@ -392,16 +393,17 @@ export interface FormData {
   phone?: string
   country?: string
   courier?: string
-  address: string
-  apartment: string
-  city: string
+  address?: string
+  state?: string
+  apartment?: string
+  city?: string
   postalCode: string
   voucher?: string
   paymentMethod?: "card" | "paypal" | "mpesa"
   deliveryType?: "Ship" | "Pickup"
   promoApplied?: boolean
-  deliveryCharge?: number | string
-  paymentPhone?: string
+  paymentPhone?: string;
+  deliveryLocationId?: number | string;
 }
 
 export interface OrderPayload {
@@ -428,37 +430,25 @@ export interface OrderPayload {
     quantity: number;
     unit_price: number;
   }[];
-  delivery_charge: number;
-  delivery_address: string;
 };
 
 export interface MemberOrderPayload {
-  user_id: string | undefined;
   is_guest_order: boolean;
-  guest_personal_details: {};
+  guest_personal_details: {
+    email?: string;
+    phone?: string;
+    last_name?: string
+    first_name?: string
+  };
   guest_delivery_address: {};
-  courier_details: string;
   order_items: OrderItem[];
-  delivery_charge: number | string;
-  delivery_address: string;
-}
-
-export interface GuestOrderPayload {
-  user_id: null;
-  is_guest_order: boolean;
-  guest_personal_details: {};
-  guest_delivery_address: {};
-  courier_details: string;
-  order_items: OrderItem[];
-  delivery_charge: number | string;
-  delivery_address: string;
 }
 
 export interface OrderItem {
   product_id: string;
-  variant_id: string | null;
+  variant_id?: string | null;
   quantity: number;
-  unit_price: number;
+  unit_price?: number;
   name?: string;
   description?: string;
   price?: number;
@@ -504,6 +494,7 @@ export interface CreateOrderResponse {
 export interface Order {
   order_id: string;
   delivery_id: string;
+  sub_total: number;
   created_at: string;
   order_status: string;
   total_amount: number;
@@ -542,7 +533,19 @@ export interface UserOrdersResponse {
   status_code: number;
 }
 
+export interface GuestOrderParams {
+  order_id: string;
+  email: string;
+  phone: string;
+}
+
 export interface UserOrderResponse {
+  data: Order;
+  message: string;
+  status_code: number;
+}
+
+export interface GuestOrderResponse {
   data: Order;
   message: string;
   status_code: number;
@@ -561,11 +564,11 @@ export interface Address {
 }
 
 export interface UserAddressPayload {
-  address: string;
-  apartment: string;
-  city: string;
-  country: string;
-  zip_code: string;
+  address?: string;
+  apartment?: string;
+  city?: string;
+  country?: string;
+  zip_code?: string;
 }
 
 export interface MyAddress {

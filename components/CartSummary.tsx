@@ -21,7 +21,7 @@ export default function CartSummary({ }) {
 
     const handleContinueToCheckout = () => {
         if (!selectedId) {
-            triggerToast("Please select store to order from.", "error")
+            triggerToast("Please select shipping location to order from.", "error")
             return
         }
 
@@ -60,7 +60,7 @@ export default function CartSummary({ }) {
             <p className="mt-[0.5rem] text-[1.5rem] uppercase font-[700]">
                 {"KES " + new Intl.NumberFormat("en-KE", {
                     minimumFractionDigits: 0,
-                }).format(cart?.total ?? 0)}
+                }).format(cart?.final ?? 0)}
             </p>
 
             <div className='mt-[1.5rem] flex flex-col w-full'>

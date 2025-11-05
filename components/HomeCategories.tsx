@@ -128,7 +128,7 @@ export default function HomeCategories() {
           </div>
 
           <Button onClick={() => router.push("/categories")} className="h-[3.438rem] hidden lg:flex min-w-[13rem] bg-transparent text-black justify-center items-center border rounded-full border-black">
-            <span className="text-[1rem]">Browse by Category</span>
+            <span className="text-[1rem]">View All</span>
           </Button>
         </div>
 

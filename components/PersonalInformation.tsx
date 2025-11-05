@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
-import { CartData, FormData, OrderItem } from '@/lib/features/types'
+import { CartData, FormData, MemberOrderPayload, OrderItem } from '@/lib/features/types'
 import { createOrderAsync, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -23,14 +23,13 @@ import {
 } from "@/components/ui/select"
 import { ArrowUpRight } from 'lucide-react'
 
-export default function PersonalInformation({ page, cart, isBuyNow }: { page: string, cart: CartData, isBuyNow: boolean }) {
+export default function PersonalInformation({ page, cart, isBuyNow }: { page: "member" | "guest", cart: CartData, isBuyNow: boolean }) {
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
         country: '',
-        courier: '',
         address: '',
         apartment: '',
         city: '',
@@ -38,8 +37,8 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
         voucher: '',
         paymentMethod: 'mpesa',
         deliveryType: 'Ship',
+        deliveryLocationId: "",
         promoApplied: false,
-        deliveryCharge: '',
         paymentPhone: '',
     })
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -50,6 +49,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
     const status = useAppSelector(selectStatus)
     const token = useAppSelector(selectUserToken)
     const address = useAppSelector(selectAddress)
+    const [isEditingAddress, setIsEditingAddress] = useState(false);
 
     const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
         { key: "firstName", label: "First Name" },
@@ -59,8 +59,20 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
         { key: "country", label: "Country" },
         { key: "address", label: "Address" },
         { key: "city", label: "City" },
-        { key: "deliveryCharge", label: "Delivery Charge" },
         { key: "paymentPhone", label: "Payment Phone Number" },
+    ];
+
+    const GUEST_REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
+        { key: "firstName", label: "First Name" },
+        { key: "lastName", label: "Last Name" },
+        { key: "email", label: "Email" },
+        { key: "phone", label: "Phone Number" },
+        { key: "country", label: "Country" },
+        { key: "address", label: "Address" },
+        { key: "city", label: "City" },
+        { key: "paymentPhone", label: "Payment Phone Number" },
+        { key: "apartment", label: "Apartment" },
+        { key: "postalCode", label: "Postal Code" },
     ];
 
     useEffect(() => {
@@ -72,12 +84,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
             dispatch(getUserAddressAsync())
         }
     }, [token])
-
-    useEffect(() => {
-        if (!cart) {
-            router.replace("/")
-        }
-    }, [cart]);
 
     useEffect(() => {
         if (profile) {
@@ -96,9 +102,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
         if (cart?.cart_items?.length) {
             const mappedItems: OrderItem[] = cart.cart_items.map((item) => ({
                 product_id: item?.product.product_id,
-                variant_id: null,
                 quantity: item.quantity,
-                unit_price: item?.product.price,
             }));
 
             setOrderItems(mappedItems);
@@ -118,7 +122,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
 
             if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phone)) return prev;
 
-            phone = phone.trim().replace(/\D/g, ""); // keep digits only
+            phone = phone.trim().replace(/\D/g, "");
 
             if (phone.startsWith("0")) {
                 phone = phone.substring(1);
@@ -164,61 +168,73 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
     }, [address]);
 
     const isFormComplete = (form: FormData): boolean => {
-        for (const { key } of REQUIRED_FIELDS) {
-            const value = form[key];
-            if (
-                value === undefined ||
-                value === null ||
-                (Array.isArray(value) && value.length === 0) ||
-                (typeof value === "string" && value.trim() === "")
-            ) {
-                return false;
-            }
+        const requiredFields = page === "member" ? REQUIRED_FIELDS : page === "guest" ? GUEST_REQUIRED_FIELDS : null;
+
+        if (!requiredFields) return false;
+
+        const isEmpty = (value: any) =>
+            value === undefined ||
+            value === null ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === "string" && value.trim() === "");
+
+        for (const { key } of requiredFields) {
+            if (isEmpty(form[key])) return false;
         }
 
-        if ((!form.email || form.email.trim() === "") && (!form.phone || form.phone.trim() === "")) {
-            return false;
-        }
+        if (isEmpty(form.email) && isEmpty(form.phone)) return false;
 
         return true;
     };
 
     const validateForm = (form: FormData): boolean => {
-        for (const { key, label } of REQUIRED_FIELDS) {
-            const value = form[key];
+        const requiredFields = page === "member" ? REQUIRED_FIELDS : page === "guest" ? GUEST_REQUIRED_FIELDS : null;
 
-            if (
-                value === undefined ||
-                value === null ||
-                (Array.isArray(value) && value.length === 0) ||
-                (typeof value === "string" && value.trim() === "")
-            ) {
+        if (!requiredFields) {
+            triggerToast("Invalid form type.", "error");
+            return false;
+        }
+
+        const isEmpty = (value: any) =>
+            value === undefined ||
+            value === null ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === "string" && value.trim() === "");
+
+        for (const { key, label } of requiredFields) {
+            if (isEmpty(form[key])) {
                 triggerToast(`${label} is required.`, "error");
                 return false;
             }
         }
 
-        if ((!form.email || form.email.trim() === "") && (!form.paymentPhone || form.paymentPhone.trim() === "")) {
+        if (isEmpty(form.email) && isEmpty(form.paymentPhone)) {
             triggerToast("Either Email or Phone Number is required.", "error");
             return false;
         }
 
-        if (form?.paymentPhone && form?.paymentPhone.trim() !== "") {
-            if (!form.paymentPhone.trim().startsWith("254")) {
-                triggerToast("Phone number must start with 254.", "error");
-                return false;
-            }
+        const phone = form.paymentPhone?.trim();
+
+        if (phone && !phone.startsWith("254")) {
+            triggerToast("Phone number must start with 254.", "error");
+            return false;
         }
 
         return true;
     };
 
-    const memberOrderPayload = (formData: FormData) => {
-        if (!profile?.user_id) return
+    const handleEditAddressClick = () => {
+        setIsEditingAddress(true);
+        router.push("/dashboard/address");
 
+        setTimeout(() => {
+            setIsEditingAddress(false);
+        }, 1000);
+    };
+
+    const orderPayload = (formData: FormData) => {
         return {
-            user_id: profile?.user_id,
-            is_guest_order: false,
+            is_guest_order: page === "member" ? false : true,
             guest_delivery_address: {
                 street: formData?.address,
                 apartment: formData?.apartment,
@@ -233,21 +249,25 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                 email: formData.email,
                 phone: formData.phone,
             },
-            courier_details: formData.courier ?? "",
             order_items: orderItems ?? [],
-            delivery_charge: formData?.deliveryCharge ?? "",
-            delivery_address: formData?.address,
+            location_id: formData?.deliveryLocationId ?? "",
         };
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (isEditingAddress) {
+            return;
+        }
+
         if (!validateForm(formData)) {
             return;
         }
-        let personalFormDetails = memberOrderPayload(formData)
 
-        if (cart?.total && personalFormDetails?.user_id) {
+        let personalFormDetails = orderPayload(formData)
+
+        if (cart?.total) {
             let extraPaymentPayload = {
                 phone: formData?.paymentPhone ?? "",
                 amount: cart?.total,
@@ -255,55 +275,27 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                 description: "payment test",
             }
 
-            if (page == "member" && profile && personalFormDetails?.user_id && profile?.user_id && personalFormDetails?.order_items?.length) {
-                dispatch(createOrderAsync({ data: personalFormDetails, redirectToOrderDetails, extraPaymentPayload }))
+            if (personalFormDetails?.order_items?.length) {
+                dispatch(createOrderAsync({ data: personalFormDetails, page, redirectToOrderDetails, extraPaymentPayload }))
 
                 return
             }
         }
-
-        // let guestFormDetails = guestOrderPayload(formData)
-        // console.log(guestFormDetails, 'guestFormDetails')
-
-        // if (page == "guest") {
-        //     dispatch(createOrderAsync({ data: guestFormDetails, redirectToOrderDetails }))
-        //     return
-        // }
     };
 
-    const redirectToOrderDetails = (order_id: string, fail = false, message = '') => {
+    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, fail = false, message = '') => {
         if (!fail) {
             triggerToast("Order placed successfully and Payment request initiated successfully!", "success");
         } else {
             triggerToast(`${message}`, "success");
         }
 
-        router.push(`/dashboard/orders/${order_id}`)
+        if (page === "member") {
+            router.push(`/dashboard/orders/${order_id}`)
+        } else if (page === "guest") {
+            router.push(`/guest/orders/${order_id}/${data?.guest_personal_details.email}/${data?.guest_personal_details?.phone}`)
+        }
     }
-
-    const guestOrderPayload = (formData: FormData) => {
-        return {
-            user_id: profile?.user_id ?? null,
-            is_guest_order: profile?.user_id ? false : true,
-            guest_personal_details: profile?.user_id ? {} : {
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                email: formData.email,
-                phone: formData.phone,
-            },
-            guest_delivery_address: profile?.user_id ? {} : {
-                street: formData.address,
-                apartment: formData.apartment,
-                city: formData.city,
-                postal_code: formData.postalCode,
-                country: formData.country,
-            },
-            courier_details: formData.courier,
-            order_items: orderItems ?? [],
-            delivery_charge: formData?.deliveryCharge,
-            delivery_address: formData?.address,
-        };
-    };
 
     return (
         <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-0 mb-[2rem] lg:mb-[2.5rem]'>
@@ -378,6 +370,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                             value={formData.phone}
                             disabled={!!profile?.phone}
                             required
+                            onBlur={() => handlePhoneBlur("phone")}
                             onChange={handleChange}
                             placeholder='254123456789*'
                             className='p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
@@ -465,7 +458,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                             </Select>
 
                             <Button
-                                onClick={() => router.push("/dashboard/address")}
+                                onClick={handleEditAddressClick}
                                 className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
                             >
                                 <ArrowUpRight />
@@ -474,33 +467,27 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                         </div>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-between">
-                        <p className="text-[0.875rem] text-gray-600">No saved addresses found.</p>
-                        <Button
-                            onClick={() => router.push("/dashboard/address")}
-                            className="text-[#AF52DE] text-[0.75rem] underline h-[2.5rem] hover:bg-[#AF52DE]"
-                        >
-                            <ArrowUpRight />
-                            <span>Add Address</span>
-                        </Button>
-                    </div>
+                    <>
+                        {
+                            token && <div className="flex items-center justify-between">
+                                <p className="text-[0.875rem] text-gray-600">No saved addresses found.</p>
+
+                                <Button
+                                    onClick={() => router.push("/dashboard/address")}
+                                    className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                                >
+                                    <ArrowUpRight />
+                                    <span>Add Address</span>
+                                </Button>
+                            </div>
+                        }
+                    </>
                 )}
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Country</span>
                     <CountrySelect formData={formData} setFormData={setFormData} />
                 </div>
-                {/* 
-                <div className='flex flex-col gap-y-[0.5rem]'>
-                    <span className='text-[0.875rem] font-semibold'>Courier Details</span>
-                    <Input
-                        name="courier"
-                        value={formData.courier}
-                        onChange={handleChange}
-                        placeholder='Courier details*'
-                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                    />
-                </div> */}
 
                 <div className='flex flex-col gap-y-[0.5rem]'>
                     <span className='text-[0.875rem] font-semibold'>Adress</span>
@@ -558,18 +545,21 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: st
                 <div className='flex flex-col gap-y-[1.5rem]'>
                     <h2 className='font-bold text-[1.5rem]'>Payment</h2>
                     <p className='text-[0.875rem]a'>Please select your preferred payment option</p>
+                    {
+                        token && <>
+                            <div className='flex gap-x-[0.5rem] items-center'>
+                                <Checkbox disabled className='h-[1.125rem] w-[1.125rem]' />
+                                <p className='text-[0.875rem]'>Do you have a gift card, product voucher, or promo code?</p>
+                            </div>
 
-                    <div className='flex gap-x-[0.5rem] items-center'>
-                        <Checkbox disabled className='h-[1.125rem] w-[1.125rem]' />
-                        <p className='text-[0.875rem]'>Do you have a gift card, product voucher, or promo code?</p>
-                    </div>
-
-                    <div className='flex gap-x-[2rem]'>
-                        <Input className='h-[2.5rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
-                        <Button disabled className='border h-[2.5rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
-                            Apply
-                        </Button>
-                    </div>
+                            <div className='flex gap-x-[2rem]'>
+                                <Input className='h-[2.5rem] border-[rgba(0,0,0,0.40)] text-[0.875rem] ' />
+                                <Button disabled className='border h-[2.5rem] bg-white text-custom-black border-[rgba(0,0,0,0.40)]'>
+                                    Apply
+                                </Button>
+                            </div>
+                        </>
+                    }
 
                     <RadioGroup defaultValue="mpesa" className="flex flex-col gap-y-[1rem]">
                         <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">

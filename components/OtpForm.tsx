@@ -95,6 +95,12 @@ export default function OtpForm() {
     }, [token, router]);
 
     useEffect(() => {
+        if (!emailOrPhone) {
+            router.replace('/user/login');
+        }
+    }, [emailOrPhone, router]);
+
+    useEffect(() => {
         if (!otpResendExpiry) {
             setResendAvailable(true)
             setSecondsLeft(0)
@@ -170,7 +176,7 @@ export default function OtpForm() {
         message: string,
         successRedirect = "/",
     ) {
-        if (message === "Verification successful") {
+        if (message === "Sign-in verification successful") {
             triggerToast(message, "success");
 
             if (successRedirect) {

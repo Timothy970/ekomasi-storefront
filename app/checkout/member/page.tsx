@@ -4,13 +4,15 @@ import Navigation from '@/components/Navigation'
 import PersonalInformation from '@/components/PersonalInformation'
 import { selectCart } from '@/lib/features/cart/cartSlice'
 import { useAppSelector } from '@/lib/hooks'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function MemberCheckout() {
   const cart = useAppSelector(selectCart)
+  const router = useRouter()
 
   if (!cart) {
-    return <></>
+    return router.replace("/")
   }
 
   return (
@@ -18,11 +20,17 @@ export default function MemberCheckout() {
       <div className='w-full px-[1rem] lg:px-[3rem] mx-auto max-w-[90rem]'>
         <div className='w-full flex flex-col md:flex-row-reverse md:gap-x-[2rem] mt-[2] lg:mt-[2.5rem]'>
           <div className='w-full'>
-            <CheckoutCartSummary cart={cart} />
+            <CheckoutCartSummary
+              cart={cart}
+            />
           </div>
 
           {
-            cart && <PersonalInformation page="member" cart={cart} isBuyNow={false} />
+            cart && <PersonalInformation
+              page="member"
+              cart={cart}
+              isBuyNow={false}
+            />
           }
         </div>
       </div>
