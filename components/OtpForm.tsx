@@ -95,6 +95,12 @@ export default function OtpForm() {
     }, [token, router]);
 
     useEffect(() => {
+        if (!emailOrPhone) {
+            router.replace('/user/login');
+        }
+    }, [emailOrPhone, router]);
+
+    useEffect(() => {
         if (!otpResendExpiry) {
             setResendAvailable(true)
             setSecondsLeft(0)
