@@ -170,7 +170,7 @@ export default function OtpForm() {
         message: string,
         successRedirect = "/",
     ) {
-        if (message === "Verification successful") {
+        if (message === "Sign-in verification successful") {
             triggerToast(message, "success");
 
             if (successRedirect) {

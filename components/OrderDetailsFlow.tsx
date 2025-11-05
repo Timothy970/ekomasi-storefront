@@ -1,11 +1,12 @@
 "use client"
-import { selectUserOrder } from "@/lib/features/cart/cartSlice"
-import { useAppSelector } from "@/lib/hooks"
+import { Order } from "@/lib/features/types"
 import React from "react"
 
-export default function OrderDetailsFlow() {
-    const order = useAppSelector(selectUserOrder)
+type OrderDetailsFlowProps = {
+    order: Order
+}
 
+export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
     const orderFlow = [
         "order placed",
         "pending",

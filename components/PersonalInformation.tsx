@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
-import { CartData, FormData, OrderItem } from '@/lib/features/types'
+import { CartData, FormData, MemberOrderPayload, OrderItem } from '@/lib/features/types'
 import { createOrderAsync, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -30,7 +30,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         email: '',
         phone: '',
         country: '',
-        courier: '',
         address: '',
         apartment: '',
         city: '',
@@ -38,8 +37,8 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         voucher: '',
         paymentMethod: 'mpesa',
         deliveryType: 'Ship',
+        deliveryLocationId: "",
         promoApplied: false,
-        deliveryCharge: '',
         paymentPhone: '',
     })
     const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -50,6 +49,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     const status = useAppSelector(selectStatus)
     const token = useAppSelector(selectUserToken)
     const address = useAppSelector(selectAddress)
+    const [isEditingAddress, setIsEditingAddress] = useState(false);
 
     const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
         { key: "firstName", label: "First Name" },
@@ -59,7 +59,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         { key: "country", label: "Country" },
         { key: "address", label: "Address" },
         { key: "city", label: "City" },
-        { key: "deliveryCharge", label: "Delivery Charge" },
         { key: "paymentPhone", label: "Payment Phone Number" },
     ];
 
@@ -71,7 +70,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         { key: "country", label: "Country" },
         { key: "address", label: "Address" },
         { key: "city", label: "City" },
-        { key: "deliveryCharge", label: "Delivery Charge" },
         { key: "paymentPhone", label: "Payment Phone Number" },
         { key: "apartment", label: "Apartment" },
         { key: "postalCode", label: "Postal Code" },
@@ -86,12 +84,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             dispatch(getUserAddressAsync())
         }
     }, [token])
-
-    useEffect(() => {
-        if (!cart) {
-            router.replace("/")
-        }
-    }, [cart]);
 
     useEffect(() => {
         if (profile) {
@@ -110,9 +102,9 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         if (cart?.cart_items?.length) {
             const mappedItems: OrderItem[] = cart.cart_items.map((item) => ({
                 product_id: item?.product.product_id,
-                variant_id: null,
+                // variant_id: null,
                 quantity: item.quantity,
-                unit_price: item?.product.price,
+                // unit_price: item?.product.price,
             }));
 
             setOrderItems(mappedItems);
@@ -132,7 +124,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
 
             if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phone)) return prev;
 
-            phone = phone.trim().replace(/\D/g, ""); // keep digits only
+            phone = phone.trim().replace(/\D/g, "");
 
             if (phone.startsWith("0")) {
                 phone = phone.substring(1);
@@ -233,6 +225,15 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         return true;
     };
 
+    const handleEditAddressClick = () => {
+        setIsEditingAddress(true);
+        router.push("/dashboard/address");
+
+        setTimeout(() => {
+            setIsEditingAddress(false);
+        }, 1000);
+    };
+
     const orderPayload = (formData: FormData) => {
         return {
             is_guest_order: page === "member" ? false : true,
@@ -250,15 +251,17 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                 email: formData.email,
                 phone: formData.phone,
             },
-            courier_details: formData.courier ?? "",
             order_items: orderItems ?? [],
-            delivery_charge: formData?.deliveryCharge ?? "",
-            delivery_address: formData?.address,
+            location_id: formData?.deliveryLocationId ?? "",
         };
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (isEditingAddress) {
+            return;
+        }
 
         if (!validateForm(formData)) {
             return;
@@ -282,7 +285,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         }
     };
 
-    const redirectToOrderDetails = (order_id: string, page: string, fail = false, message = '') => {
+    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, fail = false, message = '') => {
         if (!fail) {
             triggerToast("Order placed successfully and Payment request initiated successfully!", "success");
         } else {
@@ -292,7 +295,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         if (page === "member") {
             router.push(`/dashboard/orders/${order_id}`)
         } else if (page === "guest") {
-            router.push(`/guest/orders/${order_id}`)
+            router.push(`/guest/orders/${order_id}/${data?.guest_personal_details.email}/${data?.guest_personal_details?.phone}`)
         }
     }
 
@@ -457,7 +460,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                             </Select>
 
                             <Button
-                                onClick={() => router.push("/dashboard/address")}
+                                onClick={handleEditAddressClick}
                                 className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
                             >
                                 <ArrowUpRight />

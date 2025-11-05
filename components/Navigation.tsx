@@ -6,7 +6,7 @@ import SideBar from './AppLayout/SideBar';
 import { useAppDispatch } from '@/lib/hooks';
 import { getCategoriesAsync, getHomeDataAsync } from '@/lib/features/navigation/navigationSlice';
 import CategoryFilterModal from './CategoryFilterModal';
-import { useFilter, useGuestCheckout } from '@/app/ClientLayout';
+import { useFilter, useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout';
 import GuestCheckoutModal from './GuestCheckoutModal';
 
 export default function Navigation({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -14,6 +14,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     const dispatch = useAppDispatch()
     const { openFilterModal, setOpenFilterModal } = useFilter()
     const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
+    const { isBuyNow, setIsBuyNow } = useIsBuyNow()
 
     useEffect(() => {
         dispatch(getCategoriesAsync())
@@ -45,6 +46,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
                     openGuestCheckoutModal && <GuestCheckoutModal
                         openGuestCheckoutModal={openGuestCheckoutModal}
                         setOpenGuestCheckoutModal={setOpenGuestCheckoutModal}
+                        isBuyNow={isBuyNow}
                     />
                 }
             </div>

@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createGuestOrder, createOrder, deleteProductFromCart, getCart, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
-import type { CartData, GuestOrderPayload, MemberOrderPayload, Order, Pagination } from "../types";
+import { addToCart, createCart, createOrder, deleteProductFromCart, getCart, getGuestOrder, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
+import type { CartData, GuestOrderParams, MemberOrderPayload, Order, Pagination } from "../types";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -13,6 +13,7 @@ interface CartSliceState {
 	orders: Order[] | [],
 	order: Order | null,
 	pagination: Pagination | null;
+	guestOrder: Order | null;
 }
 
 const initialState: CartSliceState = {
@@ -26,6 +27,7 @@ const initialState: CartSliceState = {
 	orders: [],
 	order: null,
 	pagination: null,
+	guestOrder: null,
 };
 
 export const cartSlice = createAppSlice({
@@ -239,7 +241,7 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, page:string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
+			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
 				const response = await createOrder(data, page);
 
 				if (response?.data?.order_id) {
@@ -255,12 +257,12 @@ export const cartSlice = createAppSlice({
 					const paymentRes = await makePayment(paymentData)
 
 					if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
-						redirectToOrderDetails(response?.data?.order_id, page, false, '')
+						redirectToOrderDetails(response?.data?.order_id, data, page, false, '')
 					} else {
 						if (paymentRes?.data?.errorMessage) {
-							redirectToOrderDetails(response?.data?.order_id, page, false, paymentRes?.data?.errorMessage)
+							redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage)
 						} else {
-							redirectToOrderDetails(response?.data?.order_id, page, true, 'Order succesfully placed!')
+							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order succesfully placed!')
 						}
 					}
 				}
@@ -278,38 +280,6 @@ export const cartSlice = createAppSlice({
 						state.buyNowCart = null
 						state.cartId = null
 						state.buyNowcartId = null
-					} else {
-						state.message = action.payload?.message || "Failed to fetch variants";
-						state.success = false;
-					}
-					state.status = "idle";
-				},
-				rejected: (state, action) => {
-					state.status = "failed";
-					state.message = action.error?.message || "Something went wrong";
-					state.success = false;
-				},
-			}
-		),
-		createGuestOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails }: { data: GuestOrderPayload, redirectToOrderDetails: (cart_id: string) => void }) => {
-				const response = await createGuestOrder(data);
-
-				if (response?.data?.order_id) {
-					redirectToOrderDetails(response?.data?.order_id)
-				}
-
-				return response;
-			},
-			{
-				pending: (state) => {
-					state.status = "loading";
-				},
-				fulfilled: (state, action) => {
-					if (action.payload?.status_code === 201 && action.payload.data.order_id) {
-						state.success = true;
-						state.cart = null
-						state.cartId = null
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
@@ -407,6 +377,33 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		getGuestOrderAsync: create.asyncThunk(
+			async (data: GuestOrderParams) => {
+				const response = await getGuestOrder(data);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.guestOrder = action.payload.data
+					} else {
+						state.message = action.payload?.message || "Failed to fetch guest order";
+						state.success = false;
+						state.guestOrder = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectStatus: (state: CartSliceState) => state.status,
@@ -418,10 +415,11 @@ export const cartSlice = createAppSlice({
 		selectCartId: (state: CartSliceState) => state.cartId,
 		selectSuccess: (state: CartSliceState) => state.success,
 		selectMessage: (state: CartSliceState) => state.message,
+		selectGuestOrder: (state: CartSliceState) => state.guestOrder,
 	},
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, getBuyNowCartAsync, addToCartAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync } = cartSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder } = cartSlice.selectors;
+export const { resetSuccess, resetMessage, getCartAsync, getBuyNowCartAsync, addToCartAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync, getGuestOrderAsync } = cartSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder, selectGuestOrder } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;

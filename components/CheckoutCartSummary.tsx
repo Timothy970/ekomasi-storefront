@@ -40,7 +40,7 @@ export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
                     <span className='text-custom-black text-[0.875rem]'>
                         {"KES " + new Intl.NumberFormat("en-KE", {
                             minimumFractionDigits: 0,
-                        }).format(cart?.total ?? 0)}
+                        }).format(cart?.sub_total ?? 0)}
                     </span>
                 </div>
 
@@ -64,7 +64,7 @@ export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
 
             <h2 className='text-[2rem] font-bold self-start mt-[1.5rem]'>Cart</h2>
 
-            <ChekcoutCartItems />
+            <ChekcoutCartItems cart={cart} />
         </div>
     )
 }

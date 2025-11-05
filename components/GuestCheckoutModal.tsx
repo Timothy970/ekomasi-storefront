@@ -2,11 +2,14 @@ import React from 'react'
 import { Button } from './ui/button'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { X } from 'lucide-react'
+
 interface GuestCheckoutModal {
     setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>
     openGuestCheckoutModal: boolean
+    isBuyNow: boolean
 }
-export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal }: GuestCheckoutModal) {
+
+export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal, isBuyNow }: GuestCheckoutModal) {
     const router = useRouter()
     const searchParams = useSearchParams();
     const locationId = searchParams.get("location_id");
@@ -33,7 +36,11 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
 
     const handleGuestCheckout = () => {
         setOpenGuestCheckoutModal(false)
-        router.push(appendLocation("/checkout/guest"))
+        if (isBuyNow) {
+            router.push(appendLocation("/checkout/guest/buy-now"))
+        } else {
+            router.push(appendLocation("/checkout/guest"))
+        }
     }
 
     return (

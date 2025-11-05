@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderPayload, MemberOrderPayload, Order, OrderPayload, PaymentRequestPayload, PaymentRequestResponse, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
+import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderParams, GuestOrderResponse, MemberOrderPayload, PaymentRequestPayload, PaymentRequestResponse, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart({ cart_id, location_id }: { cart_id: string, location_id?: number }): Promise<ViewCartResponse> {
@@ -82,15 +82,10 @@ export async function deleteProductFromCart(data: DeleteCartRequest): Promise<Cr
 
 export async function createOrder(data: MemberOrderPayload, page: "member" | "guest"): Promise<CreateOrderResponse> {
     try {
-        const response = await api.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}order/create/new`, data,
-            {
-                headers: {
-                    requiresAuth: page === "member",
-                },
-            }
+        const response = await api.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`, data,
+            { headers: { requiresAuth: page === "member" } }
         );
 
-        console.log(response, "ressss");
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
@@ -102,21 +97,6 @@ export async function makePayment(data: PaymentRequestPayload): Promise<PaymentR
     try {
         const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}payment/pay`,
-            data,
-            {}
-        );
-
-        return response.data;
-    } catch (error) {
-        const err = error as AxiosError;
-        throw err;
-    }
-}
-
-export async function createGuestOrder(data: GuestOrderPayload): Promise<CreateOrderResponse> {
-    try {
-        const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/create`,
             data,
             {}
         );
@@ -146,6 +126,20 @@ export async function getUserOrder(order_id: string): Promise<UserOrderResponse>
             params: { order_id },
             headers: { requiresAuth: true },
         });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getGuestOrder(data: GuestOrderParams): Promise<GuestOrderResponse> {
+    try {
+        const response = await api.get<GuestOrderResponse>(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}order/guest-orders/${data?.order_id}/${data?.email}/${data?.phone}`,
+            { headers: { requiresAuth: false } }
+        );
 
         return response.data;
     } catch (error) {

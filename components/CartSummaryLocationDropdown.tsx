@@ -47,7 +47,7 @@ export default function CartSummaryLocationDropdown({ selectedId, setSelectedId 
             onValueChange={handleValueChange}
         >
             <SelectTrigger className="w-full p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">
-                <SelectValue placeholder="Select store..." />
+                <SelectValue placeholder="Select shipping location..." />
             </SelectTrigger>
             <SelectContent className="">
                 {locations?.locations.map((loc) => (
