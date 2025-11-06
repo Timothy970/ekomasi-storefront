@@ -22,6 +22,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { ArrowUpRight } from 'lucide-react'
+import { useIsEditingAdress } from '@/app/ClientLayout'
 
 export default function PersonalInformation({ page, cart, isBuyNow }: { page: "member" | "guest", cart: CartData, isBuyNow: boolean }) {
     const [formData, setFormData] = useState<FormData>({
@@ -49,31 +50,63 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     const status = useAppSelector(selectStatus)
     const token = useAppSelector(selectUserToken)
     const address = useAppSelector(selectAddress)
-    const [isEditingAddress, setIsEditingAddress] = useState(false);
+    const { isEditingAddress, setIsEditingAddress } = useIsEditingAdress()
 
-    const REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
-        { key: "firstName", label: "First Name" },
-        { key: "lastName", label: "Last Name" },
-        { key: "email", label: "Email" },
-        { key: "phone", label: "Phone Number" },
-        { key: "country", label: "Country" },
-        { key: "address", label: "Address" },
-        { key: "city", label: "City" },
-        { key: "paymentPhone", label: "Payment Phone Number" },
+    const ALL_FIELDS: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
+        { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
+        { key: "lastName", label: "Last Name", requiredFor: ["member", "guest"] },
+        { key: "email", label: "Email", requiredFor: ["member", "guest"] },
+        { key: "phone", label: "Phone Number", requiredFor: ["member", "guest"] },
+        { key: "country", label: "Country", requiredFor: ["member", "guest"] },
+        { key: "address", label: "Address", requiredFor: ["member", "guest"] },
+        { key: "city", label: "City", requiredFor: ["member", "guest"] },
+        { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
+        { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
+        { key: "apartment", label: "Apartment", requiredFor: ["guest"] },
+        { key: "postalCode", label: "Postal Code", requiredFor: ["guest"] },
     ];
 
-    const GUEST_REQUIRED_FIELDS: { key: keyof FormData; label: string }[] = [
-        { key: "firstName", label: "First Name" },
-        { key: "lastName", label: "Last Name" },
-        { key: "email", label: "Email" },
-        { key: "phone", label: "Phone Number" },
-        { key: "country", label: "Country" },
-        { key: "address", label: "Address" },
-        { key: "city", label: "City" },
-        { key: "paymentPhone", label: "Payment Phone Number" },
-        { key: "apartment", label: "Apartment" },
-        { key: "postalCode", label: "Postal Code" },
-    ];
+    const getRequiredFields = (page: "member" | "guest") =>
+        ALL_FIELDS.filter(field => field.requiredFor.includes(page));
+
+    const isEmpty = (value: any) =>
+        value === undefined ||
+        value === null ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === "string" && value.trim() === "");
+
+    const isFormComplete = (form: FormData): boolean => {
+        const requiredFields = getRequiredFields(page);
+        for (const { key } of requiredFields) {
+            if (isEmpty(form[key])) return false;
+        }
+        if (isEmpty(form.email) && isEmpty(form.phone)) return false;
+        return true;
+    };
+
+    const validateForm = (form: FormData): boolean => {
+        const requiredFields = getRequiredFields(page);
+
+        for (const { key, label } of requiredFields) {
+            if (isEmpty(form[key])) {
+                triggerToast(`${label} is required.`, "error");
+                return false;
+            }
+        }
+
+        if (isEmpty(form.email) && isEmpty(form.paymentPhone)) {
+            triggerToast("Either Email or Phone Number is required.", "error");
+            return false;
+        }
+
+        const phone = form.paymentPhone?.trim();
+        if (phone && !phone.startsWith("254")) {
+            triggerToast("Phone number must start with 254.", "error");
+            return false;
+        }
+
+        return true;
+    };
 
     useEffect(() => {
         setIsFormValid(isFormComplete(formData));
@@ -167,69 +200,13 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         }
     }, [address]);
 
-    const isFormComplete = (form: FormData): boolean => {
-        const requiredFields = page === "member" ? REQUIRED_FIELDS : page === "guest" ? GUEST_REQUIRED_FIELDS : null;
-
-        if (!requiredFields) return false;
-
-        const isEmpty = (value: any) =>
-            value === undefined ||
-            value === null ||
-            (Array.isArray(value) && value.length === 0) ||
-            (typeof value === "string" && value.trim() === "");
-
-        for (const { key } of requiredFields) {
-            if (isEmpty(form[key])) return false;
-        }
-
-        if (isEmpty(form.email) && isEmpty(form.phone)) return false;
-
-        return true;
-    };
-
-    const validateForm = (form: FormData): boolean => {
-        const requiredFields = page === "member" ? REQUIRED_FIELDS : page === "guest" ? GUEST_REQUIRED_FIELDS : null;
-
-        if (!requiredFields) {
-            triggerToast("Invalid form type.", "error");
-            return false;
-        }
-
-        const isEmpty = (value: any) =>
-            value === undefined ||
-            value === null ||
-            (Array.isArray(value) && value.length === 0) ||
-            (typeof value === "string" && value.trim() === "");
-
-        for (const { key, label } of requiredFields) {
-            if (isEmpty(form[key])) {
-                triggerToast(`${label} is required.`, "error");
-                return false;
-            }
-        }
-
-        if (isEmpty(form.email) && isEmpty(form.paymentPhone)) {
-            triggerToast("Either Email or Phone Number is required.", "error");
-            return false;
-        }
-
-        const phone = form.paymentPhone?.trim();
-
-        if (phone && !phone.startsWith("254")) {
-            triggerToast("Phone number must start with 254.", "error");
-            return false;
-        }
-
-        return true;
-    };
+    useEffect(() => {
+        setIsEditingAddress(false);
+    }, [])
 
     const handleEditAddressClick = () => {
         setIsEditingAddress(true);
         router.push("/dashboard/address");
-
-        setTimeout(() => {
-            setIsEditingAddress(false);
-        }, 1000);
     };
 
     const orderPayload = (formData: FormData) => {

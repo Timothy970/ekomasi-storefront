@@ -121,12 +121,14 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
             {
               cartId ? <Link href={`/cart/${cartId}`}>
                 <div className='flex justify-center items-center mr-[0.5rem] relative'>
-                  {
-                    cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                      <span className='text-xs'>{cart?.cart_items?.length}</span>
+                  {cart && cart?.cart_items && cart?.cart_items?.length > 0 && (
+                    <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                      <span className='text-xs'>
+                        {cart?.cart_items?.reduce((sum, item) => sum + (item.quantity || 0), 0)}
+                      </span>
                     </div>
-                  }
-
+                  )}
+                  
                   <Icons.CartIcon />
                 </div>
               </Link> : <div onClick={handleIcons} className='flex justify-center items-center mr-[0.5rem] relative'>

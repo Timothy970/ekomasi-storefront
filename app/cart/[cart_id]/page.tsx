@@ -28,6 +28,7 @@ export default function Cart() {
       router.replace("/")
     }
   }, [cart])
+  console.log(cart, 'cart')
 
   return (
     <Navigation>

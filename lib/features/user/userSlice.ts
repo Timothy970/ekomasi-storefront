@@ -68,6 +68,7 @@ export const userSlice = createAppSlice({
 		signUpUserAsync: create.asyncThunk(
 			async (user: SignUpParams) => {
 				const response = await signUpUser(user);
+				console.log(response)
 				return response;
 			},
 			{
@@ -82,7 +83,7 @@ export const userSlice = createAppSlice({
 					}
 
 					if (action.payload?.status_code == 409) {
-						state.message = "User with this email already exists"
+						state.message = action.payload.message
 					}
 
 					state.status = "idle";
