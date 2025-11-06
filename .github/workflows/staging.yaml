@@ -1,7 +1,9 @@
 name: Build & Deploy Staging
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+-rc'
 
 permissions:
   id-token: write
@@ -33,7 +35,7 @@ jobs:
     with:
       service_name: ${{ vars.SERVICE_NAME }}
       service_group: ${{ vars.SERVICE_GROUP }}
-      ref: ${{ github.sha }}
+      ref: ${{ github.ref_name }}
       environment: staging
     secrets: inherit
 
