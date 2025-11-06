@@ -35,7 +35,7 @@ jobs:
     with:
       service_name: ${{ vars.SERVICE_NAME }}
       service_group: ${{ vars.SERVICE_GROUP }}
-      ref: ${{ github.ref_name }}
+      ref: ${{ github.sha }}
       environment: staging
     secrets: inherit
 
