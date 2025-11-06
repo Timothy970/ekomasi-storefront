@@ -464,11 +464,7 @@ export interface CreateOrderData {
 
 export interface PaymentRequestPayload {
   phone_number: string;
-  amount: number;
-  reference: string;
-  description: string;
   order_id: string;
-  delivery_id: string;
 }
 
 export interface PaymentRequestResponse {

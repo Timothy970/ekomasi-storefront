@@ -270,9 +270,6 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         if (cart?.total) {
             let extraPaymentPayload = {
                 phone: formData?.paymentPhone ?? "",
-                amount: cart?.total,
-                reference: "ADENZO",
-                description: "payment test",
             }
 
             if (personalFormDetails?.order_items?.length) {

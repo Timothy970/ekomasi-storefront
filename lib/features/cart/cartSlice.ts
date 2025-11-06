@@ -241,17 +241,13 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string, amount: number, reference: string, description: string } }) => {
+			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string} }) => {
 				const response = await createOrder(data, page);
 
 				if (response?.data?.order_id) {
 					let paymentData = {
 						"phone_number": extraPaymentPayload?.phone,
-						"amount": response?.data?.total,
-						"reference": extraPaymentPayload?.reference,
-						"description": extraPaymentPayload?.description,
 						"order_id": response?.data?.order_id,
-						"delivery_id": response?.data?.delivery_id,
 					}
 
 					const paymentRes = await makePayment(paymentData)
