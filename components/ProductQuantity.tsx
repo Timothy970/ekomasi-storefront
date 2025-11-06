@@ -9,7 +9,7 @@ import { selectProduct } from "@/lib/features/navigation/navigationSlice"
 type ProductQuantityProps = {
   quantity: number
   setQuantity: React.Dispatch<React.SetStateAction<number>>
-  handleAddToCart: () => void
+  handleAddToCart: (addedQuantity: number) => void
 }
 
 const ProductQuantity: React.FC<ProductQuantityProps> = ({
@@ -22,12 +22,12 @@ const ProductQuantity: React.FC<ProductQuantityProps> = ({
 
   const handleIncrease = async () => {
     setQuantity((prev) => Math.min(prev + 1, maxQuantity))
-    handleAddToCart()
+    handleAddToCart(quantity + 1)
   }
 
   const handleDecrease = async () => {
     setQuantity((prev) => Math.max(prev - 1, 1))
-    handleAddToCart()
+    handleAddToCart(quantity - 1)
   }
 
   return (

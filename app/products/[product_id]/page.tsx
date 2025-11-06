@@ -23,7 +23,7 @@ export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
   const dispatch = useAppDispatch()
   const params = useParams<{ product_id: string }>()
-  const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
+  const [quantity, setQuantity] = useState(0)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
@@ -46,6 +46,19 @@ export default function ProductDetail() {
       setBreadCrumb(crumbs)
     }
   }, [product])
+
+  useEffect(() => {
+    if (product && cart?.cart_items) {
+      const cartItem = cart.cart_items.find(
+        item => item?.product.product_id === product.product_id
+      );
+      if (cartItem) {
+        setQuantity(cartItem.quantity);
+      } else {
+        setQuantity(product.stock_quantity > 0 ? 1 : 0);
+      }
+    }
+  }, [product]);
 
   const createAndAdd = (cart_id: string) => {
     if (product?.product_id && cart_id) {
@@ -83,21 +96,22 @@ export default function ProductDetail() {
     }
   }, [dispatch, params?.product_id])
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (addedQuantity: number) => {
     setAddToCartLoading(true)
-    if (!cartId && product?.product_id && quantity > 0) {
+
+    if (!cartId && product?.product_id && addedQuantity > 0) {
       dispatch(
         createCartAsync(
           {
             product_id: product.product_id,
-            quantity,
+            quantity: addedQuantity,
             createAndAdd,
           }
         )
       )
     } else {
       if (product?.product_id && cartId) {
-        dispatch(addToCartAsync({ product_id: product?.product_id, quantity, cart_id: cartId }))
+        dispatch(addToCartAsync({ product_id: product?.product_id, quantity: addedQuantity, cart_id: cartId }))
       }
 
       if (cartId) {
@@ -214,7 +228,7 @@ export default function ProductDetail() {
               {
                 product && <Button
                   disabled={product && product?.stock_quantity <= 0 || addToCartLoading}
-                  onClick={handleAddToCart}
+                  onClick={() => handleAddToCart(quantity)}
                   className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
                 >
                   {
