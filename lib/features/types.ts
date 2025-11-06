@@ -352,7 +352,6 @@ export interface CartData {
   cart_items: CartItem[];
   total: number;
   discount: number;
-  final: number;
   estimated_tax: number;
   delivery_charge: number;
   sub_total: number;

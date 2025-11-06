@@ -16,7 +16,7 @@ export default function CheckoutCartSummary({ cart }: { cart: CartData }) {
             <p className='self-start font-bold text-[1.5rem] uppercase'>
                 {"KES " + new Intl.NumberFormat("en-KE", {
                     minimumFractionDigits: 0,
-                }).format(cart?.final ?? 0)}
+                }).format(cart?.total ?? 0)}
             </p>
 
             {

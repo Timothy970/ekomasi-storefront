@@ -11,7 +11,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function CartSummary({ }) {
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const { openGuestCheckoutModal, setOpenGuestCheckoutModal } = useGuestCheckout()
+    const { setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
     const cart = useAppSelector(selectCart)
@@ -60,7 +60,7 @@ export default function CartSummary({ }) {
             <p className="mt-[0.5rem] text-[1.5rem] uppercase font-[700]">
                 {"KES " + new Intl.NumberFormat("en-KE", {
                     minimumFractionDigits: 0,
-                }).format(cart?.final ?? 0)}
+                }).format(cart?.total ?? 0)}
             </p>
 
             <div className='mt-[1.5rem] flex flex-col w-full'>
@@ -112,7 +112,7 @@ export default function CartSummary({ }) {
                         <span>
                             {"KES " + new Intl.NumberFormat("en-KE", {
                                 minimumFractionDigits: 0,
-                            }).format(cart?.final ?? 0)}
+                            }).format(cart?.total ?? 0)}
                         </span>
                     </div>
 
