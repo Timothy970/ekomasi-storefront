@@ -8,7 +8,7 @@ import PromocodeInput from './PromocodeInput'
 type CheckoutCartSummaryProps = {
     cartId: string | null;
     cart: CartData;
-    isBuyNow: boolean
+    isBuyNow: boolean;
 };
 
 export default function CheckoutCartSummary({ cart, cartId, isBuyNow }: CheckoutCartSummaryProps) {

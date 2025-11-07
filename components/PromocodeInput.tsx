@@ -22,6 +22,7 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
   const id = searchParams.get("location_id");
   const num = Number(id);
   const locationId = !isNaN(num) && num > 0 ? num : null;
+  const debounceDelay = 500;
 
   const handlePromocodeRes = (message: string, errorType: ToastType) => {
     triggerToast(message, errorType);
@@ -35,16 +36,20 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
   }, [dispatch, searchParams]);
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const handler = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
 
-    if (code.trim() === "") {
-      params.delete("promo_code");
-      dispatch(setPromocode(null));
-    } else {
-      params.set("promo_code", code);
-    }
+      if (code.trim() === "") {
+        params.delete("promo_code");
+        dispatch(setPromocode(null));
+      } else {
+        params.set("promo_code", code);
+      }
 
-    router.replace(`${pathname}?${params.toString()}`);
+      router.replace(`${pathname}?${params.toString()}`, undefined);
+    }, debounceDelay);
+
+    return () => clearTimeout(handler);
   }, [code, dispatch, pathname, router, searchParams]);
 
   const applyPromoCode = () => {
@@ -62,7 +67,6 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
       dispatch(
         applyPromoCodeDiscountAsync({
           code,
-          discount_type: "promo_code",
           cart_id: cartId,
           location_id: locationId,
           handlePromocodeRes,
@@ -79,7 +83,6 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
       dispatch(
         applyPromoCodeDiscountAsync({
           code,
-          discount_type: "promo_code",
           cart_id: cartId,
           location_id: locationId,
           handlePromocodeRes,
@@ -89,7 +92,7 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
     }, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [code, cartId, locationId, dispatch]);
+  }, [code, cartId, locationId, dispatch, isBuyNow]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setPromocode(e.target.value));

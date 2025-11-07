@@ -262,8 +262,7 @@ export interface AddToCartRequest {
 export interface ApplyPromoCodeDiscountRequest {
   code: string;
   cart_id: string;
-  discount_type: string;
-  location_id: number | null
+  location_id: number | null;
 }
 
 export interface CreateCartRequest {
@@ -299,7 +298,7 @@ export interface CreateCartResponse {
   status_code?: number;
 };
 
-export interface AppyPromoCodeDisountResponse {
+export interface ApplyPromoCodeDiscountResponse {
   data?: CartData;
   message: string;
   status_code?: number;

@@ -519,7 +519,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
                     <h2 className='font-bold text-[1.5rem]'>Payment</h2>
-                    <p className='text-[0.875rem]a'>Please select your preferred payment option</p>
+                    <p className='text-[0.875rem]'>Please select your preferred payment option</p>
                     {/* {
                         token && <>
                             <div className='flex gap-x-[0.5rem] items-center'>

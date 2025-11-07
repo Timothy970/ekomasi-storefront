@@ -126,8 +126,8 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		applyPromoCodeDiscountAsync: create.asyncThunk(
-			async ({ code, discount_type, cart_id, location_id, handlePromocodeRes, isBuyNow }: { code: string, discount_type: string, cart_id: string, location_id: number | null, handlePromocodeRes: (message: string, errorType: ToastType) => void, isBuyNow: boolean }) => {
-				const response = await applyPromoCodeDiscount({ code, discount_type, cart_id, location_id });
+			async ({ code, cart_id, location_id, handlePromocodeRes, isBuyNow }: { code: string, cart_id: string, location_id: number | null, handlePromocodeRes: (message: string, errorType: ToastType) => void, isBuyNow: boolean }) => {
+				const response = await applyPromoCodeDiscount({ code, cart_id, location_id });
 				if (response?.status_code === 200) {
 					handlePromocodeRes(response?.message, "success")
 

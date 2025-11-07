@@ -30,7 +30,23 @@ export default function CartSummary({ cart }: { cart: CartData }) {
         if (token == null) {
             setOpenGuestCheckoutModal(true)
         } else {
-            router.push(`/checkout/member?location_id=${selectedId}&promo_code=${promoFromUrl}`)
+            let url = '/checkout/member?';
+            let queryAdded = false;
+
+            if (selectedId) {
+                url += `location_id=${selectedId}`;
+                queryAdded = true;
+            }
+
+            if (promoFromUrl) {
+                if (queryAdded) {
+                    url += `&promo_code=${promoFromUrl}`;
+                } else {
+                    url += `promo_code=${promoFromUrl}`;
+                }
+            }
+
+            router.push(url);
         }
     }
 
