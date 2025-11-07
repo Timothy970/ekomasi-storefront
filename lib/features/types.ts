@@ -259,6 +259,13 @@ export interface AddToCartRequest {
   quantity: number;
 }
 
+export interface ApplyPromoCodeDiscountRequest {
+  code: string;
+  cart_id: string;
+  discount_type: string;
+  location_id: number | null
+}
+
 export interface CreateCartRequest {
   product_id: string;
   quantity: number;
@@ -288,6 +295,12 @@ export interface CreateCartResponse {
   data: {
     cart_id: string
   };
+  message: string;
+  status_code?: number;
+};
+
+export interface AppyPromoCodeDisountResponse {
+  data?: CartData;
   message: string;
   status_code?: number;
 };
@@ -403,6 +416,7 @@ export interface FormData {
   promoApplied?: boolean
   paymentPhone?: string;
   deliveryLocationId?: number | string;
+  promo_code?: string;
 }
 
 export interface OrderPayload {
@@ -429,6 +443,7 @@ export interface OrderPayload {
     quantity: number;
     unit_price: number;
   }[];
+  promo_code: string|null;
 };
 
 export interface MemberOrderPayload {
@@ -441,6 +456,7 @@ export interface MemberOrderPayload {
   };
   guest_delivery_address: {};
   order_items: OrderItem[];
+  promo_code?: string|null;
 }
 
 export interface OrderItem {
@@ -505,7 +521,8 @@ export interface Order {
     postal_code: string;
     country: string;
     state: string;
-  }
+  },
+  promo_code?: string|null;
 }
 
 export interface UserAddress {

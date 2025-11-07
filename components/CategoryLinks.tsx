@@ -64,17 +64,17 @@ export default function CategorySlider() {
 
     return (
         <div className="w-full relative hidden lg:block">
-            <div className="w-full lg:flex justify-center items-center flex-col h-auto bg-[rgba(148,35,117,0.08)] hidden">
+            <div className="w-full lg:flex justify-center items-center flex-col h-auto bg-[rgba(148,35,117,0.08)] hidden overflow-x-scroll hide-scrollbar">
                 <div className="max-w-[90rem] mx-auto">
                     <ul className="flex flex-row px-[1.5rem] py-[0.62rem] gap-x-[2rem] list-none text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem] h-[2.438rem] overflow-x-scroll hide-scrollbar max-w-full">
                         <Link href={"/new-in"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem]">
+                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
                                 New In
                             </span>
                         </Link>
 
                         <Link href={"/sales"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem]">
+                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
                                 Sales
                             </span>
                         </Link>
@@ -86,20 +86,20 @@ export default function CategorySlider() {
                                 onMouseLeave={() => handleMouseLeave(cat.id)}
                                 className="flex w-auto  text-[0.875rem] justify-center items-center rounded cursor-pointer transition"
                             >
-                                <span className="text-custom-black leading-[1.95rem]">
+                                <span className="text-custom-black leading-[1.95rem] text-nowrap">
                                     {cat.name}
                                 </span>
                             </li>
                         ))}
 
                         <Link href={"/blogs"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem]">
+                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
                                 Blogs
                             </span>
                         </Link>
 
                         <Link href={"/about-us"} className="flex w-auto text-[0.875rem] justify-center items-center rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem]">
+                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
                                 About Us
                             </span>
                         </Link>

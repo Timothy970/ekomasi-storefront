@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
-import { getCartAsync, selectCart } from '@/lib/features/cart/cartSlice'
+import { getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 import CartSummaryLocationDropdown from './CartSummaryLocationDropdown'
 import { triggerToast } from '@/app/utils/toastUtils'
+import { CartData } from '@/lib/features/types'
+import PromocodeInput from './PromocodeInput'
 
-export default function CartSummary({ }) {
+export default function CartSummary({ cart }: { cart: CartData }) {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const { setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
-    const cart = useAppSelector(selectCart)
     const dispatch = useAppDispatch()
     const params = useParams<{ cart_id: string }>()
     const searchParams = useSearchParams();
+    const cartId = useAppSelector(selectCartId)
+    const promoFromUrl = searchParams.get("promo_code");
 
     const handleContinueToCheckout = () => {
         if (!selectedId) {
@@ -28,7 +30,7 @@ export default function CartSummary({ }) {
         if (token == null) {
             setOpenGuestCheckoutModal(true)
         } else {
-            router.push(`/checkout/member?location_id=${selectedId}`)
+            router.push(`/checkout/member?location_id=${selectedId}&promo_code=${promoFromUrl}`)
         }
     }
 
@@ -68,12 +70,10 @@ export default function CartSummary({ }) {
                     <span className='text-base font-[400]'>Do you have a Promo Code ?</span>
                 </div>
 
-                <div className='w-full flex items-center justify-start mt-[0.75rem] gap-x-[1rem]'>
-                    <Input placeholder='Promo Code' className='h-[3rem] max-w-[15rem] border-black text-[0.875rem] ' />
-                    <Button className='h-[3rem] border rounded-md bg-white text-custom-black'>
-                        Apply
-                    </Button>
-                </div>
+                <PromocodeInput
+                    cartId={cartId}
+                    isBuyNow={false}
+                />
 
                 <div className='mt-[1.5rem]'>
                     <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>

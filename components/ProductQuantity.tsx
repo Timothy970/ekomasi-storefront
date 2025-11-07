@@ -21,14 +21,16 @@ const ProductQuantity: React.FC<ProductQuantityProps> = ({
   const maxQuantity = product?.stock_quantity ?? 0
 
   const handleIncrease = async () => {
-    setQuantity((prev) => Math.min(prev + 1, maxQuantity))
-    handleAddToCart(quantity + 1)
-  }
+    const newQty = quantity === 0 ? 1 : Math.min(quantity + 1, maxQuantity);
+    handleAddToCart(newQty);
+    setQuantity(newQty);
+  };
 
   const handleDecrease = async () => {
-    setQuantity((prev) => Math.max(prev - 1, 1))
-    handleAddToCart(quantity - 1)
-  }
+    const newQty = Math.max(quantity - 1, 1);
+    handleAddToCart(newQty);
+    setQuantity(newQty);
+  };
 
   return (
     <div className="text-custom-black mt-[0.5rem]">
