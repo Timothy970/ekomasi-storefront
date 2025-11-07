@@ -58,8 +58,6 @@ export default function NewIn() {
     if (pagination?.has_prev) {
       const updatedQuery = updateQueryParam("page", pagination.page - 1);
       setQuery(updatedQuery);
-    } else {
-      triggerToast("You are already on the first page.", "info");
     }
   };
 
@@ -67,8 +65,6 @@ export default function NewIn() {
     if (pagination?.has_next) {
       const updatedQuery = updateQueryParam("page", pagination.page + 1);
       setQuery(updatedQuery);
-    } else {
-      triggerToast("No more products to display.", "info");
     }
   };
 

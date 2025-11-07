@@ -62,8 +62,6 @@ export default function SubCategory() {
         if (pagination?.has_prev) {
             const newPage = pagination.page - 1
             setQuery(`?size=${pagination.size}&page=${newPage}`)
-        } else {
-            triggerToast("You are already on the first page.", "info");
         }
     }
 
@@ -71,8 +69,6 @@ export default function SubCategory() {
         if (pagination?.has_next) {
             const newPage = pagination.page + 1
             setQuery(`?size=${pagination.size}&page=${newPage}`)
-        } else {
-            triggerToast("No more products to display.", "info");
         }
     }
 

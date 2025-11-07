@@ -3,13 +3,12 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import LocationDropdown from './LocationDropdown'
-import { Checkbox } from './ui/checkbox'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { selectUserProfile, selectUserToken } from '@/lib/features/user/userSlice'
 import CountrySelect from './CountrySelect'
 import { CartData, FormData, MemberOrderPayload, OrderItem } from '@/lib/features/types'
-import { createOrderAsync, selectStatus } from '@/lib/features/cart/cartSlice'
+import { createOrderAsync, selectPromocode, selectStatus } from '@/lib/features/cart/cartSlice'
 import { useRouter } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from './LoadingIndicator'
@@ -51,6 +50,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     const token = useAppSelector(selectUserToken)
     const address = useAppSelector(selectAddress)
     const { isEditingAddress, setIsEditingAddress } = useIsEditingAdress()
+    const promoCode = useAppSelector(selectPromocode)
 
     const ALL_FIELDS: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
         { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
@@ -228,6 +228,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             },
             order_items: orderItems ?? [],
             location_id: formData?.deliveryLocationId ?? "",
+            promo_code: promoCode,
         };
     };
 
@@ -518,8 +519,8 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
                     <h2 className='font-bold text-[1.5rem]'>Payment</h2>
-                    <p className='text-[0.875rem]a'>Please select your preferred payment option</p>
-                    {
+                    <p className='text-[0.875rem]'>Please select your preferred payment option</p>
+                    {/* {
                         token && <>
                             <div className='flex gap-x-[0.5rem] items-center'>
                                 <Checkbox disabled className='h-[1.125rem] w-[1.125rem]' />
@@ -533,7 +534,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                                 </Button>
                             </div>
                         </>
-                    }
+                    } */}
 
                     <RadioGroup defaultValue="mpesa" className="flex flex-col gap-y-[1rem]">
                         <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">

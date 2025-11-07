@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { AddToCartRequest, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderParams, GuestOrderResponse, MemberOrderPayload, PaymentRequestPayload, PaymentRequestResponse, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
+import { AddToCartRequest, ApplyPromoCodeDiscountRequest, ApplyPromoCodeDiscountResponse, CreateCartRequest, CreateCartResponse, CreateOrderResponse, DeleteCartRequest, GuestOrderParams, GuestOrderResponse, MemberOrderPayload, PaymentRequestPayload, PaymentRequestResponse, UserOrderResponse, UserOrdersResponse, ViewCartResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCart({ cart_id, location_id }: { cart_id: string, location_id?: number }): Promise<ViewCartResponse> {
@@ -31,6 +31,26 @@ export async function addToCart(data: AddToCartRequest): Promise<any> {
         const err = error as AxiosError;
         console.error(err.response?.data || err.message, "❌ error adding to cart");
         throw err;
+    }
+}
+
+export async function applyPromoCodeDiscount(data: ApplyPromoCodeDiscountRequest): Promise<ApplyPromoCodeDiscountResponse> {
+    try {
+        const response = await axios.post<ApplyPromoCodeDiscountResponse>(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/apply-discount`,
+            data
+        );
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError<{ message: string; status_code: number }>;
+
+        const errorResponse: ApplyPromoCodeDiscountResponse = {
+            message: err.response?.data?.message ?? "Failed to apply promo code.",
+            status_code: err.response?.data?.status_code ?? 500,
+        };
+
+        return errorResponse;
     }
 }
 

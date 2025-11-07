@@ -58,8 +58,6 @@ export default function search() {
             const newPage = pagination.page - 1
             const updatedQuery = updateQueryParam("page", newPage)
             setQuery(updatedQuery)
-        } else {
-            triggerToast("You are already on the first page.", "info");
         }
     }
 
@@ -68,8 +66,6 @@ export default function search() {
             const newPage = pagination.page + 1
             const updatedQuery = updateQueryParam("page", newPage)
             setQuery(updatedQuery)
-        } else {
-            triggerToast("No more products to display.", "info");
         }
     }
 

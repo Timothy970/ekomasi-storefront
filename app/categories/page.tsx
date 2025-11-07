@@ -7,7 +7,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '../ClientLayout'
 import { Crumb } from '@/lib/features/types'
-import { triggerToast } from '../utils/toastUtils'
 
 export default function categories() {
     const dispatch = useAppDispatch()
@@ -53,8 +52,6 @@ export default function categories() {
             newQuery.set('page', String(pagination.page - 1));
             newQuery.set('size', String(pagination.size));
             setQuery(`?${newQuery.toString()}`);
-        } else {
-            triggerToast("You are already on the first page.", "info");
         }
     };
 
@@ -64,8 +61,6 @@ export default function categories() {
             newQuery.set('page', String(pagination.page + 1));
             newQuery.set('size', String(pagination.size));
             setQuery(`?${newQuery.toString()}`);
-        } else {
-            triggerToast("No more products to display.", "info");
         }
     };
 

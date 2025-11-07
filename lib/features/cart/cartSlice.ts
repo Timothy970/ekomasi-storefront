@@ -1,6 +1,7 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addToCart, createCart, createOrder, deleteProductFromCart, getCart, getGuestOrder, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
+import { addToCart, applyPromoCodeDiscount, createCart, createOrder, deleteProductFromCart, getCart, getGuestOrder, getUserOrder, getUserOrders, makePayment, updateCart } from "./cartAPI";
 import type { CartData, GuestOrderParams, MemberOrderPayload, Order, Pagination } from "../types";
+import { ToastType } from "../toast/toastSlice";
 
 interface CartSliceState {
 	status: "idle" | "loading" | "failed";
@@ -14,6 +15,7 @@ interface CartSliceState {
 	order: Order | null,
 	pagination: Pagination | null;
 	guestOrder: Order | null;
+	promoCode: null | string;
 }
 
 const initialState: CartSliceState = {
@@ -28,6 +30,7 @@ const initialState: CartSliceState = {
 	order: null,
 	pagination: null,
 	guestOrder: null,
+	promoCode: null,
 };
 
 export const cartSlice = createAppSlice({
@@ -39,6 +42,9 @@ export const cartSlice = createAppSlice({
 		}),
 		resetMessage: create.reducer((state) => {
 			state.message = "";
+		}),
+		setPromocode: create.reducer<string | null>((state, action) => {
+			state.promoCode = action.payload;
 		}),
 		getCartAsync: create.asyncThunk(
 			async ({ cart_id, location_id }: { cart_id: string, location_id?: number }) => {
@@ -116,6 +122,48 @@ export const cartSlice = createAppSlice({
 					state.status = "failed";
 					state.message = action.error?.message || "Something went wrong";
 					state.success = false;
+				},
+			}
+		),
+		applyPromoCodeDiscountAsync: create.asyncThunk(
+			async ({ code, cart_id, location_id, handlePromocodeRes, isBuyNow }: { code: string, cart_id: string, location_id: number | null, handlePromocodeRes: (message: string, errorType: ToastType) => void, isBuyNow: boolean }) => {
+				const response = await applyPromoCodeDiscount({ code, cart_id, location_id });
+				if (response?.status_code === 200) {
+					handlePromocodeRes(response?.message, "success")
+
+				} else {
+					handlePromocodeRes(response?.message, "error")
+				}
+
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 && action.payload.data) {
+						state.success = true;
+
+						if (action.meta.arg.isBuyNow) {
+							state.buyNowCart = action.payload.data
+						} else {
+							state.cart = action.payload.data
+						}
+						
+						state.promoCode = action.meta.arg.code;
+					} else {
+						state.message = action.payload?.message;
+						state.success = false;
+						state.promoCode = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+					state.promoCode = null
 				},
 			}
 		),
@@ -241,7 +289,7 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string} }) => {
+			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string } }) => {
 				const response = await createOrder(data, page);
 
 				if (response?.data?.order_id) {
@@ -276,6 +324,7 @@ export const cartSlice = createAppSlice({
 						state.buyNowCart = null
 						state.cartId = null
 						state.buyNowcartId = null
+						state.promoCode = null
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
@@ -412,10 +461,11 @@ export const cartSlice = createAppSlice({
 		selectSuccess: (state: CartSliceState) => state.success,
 		selectMessage: (state: CartSliceState) => state.message,
 		selectGuestOrder: (state: CartSliceState) => state.guestOrder,
+		selectPromocode: (state: CartSliceState) => state.promoCode,
 	},
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getCartAsync, getBuyNowCartAsync, addToCartAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync, getGuestOrderAsync } = cartSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder, selectGuestOrder } = cartSlice.selectors;
+export const { resetSuccess, resetMessage, setPromocode, getCartAsync, getBuyNowCartAsync, addToCartAsync, applyPromoCodeDiscountAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync, getGuestOrderAsync } = cartSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectPromocode, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder, selectGuestOrder } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;
