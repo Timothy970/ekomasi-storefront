@@ -77,6 +77,7 @@ export interface Product {
   images?: Image[];
   urls?: Image[];
   liked_by_user?: boolean;
+  tag: string;
 }
 
 export interface SubCategory {

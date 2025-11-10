@@ -20,6 +20,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
     const isInitiallyOpen = openList.includes(variantName)
     const [isOpen, setIsOpen] = useState(isInitiallyOpen)
     const [contentHeight, setContentHeight] = useState<`${number}px` | "auto">("auto")
+    const isColorVariant = variantName === "color" || variantName === "colour"
 
     useEffect(() => {
         setSearchParamsStr(searchParamsFromHook.toString())
@@ -136,19 +137,21 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
                 <div className="flex flex-col gap-y-[1rem] p-[0.5rem]">
                     {variant?.variants?.map((item, index) => {
                         const isChecked = checkedValues.includes(item.name)
+                        const colorName = item?.name?.toLowerCase() || "#fff"
+
                         return (
-                            <div
-                                key={index}
-                                className="flex justify-start items-center gap-x-[0.5rem]"
-                            >
-                                <Checkbox
-                                    checked={isChecked}
-                                    onCheckedChange={() => handleToggle(item.name)}
-                                    className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
-                                />
-                                <span className="text-custom-black font-normal text-[0.875rem] leading-[1.95rem] capitalize">
-                                    {item?.name}
-                                </span>
+                            <div key={index} className="flex items-center justify-strart flex-row gap-x-[0.75rem]">
+                                {isColorVariant && <div style={{ backgroundColor: colorName }} className="rounded-full border border-black bg-green-600 h-[1rem] w-[1rem]"></div>}
+                                <div className="flex justify-start items-center gap-x-[0.5rem]">
+                                    <Checkbox
+                                        checked={isChecked}
+                                        onCheckedChange={() => handleToggle(item.name)}
+                                        className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
+                                    />
+                                    <span className="text-custom-black font-normal text-[0.875rem] leading-[1.95rem] capitalize">
+                                        {item?.name}
+                                    </span>
+                                </div>
                             </div>
                         )
                     })}

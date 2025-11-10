@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/features/types";
@@ -6,13 +6,6 @@ import { customeParser } from "@/lib/utils";
 
 export default function CategoryProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
-
-  const isNewIn = useMemo(() => {
-    const createdDate = new Date(product.created_at);
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    return createdDate >= oneMonthAgo;
-  }, [product.created_at]);
 
   useEffect(() => {
     if (product?.id) {
@@ -44,11 +37,11 @@ export default function CategoryProductCard({ product }: { product: Product }) {
           />
         )}
 
-        {isNewIn && (
-          <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
-            <span className="text-[0.75rem] text-white font-bold">New In</span>
+        {
+          product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
+            <span className="text-[0.75rem] text-white font-bold">{product?.tag}</span>
           </div>
-        )}
+        }
       </div>
 
       <div className="pt-4">
