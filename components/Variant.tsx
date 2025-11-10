@@ -18,7 +18,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
         const values: string[] = []
         variants.forEach(v => {
-            const [name, value] = v.split("--")
+            const [name, value] = v.split("---")
             if (name === variant.variant_type && value) {
                 values.push(value)
             }
@@ -43,7 +43,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         const searchParams = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query)
 
         const variants = searchParams.getAll("variant").filter(v => {
-            const [name] = v.split("--")
+            const [name] = v.split("---")
             return name !== variant.variant_type
         })
 
@@ -52,7 +52,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         variants.forEach(v => searchParams.append("variant", v))
 
         newValues.forEach(v => {
-            searchParams.append("variant", `${variant.variant_type}--${v}`)
+            searchParams.append("variant", `${variant.variant_type}---${v}`)
         })
 
         const newQuery = "?" + searchParams.toString()
@@ -61,7 +61,6 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         const newUrl = `${pathname}${newQuery}`
         router.replace(newUrl, { scroll: false })
     }
-
 
     return (
         <div className='flex flex-col gap-y-[1rem] mb-[1rem]'>
