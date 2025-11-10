@@ -68,7 +68,6 @@ export const userSlice = createAppSlice({
 		signUpUserAsync: create.asyncThunk(
 			async (user: SignUpParams) => {
 				const response = await signUpUser(user);
-				console.log(response)
 				return response;
 			},
 			{

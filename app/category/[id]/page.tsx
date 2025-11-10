@@ -9,7 +9,6 @@ import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
 import { Crumb } from '@/lib/features/types'
 import { customeParser } from '@/lib/utils'
-import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function ProductCategory() {
     const category = useAppSelector(selectCategory)
