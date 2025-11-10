@@ -20,7 +20,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     const router = useRouter()
     const category = useAppSelector(selectCategory)
     const searchParams = useSearchParams()
-    const { query, setQuery } = useFilterQuery()
+    const { setQuery } = useFilterQuery()
     const pathname = usePathname()
 
     const [priceRange, setPriceRange] = useState<[number, number]>([
@@ -39,7 +39,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
 
         debounceRef.current = setTimeout(() => {
             const params = new URLSearchParams(window.location.search)
-            
+
             params.set("minPrice", values[0].toString())
             params.set("maxPrice", values[1].toString())
 
@@ -84,12 +84,6 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
                 </div>
             )}
 
-            <div className="flex flex-col gap-y-[1.5rem]">
-                {variants?.map((variant, index) => (
-                    <Variant key={index.toString()} variant={variant} />
-                ))}
-            </div>
-
             <div className="flex flex-col items-center justify-center">
                 <PriceRangeSlider
                     min={0}
@@ -98,6 +92,12 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
                     defaultValues={priceRange}
                     onChange={handlePriceChange}
                 />
+            </div>
+
+            <div className="flex flex-col gap-y-[1.5rem]">
+                {variants?.map((variant, index) => (
+                    <Variant key={index.toString()} variant={variant} />
+                ))}
             </div>
 
             <div className="flex w-full items-center justify-between">
