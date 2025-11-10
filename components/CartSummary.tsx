@@ -98,7 +98,7 @@ export default function CartSummary({ cart }: { cart: CartData }) {
                             <span>
                                 {"KES " + new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
-                                }).format(cart?.total ?? 0)}
+                                }).format(cart?.sub_total ?? 0)}
                             </span>
                         </div>
 
