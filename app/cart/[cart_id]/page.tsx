@@ -1,30 +1,18 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
 import NowTrending from '@/components/NowTrending';
 import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { useParams, useSearchParams } from 'next/navigation';
-import { getCartAsync, selectCart } from '@/lib/features/cart/cartSlice';
+import { useAppSelector } from '@/lib/hooks';
+import { selectCart } from '@/lib/features/cart/cartSlice';
 import CartSummary from '@/components/CartSummary';
 import CartItems from '@/components/CartItems';
 import { selectUserToken } from '@/lib/features/user/userSlice';
 import { ShoppingBag } from 'lucide-react';
 
 export default function Cart() {
-  const params = useParams<{ cart_id: string }>()
-  const dispatch = useAppDispatch()
   const token = useAppSelector(selectUserToken)
   const cart = useAppSelector(selectCart)
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const promoFromUrl = searchParams.get("promo_code");
-
-    if (params?.cart_id && !promoFromUrl) {
-      dispatch(getCartAsync({ cart_id: params?.cart_id }))
-    }
-  }, [params?.cart_id, searchParams])
 
   if (!cart || cart && !cart?.cart_items) {
     return (

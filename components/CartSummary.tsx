@@ -51,25 +51,26 @@ export default function CartSummary({ cart }: { cart: CartData }) {
     }
 
     useEffect(() => {
-        if (params?.cart_id && selectedId) {
-            dispatch(getCartAsync({ cart_id: params?.cart_id, location_id: selectedId }))
-        }
-    }, [selectedId, params?.cart_id])
+        if (!params?.cart_id) return;
 
-    useEffect(() => {
         const locationIdFromUrl = searchParams.get("location_id");
+        const promoFromUrl = searchParams.get("promo_code");
+        const idNum = locationIdFromUrl ? Number(locationIdFromUrl) : selectedId;
 
-        if (locationIdFromUrl) {
-            const idNum = Number(locationIdFromUrl);
+        let data: { cart_id: string, location_id?: number, code?: string } = { cart_id: params.cart_id }
+
+        if (idNum) {
             setSelectedId(idNum);
-
-            if (params?.cart_id) {
-                dispatch(getCartAsync({ cart_id: params.cart_id, location_id: idNum }));
-            }
-        } else if (params?.cart_id) {
-            dispatch(getCartAsync({ cart_id: params.cart_id }));
+            data = { ...data, location_id: idNum }
         }
-    }, [params?.cart_id]);
+
+        if (promoFromUrl) {
+            data = { ...data, code: promoFromUrl }
+        }
+
+        dispatch(getCartAsync({ ...data }));
+
+    }, [params?.cart_id, searchParams]);
 
     return (
         <div className='w-full mt-[2.25rem] md:mt-0'>

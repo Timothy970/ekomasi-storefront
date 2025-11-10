@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import type { Meta, Pagination } from "@/lib/features/types";
+import { scrollToTop } from "@/lib/utils";
 
 interface PaginationProps {
   meta: Meta | Pagination;
@@ -13,11 +14,12 @@ export function PaginationBtns({ meta, onPrev, onNext }: PaginationProps) {
     <div className="flex flex-col sm:flex-row w-full justify-center items-center gap-4 mt-[2rem] md:mt-[2.5rem]">
       <Button
         variant="outline"
-        className={`bg-white text-custom-black h-[3rem] min-w-[8rem] sm:min-w-[10rem] ${
-          !meta.has_prev ? "border-gray-300" : "border-black"
-        } border text-[0.875rem] font-normal leading-[195%]`}
-        onClick={onPrev}
+        className={`bg-white text-custom-black cursor-pointer h-[2.5rem] min-w-[8rem] sm:min-w-[10rem] ${!meta.has_prev ? "border-gray-300" : "border-black"} border text-[0.875rem] font-normal leading-[195%]`}
         disabled={!meta.has_prev}
+        onClick={() => {
+          onPrev()
+          scrollToTop()
+        }}
       >
         Previous
       </Button>
@@ -28,10 +30,11 @@ export function PaginationBtns({ meta, onPrev, onNext }: PaginationProps) {
 
       <Button
         variant="outline"
-        className={`bg-white text-custom-black h-[3rem] min-w-[8rem] sm:min-w-[10rem] border ${
-          !meta.has_next ? "border-gray-300" : "border-black"
-        } text-[0.875rem] font-normal leading-[195%]`}
-        onClick={onNext}
+        className={`bg-white text-custom-black cursor-pointer h-[2.5rem] min-w-[8rem] sm:min-w-[10rem] border ${!meta.has_next ? "border-gray-300" : "border-black"} text-[0.875rem] font-normal leading-[195%]`}
+        onClick={() => {
+          onNext()
+          scrollToTop()
+        }}
         disabled={!meta.has_next}
       >
         Next

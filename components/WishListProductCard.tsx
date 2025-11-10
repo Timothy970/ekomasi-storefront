@@ -114,7 +114,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                                 product?.product_id ? handleAddTocart(product) : null
                                 e.stopPropagation();
                             }}
-                            className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[3rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
+                            className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[2.5rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
                             {
                                 loading && <LoadingIndicator textColor="text-white" />
                             }
@@ -135,7 +135,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                                 product?.product_id ? handleRemoveWishlist(product?.product_id) : null
                                 e.stopPropagation();
                             }}
-                            className='bg-white border border-[#7A4597] h-[3rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
+                            className='bg-white border border-[#7A4597] h-[2.5rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
                             {
                                 status == "loading" && <LoadingIndicator textColor="text-[#7A4597]" />
                             }

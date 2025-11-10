@@ -46,7 +46,7 @@ export default function CartSummaryLocationDropdown({ selectedId, setSelectedId 
             value={selectedId === null ? undefined : String(selectedId)}
             onValueChange={handleValueChange}
         >
-            <SelectTrigger className="w-full p-[0.5rem] h-[3rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">
+            <SelectTrigger className="w-full p-[0.5rem] h-[2.5rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">
                 <SelectValue placeholder="Select shipping location..." />
             </SelectTrigger>
             <SelectContent className="">

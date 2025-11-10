@@ -132,7 +132,7 @@ export default function SignUp() {
                                 type='text'
                                 placeholder='Enter phone or email'
                                 className={`mt-[2rem] p-[0.75rem] font-poppins text-[0.875rem] font-normal leading-[195%]
-                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[3rem]
+                                    text-[rgba(0,0,0,0.60)] rounded-md border h-[3.3rem] lg:h-[2.5rem]
                                     ${error ? "border-red-500 focus-visible:ring-red-500" : "border-[var(--Color-Neutral,#666)]"}
                                 `}
                             />
@@ -144,7 +144,7 @@ export default function SignUp() {
                             <Button
                                 type="submit"
                                 variant="outline"
-                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[3rem]'
+                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[2.5rem]'
                             >
                                 {
                                     status == "loading" && <LoadingIndicator textColor="text-white" />

@@ -41,7 +41,7 @@ export default function UpdateUserForm() {
     }
 
     const isValidKenyanPhone = (phone: string) => {
-        const regex = /^254\d{9}$/; 
+        const regex = /^254\d{9}$/;
         return regex.test(phone);
     }
 
@@ -158,7 +158,7 @@ export default function UpdateUserForm() {
                             required
                             onChange={e => handleChange("email", e.target.value)}
                             placeholder="Email Address*"
-                            className="p-[0.5rem] h-[3rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)]"
+                            className="p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)]"
                         />
                     </div>
                 </div>
