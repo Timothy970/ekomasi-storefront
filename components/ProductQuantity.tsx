@@ -1,5 +1,4 @@
 "use client"
-
 import React from "react"
 import { Button } from "@/components/ui/button"
 import { Minus, Plus } from "lucide-react"
@@ -9,26 +8,22 @@ import { selectProduct } from "@/lib/features/navigation/navigationSlice"
 type ProductQuantityProps = {
   quantity: number
   setQuantity: React.Dispatch<React.SetStateAction<number>>
-  handleAddToCart: (addedQuantity: number) => void
 }
 
 const ProductQuantity: React.FC<ProductQuantityProps> = ({
   quantity,
   setQuantity,
-  handleAddToCart
 }) => {
   const product = useAppSelector(selectProduct)
   const maxQuantity = product?.stock_quantity ?? 0
 
   const handleIncrease = async () => {
     const newQty = quantity === 0 ? 1 : Math.min(quantity + 1, maxQuantity);
-    handleAddToCart(newQty);
     setQuantity(newQty);
   };
 
   const handleDecrease = async () => {
     const newQty = Math.max(quantity - 1, 1);
-    handleAddToCart(newQty);
     setQuantity(newQty);
   };
 

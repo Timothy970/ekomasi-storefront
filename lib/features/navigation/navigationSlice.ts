@@ -7,6 +7,7 @@ interface NavigationSliceState {
 	category: Category | null;
 	subcategory: SubcategoryProducts | null;
 	status: "idle" | "loading" | "failed";
+	productStatus: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
 	homeData: HomeDataWrapper | null;
@@ -21,6 +22,7 @@ const initialState: NavigationSliceState = {
 	category: null,
 	homeData: null,
 	status: "idle",
+	productStatus: "idle",
 	message: "",
 	success: false,
 	pagination: null,
@@ -153,10 +155,10 @@ export const navigationSlice = createAppSlice({
 			},
 			{
 				pending: (state) => {
-					state.status = "loading";
+					state.productStatus = "loading";
 				},
 				fulfilled: (state, action) => {
-					state.status = "idle";
+					state.productStatus = "idle";
 
 					if (action.payload?.status_code === 200) {
 						state.success = true;
@@ -167,7 +169,7 @@ export const navigationSlice = createAppSlice({
 					}
 				},
 				rejected: (state, action) => {
-					state.status = "failed";
+					state.productStatus = "failed";
 					state.message = action.error?.message ?? "";
 					state.success = false;
 					state.product = null;
@@ -208,6 +210,7 @@ export const navigationSlice = createAppSlice({
 		selectPagination: (state: NavigationSliceState) => state.pagination || null,
 		selectHomeData: (state: NavigationSliceState) => state.homeData?.data || null,
 		selectStatus: (state: NavigationSliceState) => state.status,
+		selectProducStatus: (state: NavigationSliceState) => state.productStatus,
 		selectSuccess: (state: NavigationSliceState) => state.success,
 		selectMessage: (state: NavigationSliceState) => state.message,
 	},
@@ -215,5 +218,5 @@ export const navigationSlice = createAppSlice({
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProducStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

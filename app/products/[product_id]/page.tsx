@@ -8,9 +8,9 @@ import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getProductAsync, selectProduct } from '@/lib/features/navigation/navigationSlice'
+import { getProductAsync, selectProducStatus, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
-import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, selectStatus } from '@/lib/features/cart/cartSlice'
+import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
@@ -18,16 +18,17 @@ import LoadingIndicator from '@/components/LoadingIndicator'
 import { customeParser } from '@/lib/utils'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout'
+import { ShoppingBag } from 'lucide-react'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
   const dispatch = useAppDispatch()
   const params = useParams<{ product_id: string }>()
-  const [quantity, setQuantity] = useState(0)
+  const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
-  const status = useAppSelector(selectStatus)
+  const status = useAppSelector(selectProducStatus)
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
   const [addToCartLoading, setAddToCartLoading] = useState(false)
@@ -144,14 +145,34 @@ export default function ProductDetail() {
     }
   }
 
-  useEffect(() => {
-    if (!product) {
-      router.replace("/")
-    }
-  }, [product])
+  if (status === "loading") {
+    return (
+      <Navigation>
+        <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-[#AF52DE]/30 border-t-[#AF52DE] rounded-full animate-spin"></div>
+        </div>
+      </Navigation>
+    );
+  }
 
   if (!product) {
-    return <></>
+    return (
+      <Navigation>
+        <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4">
+          <ShoppingBag className="w-16 h-16 text-gray-400" />
+          <h2 className="text-xl font-semibold text-gray-800">Product not found</h2>
+          <p className="text-gray-500 max-w-sm">
+            The product you’re looking for doesn’t exist or has been removed.
+          </p>
+          <a
+            href="/"
+            className="mt-4 px-5 py-2.5 rounded-full bg-[#AF52DE] text-white hover:bg-[#9c3fcb] transition-colors"
+          >
+            Continue Shopping
+          </a>
+        </div>
+      </Navigation>
+    );
   }
 
   return (
@@ -185,23 +206,20 @@ export default function ProductDetail() {
               }
 
               <div className='mt-[1.5rem] min-h-[2.5rem]'>
-                {status !== "loading" ? (
-                  product && product?.stock_quantity && product?.stock_quantity > 0 ? (
-                    <div className='flex items-center gap-x-[0.5rem]'>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
-                        <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
-                      </svg>
-                      <span className='text-base'>In Stock</span>
-                    </div>
-                  ) : (
-                    <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
-                      <span className='text-base'>Sold Out:</span>
-                      <span className='text-base'>This product is currently unavailable</span>
-                    </div>
-                  )
+                {product && product?.stock_quantity && product?.stock_quantity > 0 ? (
+                  <div className='flex items-center gap-x-[0.5rem]'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+                      <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
+                    </svg>
+                    <span className='text-base'>In Stock</span>
+                  </div>
                 ) : (
-                  <div className='bg-gray-100 animate-pulse h-full w-full'></div>
-                )}
+                  <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
+                    <span className='text-base'>Sold Out:</span>
+                    <span className='text-base'>This product is currently unavailable</span>
+                  </div>
+                )
+                }
               </div>
 
               <div className='flex items-center mt-[0.75rem]'>
@@ -220,7 +238,6 @@ export default function ProductDetail() {
                   <ProductQuantity
                     setQuantity={setQuantity}
                     quantity={quantity}
-                    handleAddToCart={handleAddToCart}
                   />
                 </div>
               }
