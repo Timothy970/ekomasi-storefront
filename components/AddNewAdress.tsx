@@ -118,7 +118,7 @@ export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
                     onChange={handleChange}
                     required
                     placeholder='Address*'
-                    className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                 />
             </div>
 
@@ -132,7 +132,7 @@ export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
                     onChange={handleChange}
                     required
                     placeholder='Apartment, suite, etc.'
-                    className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                    className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                 />
             </div>
 
@@ -146,7 +146,7 @@ export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
                         required
                         onChange={handleChange}
                         placeholder='City'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
 
@@ -158,12 +158,12 @@ export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
                         onChange={handleChange}
                         required
                         placeholder='Postal code'
-                        className='p-[0.5rem] h-[3rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
                     />
                 </div>
             </div>
 
-            <Button type='submit' className='h-[3rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]' disabled={!isFormValid}>
+            <Button type='submit' className='h-[2.5rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]' disabled={!isFormValid}>
                 Add New Address
             </Button>
         </form>

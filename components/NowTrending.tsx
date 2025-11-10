@@ -137,7 +137,7 @@ export default function NowTrending({ title }: { title: string }) {
               aria-label="Previous"
               disabled={!canPrev}
             >
-              <ChevronLeft className="h-[3rem] w-[3rem]" />
+              <ChevronLeft className="h-[2.5rem] w-[3rem]" />
             </Button>
             <Button
               className="rounded-full border border-black"
@@ -147,7 +147,7 @@ export default function NowTrending({ title }: { title: string }) {
               aria-label="Next"
               disabled={!canNext}
             >
-              <ChevronRight className="h-[3rem] w-[3rem] rounded-full" />
+              <ChevronRight className="h-[2.5rem] w-[3rem] rounded-full" />
             </Button>
           </div>
         )}

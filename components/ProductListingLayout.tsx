@@ -6,9 +6,10 @@ import { FilterSortBy } from './FilterSortBy'
 import { Button } from './ui/button'
 import CategoryProducts from './CategoryProducts'
 import type { Crumb, Pagination, Product } from '@/lib/features/types'
-import { PaginationBtns } from './PaginationBytns'
+import { PaginationBtns } from './PaginationBtns'
 import CustomBreadcrumb from './CustomBreadcrumb'
 import LoadingIndicator from './LoadingIndicator'
+import { scrollToTop } from '@/lib/utils'
 
 type ProductListingLayoutProps = {
     products: Product[];
@@ -33,13 +34,6 @@ export default function ProductListingLayout({
 }: ProductListingLayoutProps) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        })
-    }
-
     return (
         <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem]'>
             <div className='flex flex-row lg:gap-x-[2rem]'>
@@ -57,7 +51,7 @@ export default function ProductListingLayout({
                                 <FilterSortBy />
                             </div>
 
-                            <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[3rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden rounded-none border-black'>
+                            <Button onClick={() => setOpenFilterModal(!openFilterModal)} className='border bg-white text-custom-black h-[2.5rem] min-w-[10rem] flex gap-x-[1rem] lg:hidden rounded-none border-black'>
                                 <span className='text-[0.875rem] '>Filter</span>
                                 <span>
                                     <svg

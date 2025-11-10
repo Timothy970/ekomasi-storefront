@@ -254,7 +254,7 @@ export default function OtpForm() {
                         pattern="[0-9]*"
                         maxLength={1}
                         autoComplete="one-time-code"
-                        className="h-[3.3rem] lg:h-[3rem] caret-white text-white w-[3.3rem] lg:w-[3rem] text-center text-xl tracking-wider rounded-2xl border-white"
+                        className="h-[3.3rem] lg:h-[2.5rem] caret-white text-white w-[3.3rem] lg:w-[3rem] text-center text-xl tracking-wider rounded-2xl border-white"
                         aria-label={`Digit ${idx + 1}`}
                     />
                 ))}
@@ -278,7 +278,7 @@ export default function OtpForm() {
                 disabled={status === "loading"}
                 onClick={handleSubmit}
                 variant="outline"
-                className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[3rem]'
+                className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[2.5rem]'
             >
                 {
                     status == "loading" && <LoadingIndicator textColor="text-white" />

@@ -33,7 +33,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
             if (cart_id) {
                 setTimeout(() => {
                     triggerToast("Cart updated successfully!", "success");
-                    dispatch(getCartAsync({cart_id: cart_id}))
+                    dispatch(getCartAsync({ cart_id: cart_id }))
                 }, 1000)
             }
         }
@@ -59,7 +59,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                 if (cartId) {
                     setTimeout(() => {
                         triggerToast("Cart updated successfully!", "success");
-                        dispatch(getCartAsync({cart_id: cartId}))
+                        dispatch(getCartAsync({ cart_id: cartId }))
                     }, 1000)
                 }
             }
@@ -81,7 +81,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
     }
 
     return (
-        <div onClick={() => router.push(`/products/${product?.product_id}`)}>
+        <div className='cursor-pointer' onClick={() => router.push(`/products/${product?.product_id}`)}>
             <div className="overflow-hidden flex flex-col justify-center items-center">
                 {
                     product && product?.urls !== undefined && product?.urls.length > 0 && <div className="relative w-full h-[15rem] sm:h-[20rem] md:h-[20rem]">
@@ -94,6 +94,11 @@ export default function WishListProductCard({ product }: { product: Product }) {
                             priority
                             unoptimized
                         />
+                        {
+                            product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
+                                <span className="text-[0.75rem] text-white font-bold">{product?.tag}</span>
+                            </div>
+                        }
                     </div>
                 }
 
@@ -109,7 +114,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                                 product?.product_id ? handleAddTocart(product) : null
                                 e.stopPropagation();
                             }}
-                            className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[3rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
+                            className="items-center rounded-[0.125rem] bg-[#AF52DE] h-[2.5rem] font-semibold flex gap-x-[0.25] md:gap-[0.75rem]">
                             {
                                 loading && <LoadingIndicator textColor="text-white" />
                             }
@@ -130,7 +135,7 @@ export default function WishListProductCard({ product }: { product: Product }) {
                                 product?.product_id ? handleRemoveWishlist(product?.product_id) : null
                                 e.stopPropagation();
                             }}
-                            className='bg-white border border-[#7A4597] h-[3rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
+                            className='bg-white border border-[#7A4597] h-[2.5rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
                             {
                                 status == "loading" && <LoadingIndicator textColor="text-[#7A4597]" />
                             }

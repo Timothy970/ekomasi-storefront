@@ -47,7 +47,7 @@ export const cartSlice = createAppSlice({
 			state.promoCode = action.payload;
 		}),
 		getCartAsync: create.asyncThunk(
-			async ({ cart_id, location_id }: { cart_id: string, location_id?: number }) => {
+			async ({ cart_id, location_id }: { cart_id: string, location_id?: number, code?: string }) => {
 				const response = await getCart({ cart_id, location_id });
 				return response;
 			},

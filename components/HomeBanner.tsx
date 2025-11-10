@@ -77,7 +77,7 @@ export default function HomeBanner() {
                             </div>
                         </div>
 
-                        <Button onClick={() => router.push(slides[current].link)} className="h-[3rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
+                        <Button onClick={() => router.push(slides[current].link)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
                                 {slides[current].buttonText}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">

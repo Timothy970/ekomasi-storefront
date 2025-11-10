@@ -58,7 +58,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                   </div>
                 </div>
 
-                <Link href={`/dashboard/orders/${order.order_id}`} className="flex items-center justify-start md:gap-x-[0.75rem] gap-x-[0.54rem] min-h-[3rem]">
+                <Link href={`/dashboard/orders/${order.order_id}`} className="flex items-center justify-start md:gap-x-[0.75rem] gap-x-[0.54rem] min-h-[2.5rem]">
                   <span className="text-[#AF52DE] text-[0.5rem] md:text-[0.875rem] text-base">See details</span>
 
                   <div className='h-[1.5rem] w-[1.5rem] flex items-center justify-center'>
@@ -69,7 +69,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                 </Link>
               </div>
 
-              <Button className="w-[6rem] h-[3rem] text-[0.875rem] my-[1rem]">Reorder</Button>
+              <Button className="w-[6rem] h-[2.5rem] text-[0.875rem] my-[1rem]">Reorder</Button>
             </div>
           </div>
         );

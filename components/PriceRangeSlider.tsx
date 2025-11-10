@@ -30,7 +30,7 @@ export default function PriceRangeSlider({
 
     return (
         <div className='flex flex-col gap-y-[1rem] my-[1rem] w-full'>
-            <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center h-[3rem] px-[0.5rem]'>
+            <div className='bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center h-[2.5rem] px-[0.5rem]'>
                 <h2 className='text-custom-black font-bold text-[0.875rem] lg:text-[1.125rem] leading-[1.6875rem] capitalize'>
                     Price
                 </h2>
