@@ -56,9 +56,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                                 {
                                     wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                                         <span className='text-xs'>{wishlist[0]?.products?.length}</span>
-                                    </div> : <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                                        <span className='text-xs'>0</span>
-                                    </div>
+                                    </div> : <></>
                                 }
 
                                 <Icons.HeartIcon />
@@ -67,13 +65,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                             <h2 className='text-custom-black text-sm'>Favorites</h2>
                         </div>
                     </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
-                        <div className='relative'>
-                            <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                                <span className='text-xs'>0</span>
-                            </div>
-                            <Icons.HeartIcon />
-                        </div>
-
+                        <Icons.HeartIcon />
                         <h2 className='text-custom-black text-sm'>Favorites</h2>
                     </div>
                 }
@@ -81,19 +73,11 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                 {
                     token ? <Link href={`/dashboard/orders`}>
                         <div className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
-                            <div className='relative'>
-                                <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                                    <span className='text-xs'>0</span>
-                                </div>
-
-                                <Icons.OrderIcon />
-                            </div>
-
+                            <Icons.OrderIcon />
                             <h2 className='text-custom-black text-sm'>Orders</h2>
                         </div>
                     </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
                         <Icons.OrderIcon />
-
                         <h2 className='text-custom-black text-sm'>Orders</h2>
                     </div>
                 }
@@ -114,14 +98,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                             <h2 className='text-custom-black text-sm'>Bag</h2>
                         </div>
                     </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
-                        <div className='relative'>
-                            <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                                <span className='text-xs'>0</span>
-                            </div>
-
-                            <Icons.CartIcon />
-                        </div>
-
+                        <Icons.CartIcon />
                         <h2 className='text-custom-black text-sm'>Bag</h2>
                     </div>
                 }

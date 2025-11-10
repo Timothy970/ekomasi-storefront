@@ -11,9 +11,12 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
     const [checkedValues, setCheckedValues] = useState<string[]>([])
     const paramKey = "open"
     const variantName = variant?.variant_type?.toLowerCase() ?? ""
-    const openParam = searchParams.get(paramKey)
+    const openParam = searchParams.get(paramKey) || ""
+    const openList = openParam.split(",").filter(Boolean)
     const [hasInteracted, setHasInteracted] = useState(false)
     const contentRef = useRef<HTMLDivElement>(null)
+    const isInitiallyOpen = openList.includes(variantName)
+    const [isOpen, setIsOpen] = useState(isInitiallyOpen)
 
     useEffect(() => {
         const currentParams = new URLSearchParams(searchParams.toString())
@@ -29,21 +32,30 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         setCheckedValues(values)
     }, [searchParams, variant.variant_type])
 
-    const shouldBeOpen = openParam === variantName || checkedValues.length > 0
-    const [isOpen, setIsOpen] = useState(shouldBeOpen)
-
     useEffect(() => {
-        setIsOpen(openParam === variantName || checkedValues.length > 0)
-    }, [openParam, variantName, checkedValues.length])
+        const shouldBeOpen = openList.includes(variantName) || checkedValues.length > 0
+        setIsOpen(shouldBeOpen)
+    }, [openList, variantName, checkedValues.length])
 
     const toggleDropdown = () => {
         setHasInteracted(true)
         const params = new URLSearchParams(searchParams.toString())
+
+        let updatedOpenList = [...openList]
         if (isOpen) {
-            params.delete(paramKey)
+            updatedOpenList = updatedOpenList.filter(name => name !== variantName)
         } else {
-            params.set(paramKey, variantName)
+            if (!updatedOpenList.includes(variantName)) {
+                updatedOpenList.push(variantName)
+            }
         }
+
+        if (updatedOpenList.length > 0) {
+            params.set(paramKey, updatedOpenList.join(","))
+        } else {
+            params.delete(paramKey)
+        }
+
         router.push(`?${params.toString()}`, { scroll: false })
     }
 
