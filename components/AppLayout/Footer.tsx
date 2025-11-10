@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import SocialLinksFooter from '../SocialLinksFooter'
 import { useAppSelector } from '@/lib/hooks'
 import { selectCategories, selectHomeData } from '@/lib/features/navigation/navigationSlice'
+import Link from 'next/link'
 
 export default function Footer() {
   const homeData = useAppSelector(selectHomeData)
@@ -131,15 +132,17 @@ export default function Footer() {
         <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block'></div>
 
         <div className='mt-[3rem] hidden w-full lg:flex justify-center items-center'>
-          <Image
-            src={"/images/adenzo-logo-footer.png"}
-            alt="Logo"
-            width={150}
-            height={25}
-            priority={true}
-            unoptimized
-            className='w-auto h-[5rem] shrink-0'
-          />
+          <Link href={`/`}>
+            <Image
+              src={"/images/adenzo-logo-footer.png"}
+              alt="Logo"
+              width={150}
+              height={25}
+              priority={true}
+              unoptimized
+              className='w-auto h-[5rem] shrink-0'
+            />
+          </Link>
         </div>
 
         <div className='mt-[3rem] w-full flex justify-center items-center'>

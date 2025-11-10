@@ -10,6 +10,7 @@ import { resetMessage, resetSuccess, selectMessage, selectStatus, selectUserToke
 import Exclusive from '@/components/Exclusive'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from '@/components/LoadingIndicator'
+import Link from 'next/link'
 
 export default function Login() {
     const [phoneOrEmail, setPhoneOrEmail] = useState<string>("")
@@ -90,15 +91,17 @@ export default function Login() {
             <div className='max-w-[90rem] w-full h-full max-h-[56.25rem] flex flex-row justify-center'>
                 <div className='w-full max-w-[22rem] lg:max-w-[42rem] flex justify-start items-start flex-col h-full px-0 lg:px-[3rem]'>
                     <div className='w-full flex justify-center items-center lg:justify-start lg:h-auto'>
-                        <Image
-                            src={"/images/company-logo.svg"}
-                            alt="Logo"
-                            width={150}
-                            height={25}
-                            unoptimized
-                            priority={true}
-                            className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem]'
-                        />
+                        <Link href={`/`}>
+                            <Image
+                                src={"/images/company-logo.svg"}
+                                alt="Logo"
+                                width={150}
+                                height={25}
+                                unoptimized
+                                priority={true}
+                                className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem]'
+                            />
+                        </Link>
                     </div>
 
                     <div className='w-full flex flex-col justify-center items-center lg:h-[80%] lg:max-w-[28rem]'>
