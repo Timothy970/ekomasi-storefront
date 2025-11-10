@@ -190,6 +190,7 @@ export interface SubCategoryProduct {
   created_at: string;
   last_updated: string;
   urls: Image[];
+  tag: string;
 }
 
 export interface SubcategoryProducts {
