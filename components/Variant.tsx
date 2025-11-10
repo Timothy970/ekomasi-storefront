@@ -7,7 +7,9 @@ import type { VariantGroup } from "@/lib/features/types"
 export default function Variant({ variant }: { variant: VariantGroup }) {
     const pathname = usePathname()
     const router = useRouter()
-    const searchParams = useSearchParams()
+    const searchParamsFromHook = useSearchParams()
+    const [searchParamsStr, setSearchParamsStr] = useState(searchParamsFromHook.toString())
+    const searchParams = new URLSearchParams(searchParamsStr)
     const [checkedValues, setCheckedValues] = useState<string[]>([])
     const paramKey = "open"
     const variantName = variant?.variant_type?.toLowerCase() ?? ""
@@ -17,10 +19,22 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
     const contentRef = useRef<HTMLDivElement>(null)
     const isInitiallyOpen = openList.includes(variantName)
     const [isOpen, setIsOpen] = useState(isInitiallyOpen)
+    const [contentHeight, setContentHeight] = useState<`${number}px` | "auto">("auto")
 
     useEffect(() => {
-        const currentParams = new URLSearchParams(searchParams.toString())
-        const variants = currentParams.getAll("variant")
+        setSearchParamsStr(searchParamsFromHook.toString())
+    }, [searchParamsFromHook])
+
+    useEffect(() => {
+        if (isOpen && contentRef.current) {
+            setContentHeight(`${contentRef.current.scrollHeight}px`)
+        } else {
+            setContentHeight("0px")
+        }
+    }, [isOpen])
+
+    useEffect(() => {
+        const variants = searchParams.getAll("variant")
         const values: string[] = []
 
         variants.forEach(v => {
@@ -30,12 +44,13 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
             }
         })
         setCheckedValues(values)
-    }, [searchParams, variant.variant_type])
+    }, [searchParamsStr, variant.variant_type])
 
     useEffect(() => {
+        const openList = openParam.split(",").filter(Boolean)
         const shouldBeOpen = openList.includes(variantName) || checkedValues.length > 0
         setIsOpen(shouldBeOpen)
-    }, [openList, variantName, checkedValues.length])
+    }, [openParam, variantName, checkedValues.length])
 
     const toggleDropdown = () => {
         setHasInteracted(true)
@@ -56,7 +71,8 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
             params.delete(paramKey)
         }
 
-        router.push(`?${params.toString()}`, { scroll: false })
+        const newUrl = `${pathname}${params.toString() ? `?${params.toString()}` : ""}`
+        router.push(newUrl, { scroll: false })
     }
 
     const handleToggle = (value: string) => {
@@ -84,23 +100,17 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         router.replace(newUrl, { scroll: false })
     }
 
-    const heightStyle = isOpen
-        ? {
-            height: contentRef.current?.scrollHeight || "auto",
-            opacity: 1,
-            transition: hasInteracted ? "height 0.4s ease, opacity 0.3s ease" : "none",
-        }
-        : {
-            height: 0,
-            opacity: 0,
-            transition: "height 0.4s ease, opacity 0.3s ease",
-        }
+    const heightStyle = {
+        height: contentHeight,
+        opacity: isOpen ? 1 : 0,
+        transition: hasInteracted ? "height 0.4s ease, opacity 0.3s ease" : "none",
+    }
 
     return (
         <div className="flex flex-col mb-[1rem]">
             <div
                 className="bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none"
-                onClick={toggleDropdown}
+                onClick={() => toggleDropdown()}
             >
                 <h2 className="text-custom-black font-bold text-[0.875rem] lg:text-[1rem] leading-[1.6875rem] capitalize">
                     {variant?.variant_type?.replace(/_/g, " ")}
