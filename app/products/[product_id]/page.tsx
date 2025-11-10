@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getProductAsync, selectProducStatus, selectProduct } from '@/lib/features/navigation/navigationSlice'
+import { getProductAsync, selectProductStatus, selectProduct } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -24,11 +24,11 @@ export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
   const dispatch = useAppDispatch()
   const params = useParams<{ product_id: string }>()
-  const [quantity, setQuantity] = useState(product && product?.stock_quantity > 0 ? 1 : 0)
+  const [quantity, setQuantity] = useState(1)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
-  const status = useAppSelector(selectProducStatus)
+  const status = useAppSelector(selectProductStatus)
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
   const [addToCartLoading, setAddToCartLoading] = useState(false)
@@ -144,6 +144,16 @@ export default function ProductDetail() {
       triggerToast("Please select a valid quantity", 'error');
     }
   }
+
+  useEffect(() => {
+    if (product) {
+      if (product.stock_quantity > 0) {
+        setQuantity(1);
+      } else {
+        setQuantity(0);
+      }
+    }
+  }, [product]);
 
   if (status === "loading") {
     return (

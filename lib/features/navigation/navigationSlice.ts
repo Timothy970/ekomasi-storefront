@@ -62,7 +62,7 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getCategoryAsync: create.asyncThunk(
-			async ({ id, query }: { id: string; query:string }) => {
+			async ({ id, query }: { id: string; query: string }) => {
 				const response = await getCategoryById(id, query);
 				return response;
 			},
@@ -210,7 +210,7 @@ export const navigationSlice = createAppSlice({
 		selectPagination: (state: NavigationSliceState) => state.pagination || null,
 		selectHomeData: (state: NavigationSliceState) => state.homeData?.data || null,
 		selectStatus: (state: NavigationSliceState) => state.status,
-		selectProducStatus: (state: NavigationSliceState) => state.productStatus,
+		selectProductStatus: (state: NavigationSliceState) => state.productStatus,
 		selectSuccess: (state: NavigationSliceState) => state.success,
 		selectMessage: (state: NavigationSliceState) => state.message,
 	},
@@ -218,5 +218,5 @@ export const navigationSlice = createAppSlice({
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProducStatus } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;
