@@ -24,8 +24,7 @@ export default function PriceRangeSlider({
     };
 
     const handleClear = () => {
-        const resetRange: [number, number] = [0, 1000];
-        setValues([0, 1000]);
+        setValues([min, max]);
     }
 
     return (
@@ -52,10 +51,10 @@ export default function PriceRangeSlider({
 
             <div className="flex justify-between text-sm mt-[1.5rem]">
                 <Label htmlFor="min" className="text-black text-[1.125rem]">
-                    {values[0].toLocaleString()}
+                    {min.toLocaleString()}
                 </Label>
                 <Label htmlFor="max" className="text-black text-[1.125rem]">
-                    {values[1].toLocaleString()}
+                    {max.toLocaleString()}
                 </Label>
             </div>
         </div>

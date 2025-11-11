@@ -109,6 +109,7 @@ export default function ProductListingLayout({
                         {
                             products && status !== "loading" && <CategoryProducts
                                 products={products}
+                                listingName={listingName}
                             />
                         }
                     </div>

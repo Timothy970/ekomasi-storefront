@@ -3,7 +3,7 @@ import { getVariantsAsync, selectVariants } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState, useRef } from 'react'
 import Variant from './Variant'
-import { selectCategory } from '@/lib/features/navigation/navigationSlice'
+import { getMinMaxPriceRangeAsync, selectCategory, selectMinMaxPriceRange } from '@/lib/features/navigation/navigationSlice'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import PriceRangeSlider from './PriceRangeSlider'
 import { Button } from './ui/button'
@@ -22,17 +22,27 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     const searchParams = useSearchParams()
     const { setQuery } = useFilterQuery()
     const pathname = usePathname()
-
+    const minMaxPriceRange = useAppSelector(selectMinMaxPriceRange)
+    const [minMax, setMinMax] = useState([0, 20000])
     const [priceRange, setPriceRange] = useState<[number, number]>([
         Number(searchParams.get("minPrice")) || 0,
-        Number(searchParams.get("maxPrice")) || 1000,
+        Number(searchParams.get("maxPrice")) || 20000,
     ])
-
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
         dispatch(getVariantsAsync())
+        dispatch(getMinMaxPriceRangeAsync())
     }, [])
+
+    useEffect(() => {
+        if (minMaxPriceRange) {
+            setMinMax([
+                minMaxPriceRange?.cheapest_product?.price,
+                minMaxPriceRange?.expensive_product?.price,
+            ])
+        } 
+    }, [minMaxPriceRange])
 
     const updateQueryParams = (values: [number, number]) => {
         if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -84,15 +94,19 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
                 </div>
             )}
 
-            <div className="flex flex-col items-center justify-center">
-                <PriceRangeSlider
-                    min={0}
-                    max={20000}
-                    step={50}
-                    defaultValues={priceRange}
-                    onChange={handlePriceChange}
-                />
-            </div>
+            {
+                minMax?.length && <div className="flex flex-col items-center justify-center">
+                    <PriceRangeSlider
+                        min={minMax[0] ?? 0}
+                        max={minMax[1] ?? 20000}
+                        step={50}
+                        defaultValues={priceRange}
+                        onChange={handlePriceChange}
+                    />
+                </div>
+            }
+
+
 
             <div className="flex flex-col gap-y-[1.5rem]">
                 {variants?.map((variant, index) => (

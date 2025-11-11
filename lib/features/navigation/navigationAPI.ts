@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, Category, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, Category, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -91,5 +91,15 @@ export async function getHomeDate(): Promise<HomeDataResponse> {
   } catch (error) {
     const err = error as AxiosError<HomeDataResponse>;
     return err.response?.data as HomeDataResponse;
+  }
+}
+
+export async function getMinMaxPriceRange(): Promise<MinMaxRangeResponse> {
+  try {
+    const response = await axios.get<MinMaxRangeResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/cheap/expensive`);
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<MinMaxRangeResponse>;
+    return err.response?.data as MinMaxRangeResponse;
   }
 }

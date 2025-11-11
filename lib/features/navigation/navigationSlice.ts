@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, FeaturedProduct, HomeDataWrapper, Pagination, Product, SubcategoryProducts, } from "../types";
-import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getProduct, getSubCategoryById } from "./navigationAPI";
+import { Category, FeaturedProduct, HomeDataWrapper, MinMaxData, Pagination, Product, SubcategoryProducts, } from "../types";
+import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
 	categories: Category[] | null;
@@ -14,6 +14,7 @@ interface NavigationSliceState {
 	pagination: Pagination | null;
 	featured: FeaturedProduct[] | null;
 	product: Product | null;
+	minMaxPriceRange: MinMaxData | null;
 }
 
 const initialState: NavigationSliceState = {
@@ -28,6 +29,7 @@ const initialState: NavigationSliceState = {
 	pagination: null,
 	featured: null,
 	product: null,
+	minMaxPriceRange: null,
 };
 
 export const navigationSlice = createAppSlice({
@@ -200,6 +202,30 @@ export const navigationSlice = createAppSlice({
 				},
 			}
 		),
+		getMinMaxPriceRangeAsync: create.asyncThunk(
+			async () => {
+				const response = await getMinMaxPriceRange();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.minMaxPriceRange = action.payload.data;
+						state.message = action.payload.message;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectCategories: (state: NavigationSliceState) => state.categories || null,
@@ -213,10 +239,11 @@ export const navigationSlice = createAppSlice({
 		selectProductStatus: (state: NavigationSliceState) => state.productStatus,
 		selectSuccess: (state: NavigationSliceState) => state.success,
 		selectMessage: (state: NavigationSliceState) => state.message,
+		selectMinMaxPriceRange: (state: NavigationSliceState) => state.minMaxPriceRange,
 	},
 });
 
 // Export actions and selectors
-export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

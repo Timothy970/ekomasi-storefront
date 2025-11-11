@@ -155,6 +155,17 @@ export interface HomeDataResponse {
   status_code: number;
 }
 
+export interface MinMaxData {
+  cheapest_product: Product;
+  expensive_product: Product;
+}
+
+export interface MinMaxRangeResponse {
+  data: MinMaxData;
+  message: string;
+  status_code: number;
+}
+
 export interface MallVariant {
   variant_id: string;
   variant_type: string;
@@ -444,7 +455,7 @@ export interface OrderPayload {
     quantity: number;
     unit_price: number;
   }[];
-  promo_code: string|null;
+  promo_code: string | null;
 };
 
 export interface MemberOrderPayload {
@@ -457,7 +468,7 @@ export interface MemberOrderPayload {
   };
   guest_delivery_address: {};
   order_items: OrderItem[];
-  promo_code?: string|null;
+  promo_code?: string | null;
 }
 
 export interface OrderItem {
@@ -523,7 +534,7 @@ export interface Order {
     country: string;
     state: string;
   },
-  promo_code?: string|null;
+  promo_code?: string | null;
 }
 
 export interface UserAddress {
