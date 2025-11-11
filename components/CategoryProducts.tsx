@@ -2,7 +2,7 @@ import React from 'react'
 import type { Product } from '@/lib/features/types'
 import CategoryProductCard from './CategoryProductCard'
 
-export default function CategoryProducts({ products, listingName }: { products: Product[], listingName: string }) {
+export default function CategoryProducts({ products }: { products: Product[] }) {
     return (
         <div className="mt-[2rem] lg:mt-[2.5rem]">
             {
@@ -10,7 +10,6 @@ export default function CategoryProducts({ products, listingName }: { products: 
                     {products.map((product, index) => (
                         <CategoryProductCard
                             key={index?.toString()} product={product}
-                            listingName={listingName}
                         />
                     ))}
                 </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Product } from "@/lib/features/types";
 import { customeParser } from "@/lib/utils";
 
-export default function CategoryProductCard({ product, listingName }: { product: Product, listingName: string }) {
+export default function CategoryProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -20,7 +20,6 @@ export default function CategoryProductCard({ product, listingName }: { product:
   if (!productId) {
     return null;
   }
-  console.log(product)
 
   return (
     <Link
@@ -38,15 +37,9 @@ export default function CategoryProductCard({ product, listingName }: { product:
           />
         )}
 
-<<<<<<< Updated upstream
         {
           product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
             <span className="text-[0.75rem] text-white font-bold">{product?.tag}</span>
-=======
-        {isNewIn && (
-          <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
-            <span className="text-[0.75rem] text-white font-bold">{listingName}</span>
->>>>>>> Stashed changes
           </div>
         }
       </div>
