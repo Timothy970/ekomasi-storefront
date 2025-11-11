@@ -8,7 +8,9 @@ export default function CategoryProducts({ products }: { products: Product[] }) 
             {
                 products && <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
                     {products.map((product, index) => (
-                        <CategoryProductCard key={index?.toString()} product={product} />
+                        <CategoryProductCard
+                            key={index?.toString()} product={product}
+                        />
                     ))}
                 </div>
             }
