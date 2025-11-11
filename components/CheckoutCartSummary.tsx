@@ -65,6 +65,15 @@ export default function CheckoutCartSummary({ cart, cartId, isBuyNow }: Checkout
                 </div>
             </div>
 
+            <div className='w-full flex justify-between border-b border-black py-[1rem]'>
+                <span className='font-[700]'>Total</span>
+                <span>
+                    {"KES " + new Intl.NumberFormat("en-KE", {
+                        minimumFractionDigits: 0,
+                    }).format(cart?.total ?? 0)}
+                </span>
+            </div>
+
             <h2 className='text-[2rem] font-bold self-start mt-[1.5rem]'>Cart</h2>
 
             <ChekcoutCartItems cart={cart} />

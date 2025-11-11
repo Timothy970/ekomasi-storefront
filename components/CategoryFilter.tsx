@@ -8,6 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import PriceRangeSlider from './PriceRangeSlider'
 import { Button } from './ui/button'
 import { useFilterQuery } from '@/app/ClientLayout'
+import { MinMaxData } from '@/lib/features/types'
 
 interface CategoryFilterParam {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -22,8 +23,8 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     const searchParams = useSearchParams()
     const { setQuery } = useFilterQuery()
     const pathname = usePathname()
-    const minMaxPriceRange = useAppSelector(selectMinMaxPriceRange)
-    const [minMax, setMinMax] = useState([0, 20000])
+    const minMaxPriceRange = useAppSelector<MinMaxData | null>(selectMinMaxPriceRange)
+    const [minMax, setMinMax] = useState<[number, number]>([0, 20000])
     const [priceRange, setPriceRange] = useState<[number, number]>([
         Number(searchParams.get("minPrice")) || 0,
         Number(searchParams.get("maxPrice")) || 20000,
@@ -38,10 +39,10 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     useEffect(() => {
         if (minMaxPriceRange) {
             setMinMax([
-                minMaxPriceRange?.cheapest_product?.price,
-                minMaxPriceRange?.expensive_product?.price,
+                minMaxPriceRange?.cheapest_product?.price ?? 0,
+                minMaxPriceRange?.expensive_product?.price ?? 20000,
             ])
-        } 
+        }
     }, [minMaxPriceRange])
 
     const updateQueryParams = (values: [number, number]) => {
@@ -95,7 +96,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
             )}
 
             {
-                minMax?.length && <div className="flex flex-col items-center justify-center">
+                minMaxPriceRange && <div className="flex flex-col items-center justify-center">
                     <PriceRangeSlider
                         min={minMax[0] ?? 0}
                         max={minMax[1] ?? 20000}
@@ -105,8 +106,6 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
                     />
                 </div>
             }
-
-
 
             <div className="flex flex-col gap-y-[1.5rem]">
                 {variants?.map((variant, index) => (

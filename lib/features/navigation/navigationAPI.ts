@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, Category, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
