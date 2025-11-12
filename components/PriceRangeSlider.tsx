@@ -34,7 +34,7 @@ export default function PriceRangeSlider({
                     Price
                 </h2>
 
-                <button onClick={handleClear}>
+                <button onClick={handleClear} className="cursor-pointer">
                     <span className="font-[400] text-base">Clear</span>
                 </button>
             </div>
@@ -51,10 +51,10 @@ export default function PriceRangeSlider({
 
             <div className="flex justify-between text-sm mt-[1.5rem]">
                 <Label htmlFor="min" className="text-black text-[1.125rem]">
-                    {min.toLocaleString()}
+                    {defaultValues[0].toLocaleString()}
                 </Label>
                 <Label htmlFor="max" className="text-black text-[1.125rem]">
-                    {max.toLocaleString()}
+                    {defaultValues[1].toLocaleString()}
                 </Label>
             </div>
         </div>
