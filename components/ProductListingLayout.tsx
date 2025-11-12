@@ -19,7 +19,8 @@ type ProductListingLayoutProps = {
     handlePrev: () => void;
     handleNext: () => void;
     crumbs: Crumb[];
-    status: string
+    status: string,
+    page?: string,
 };
 
 export default function ProductListingLayout({
@@ -30,7 +31,8 @@ export default function ProductListingLayout({
     handleNext,
     handlePrev,
     crumbs,
-    status
+    status,
+    page,
 }: ProductListingLayoutProps) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
@@ -40,7 +42,7 @@ export default function ProductListingLayout({
                 <div className='sticky lg:top-[10rem] hidden pt-[1rem] lg:block lg:min-w-[20%] overflow-y-scroll mt-[2rem] lg:mt-[2.5rem] pb-[12rem] max-h-screen' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                     <CategoryFilter
                         setOpenFilterModal={setOpenFilterModal}
-                        page="category"
+                        page={page}
                     />
                 </div>
 

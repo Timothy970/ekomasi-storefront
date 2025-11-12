@@ -81,6 +81,7 @@ export default function ProductCategory() {
                     handleNext={handleNext}
                     crumbs={breadCrumb}
                     status={status}
+                    page="category"
                 />
             }
         </Navigation>

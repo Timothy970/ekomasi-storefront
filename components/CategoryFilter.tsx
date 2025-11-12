@@ -12,7 +12,7 @@ import { MinMaxData } from '@/lib/features/types'
 
 interface CategoryFilterParam {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
-    page: string
+    page?: string
 }
 
 export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFilterParam) {

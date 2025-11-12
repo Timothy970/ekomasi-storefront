@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { useFilterQuery } from "@/app/ClientLayout";
 
 export default function PriceRangeSlider({
     min = 0,
@@ -17,15 +18,29 @@ export default function PriceRangeSlider({
     onChange?: (values: [number, number]) => void;
 }) {
     const [values, setValues] = React.useState<[number, number]>(defaultValues);
+    const { setQuery } = useFilterQuery()
 
     const handleValueChange = (newValues: [number, number]) => {
         setValues(newValues);
         onChange?.(newValues);
     };
-
     const handleClear = () => {
-        setValues([min, max]);
-    }
+        setValues([0, 20000]);
+
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+
+        params.set("minPrice", "0");
+        params.set("maxPrice", "20000");
+
+        const newQuery = "?" + params.toString();
+
+        setQuery(newQuery);
+
+        url.search = params.toString();
+        window.history.replaceState({}, "", url.toString());
+    };
+
 
     return (
         <div className='flex flex-col gap-y-[1rem] my-[1rem] w-full'>

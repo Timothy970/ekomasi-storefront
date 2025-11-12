@@ -69,13 +69,14 @@ export default function categories() {
             {
                 <ProductListingLayout
                     listingDescription={""}
-                    listingName={"Categories"}
+                    listingName={"Products"}
                     products={products ?? []}
                     pagination={pagination}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
                     crumbs={breadCrumb}
                     status={status}
+                    page="categories"
                 />
             }
         </Navigation>
