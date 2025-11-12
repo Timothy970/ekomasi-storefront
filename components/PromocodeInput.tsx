@@ -92,7 +92,7 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
     }, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [code, cartId, locationId, dispatch, isBuyNow]);
+  }, [cartId, locationId, dispatch, isBuyNow]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setPromocode(e.target.value));
