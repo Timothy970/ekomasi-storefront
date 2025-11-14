@@ -12,7 +12,7 @@ import LoadingIndicator from './LoadingIndicator'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 
-export default function WishListProductCard({ product }: { product: Product }) {
+export default function WishListProductCard({ product, pageType }: { product: Product; pageType: "wishlist" | "shared" }) {
     const router = useRouter()
     const token = useAppSelector(selectUserToken)
     const dispatch = useAppDispatch()
@@ -129,20 +129,21 @@ export default function WishListProductCard({ product }: { product: Product }) {
 
                             <span className='text-[0.875rem] hidden md:block'>Add to cart</span>
                         </Button>
-
-                        <Button
-                            onClick={(e) => {
-                                product?.product_id ? handleRemoveWishlist(product?.product_id) : null
-                                e.stopPropagation();
-                            }}
-                            className='bg-white border border-[#7A4597] h-[2.5rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
-                            {
-                                status == "loading" && <LoadingIndicator textColor="text-[#7A4597]" />
-                            }
-                            Remove
-                        </Button>
-
-                        <Trash className='text-red-400 mr-[1.25rem] md:hidden' />
+                        {pageType === "wishlist" && (
+                            <Button
+                                onClick={(e) => {
+                                    product?.product_id ? handleRemoveWishlist(product?.product_id) : null
+                                    e.stopPropagation();
+                                }}
+                                className='bg-white border border-[#7A4597] h-[2.5rem] md:min-w-[5rem] text-[#7A4597] text-[0.875rem] hidden md:flex items-center justify-center'>
+                                {
+                                    status == "loading" && <LoadingIndicator textColor="text-[#7A4597]" />
+                                }
+                                Remove
+                            </Button>
+                        )}
+                        {pageType === "wishlist" && (
+                            <Trash className='text-red-400 mr-[1.25rem] md:hidden' />)}
                     </div>
                 </div>
             </div>

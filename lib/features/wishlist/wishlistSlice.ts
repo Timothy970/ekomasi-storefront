@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { addProductToWishList, deleteProductFromWishList, getWishLists } from "./wishlistAPI";
-import { Pagination, WishList } from "../types";
+import { addProductToWishList, deleteProductFromWishList, getSharedWishLists, getWishLists, shareWishlist } from "./wishlistAPI";
+import { Pagination, ShareWishListPayload, WishList } from "../types";
 import { ToastType } from "../toast/toastSlice";
 
 interface WishListsSliceState {
@@ -9,6 +9,7 @@ interface WishListsSliceState {
 	message: string;
 	success: boolean;
 	wishLists: WishList[] | null;
+	sharedWishLists: WishList[] | null;
 	wishListPagination: Pagination | null,
 }
 
@@ -18,6 +19,7 @@ const initialState: WishListsSliceState = {
 	message: "",
 	success: false,
 	wishLists: null,
+	sharedWishLists: null,
 	wishListPagination: null,
 };
 
@@ -116,6 +118,73 @@ export const wishListsSlice = createAppSlice({
 				},
 			}
 		),
+		getSharedWishListsAsync: create.asyncThunk(
+			async (wishlistID: string) => {
+				const response = await getSharedWishLists(wishlistID);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.sharedWishLists = action.payload.data.wishlists
+						state.wishListPagination = action.payload.data.pagination
+						state.success = true;
+					} else {
+						state.message = action.payload?.message || "Failed to fetch shared wishlists";
+						state.success = false;
+						state.sharedWishLists = null;
+						state.wishListPagination = null;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+					state.wishLists = null;
+					state.wishListPagination = null;
+				},
+			}
+		),
+		shareWishlistAsync: create.asyncThunk(
+			async ({data, token, refetchWishLists}: {data: ShareWishListPayload, token: string, refetchWishLists:( isSuccess: boolean) => void }) => {
+				const response = await shareWishlist(token, data);
+				if (response?.status_code === 200) {
+					refetchWishLists(true);
+				} else {
+					refetchWishLists(false);
+				}
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					// if (action.payload?.status_code === 200) {
+					// 	state.sharedWishLists = action.payload.data.wishlists
+					// 	state.wishListPagination = action.payload.data.pagination
+					// 	state.success = true;
+					// } else {
+					// 	state.message = action.payload?.message || "Failed to fetch shared wishlists";
+					// 	state.success = false;
+					// 	state.sharedWishLists = null;
+					// 	state.wishListPagination = null;
+					// }
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+					state.wishLists = null;
+					state.wishListPagination = null;
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectStatus: (state: WishListsSliceState) => state.status,
@@ -123,10 +192,11 @@ export const wishListsSlice = createAppSlice({
 		selectSuccess: (state: WishListsSliceState) => state.success,
 		selectMessage: (state: WishListsSliceState) => state.message,
 		selectWishLists: (state: WishListsSliceState) => state.wishLists,
+		selectSharedWishLists: (state: WishListsSliceState) => state.sharedWishLists,
 		selectWishListPagination: (state: WishListsSliceState) => state.wishListPagination,
 	},
 });
 
-export const { resetSuccess, resetMessage, getWishListsAsync, createWishListAsync, deleteProductFromWishListAsync } = wishListsSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectDeleteStatus, selectWishListPagination, selectWishLists } = wishListsSlice.selectors;
+export const { resetSuccess, resetMessage, getWishListsAsync, createWishListAsync, deleteProductFromWishListAsync, getSharedWishListsAsync, shareWishlistAsync } = wishListsSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectDeleteStatus, selectWishListPagination, selectWishLists, selectSharedWishLists } = wishListsSlice.selectors;
 export const wishListsReducer = wishListsSlice.reducer;
