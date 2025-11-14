@@ -95,9 +95,15 @@ export default function WishList() {
                   <span>Share</span>
                 </Button> */}
 
-                <Button onClick={handleRemoveAll} disabled={wishList?.length == 0} className='bg-white text-custom-black text-[0.875rem] h-[2.5rem] border border-black w-[10rem] md:rounded-[0.5rem]'>
-                  Clear All
-                </Button>
+                {
+                  wishList && wishList[0]?.products?.length && <Button
+                    onClick={handleRemoveAll}
+                    disabled={wishList?.length == 0}
+                    className='bg-white text-custom-black text-[0.875rem] h-[2.5rem] border border-black w-[10rem] md:rounded-[0.5rem]'
+                  >
+                    Clear All
+                  </Button>
+                }
               </div>
             </div>
 

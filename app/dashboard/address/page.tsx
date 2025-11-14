@@ -131,9 +131,7 @@ export default function Address() {
                     </div>
                   </div>
                 })}
-              </div> : <div className='w-full flex items-center justify-center mt-[2rem] md:mt-[2.5rem]'>
-                <h3 className='text-[0.875rem]'>No user address found!</h3>
-              </div>
+              </div> : <></>
             }
           </div>
         </div>

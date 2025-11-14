@@ -41,7 +41,17 @@ export default function SignUp() {
 
     useEffect(() => {
         if (message === "Account created successfully. Please check your email/phone for activation.") {
-            triggerToast(message, "success");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            const phoneRegex = /^[0-9]{12}$/
+
+            if (emailRegex.test(phoneOrEmail)) {
+                triggerToast("Verify using the OTP sent to your email within 10 minutes to complete registration.", "success");
+            } else if (phoneRegex.test(phoneOrEmail)) {
+                triggerToast("Verify using the OTP sent to your phone within 10 minutes to complete registration.", "success");
+            } else {
+                triggerToast("Verify using the OTP sent to your email/phone within 10 minutes to complete registration.", "success");
+            }
+
             const redirect = searchParams.get("redirect")
 
             const timer = setTimeout(() => {

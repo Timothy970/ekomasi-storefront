@@ -150,7 +150,7 @@ export const cartSlice = createAppSlice({
 						} else {
 							state.cart = action.payload.data
 						}
-						
+
 						state.promoCode = action.meta.arg.code;
 					} else {
 						state.message = action.payload?.message;
@@ -289,8 +289,30 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createOrderAsync: create.asyncThunk(
-			async ({ data, redirectToOrderDetails, page, extraPaymentPayload }: { data: MemberOrderPayload, page: "member" | "guest", redirectToOrderDetails: (cart_id: string, data: MemberOrderPayload, page: string, fail: boolean, message: string) => void, extraPaymentPayload: { phone: string } }) => {
+			async ({
+				data,
+				redirectToOrderDetails,
+				page,
+				extraPaymentPayload,
+				triggerToast,
+			}: {
+				data: MemberOrderPayload,
+				page: "member" | "guest",
+				redirectToOrderDetails: (
+					cart_id: string,
+					data: MemberOrderPayload,
+					page: string,
+					fail: boolean,
+					message: string
+				) => void,
+				extraPaymentPayload: { phone: string },
+				triggerToast: (message: string, type: ToastType) => void,
+			}) => {
 				const response = await createOrder(data, page);
+
+				if (response?.status_code !== 201 && response?.message) {
+					triggerToast(response?.message, "error")
+				}
 
 				if (response?.data?.order_id) {
 					let paymentData = {
