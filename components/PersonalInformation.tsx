@@ -251,7 +251,15 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             }
 
             if (personalFormDetails?.order_items?.length) {
-                dispatch(createOrderAsync({ data: personalFormDetails, page, redirectToOrderDetails, extraPaymentPayload }))
+                dispatch(createOrderAsync(
+                    {
+                        data: personalFormDetails,
+                        page,
+                        redirectToOrderDetails,
+                        extraPaymentPayload,
+                        triggerToast
+                    }
+                ))
 
                 return
             }
