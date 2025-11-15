@@ -1,11 +1,7 @@
 import React from 'react'
-import { useAppSelector } from '@/lib/hooks';
-import { selectWishLists } from '@/lib/features/wishlist/wishlistSlice';
 import { Product, WishList } from '@/lib/features/types';
 import WishListProductCard from './WishListProductCard';
-export default function WishLists({ pageType }: { pageType: "wishlist" | "shared" }) {
-    const wishLists = useAppSelector(selectWishLists)
-
+export default function WishLists({ pageType, wishLists }: { pageType: "wishlist" | "shared", wishLists: WishList[] | null }) {
     return (
         <div className='mt-[2rem] pb-[2rem]'>
             <div>

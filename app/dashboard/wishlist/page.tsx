@@ -139,7 +139,7 @@ export default function WishList() {
               {
                 !wishList ? <div className='mt-[2rem] md:mt-[2.5rem] w-full flex items-center justify-center'>
                   <p className='text-[1.125rem]'>There are no items in your Wishlist</p>
-                </div> : <WishLists pageType="wishlist" />
+                </div> : <WishLists pageType="wishlist" wishLists={wishList} />
               }
 
             </div>

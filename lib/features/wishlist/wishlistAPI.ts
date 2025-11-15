@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { CreateCartResponse, ShareWishListPayload, WishlistsResponse } from "../types";
+import { CreateCartResponse, SharedWishListResponse, ShareWishListPayload, WishlistsResponse } from "../types";
 import api from "@/lib/utils/axios";
 
 export async function addProductToWishList(token: string, product_id: string): Promise<any> {
@@ -58,7 +58,7 @@ export async function deleteProductFromWishList(product_id: string): Promise<Cre
   }
 }
 
-export async function getSharedWishLists(wishlistID: string): Promise<WishlistsResponse | null> {
+export async function getSharedWishLists(wishlistID: string): Promise<SharedWishListResponse | null> {
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}wishlist/share/${wishlistID}`,
@@ -76,7 +76,7 @@ export async function getSharedWishLists(wishlistID: string): Promise<WishlistsR
   }
 }
 
-export async function shareWishlist(token: string, payload: ShareWishListPayload): Promise<WishlistsResponse | null> {
+export async function shareWishlist(token: string, payload: ShareWishListPayload): Promise<SharedWishListResponse | null> {
   try {
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}wishlist/share`,

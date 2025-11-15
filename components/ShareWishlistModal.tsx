@@ -15,7 +15,9 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
     const modalRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (modalRef.current && !modalRef.current.contains(event.target as Node)) { onClose() }
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                onClose()
+            }
         };
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -48,7 +50,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
             className="absolute top-full right-0 mt-2 z-50 bg-white rounded-lg shadow-xl border border-gray-200 p-6 w-[90vw] md:w-[400px]"
         >
             <h2 className="text-[1.25rem] font-semibold mb-4 text-custom-black">Share Wishlist</h2>
-            <div onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className="block mb-4">
                     <Label className="block text-[0.875rem] font-medium mb-2 text-custom-black">
                         Recipient Email
@@ -90,7 +92,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
                         Share
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 };

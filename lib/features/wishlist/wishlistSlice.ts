@@ -9,7 +9,7 @@ interface WishListsSliceState {
 	message: string;
 	success: boolean;
 	wishLists: WishList[] | null;
-	sharedWishLists: WishList[] | null;
+	sharedWishLists: WishList | null;
 	wishListPagination: Pagination | null,
 }
 
@@ -129,8 +129,8 @@ export const wishListsSlice = createAppSlice({
 				},
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 200) {
-						state.sharedWishLists = action.payload.data.wishlists
-						state.wishListPagination = action.payload.data.pagination
+						state.sharedWishLists = action.payload.data
+						state.wishListPagination = null
 						state.success = true;
 					} else {
 						state.message = action.payload?.message || "Failed to fetch shared wishlists";
@@ -144,13 +144,13 @@ export const wishListsSlice = createAppSlice({
 					state.status = "failed";
 					state.message = action.error?.message || "Something went wrong";
 					state.success = false;
-					state.wishLists = null;
+					state.sharedWishLists = null;
 					state.wishListPagination = null;
 				},
 			}
 		),
 		shareWishlistAsync: create.asyncThunk(
-			async ({data, token, refetchWishLists}: {data: ShareWishListPayload, token: string, refetchWishLists:( isSuccess: boolean) => void }) => {
+			async ({data, token, refetchWishLists}: {data: ShareWishListPayload, token: string, refetchWishLists: (isSuccess: boolean) => void }) => {
 				const response = await shareWishlist(token, data);
 				if (response?.status_code === 200) {
 					refetchWishLists(true);
@@ -164,23 +164,13 @@ export const wishListsSlice = createAppSlice({
 					state.status = "loading";
 				},
 				fulfilled: (state, action) => {
-					// if (action.payload?.status_code === 200) {
-					// 	state.sharedWishLists = action.payload.data.wishlists
-					// 	state.wishListPagination = action.payload.data.pagination
-					// 	state.success = true;
-					// } else {
-					// 	state.message = action.payload?.message || "Failed to fetch shared wishlists";
-					// 	state.success = false;
-					// 	state.sharedWishLists = null;
-					// 	state.wishListPagination = null;
-					// }
 					state.status = "idle";
 				},
 				rejected: (state, action) => {
 					state.status = "failed";
 					state.message = action.error?.message || "Something went wrong";
 					state.success = false;
-					state.wishLists = null;
+					state.sharedWishLists = null;
 					state.wishListPagination = null;
 				},
 			}

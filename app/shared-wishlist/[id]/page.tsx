@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 export default function WishList() {
-    const wishList = useAppSelector(selectSharedWishLists)
+    const sharedWishList = useAppSelector(selectSharedWishLists)
     const dispatch = useAppDispatch()
     const params = useParams<{ id: string }>();
     useEffect(() => {
@@ -33,16 +33,16 @@ export default function WishList() {
                         <p className='text-[0.875rem] md:text-[1.125rem]'>It's super simple to create a wishlist! When you're browsing and see something you love, click the heart icon to add that item to your list. You can even login and drop a little hint by sharing your wish list with your nearest and dearest!</p>
 
                         {
-                            wishList ? <div className='mt-[2rem] md:mt-[2.5rem] w-full flex items-center justify-center'>
+                            !sharedWishList ? <div className='mt-[2rem] md:mt-[2.5rem] w-full flex items-center justify-center'>
                                 <p className='text-[1.125rem]'>There are no items in the shared Wishlist</p>
-                            </div> : <WishLists pageType="shared" />
+                            </div> : <WishLists pageType="shared" wishLists={[sharedWishList]} />
                         }
 
                     </div>
                 </div>
 
                 {
-                    !wishList && <NowTrending title="Now Trending" />
+                    !sharedWishList && <NowTrending title="Now Trending" />
                 }
             </div>
         </Navigation>

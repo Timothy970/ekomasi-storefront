@@ -303,6 +303,12 @@ export interface WishlistsResponse {
   status_code: number;
 }
 
+export interface SharedWishListResponse {
+  data: WishList;
+  message: string;
+  status_code: number;
+}
+
 export interface CreateCartResponse {
   data: {
     cart_id: string
