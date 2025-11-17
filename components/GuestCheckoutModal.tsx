@@ -50,6 +50,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
                     <X className='text-white' />
                 </div>
             </div>
+            
             <div className='bg-white flex hide-scrollbar flex-col items-center justify-center p-[3rem] gap-y-[1rem] m-[1rem] overflow-y-scroll z-[70]'>
                 <div className='mb-[2rem] border-b border-black pb-[2rem]'>
                     <div className='text-center flex flex-col gap-y-[1rem] p-2 max-w-[23rem]'>

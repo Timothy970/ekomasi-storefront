@@ -100,6 +100,7 @@ export default function WishList() {
       triggerToast("Failed to share wishlist.", "error");
     }
   }
+  
   return (
     <Navigation>
       <DashboardLayout>
@@ -124,11 +125,6 @@ export default function WishList() {
                     </svg>
                     <span>Share</span>
                   </Button>
-                  <ShareWishlistModal
-                    isOpen={isShareWishlistModalOpen}
-                    onClose={() => setShareWishlistModalOpen(false)}
-                    onShare={handleShareWishlist}
-                  />
                 </div>
 
                 <Button onClick={handleRemoveAll} disabled={wishList?.length == 0} className='bg-white text-custom-black text-[0.875rem] h-[2.5rem] border border-black w-[10rem] md:rounded-[0.5rem]'>
@@ -154,6 +150,13 @@ export default function WishList() {
           }
         </div>
       </DashboardLayout>
+
+      {
+        isShareWishlistModalOpen && <ShareWishlistModal
+          isOpen={isShareWishlistModalOpen}
+          onShare={handleShareWishlist}
+        />
+      }
     </Navigation>
   )
 }

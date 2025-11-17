@@ -39,7 +39,6 @@ type ShareWishlistModalContextType = {
     setShareWishlistModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
 const IsBuyNowContext = createContext<isBuyNowContextType | undefined>(undefined);
@@ -99,7 +98,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const [openSearchModal, setOpenSearchModal] = useState(false)
     const searchParams = useSearchParams();
     const [query, setQuery] = useState<string>(searchParams.toString());
-    const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(false);
+    const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(true);
 
     useEffect(() => {
         setMounted(true);
