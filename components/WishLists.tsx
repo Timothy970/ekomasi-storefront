@@ -1,18 +1,13 @@
 import React from 'react'
-import { useAppSelector } from '@/lib/hooks';
-import { selectWishLists } from '@/lib/features/wishlist/wishlistSlice';
 import { Product, WishList } from '@/lib/features/types';
 import WishListProductCard from './WishListProductCard';
-
-export default function WishLists() {
-    const wishLists = useAppSelector(selectWishLists)
-
+export default function WishLists({ pageType, wishLists }: { pageType: "wishlist" | "shared", wishLists: WishList[] | null }) {
     return (
         <div className='mt-[2rem] pb-[2rem]'>
             <div>
                 {wishLists?.map((wishlist: WishList, index: number) => {
                     return <div key={index.toString()} className="">
-                        <h2 className='font-bold text-lg'>{wishlist?.name}</h2>
+                        <h2 className='font-bold text-lg'>{pageType === "wishlist" ? wishlist?.name : "Shared Wishlist"}</h2>
 
                         {
                             wishlist?.products ? <div className='mt-[1.5rem] grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[2rem] sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'>
@@ -21,6 +16,7 @@ export default function WishLists() {
                                         return <WishListProductCard
                                             key={index?.toString()}
                                             product={product}
+                                            pageType={pageType}
                                         />
                                     })
                                 }

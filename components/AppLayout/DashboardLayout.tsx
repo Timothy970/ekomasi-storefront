@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout, selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
-import { selectCart } from "@/lib/features/cart/cartSlice";
 import { selectWishLists } from "@/lib/features/wishlist/wishlistSlice";
 
 const dashboardTabs = [
@@ -55,7 +54,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const token = useAppSelector(selectUserToken)
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const cart = useAppSelector(selectCart)
   const wishlist = useAppSelector(selectWishLists)
 
   useEffect(() => {
@@ -111,7 +109,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </div>
 
-      <div className="flex w-full h-full justify-center items-start relative">
+      <div className="flex w-full h-full justify-center items-start relative z-0">
         <div className="max-w-[90rem] w-full h-full flex flex-row">
           <aside className={`bg-white fixed top-0 left-0 h-full w-3/4 max-w-xs z-50 transform transition-transform duration-300 md:relative md:translate-x-0 md:w-1/4 md:block ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="p-4 flex flex-col gap-2 w-full">
