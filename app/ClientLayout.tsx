@@ -98,7 +98,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const [openSearchModal, setOpenSearchModal] = useState(false)
     const searchParams = useSearchParams();
     const [query, setQuery] = useState<string>(searchParams.toString());
-    const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(true);
+    const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
