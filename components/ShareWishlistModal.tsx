@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
 
 interface ShareWishlistModalProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
     const [errorMessage, setErrorMessage] = useState('');
     const [message, setMessage] = useState('');
     const modalRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
@@ -26,7 +28,9 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen, onClose]);
+
     if (!isOpen) return null;
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!email) {
@@ -44,6 +48,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
         setMessage('');
         onClose();
     };
+
     return (
         <div
             ref={modalRef}
@@ -69,8 +74,8 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onClose
                     <Label className="block text-[0.875rem] font-medium mb-2 text-custom-black">
                         Message (optional)
                     </Label>
-                    <textarea
-                        className="w-full h-24 border border-gray-300 rounded-[0.5rem] px-3 py-2 text-[0.875rem] resize-none focus:outline-none focus:ring-2 focus:ring-[rgba(232,41,138,0.25)] focus:border-transparent"
+                    <Textarea
+                        className="w-full bg-white h-24 border border-gray-300 rounded-[0.5rem] px-3 py-2 text-[0.875rem] resize-none focus:outline-none focus:ring-2 focus:ring-[rgba(232,41,138,0.25)] focus:border-transparent"
                         value={message}
                         onChange={e => setMessage(e.target.value)}
                         placeholder="Add a personalized message"

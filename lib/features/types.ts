@@ -672,6 +672,7 @@ export interface Crumb {
   name: string
   link: string
 }
+
 export interface ShareWishListPayload {
   email: string;
   message: string;

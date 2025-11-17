@@ -11,9 +11,11 @@ export default function WishList() {
     const sharedWishList = useAppSelector(selectSharedWishLists)
     const dispatch = useAppDispatch()
     const params = useParams<{ id: string }>();
+
     useEffect(() => {
         dispatch(getSharedWishListsAsync(params.id));
     }, [dispatch, params.id]);
+
     return (
         <Navigation>
             <div className='w-full flex flex-col justify-center items-center'>

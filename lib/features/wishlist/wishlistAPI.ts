@@ -60,7 +60,7 @@ export async function deleteProductFromWishList(product_id: string): Promise<Cre
 
 export async function getSharedWishLists(wishlistID: string): Promise<SharedWishListResponse | null> {
   try {
-    const response = await axios.get(
+    const response = await api.get(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}wishlist/share/${wishlistID}`,
       {
         headers: {
@@ -76,15 +76,15 @@ export async function getSharedWishLists(wishlistID: string): Promise<SharedWish
   }
 }
 
-export async function shareWishlist(token: string, payload: ShareWishListPayload): Promise<SharedWishListResponse | null> {
+export async function shareWishlist(payload: ShareWishListPayload): Promise<SharedWishListResponse | null> {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}wishlist/share`,
       payload,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          requiresAuth: true,
         },
       }
     );

@@ -150,8 +150,8 @@ export const wishListsSlice = createAppSlice({
 			}
 		),
 		shareWishlistAsync: create.asyncThunk(
-			async ({data, token, refetchWishLists}: {data: ShareWishListPayload, token: string, refetchWishLists: (isSuccess: boolean) => void }) => {
-				const response = await shareWishlist(token, data);
+			async ({data, refetchWishLists}: {data: ShareWishListPayload, refetchWishLists: (isSuccess: boolean) => void }) => {
+				const response = await shareWishlist(data);
 				if (response?.status_code === 200) {
 					refetchWishLists(true);
 				} else {
