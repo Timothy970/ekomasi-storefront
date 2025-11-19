@@ -541,6 +541,7 @@ export interface Order {
     state: string;
   },
   promo_code?: string | null;
+  estimated_tax: number;
 }
 
 export interface UserAddress {

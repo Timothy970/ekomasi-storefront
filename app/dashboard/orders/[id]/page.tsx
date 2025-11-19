@@ -13,7 +13,6 @@ export default function Order() {
     const dispatch = useAppDispatch();
     const order = useAppSelector(selectUserOrder);
     const profile = useAppSelector(selectUserProfile);
-
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 

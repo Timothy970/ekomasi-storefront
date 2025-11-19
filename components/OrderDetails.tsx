@@ -113,7 +113,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
 
               <div className='flex justify-between w-full'>
                 <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
-                <span className='text-custom-black text-[0.875rem]'>16%</span>
+                <span className='text-custom-black text-[0.875rem]'>{order?.estimated_tax}</span>
               </div>
 
               <div className='flex justify-between w-full'>
