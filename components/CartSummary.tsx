@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Button } from './ui/button'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
 import { getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
-import CartSummaryLocationDropdown from './CartSummaryLocationDropdown'
-import { triggerToast } from '@/app/utils/toastUtils'
 import { CartData } from '@/lib/features/types'
 import PromocodeInput from './PromocodeInput'
 
 export default function CartSummary({ cart }: { cart: CartData }) {
-    const [selectedId, setSelectedId] = useState<number | null>(null);
     const { setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
@@ -22,21 +19,11 @@ export default function CartSummary({ cart }: { cart: CartData }) {
     const promoFromUrl = searchParams.get("promo_code");
 
     const handleContinueToCheckout = () => {
-        if (!selectedId) {
-            triggerToast("Please select shipping location to order from.", "error")
-            return
-        }
-
         if (token == null) {
             setOpenGuestCheckoutModal(true)
         } else {
             let url = '/checkout/member?';
             let queryAdded = false;
-
-            if (selectedId) {
-                url += `location_id=${selectedId}`;
-                queryAdded = true;
-            }
 
             if (promoFromUrl) {
                 if (queryAdded) {
@@ -53,16 +40,9 @@ export default function CartSummary({ cart }: { cart: CartData }) {
     useEffect(() => {
         if (!params?.cart_id) return;
 
-        const locationIdFromUrl = searchParams.get("location_id");
         const promoFromUrl = searchParams.get("promo_code");
-        const idNum = locationIdFromUrl ? Number(locationIdFromUrl) : selectedId;
 
         let data: { cart_id: string, location_id?: number, code?: string } = { cart_id: params.cart_id }
-
-        if (idNum) {
-            setSelectedId(idNum);
-            data = { ...data, location_id: idNum }
-        }
 
         if (promoFromUrl) {
             data = { ...data, code: promoFromUrl }
@@ -102,11 +82,6 @@ export default function CartSummary({ cart }: { cart: CartData }) {
                                 }).format(cart?.sub_total ?? 0)}
                             </span>
                         </div>
-
-                        <CartSummaryLocationDropdown
-                            selectedId={selectedId}
-                            setSelectedId={setSelectedId}
-                        />
 
                         <div className='flex justify-between w-full'>
                             <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
