@@ -78,7 +78,7 @@ export interface Product {
   urls?: Image[];
   liked_by_user?: boolean;
   tag: string;
-  product_variants: MallVariant[]
+  product_variants?: MallVariant[]
 }
 
 export interface SubCategory {
