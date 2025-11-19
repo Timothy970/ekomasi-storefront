@@ -239,7 +239,7 @@ export default function ProductDetail() {
 
               <div className='mt-[0.75rem]'>
                 <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
-                <ProductColors />
+                <ProductColors product={product} />
               </div>
 
               {

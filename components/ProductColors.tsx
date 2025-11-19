@@ -1,14 +1,22 @@
-import React from 'react'
+"use client";
+import { Product } from "@/lib/features/types";
+import React from "react";
 
-export default function ProductColors() {
-    const stars = Array(5).fill(0);
+export default function ProductColors({ product }: { product: Product }) {
+    const colorVariants = product.product_variants?.filter((v) => v.variant_type.toLowerCase() === "color") || [];
+
+    if (!colorVariants) {
+        return <></>
+    }
 
     return (
-        <div className="flex gap-1 mt-[1rem]">
-            {stars.map((_, index) => (
-                <svg key={index} xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <circle cx="20" cy="20" r="20" fill="#78B464" />
-                </svg>
+        <div className="flex gap-2 mt-[1rem]">
+            {colorVariants.map((variant) => (
+                <div
+                    key={variant.variant_id}
+                    className="w-10 h-10 rounded-full border"
+                    style={{ backgroundColor: variant.name }}
+                />
             ))}
         </div>
     );

@@ -51,6 +51,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     const address = useAppSelector(selectAddress)
     const { isEditingAddress, setIsEditingAddress } = useIsEditingAdress()
     const promoCode = useAppSelector(selectPromocode)
+    const [deliveryType, setDeliveryType] = useState<"ship" | "in store">("ship")
 
     const ALL_FIELDS: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
         { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
@@ -66,8 +67,15 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         { key: "postalCode", label: "Postal Code", requiredFor: ["guest"] },
     ];
 
-    const getRequiredFields = (page: "member" | "guest") =>
-        ALL_FIELDS.filter(field => field.requiredFor.includes(page));
+    const getRequiredFields = (page: "member" | "guest", deliveryType: "ship" | "in store") => {
+        let fields = ALL_FIELDS.filter(field => field.requiredFor.includes(page));
+
+        if (deliveryType === "in store") {
+            fields = fields.filter(field => field.key !== "deliveryLocationId");
+        }
+
+        return fields;
+    };
 
     const isEmpty = (value: any) =>
         value === undefined ||
@@ -76,7 +84,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         (typeof value === "string" && value.trim() === "");
 
     const isFormComplete = (form: FormData): boolean => {
-        const requiredFields = getRequiredFields(page);
+        const requiredFields = getRequiredFields(page, deliveryType);
         for (const { key } of requiredFields) {
             if (isEmpty(form[key])) return false;
         }
@@ -85,7 +93,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     };
 
     const validateForm = (form: FormData): boolean => {
-        const requiredFields = getRequiredFields(page);
+        const requiredFields = getRequiredFields(page, deliveryType);
 
         for (const { key, label } of requiredFields) {
             if (isEmpty(form[key])) {
@@ -110,7 +118,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
 
     useEffect(() => {
         setIsFormValid(isFormComplete(formData));
-    }, [formData]);
+    }, [formData, deliveryType]);
 
     useEffect(() => {
         if (token) {
@@ -210,7 +218,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     };
 
     const orderPayload = (formData: FormData) => {
-        return {
+        let payload = {
             is_guest_order: page === "member" ? false : true,
             guest_delivery_address: {
                 street: formData?.address,
@@ -229,7 +237,13 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             order_items: orderItems ?? [],
             location_id: formData?.deliveryLocationId ?? "",
             promo_code: promoCode,
-        };
+        } as any;
+
+        if (deliveryType !== "ship") {
+            delete payload.location_id;
+        }
+
+        return payload
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -366,7 +380,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                 <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                 <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                    <Button className='px-[3rem] min-w-[10rem] h-[2.5rem] border border-[#AF52DE] text-custom-black bg-[#AF52DE36]'>
+                    <Button type='button' onClick={() => setDeliveryType("ship")} className={`px-[3rem] min-w-[10rem] h-[2.5rem] border ${deliveryType === "ship" ? 'bg-[#AF52DE36]' : 'bg-white'} border-[#AF52DE] text-custom-black `}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -386,7 +400,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                         <span>Ship</span>
                     </Button>
 
-                    <Button disabled className='px-[3rem] min-w-[10rem] h-[2.5rem] bg-white border border-black text-custom-black'>
+                    <Button type='button' onClick={() => setDeliveryType("in store")} className={`px-[3rem] min-w-[10rem] h-[2.5rem] ${deliveryType === "in store" ? 'bg-[#AF52DE36]' : 'bg-white'} border border-black text-custom-black`}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -520,10 +534,12 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                     </div>
                 </div>
 
-                <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                    <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
-                </div>
+                {
+                    deliveryType === "ship" && <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                        <span className='text-[0.875rem] font-semibold'>Shipping price</span>
+                        <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
+                    </div>
+                }
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
                     <h2 className='font-bold text-[1.5rem]'>Payment</h2>
