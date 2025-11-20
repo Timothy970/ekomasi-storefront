@@ -21,6 +21,7 @@ import { useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout'
 import { ShoppingBag } from 'lucide-react'
 import Accordion from '@/components/Accordion'
 import { ProductDetailsReviews } from '@/components/ProductDetailsReviews'
+import ProductFeatureSection from '@/components/ProductFeatureSection'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -357,11 +358,8 @@ export default function ProductDetail() {
                 <Accordion title="Warranty">
                   warranty content
                 </Accordion>
-
               </div>
             </div>
-
-
           </div>
         </div>
 
@@ -372,6 +370,8 @@ export default function ProductDetail() {
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <NowTrending title="You may also like" />
         </div>
+
+        <ProductFeatureSection />
       </div>
     </Navigation >
   )

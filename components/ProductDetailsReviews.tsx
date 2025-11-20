@@ -10,7 +10,7 @@ import ProductCustomerReview from "./ProductCustomerReview"
 export function ProductDetailsReviews() {
     return (
         <div className="flex w-full flex-col gap-6">
-            <Tabs defaultValue="customer-reviews" className="w-full mt-[2rem]">
+            <Tabs defaultValue="details" className="w-full mt-[2rem]">
                 <TabsList className="flex gap-[1.5rem] justify-start border-b border-none bg-transparent p-0">
                     <TabsTrigger
                         value="details"
@@ -29,7 +29,7 @@ export function ProductDetailsReviews() {
 
                 <TabsContent value="details">
                     <div className="w-full px-[1.5rem] mt-[0.5rem]">
-                        <ul className="flex flex-col gap-y-[0.32rem]">
+                        <ul className="flex flex-col gap-y-[0.32rem] flex-wrap">
                             <li className="list-disc font-[400] text-[0.875rem]">High-impact wheels with all-terrain bicycle tires</li>
                             <li className="list-disc font-[400] text-[0.875rem]">High-impact wheels with all-terrain bicycle tires</li>
                             <li className="list-disc font-[400] text-[0.875rem]">High-impact wheels with all-terrain bicycle tires</li>

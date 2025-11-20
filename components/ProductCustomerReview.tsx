@@ -5,7 +5,7 @@ import CustomerReviews from './CustomerReviews'
 
 export default function ProductCustomerReview() {
     return (
-        <div className="w-full px-[1.5rem] mt-[0.5rem] flex flex-row gap-x-[1rem]">
+        <div className="w-full mt-[0.5rem] flex flex-col lg:flex-row gap-x-[1rem]">
             <div className='flex flex-col w-full gap-y-[1rem]'>
                 <div className='flex flex-row items-center gap-x-[1.5rem]'>
                     <span className='text-[3rem] font-[700]'>5.0</span>
@@ -29,12 +29,12 @@ export default function ProductCustomerReview() {
                             </svg>
                         </div>
 
-                        <span>5 Reviews</span>
+                        <span className='font-[400] text-[1.125rem]'>5 Reviews</span>
                     </div>
                 </div>
 
                 <div>
-                    <Button className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400] my-[1rem]'>
+                    <Button className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
                         Write a review
                     </Button>
                 </div>

@@ -12,7 +12,7 @@ import ReviewsList from './ReviewsList'
 
 export default function CustomerReviews() {
     return (
-        <div className=''>
+        <div className='mt-[2rem]'>
             <div className='flex flex-row justify-between gap-x-[1rem]'>
                 <Select>
                     <SelectTrigger className="w-[180px]">
