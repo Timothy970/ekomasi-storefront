@@ -44,6 +44,22 @@ export async function signIn({ phone_number, email }: SignInParams): Promise<Sig
     }
 }
 
+export async function addProductReview({ productId, user_id, score, details }: {
+    productId: string, user_id: string, score: number, details: string
+}): Promise<SignInResponse> {
+    try {
+        let payload: Record<string, string | number> = {};
+        payload = { user_id, score, details }
+
+        const response = await api.post<SignInResponse>(`products/${productId}/reviews`, payload, { headers: { requiresAuth: true } });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError<SignInResponse>;
+        return err.response?.data as SignInResponse;
+    }
+}
+
 export async function requestOtp(params: OtpRequestParams): Promise<OtpResponse> {
     try {
         const response = await api.post<OtpResponse>("auth/resend-otp", params);

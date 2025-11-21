@@ -2,12 +2,16 @@ import Image from 'next/image'
 import React from 'react'
 import { format, addDays } from "date-fns";
 import { Order } from '@/lib/features/types';
+import { Button } from './ui/button';
+import { useReview } from '@/app/ClientLayout';
 
 type OrderDetailsProps = {
-  order: Order
+  order: Order;
+  setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-export default function OrderDetails({ order }: OrderDetailsProps) {
+export default function OrderDetails({ order, setProductReviewId }: OrderDetailsProps) {
+  const { setOpenReviewModal } = useReview()
 
   return (
     <div className='mt-[2rem] md:mt-[2.5rem] w-full px-[1rem] lg:px-[3rem] flex flex-col md:flex-row md:justify-between'>
@@ -61,6 +65,17 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
                     <span className='text-[1.125rem]'>Qty:</span>
                     <span className='text-[1.125rem] font-light'>{item?.stock_quantity}</span>
                   </div>
+                </div>
+
+                <div>
+                  <Button onClick={() => {
+                    setOpenReviewModal(true)
+                    setProductReviewId(item?.product_id)
+                  }
+                  }
+                    className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
+                    Write a review
+                  </Button>
                 </div>
               </div>
             })

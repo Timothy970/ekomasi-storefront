@@ -1,7 +1,9 @@
 "use client";
+import { useReview } from '@/app/ClientLayout';
 import Navigation from '@/components/Navigation';
 import OrderDetails from '@/components/OrderDetails';
 import OrderDetailsFlow from '@/components/OrderDetailsFlow';
+import ReviewModal from '@/components/ReviewModal';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
@@ -15,6 +17,8 @@ export default function Order() {
     const profile = useAppSelector(selectUserProfile);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const { openReviewModal, setOpenReviewModal } = useReview()
+    const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (params?.id) {
@@ -116,7 +120,16 @@ export default function Order() {
                 </div>
 
                 <OrderDetailsFlow order={order} />
-                <OrderDetails order={order} />
+                <OrderDetails order={order} setProductReviewId={setProductReviewId} />
+
+                {
+                    openReviewModal && <ReviewModal
+                        openReviewModal={openReviewModal}
+                        setProductReviewId={setProductReviewId}
+                        productReviewId={productReviewId}
+                        orderId={params?.id}
+                    />
+                }
             </div>
         </Navigation>
     );
