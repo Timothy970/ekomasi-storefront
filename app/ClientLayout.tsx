@@ -9,6 +9,11 @@ type FilterContextType = {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+type ReviewContextType = {
+    openReviewModal: boolean
+    setOpenReviewModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 type SearchContextType = {
     openSearchModal: boolean
     setOpenSearchModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -40,6 +45,7 @@ type ShareWishlistModalContextType = {
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
+const ReviewContext = createContext<ReviewContextType | undefined>(undefined)
 const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
 const IsBuyNowContext = createContext<isBuyNowContextType | undefined>(undefined);
 const IsEditingAdressContext = createContext<isEditingAdressContextType | undefined>(undefined);
@@ -50,6 +56,12 @@ const ShareWishlistModalContext = createContext<ShareWishlistModalContextType | 
 export function useFilter() {
     const ctx = useContext(FilterContext)
     if (!ctx) throw new Error("useFilter must be used within FilterProvider")
+    return ctx
+}
+
+export function useReview() {
+    const ctx = useContext(ReviewContext)
+    if (!ctx) throw new Error("useReview must be used within ReviewProvider")
     return ctx
 }
 
@@ -92,6 +104,7 @@ export function useShareWishlistModal() {
 export default function ClientLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
     const [mounted, setMounted] = useState(false);
     const [openFilterModal, setOpenFilterModal] = useState(false)
+    const [openReviewModal, setOpenReviewModal] = useState(false)
     const [openGuestCheckoutModal, setOpenGuestCheckoutModal] = useState(false);
     const [isBuyNow, setIsBuyNow] = useState(false);
     const [isEditingAddress, setIsEditingAddress] = useState(false);
@@ -109,22 +122,24 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     }
 
     return (
-        <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
-            <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-                <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
-                    <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
-                        <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-                            <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                                <QueryContext.Provider value={{ query, setQuery }}>
-                                    <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
-                                        {children}
-                                    </main>
-                                </QueryContext.Provider>
-                            </SearchContext.Provider>
-                        </GuestCheckoutContext.Provider>
-                    </IsEditingAdressContext.Provider>
-                </IsBuyNowContext.Provider>
-            </FilterContext.Provider>
-        </ShareWishlistModalContext.Provider>
+        <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
+            <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
+                <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
+                    <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
+                        <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
+                            <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
+                                <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
+                                    <QueryContext.Provider value={{ query, setQuery }}>
+                                        <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                                            {children}
+                                        </main>
+                                    </QueryContext.Provider>
+                                </SearchContext.Provider>
+                            </GuestCheckoutContext.Provider>
+                        </IsEditingAdressContext.Provider>
+                    </IsBuyNowContext.Provider>
+                </FilterContext.Provider>
+            </ShareWishlistModalContext.Provider>
+        </ReviewContext.Provider>
     )
 }

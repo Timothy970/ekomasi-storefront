@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from './ui/button'
 import RatingBreakdown from './RatingBreakdown'
 import CustomerReviews from './CustomerReviews'
 
@@ -31,12 +30,6 @@ export default function ProductCustomerReview() {
 
                         <span className='font-[400] text-[1.125rem]'>5 Reviews</span>
                     </div>
-                </div>
-
-                <div>
-                    <Button className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
-                        Write a review
-                    </Button>
                 </div>
 
                 <RatingBreakdown />

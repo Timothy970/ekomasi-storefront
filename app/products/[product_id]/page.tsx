@@ -39,6 +39,7 @@ export default function ProductDetail() {
   const { setOpenGuestCheckoutModal } = useGuestCheckout()
   const { setIsBuyNow } = useIsBuyNow()
   const url = typeof window !== "undefined" ? window.location.href : "";
+
   console.log(product, 'produc')
 
   useEffect(() => {
