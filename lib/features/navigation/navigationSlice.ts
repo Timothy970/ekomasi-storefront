@@ -270,7 +270,7 @@ export const navigationSlice = createAppSlice({
 		selectSuccess: (state: NavigationSliceState) => state.success,
 		selectMessage: (state: NavigationSliceState) => state.message,
 		selectMinMaxPriceRange: (state: NavigationSliceState) => state.minMaxPriceRange,
-		selectStaticContents: (state: NavigationSliceState) => state.staticContents || null,
+		selectStaticContents: (state: NavigationSliceState) => state.staticContents || [],
 	},
 });
 

@@ -688,18 +688,18 @@ export interface ContentAuthor {
 export interface Banner {
   image_url?: string;
   alt?: string;
-  caption?: string
+  caption?: string;
 }
 
 export interface Paragraph {
   text?: string;
-  title?: string
+  title?: string;
 }
 
 export interface GetStaticContentsResponse {
   data: StaticContent[];
   message: string;
-  status_code: number
+  status_code: number;
 }
 
 export interface StaticContentAppSection {

@@ -104,7 +104,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                     onFocus={() => setOpenSearchModal(true)}
-                    onBlur={() => setOpenSearchModal(false)} 
+                    onBlur={() => setOpenSearchModal(false)}
                     onKeyDown={handleKeyDown}
                     className="w-full h-full pl-4 pr-10 text-[0.875rem] rounded-lg border border-[#AAA] bg-white"
                 />
