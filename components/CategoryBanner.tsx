@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { customeParser } from "@/lib/utils";
+import { customParser } from "@/lib/utils";
 
 export default function CategoryBanner({ imageUrl, description, title }: { imageUrl: string, description: string, title: string }) {
   return (
@@ -22,7 +22,7 @@ export default function CategoryBanner({ imageUrl, description, title }: { image
             {title}
           </h2>
           <div className="text-white hidden md:block text-start font-poppins text-[1.25rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
-            {customeParser(description)}
+            {customParser(description)}
           </div>
         </div>
       </div>

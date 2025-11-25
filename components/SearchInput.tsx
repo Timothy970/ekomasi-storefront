@@ -17,7 +17,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
     const inputRef = useRef<HTMLInputElement>(null);
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
     const dispatch = useAppDispatch();
-    const { query, setQuery } = useFilterQuery();
+    const { setQuery } = useFilterQuery();
     const [searchValue, setSearchValue] = useState("");
     const [debouncedValue, setDebouncedValue] = useState("");
     const searchTerm = useAppSelector(selectSearchTerm);
@@ -104,6 +104,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                     onFocus={() => setOpenSearchModal(true)}
+                    onBlur={() => setOpenSearchModal(false)}
                     onKeyDown={handleKeyDown}
                     className="w-full h-full pl-4 pr-10 text-[0.875rem] rounded-lg border border-[#AAA] bg-white"
                 />

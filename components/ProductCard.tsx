@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/features/types";
-import { customeParser } from "@/lib/utils";
+import { customParser } from "@/lib/utils";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -49,7 +49,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.name}
         </h3>
         <div className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
-          {customeParser(product.description)}
+          {customParser(product.description)}
         </div>
         <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
           KES {product.price}

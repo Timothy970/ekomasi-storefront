@@ -15,7 +15,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb } from '@/lib/features/types'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import { customeParser } from '@/lib/utils'
+import { customParser } from '@/lib/utils'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout'
 import { ShoppingBag } from 'lucide-react'
@@ -212,7 +212,7 @@ export default function ProductDetail() {
                 <span>10 Reviews</span>
               </div>
               {
-                product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customeParser(product?.description)}</div>
+                product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product?.description)}</div>
               }
 
               <div className='mt-[1.5rem] min-h-[2.5rem]'>

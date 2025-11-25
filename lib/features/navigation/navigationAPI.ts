@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -13,6 +13,15 @@ export async function getCategories(): Promise<CategoriesResponse> {
   }
 }
 
+export async function getStaticContents(): Promise<GetStaticContentsResponse> {
+  try {
+    const response = await api.get<GetStaticContentsResponse>(`static-pages`, { headers: { requiresAuth: true } });
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError;
+    throw err;
+  }
+}
 
 export async function getCategoryById(id: string, query: string): Promise<CategoryResponse | null> {
   try {

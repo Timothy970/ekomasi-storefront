@@ -1,8 +1,5 @@
-import Navigation from '@/components/Navigation'
-import React from 'react'
+import StaticContentPage from "@/components/StaticContentPage";
 
 export default function aboutus() {
-  return (
-    <Navigation>aboutus</Navigation>
-  )
+  return <StaticContentPage contentPath="about-us" />;
 }

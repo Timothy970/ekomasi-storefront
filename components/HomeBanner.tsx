@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { customeParser } from "@/lib/utils";
+import { customParser } from "@/lib/utils";
 
 export default function HomeBanner() {
     const [current, setCurrent] = useState(0);
@@ -73,7 +73,7 @@ export default function HomeBanner() {
                                 {slides[current].title}
                             </h2>
                             <div className="text-white text-center font-poppins text-[1.125rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
-                                {customeParser(slides[current].description)}
+                                {customParser(slides[current].description)}
                             </div>
                         </div>
 

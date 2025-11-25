@@ -4,12 +4,11 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import SocialLinksFooter from '../SocialLinksFooter'
 import { useAppSelector } from '@/lib/hooks'
-import { selectCategories, selectHomeData } from '@/lib/features/navigation/navigationSlice'
+import { selectHomeData } from '@/lib/features/navigation/navigationSlice'
 import Link from 'next/link'
 
 export default function Footer() {
   const homeData = useAppSelector(selectHomeData)
-  const categories = useAppSelector(selectCategories)
 
   return (
     <div className='relative w-full z-0'>
@@ -150,9 +149,10 @@ export default function Footer() {
         </div>
 
         <div className='lg:flex flex-row gap-y-[1rem] hidden gap-x-[2rem] mt-[3rem]'>
-          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Privacy Policy</a>
-          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Terms of Service</a>
-          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Cookies Settings</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/privacy-policy' target='_blank'>Privacy Policy</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/about-us' target='_blank'>About Us</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/faq' target='_blank'>FAQs</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/terms-&-conditions' target='_blank'>Terms and conditions</a>
         </div>
       </div>
     </div>
