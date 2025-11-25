@@ -8,7 +8,7 @@ import CategoryBanner from '@/components/CategoryBanner'
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '@/app/ClientLayout'
 import { Crumb } from '@/lib/features/types'
-import { customeParser } from '@/lib/utils'
+import { customParser } from '@/lib/utils'
 
 export default function SubCategory() {
     const params = useParams<{ id: string }>()
@@ -83,7 +83,7 @@ export default function SubCategory() {
 
             {
                 <ProductListingLayout
-                    listingDescription={subCategory?.description ? customeParser(subCategory?.description) : ""}
+                    listingDescription={subCategory?.description ? customParser(subCategory?.description) : ""}
                     listingName={subCategory?.name ?? ""}
                     products={subCategory?.products ?? []}
                     pagination={pagination}

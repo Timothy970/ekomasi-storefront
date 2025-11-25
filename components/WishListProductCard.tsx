@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Trash } from 'lucide-react'
 import { Product } from '@/lib/features/types'
-import { customeParser } from '@/lib/utils'
+import { customParser } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
@@ -104,7 +104,7 @@ export default function WishListProductCard({ product, pageType }: { product: Pr
 
                 <div className=" pb-3 flex flex-col gap-y-1 mt-[0.75rem] w-full justify-center">
                     <h3 className="text-[0.875rem] text-custom-black capitalize">{product.name}</h3>
-                    <div className="text-[0.875rem] font-normal capitalize">{customeParser(product.description)}</div>
+                    <div className="text-[0.875rem] font-normal capitalize">{customParser(product.description)}</div>
                     <p className="text-[0.875rem] font-semibold">KES {product.price}</p>
 
                     <div className='flex justify-between items-center mt-1'>

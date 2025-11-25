@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, FeaturedProduct, HomeDataWrapper, MinMaxData, Pagination, Product, SubcategoryProducts, } from "../types";
-import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getSubCategoryById } from "./navigationAPI";
+import { Category, FeaturedProduct, HomeDataWrapper, MinMaxData, Pagination, Product, StaticContent, SubcategoryProducts, } from "../types";
+import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getStaticContents, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
 	categories: Category[] | null;
@@ -15,6 +15,7 @@ interface NavigationSliceState {
 	featured: FeaturedProduct[] | null;
 	product: Product | null;
 	minMaxPriceRange: MinMaxData | null;
+	staticContents: StaticContent[] | [];
 }
 
 const initialState: NavigationSliceState = {
@@ -30,6 +31,7 @@ const initialState: NavigationSliceState = {
 	featured: null,
 	product: null,
 	minMaxPriceRange: null,
+	staticContents: [],
 };
 
 export const navigationSlice = createAppSlice({
@@ -60,6 +62,34 @@ export const navigationSlice = createAppSlice({
 					state.status = "failed";
 					state.message = action.error?.message ?? "";
 					state.success = false;
+				},
+			}
+		),
+		getStaticContentsAsync: create.asyncThunk(
+			async () => {
+				const response = await getStaticContents()
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.data) {
+						state.success = true
+						state.message = action.payload?.message
+						state.staticContents = action?.payload?.data
+					} else {
+						state.success = false
+						state.message = action.payload?.message
+						state.staticContents = []
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = ""
 				},
 			}
 		),
@@ -240,10 +270,11 @@ export const navigationSlice = createAppSlice({
 		selectSuccess: (state: NavigationSliceState) => state.success,
 		selectMessage: (state: NavigationSliceState) => state.message,
 		selectMinMaxPriceRange: (state: NavigationSliceState) => state.minMaxPriceRange,
+		selectStaticContents: (state: NavigationSliceState) => state.staticContents || null,
 	},
 });
 
 // Export actions and selectors
-export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getStaticContentsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectStaticContents, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

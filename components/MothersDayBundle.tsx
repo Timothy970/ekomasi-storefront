@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { customeParser } from "@/lib/utils";
+import { customParser } from "@/lib/utils";
 
 const slides = [
     {
@@ -75,7 +75,7 @@ export default function MothersDayBundle() {
                                     {slides[current].title}
                                 </h2>
                                 <div className="text-white text-center font-poppins text-[0.875rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-lg lg:leading-[1.6875rem]">
-                                    {customeParser(slides[current].description)}
+                                    {customParser(slides[current].description)}
                                 </div>
                             </div>
                         </div>

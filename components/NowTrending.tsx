@@ -10,7 +10,7 @@ import {
 } from "@/lib/features/navigation/navigationSlice";
 import Link from "next/link";
 import Image from "next/image";
-import { customeParser } from "@/lib/utils";
+import { customParser } from "@/lib/utils";
 
 export default function NowTrending({ title }: { title: string }) {
   const [index, setIndex] = useState(0);
@@ -111,7 +111,7 @@ export default function NowTrending({ title }: { title: string }) {
                     </h3>
 
                     <div className="text-custom-black font-[600] text-[0.875rem] lg:text-base leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
-                      {customeParser(p.name)}
+                      {customParser(p.name)}
                     </div>
 
                     <p className="mt-2 text-[1.25rem] font-bold text-custom-black">

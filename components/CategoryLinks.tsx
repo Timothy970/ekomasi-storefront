@@ -91,18 +91,6 @@ export default function CategorySlider() {
                                 </span>
                             </li>
                         ))}
-
-                        <Link href={"/blogs"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
-                                Blogs
-                            </span>
-                        </Link>
-
-                        <Link href={"/about-us"} className="flex w-auto text-[0.875rem] justify-center items-center rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
-                                About Us
-                            </span>
-                        </Link>
                     </ul>
                 </div>
             </div>

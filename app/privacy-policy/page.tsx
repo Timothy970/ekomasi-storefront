@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { customParser } from '@/lib/utils'
 import React, { useEffect, useState } from 'react'
 
-export default function aboutus() {
+export default function privacypolicy() {
   const staticContents = useAppSelector(selectStaticContents)
   const dispatch = useAppDispatch()
   const [content, setContent] = useState<StaticContent | null>(null)
@@ -17,7 +17,7 @@ export default function aboutus() {
   useEffect(() => {
     if (!staticContents) return;
 
-    const about = staticContents.find(item => item.path === "about-us");
+    const about = staticContents.find(item => item.path === "privacy-policy");
 
     if (about) {
       setContent(about);

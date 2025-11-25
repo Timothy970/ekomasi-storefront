@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function customeParser(string: string) {
+export function customParser(string: string | undefined) {
   if (string) {
     return parse(string)
   }

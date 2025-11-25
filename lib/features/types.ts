@@ -679,3 +679,56 @@ export interface ShareWishListPayload {
   email: string;
   message: string;
 }
+
+export interface ContentAuthor {
+  name?: string;
+  avatar?: string;
+}
+
+export interface Banner {
+  image_url?: string;
+  alt?: string;
+  caption?: string
+}
+
+export interface Paragraph {
+  text?: string;
+  title?: string
+}
+
+export interface GetStaticContentsResponse {
+  data: StaticContent[];
+  message: string;
+  status_code: number
+}
+
+export interface StaticContentAppSection {
+  position?: number;
+  banner?: Banner | null;
+  paragraphs?: Paragraph[];
+  images?: ContentImage[];
+  title?: string;
+}
+
+export interface ContentImage {
+  image_url?: string;
+  alt?: string;
+  caption?: string;
+}
+
+export interface StaticContent {
+  id?: string;
+  static_page_id?: string;
+  author?: ContentAuthor;
+  created_at?: Date;
+  updated_at?: Date;
+  title?: string;
+  description?: string;
+  sections?: StaticContentAppSection[];
+  paths?: {
+    edit: string;
+    view: string;
+    create: string;
+  };
+  path?: string;
+}
