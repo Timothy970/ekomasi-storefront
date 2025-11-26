@@ -527,6 +527,7 @@ export interface Order {
   sub_total: number;
   created_at: string;
   order_status: string;
+  delivery_status: string;
   total_amount: number;
   total_discount: number;
   items: OrderItem[];

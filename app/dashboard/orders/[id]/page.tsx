@@ -17,26 +17,48 @@ export default function Order() {
     const profile = useAppSelector(selectUserProfile);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const { openReviewModal, setOpenReviewModal } = useReview()
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const { openReviewModal } = useReview();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
+    console.log(order, 'orders')
+
+    const fetchOrder = async (isIntervalFetch = false) => {
+        if (!params?.id) return;
+
+        if (isIntervalFetch) setIsRefreshing(true);
+
+        try {
+            await dispatch(getOrderAsync(params.id)).unwrap();
+        } catch {
+            if (!isIntervalFetch) setError(true);
+        } finally {
+            if (isIntervalFetch) {
+                setTimeout(() => setIsRefreshing(false), 800);
+            } else {
+                setLoading(false);
+            }
+        }
+    };
 
     useEffect(() => {
-        if (params?.id) {
-            dispatch(getOrderAsync(params.id))
-                .unwrap()
-                .catch(() => setError(true))
-                .finally(() => setLoading(false));
-        } else {
-            setError(true);
-            setLoading(false);
-        }
-    }, [params?.id, dispatch]);
+        fetchOrder(false);
+    }, [params?.id]);
+
+    useEffect(() => {
+        if (!params?.id) return;
+
+        const interval = setInterval(() => {
+            fetchOrder(true);
+        }, 30000);
+
+        return () => clearInterval(interval);
+    }, [params?.id]);
 
     if (loading) {
         return (
             <Navigation>
                 <div className="w-full flex justify-center items-center min-h-[50vh]">
-                    <p className="text-base">Loading your order details...</p>
+                    <p className="text-base animate-pulse">Loading your order details...</p>
                 </div>
             </Navigation>
         );
@@ -57,7 +79,13 @@ export default function Order() {
 
     return (
         <Navigation>
-            <div className="max-w-[90rem] w-full mx-auto flex flex-col items-center justify-center mb-[2rem] md:mb-[2.5rem]">
+            <div
+                className={`
+                    max-w-[90rem] w-full mx-auto flex flex-col items-center justify-center mb-[2rem] md:mb-[2.5rem]
+                    transition-colors duration-700
+                    ${isRefreshing ? "bg-[rgba(0,0,0,0.03)]" : "bg-transparent"}
+                `}
+            >
                 {order.order_status === "Cancelled" ? (
                     <div className="w-full flex items-center justify-center bg-[#FF3B308F]">
                         <div className="flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]">
@@ -107,13 +135,15 @@ export default function Order() {
                         <div className="flex text-custom-black gap-x-[0.5rem]">
                             <span className="font-medium">Total:</span>
                             <p className="uppercase font-medium">
-                                {"KES " + new Intl.NumberFormat("en-KE", { minimumFractionDigits: 0 }).format(order.total_amount ?? 0)}
+                                {"KES " +
+                                    new Intl.NumberFormat("en-KE", { minimumFractionDigits: 0 }).format(order.total_amount ?? 0)}
                             </p>
                         </div>
 
                         {profile && (
                             <p className="font-medium mt-[1rem] text-center text-wrap text-[0.875rem] lg:text-base">
-                                We have sent the order confirmation details to <span className="font-bold">{profile.email}</span>
+                                We have sent the order confirmation details to{" "}
+                                <span className="font-bold">{profile.email}</span>
                             </p>
                         )}
                     </div>
@@ -122,14 +152,14 @@ export default function Order() {
                 <OrderDetailsFlow order={order} />
                 <OrderDetails order={order} setProductReviewId={setProductReviewId} />
 
-                {
-                    openReviewModal && <ReviewModal
+                {openReviewModal && (
+                    <ReviewModal
                         openReviewModal={openReviewModal}
                         setProductReviewId={setProductReviewId}
                         productReviewId={productReviewId}
                         orderId={params?.id}
                     />
-                }
+                )}
             </div>
         </Navigation>
     );

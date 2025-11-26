@@ -1,5 +1,6 @@
 "use client"
 import { Order } from "@/lib/features/types"
+import { DELIVERY_STATUS, ORDER_STATUS } from "@/lib/utils"
 import React from "react"
 
 type OrderDetailsFlowProps = {
@@ -8,14 +9,18 @@ type OrderDetailsFlowProps = {
 
 export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
     const orderFlow = [
-        "order placed",
-        "pending",
-        "processing",
-        "dispatched",
-        "delivered",
+        ORDER_STATUS.PENDING,
+        ORDER_STATUS.CONFIRMED,
+        ORDER_STATUS.PROCESSING,
+        DELIVERY_STATUS.SHIPPED,
+        DELIVERY_STATUS.OUT_FOR_DELIVERY,
+        DELIVERY_STATUS.DELIVERED,
     ]
 
-    const stepIndex = orderFlow.indexOf(order?.order_status ?? '')
+    const orderIndex = orderFlow.indexOf(order?.order_status ?? "")
+    const deliveryIndex = orderFlow.indexOf(order?.delivery_status ?? "")
+
+    const stepIndex = Math.max(orderIndex, deliveryIndex)
 
     return (
         <div className="w-full overflow-x-scroll hide-scrollbar">
@@ -23,7 +28,7 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
                 {orderFlow.map((step, index) => {
                     let dotClass = ""
 
-                    if (order?.order_status === "Cancelled") {
+                    if (order?.order_status === ORDER_STATUS.CANCELLED) {
                         dotClass = "bg-red-500"
                     } else if (index <= stepIndex) {
                         dotClass = "bg-[#34C759] border-[0.19rem] border-[#34C759]"
@@ -32,7 +37,7 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
                     }
 
                     let connectorClass = ""
-                    if (order?.order_status === "Cancelled") {
+                    if (order?.order_status === ORDER_STATUS.CANCELLED) {
                         connectorClass = "bg-[#FF3B308F]"
                     } else if (index < stepIndex) {
                         connectorClass = "bg-[#34C759]"
@@ -57,14 +62,14 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
                                     <div className={`flex-1 h-[0.1875rem] ${connectorClass}`} />
                                 )}
 
-                                {
-                                    index === orderFlow.length - 1 && (
-                                        <div className={`flex-1 h-[0.1875rem] ${connectorClass}`} />
-                                    )
-                                }
+                                {index === orderFlow.length - 1 && (
+                                    <div className={`flex-1 h-[0.1875rem] ${connectorClass}`} />
+                                )}
                             </div>
 
-                            <p className={`text-[0.875rem] text-wrap px-4 lg:text-[1rem] mt-2 capitalize text-center font-bold text-black`}>{step}</p>
+                            <p className="text-[0.875rem] text-wrap px-4 lg:text-[1rem] mt-2 capitalize text-center font-bold text-black">
+                                {step.replace(/_/g, " ")}
+                            </p>
                         </div>
                     )
                 })}
