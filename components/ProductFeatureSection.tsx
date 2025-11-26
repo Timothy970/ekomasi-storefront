@@ -1,10 +1,12 @@
+import { ProductFeature } from '@/lib/features/types'
+import { customParser } from '@/lib/utils'
 import Image from 'next/image'
 import React from 'react'
 
-export default function ProductFeatureSection() {
+export default function ProductFeatureSection({ productFeatures }: { productFeatures: ProductFeature[] }) {
     return (
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem] flex items-center justify-center flex-col'>
-            <h2 className='text-[2rem] lg:text-[3rem] font-[700] text-center block max-w-xl lg:leading-[3.78rem]'>Discover Our Stylish and Comfortable Strollers for Your Little Ones</h2>
+            <h2 className='text-[2rem] lg:text-[3rem] font-[700] text-center block max-w-xl lg:leading-[3.78rem]'></h2>
 
             <div className='mt-[1.5rem] flex flex-col items-center justify-center'>
                 <span className='text-[1.125rem] font-[400]'>-5-point harness system</span>
@@ -64,107 +66,28 @@ export default function ProductFeatureSection() {
                 </div>
             </div>
 
-            <div className='w-full flex flex-col gap-y-[1.5rem] lg:flex-row mt-[2rem] lg:mt-[3rem] gap-x-[5rem] items-center'>
-                <div className='w-full flex justify-center text-center lg:text-start gap-y-[2rem] flex-col max-w-lg lg:max-w-full'>
-                    <h2 className='text-[2.25rem] font-[700]'>Incredibly easy fold</h2>
-                    <p>The Jogger Stroller - XCEL-R8 standout feature is the one-hand one-second fold, which allows parents to fold and unfold the stroller with ease. It also boasts the world’s first foldable cot on a compact stroller. The generous shoulder strap and foldable bumper bar makes it incredibly easy to carry the stroller wherever you go.</p>
-                </div>
+            {productFeatures?.map(feature => (
+                <div
+                    key={feature.feature_id}
+                    className={`w-full flex flex-col gap-y-[1.5rem] lg:flex-row mt-[2rem] lg:mt-[3rem] gap-x-[5rem] items-center ${feature["image-position"] === 'right' ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}
+                >
+                    <div className='w-full flex justify-center text-center lg:text-start gap-y-[2rem] flex-col max-w-lg lg:max-w-full'>
+                        <h2 className='text-[2.25rem] font-[700]'>{feature.header}</h2>
+                        <div className='font-[400]'>{customParser(feature.description)}</div>
+                    </div>
 
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
+                    <div className='relative h-[40rem] w-full'>
+                        <Image
+                            src={feature.image}
+                            alt={feature.header}
+                            fill
+                            priority
+                            unoptimized
+                            className="object-cover h-full w-full  mx-auto"
+                        />
+                    </div>
                 </div>
-            </div>
-
-            <div className='w-full flex flex-col gap-y-[1.5rem] mt-[2rem] lg:mt-[3rem] gap-x-[5rem] items-center lg:flex-row-reverse'>
-                <div className='w-full flex justify-center text-center lg:text-start gap-y-[2rem] flex-col max-w-lg lg:max-w-full'>
-                    <h2 className='text-[2.25rem] font-[700]'>Incredibly easy fold</h2>
-                    <p>The Jogger Stroller - XCEL-R8 standout feature is the one-hand one-second fold, which allows parents to fold and unfold the stroller with ease. It also boasts the world’s first foldable cot on a compact stroller. The generous shoulder strap and foldable bumper bar makes it incredibly easy to carry the stroller wherever you go.</p>
-                </div>
-
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
-                </div>
-            </div>
-
-            <div className='w-full flex mt-[2rem] lg:mt-[3rem] gap-x-[2rem] flex-row'>
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
-                </div>
-            </div>
-
-            <div className='w-full flex flex-col gap-y-[1.5rem] lg:flex-row mt-[2rem] lg:mt-[3rem] gap-x-[5rem] items-center'>
-                <div className='w-full flex justify-center text-center lg:text-start gap-y-[2rem] flex-col max-w-lg lg:max-w-full'>
-                    <h2 className='text-[2.25rem] font-[700]'>Incredibly easy fold</h2>
-                    <p>The Jogger Stroller - XCEL-R8 standout feature is the one-hand one-second fold, which allows parents to fold and unfold the stroller with ease. It also boasts the world’s first foldable cot on a compact stroller. The generous shoulder strap and foldable bumper bar makes it incredibly easy to carry the stroller wherever you go.</p>
-                </div>
-
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
-                </div>
-            </div>
-
-            <div className='relative h-[40rem] w-full mt-[2rem] lg:mt-[3rem]'>
-                <Image
-                    src="/images/featured.jpg"
-                    alt="otp"
-                    fill
-                    priority
-                    unoptimized
-                    className="object-cover h-full w-full  mx-auto"
-                />
-            </div>
-
-            <div className='w-full flex flex-col mt-[2rem] lg:mt-[3rem] gap-x-[2rem] md:flex-row gap-y-[2rem]'>
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
-                </div>
-
-                <div className='relative h-[40rem] w-full'>
-                    <Image
-                        src="/images/featured.jpg"
-                        alt="otp"
-                        fill
-                        priority
-                        unoptimized
-                        className="object-cover h-full w-full  mx-auto"
-                    />
-                </div>
-            </div>
+            ))}
         </div>
     )
 }

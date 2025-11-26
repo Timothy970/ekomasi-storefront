@@ -79,6 +79,7 @@ export interface Product {
   liked_by_user?: boolean;
   tag: string;
   product_variants?: MallVariant[]
+  features: ProductFeature [];
 }
 
 export interface SubCategory {
@@ -263,6 +264,21 @@ export interface FeaturedProductsResponse {
 
 export interface ProductResponse {
   data: Product;
+  message: string;
+  status_code: number;
+};
+
+export interface ProductFeature {
+  feature_id: string;
+  description: string;
+  header: string;
+  image: string;
+  "image-position": string;
+  product_id: string;
+}
+
+export interface ProductFeaturedResponse {
+  data: ProductFeature[];
   message: string;
   status_code: number;
 };

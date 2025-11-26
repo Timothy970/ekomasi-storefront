@@ -40,7 +40,7 @@ export default function ProductDetail() {
   const { setIsBuyNow } = useIsBuyNow()
   const url = typeof window !== "undefined" ? window.location.href : "";
 
-  console.log(product, 'produc')
+  console.log(product, 'product')
 
   useEffect(() => {
     if (product) {
@@ -59,6 +59,7 @@ export default function ProductDetail() {
       const cartItem = cart.cart_items.find(
         item => item?.product.product_id === product.product_id
       );
+
       if (cartItem) {
         setQuantity(cartItem.quantity);
       } else {
@@ -372,7 +373,11 @@ export default function ProductDetail() {
           <NowTrending title="You may also like" />
         </div>
 
-        <ProductFeatureSection />
+        {
+          product?.features?.length > 0 && <ProductFeatureSection
+            productFeatures={product?.features}
+          />
+        }
       </div>
     </Navigation >
   )
