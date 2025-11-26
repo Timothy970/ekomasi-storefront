@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
     const dispatch = useAppDispatch();
     const { setQuery } = useFilterQuery();
@@ -37,7 +38,6 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
         const handler = setTimeout(() => {
             setDebouncedValue(searchValue);
         }, 400);
-
         return () => clearTimeout(handler);
     }, [searchValue]);
 
@@ -53,21 +53,21 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
         }
     }, [searchTerm]);
 
-    useEffect(() => {
-        const input = inputRef.current;
-        if (!input) return;
+    const handleFocus = () => {
+        if (blurTimeoutRef.current) {
+            clearTimeout(blurTimeoutRef.current);
+            blurTimeoutRef.current = null;
+        }
+        setIsFocused(true);
+        setOpenSearchModal(true);
+    };
 
-        const handleFocus = () => setIsFocused(true);
-        const handleBlur = () => setIsFocused(false);
-
-        input.addEventListener("focus", handleFocus);
-        input.addEventListener("blur", handleBlur);
-
-        return () => {
-            input.removeEventListener("focus", handleFocus);
-            input.removeEventListener("blur", handleBlur);
-        };
-    }, []);
+    const handleBlur = () => {
+        blurTimeoutRef.current = setTimeout(() => {
+            setIsFocused(false);
+            setOpenSearchModal(false);
+        }, 150);
+    };
 
     const handleClear = () => {
         setSearchValue("");
@@ -103,8 +103,8 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                     placeholder={placeHolderText}
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => setOpenSearchModal(true)}
-                    onBlur={() => setOpenSearchModal(false)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
                     className="w-full h-full pl-4 pr-10 text-[0.875rem] rounded-lg border border-[#AAA] bg-white"
                 />

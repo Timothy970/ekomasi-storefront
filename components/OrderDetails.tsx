@@ -4,6 +4,7 @@ import { format, addDays } from "date-fns";
 import { Order } from '@/lib/features/types';
 import { Button } from './ui/button';
 import { useReview } from '@/app/ClientLayout';
+import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
 
 type OrderDetailsProps = {
   order: Order;
@@ -67,16 +68,19 @@ export default function OrderDetails({ order, setProductReviewId }: OrderDetails
                   </div>
                 </div>
 
-                <div>
-                  <Button onClick={() => {
-                    setOpenReviewModal(true)
-                    setProductReviewId(item?.product_id)
-                  }
-                  }
-                    className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
-                    Write a review
-                  </Button>
-                </div>
+                {
+                  order?.order_status === ORDER_STATUS?.COMPLETED &&
+                  order?.delivery_status === DELIVERY_STATUS?.DELIVERED && <div>
+                    <Button onClick={() => {
+                      setOpenReviewModal(true)
+                      setProductReviewId(item?.product_id)
+                    }
+                    }
+                      className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
+                      Write a review
+                    </Button>
+                  </div>
+                }
               </div>
             })
           }

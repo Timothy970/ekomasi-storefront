@@ -528,6 +528,7 @@ export interface Order {
   created_at: string;
   order_status: string;
   delivery_status: string;
+  payment_status: string;
   total_amount: number;
   total_discount: number;
   items: OrderItem[];
