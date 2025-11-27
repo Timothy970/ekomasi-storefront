@@ -105,3 +105,10 @@ export const isCancelledOrder = (order: Order) => {
     order.delivery_status === DELIVERY_STATUS.RETURNED
   );
 };
+
+export const FEATURE_DESIGN_TYPES = [
+  "top-section",
+  "single-image-side-section",
+  "two-images",
+  "one-image",
+]

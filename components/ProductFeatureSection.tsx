@@ -6,7 +6,7 @@ import React from 'react'
 export default function ProductFeatureSection({ productFeatures }: { productFeatures: ProductFeature[] }) {
     return (
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem] flex items-center justify-center flex-col'>
-            <h2 className='text-[2rem] lg:text-[3rem] font-[700] text-center block max-w-xl lg:leading-[3.78rem]'></h2>
+            <h2 className='text-[2rem] lg:text-[3rem] font-[700] text-center block max-w-xl lg:leading-[3.78rem]'>Discover Our Stylish and Comfortable Strollers for Your Little Ones</h2>
 
             <div className='mt-[1.5rem] flex flex-col items-center justify-center'>
                 <span className='text-[1.125rem] font-[400]'>-5-point harness system</span>
