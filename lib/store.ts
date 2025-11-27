@@ -11,6 +11,7 @@ import { wishListsReducer } from "./features/wishlist/wishlistSlice";
 import { addressReducer } from "./features/address/addressSlice";
 import { encryptTransform } from "redux-persist-transform-encrypt";
 import { getStore } from "./storeRef";
+import { returnReducer } from "./features/returns/returnSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   wishlists: wishListsReducer,
   address: addressReducer,
+  returns: returnReducer,
 });
 
 const encryptor = encryptTransform({

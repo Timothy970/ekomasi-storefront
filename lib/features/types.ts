@@ -732,3 +732,35 @@ export interface StaticContent {
   };
   path?: string;
 }
+
+
+export interface CreateReturnPayload {
+  reason: string;
+  order_id: string;
+  products: {
+    product_id: string;
+    quantity: number;
+  }[];
+}
+
+export interface ReturnsResponse {
+  data: Returns[] | null;
+  message: string;
+  status_code: number;
+}
+
+export interface Returns {
+  return_id: string;
+  order_id: string;
+  products: Product[];
+  reason: string;
+  status: string;
+  total_refund: number;
+  created_at: string;
+}
+
+export interface ReturnResponse {
+  data: Returns | null;
+  message: string;
+  status_code: number;
+}
