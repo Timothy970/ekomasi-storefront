@@ -25,7 +25,7 @@ export default function Return() {
         if (token) {
             dispatch(getReturnsAsync())
         }
-    }, [token])
+    }, [token, dispatch]);
 
     useEffect(() => {
         if (returns?.length) {

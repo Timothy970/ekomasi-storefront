@@ -44,7 +44,6 @@ export default function OrderDetails({ order, toReturn, onCloseReturn }: OrderDe
     if (response?.status_code === 201) {
       setCheckedValues([]);
       setReason('');
-      toReturn = false;
       onCloseReturn?.();
       triggerToast("Return request created successfully.", "success");
     } else {
