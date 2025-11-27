@@ -1,18 +1,62 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import { format, addDays } from "date-fns";
-import { Order } from '@/lib/features/types';
+import { CreateReturnPayload, Order } from '@/lib/features/types';
 import { Button } from './ui/button';
 import { useReview } from '@/app/ClientLayout';
 import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
+import { Checkbox } from './ui/checkbox';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
+import { useAppDispatch } from '@/lib/hooks';
+import { createReturnsAsync } from '@/lib/features/returns/returnSlice';
+import { triggerToast } from '@/app/utils/toastUtils';
 
 type OrderDetailsProps = {
   order: Order;
   setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>
+  toReturn?: boolean
+  onCloseReturn?: () => void
 }
 
-export default function OrderDetails({ order, setProductReviewId }: OrderDetailsProps) {
+export default function OrderDetails({ order, setProductReviewId, toReturn, onCloseReturn }: OrderDetailsProps) {
   const { setOpenReviewModal } = useReview()
+  const [checkedValues, setCheckedValues] = useState<string[]>([])
+  const [reason, setReason] = useState('');
+  const dispatch = useAppDispatch();
+
+
+  const handleToggle = (productId: string) => {
+    setCheckedValues((prevCheckedValues) => {
+      if (prevCheckedValues.includes(productId)) {
+        return prevCheckedValues.filter((id) => id !== productId);
+      } else {
+        return [...prevCheckedValues, productId];
+      }
+    });
+  }
+
+  const handleReturnItems = async () => {
+    const payload: CreateReturnPayload = {
+      order_id: order.order_id,
+      products: checkedValues.map((productId) => ({
+        product_id: productId,
+        quantity: order.items.find(item => item.product_id === productId)?.stock_quantity || 1,
+      })),
+      reason: reason,
+    };
+    const response = await dispatch(createReturnsAsync(payload)).unwrap();
+    if (response?.status_code === 201) {
+      setCheckedValues([]);
+      setReason('');
+      toReturn = false;
+      onCloseReturn?.();
+      triggerToast("Return request created successfully.", "success");
+    } else {
+      triggerToast("Failed to create return request.", "error");
+    }
+
+  }
 
   return (
     <div className='mt-[2rem] md:mt-[2.5rem] w-full px-[1rem] lg:px-[3rem] flex flex-col md:flex-row md:justify-between'>
@@ -37,6 +81,8 @@ export default function OrderDetails({ order, setProductReviewId }: OrderDetails
         <div className='w-full flex flex-col gap-y-[0.5rem] mt-[1.5rem]'>
           {
             order?.items?.map((item, index) => {
+              const isChecked = checkedValues.includes(item.product_id);
+
               return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex pb-[1.5rem] md:gap-x-[2rem] justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                 {
                   item?.urls &&
@@ -81,9 +127,34 @@ export default function OrderDetails({ order, setProductReviewId }: OrderDetails
                     </Button>
                   </div>
                 }
+                {toReturn &&
+                  <Checkbox
+                    checked={isChecked}
+                    onCheckedChange={() => handleToggle(item.product_id)}
+                    className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
+                  />
+                }
               </div>
             })
           }
+          {toReturn && (
+            <div
+              className='w-full flex flex-col justify-start items-center gap-y-[1rem]'>
+              <Textarea
+                className="w-full bg-white h-24 rounded-[0.5rem] px-3 py-2 text-[0.875rem]"
+                value={reason}
+                onChange={e => setReason(e.target.value)}
+                placeholder="Add a reason for return"
+              />
+              <Button
+                disabled={checkedValues.length === 0 || reason.trim() === ''}
+                onClick={() => handleReturnItems()} className='bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem] max-w-[12rem]'>
+                <span>Return Items</span>
+              </Button>
+            </div>
+          )
+          }
+
         </div>
       </div>
 

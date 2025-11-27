@@ -4,6 +4,7 @@ import Navigation from '@/components/Navigation';
 import OrderDetails from '@/components/OrderDetails';
 import OrderDetailsFlow from '@/components/OrderDetailsFlow';
 import ReviewModal from '@/components/ReviewModal';
+import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
@@ -17,7 +18,12 @@ export default function Order() {
     const profile = useAppSelector(selectUserProfile);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false); const [wantsReturn, setWantsReturn] = useState(false);
+
+    const handleCloseReturn = () => {
+        setWantsReturn(false);
+    }
+
     const { openReviewModal } = useReview();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
 
@@ -149,7 +155,23 @@ export default function Order() {
                 </div>
 
                 <OrderDetailsFlow order={order} />
-                <OrderDetails order={order} setProductReviewId={setProductReviewId} />
+                {/* // check box to request if user wants to return any items */}
+                <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
+                    <div className='flex w-full justify-between max-w-56 items-start border-t border-[#AAA] pt-[1.25rem]'>
+                        <h3 className='font-bold'>Return Items ?</h3>
+                        <Checkbox
+                            checked={wantsReturn}
+                            onCheckedChange={(checked) => setWantsReturn(checked === true)}
+                            className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
+                        />
+                    </div>
+                    {wantsReturn && (
+                        <p className="text-[0.875rem] lg:text-base mt-[1rem]">
+                            Select Items you want to return
+                        </p>
+                    )}
+                </div>
+                <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} setProductReviewId={setProductReviewId} />
 
                 {openReviewModal && (
                     <ReviewModal
