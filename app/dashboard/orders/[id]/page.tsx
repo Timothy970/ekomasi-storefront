@@ -122,22 +122,25 @@ export default function Order() {
                 </div>
 
                 <OrderDetailsFlow order={order} />
-                {/* // check box to request if user wants to return any items */}
-                <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
-                    <div className='flex w-full justify-between max-w-56 items-start border-t border-[#AAA] pt-[1.25rem]'>
-                        <h3 className='font-bold'>Return Items ?</h3>
-                        <Checkbox
-                            checked={wantsReturn}
-                            onCheckedChange={(checked) => setWantsReturn(checked === true)}
-                            className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
-                        />
+
+                {order.order_status.toLowerCase() === "delivered" &&
+                    <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
+                        <div className='flex w-full justify-between max-w-56 items-start border-t border-[#AAA] pt-[1.25rem]'>
+                            <h3 className='font-bold'>Return Items?</h3>
+                            <Checkbox
+                                checked={wantsReturn}
+                                onCheckedChange={(checked) => setWantsReturn(checked === true)}
+                                className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
+                            />
+                        </div>
+                        {wantsReturn && (
+                            <p className="text-[0.875rem] lg:text-base mt-[1rem]">
+                                Select Items you want to return
+                            </p>
+                        )}
                     </div>
-                    {wantsReturn && (
-                        <p className="text-[0.875rem] lg:text-base mt-[1rem]">
-                            Select Items you want to return
-                        </p>
-                    )}
-                </div>
+                }
+
                 <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} />
             </div>
         </Navigation>
