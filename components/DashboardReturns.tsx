@@ -39,7 +39,7 @@ export default function DashboardReturns({ returns }: DashboardReturnsProps) {
                                     {firstItem?.name}
                                 </h3>
 
-                                <p className="font-poppins text-[0.875rem] md:ext-base font-[400] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
+                                <p className="font-poppins text-[0.875rem] md:text-base font-[400] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
                                     Return {returnItem?.return_id}
                                 </p>
 

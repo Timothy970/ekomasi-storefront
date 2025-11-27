@@ -108,7 +108,7 @@ export default function Return() {
                     <div className="flex flex-col items-center mt-[0.5rem] gap-y-[0.5rem]">
                         <div className="flex text-custom-black gap-x-[0.5rem]">
                             <span className="font-medium text-base lg:text-[1.125rem]">Your return:</span>
-                            <span className="font font-medium text-[1.125rem]">{returnData.return_id}</span>
+                            <span className="font-medium text-[1.125rem]">{returnData.return_id}</span>
                         </div>
 
                         <div className="flex text-custom-black items-center justify-center gap-x-[0.5rem] text-[1.125rem]">
