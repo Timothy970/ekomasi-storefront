@@ -49,7 +49,6 @@ export default function OrderDetails({ order, setProductReviewId, toReturn, onCl
     if (response?.status_code === 201) {
       setCheckedValues([]);
       setReason('');
-      toReturn = false;
       onCloseReturn?.();
       triggerToast("Return request created successfully.", "success");
     } else {

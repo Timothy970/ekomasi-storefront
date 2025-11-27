@@ -137,6 +137,12 @@ export const returnSlice = createAppSlice({
 });
 
 export const {
+    resetSuccess,
+    setReturns,
+    setReturn,
+    resetStatus,
+    setStatus,
+    setMessage,
     createReturnsAsync,
     getReturnsAsync,
     getReturnAsync,
