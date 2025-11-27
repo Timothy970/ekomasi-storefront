@@ -30,19 +30,19 @@ export const scrollToTop = () => {
 }
 
 export const ORDER_STATUS = {
-  PENDING: "pending",
-  CONFIRMED: "confirmed",
-  PROCESSING: "processing",
-  CANCELLED: "cancelled",
-  COMPLETED: "completed",
+  PENDING: "Pending",
+  CONFIRMED: "Confirmed",
+  PROCESSING: "Processing",
+  CANCELLED: "Cancelled",
+  COMPLETED: "Completed",
 };
 
 export const DELIVERY_STATUS = {
-  NOT_SHIPPED: "not shipped",
-  SHIPPED: "shipped",
-  OUT_FOR_DELIVERY: "out for delivery",
-  DELIVERED: "delivered",
-  RETURNED: "returned",
+  NOT_SHIPPED: "Not shipped",
+  SHIPPED: "Shipped",
+  OUT_FOR_DELIVERY: "Out for delivery",
+  DELIVERED: "Delivered",
+  RETURNED: "Returned",
 };
 
 export const orderStatusOptions = [
@@ -64,19 +64,19 @@ export const deliveryStatusOptions = [
 ];
 
 export const paymentStatusOptions = [
-  { value: "all", label: "All" },
-  { value: "paid", label: "Paid" },
-  { value: "pending", label: "Pending" },
-  { value: "failed", label: "Failed" },
-  { value: "refunded", label: "Refunded" },
+  { value: "All", label: "All" },
+  { value: "Paid", label: "Paid" },
+  { value: "Pending", label: "Pending" },
+  { value: "Failed", label: "Failed" },
+  { value: "Refunded", label: "Refunded" },
 ];
 
 export const paymentMethodOptions = [
-  { value: "all", label: "All" },
-  { value: "credit_card", label: "Credit Card" },
-  { value: "paypal", label: "PayPal" },
-  { value: "bank_transfer", label: "Bank Transfer" },
-  { value: "cash_on_delivery", label: "Cash on Delivery" },
+  { value: "All", label: "All" },
+  { value: "Credit card", label: "Credit Card" },
+  { value: "Paypal", label: "PayPal" },
+  { value: "Bank transfer", label: "Bank Transfer" },
+  { value: "Cash on delivery", label: "Cash on Delivery" },
 ];
 
 export const isOngoingOrder = (order: Order) => {
