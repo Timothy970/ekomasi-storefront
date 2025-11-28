@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -84,6 +84,23 @@ export async function getProduct(product_id: string): Promise<ProductResponse | 
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ProductResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
+export async function getProductBundles(): Promise<ProductBundlesResponse | null> {
+  try {
+    const response = await api.get<ProductBundlesResponse>(`products/bundles`, {
+      headers: { requiresAuth: true },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ProductBundlesResponse>;
     if (err.response) {
       return err.response.data;
     }

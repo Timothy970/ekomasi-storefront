@@ -841,7 +841,6 @@ export interface GetBlogResponse {
   status_code: number
 }
 
-
 export interface CreateReturnPayload {
   reason: string;
   order_id: string;
@@ -872,3 +871,24 @@ export interface ReturnResponse {
   message: string;
   status_code: number;
 }
+
+export interface Bundle {
+  bundle_description: string;
+  bundle_id: string;
+  bundle_name: string;
+  bundle_price: number;
+  compare_at_price: number;
+  keep_selling_when_out_of_stock: boolean;
+  products: Product[];
+}
+
+export interface ProductBundleData {
+  pagination: Pagination;
+  bundles: Bundle[];
+}
+
+export interface ProductBundlesResponse {
+  data: ProductBundleData;
+  message: string;
+  status_code: number;
+};
