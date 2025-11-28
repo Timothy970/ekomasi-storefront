@@ -732,3 +732,45 @@ export interface StaticContent {
   };
   path?: string;
 }
+
+export interface ContentAppSection {
+  position?: number;
+  banner?: Banner | null;
+  paragraphs?: Paragraph[];
+  images?: ContentImage[];
+  title?: string;
+}
+
+export interface Content {
+  banner_image_url?: string;
+  blog_id?: string;
+  id?: string;
+  author?: ContentAuthor;
+  created_at?: Date;
+  updated_at?: Date;
+  read_time_minutes?: number;
+  title?: string;
+  description?: string;
+  sections?: ContentAppSection[];
+  tags?: string[];
+  status?: string;
+  image_url?: string;
+  is_published?: boolean;
+}
+
+export interface BlogsData {
+  blogs: Content[];
+  pagination: Pagination;
+}
+
+export interface GetBlogsResponse {
+  data: BlogsData;
+  message: string;
+  status_code: number
+}
+
+export interface GetBlogResponse {
+  data: Content;
+  message: string;
+  status_code: number
+}
