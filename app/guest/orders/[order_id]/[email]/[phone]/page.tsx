@@ -104,7 +104,7 @@ export default function Page() {
                 </div>
 
                 <OrderDetailsFlow order={guestOrder} />
-                <OrderDetails order={guestOrder} />
+                <OrderDetails order={guestOrder} setProductReviewId={()=> undefined}  />
             </div>
         </Navigation>
     );

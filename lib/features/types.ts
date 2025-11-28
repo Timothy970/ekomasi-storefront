@@ -199,7 +199,8 @@ export interface GetVariantsParams {
 }
 
 export interface SubCategoryProduct {
-  product_id: string;
+  product_id?: string;
+  id?: string;
   name: string;
   description: string;
   sku: string;
@@ -210,8 +211,13 @@ export interface SubCategoryProduct {
   search_vector: string;
   created_at: string;
   last_updated: string;
-  urls: Image[];
+  images?: Image[];
+  urls?: Image[];
+  liked_by_user?: boolean;
   tag: string;
+  product_variants?: MallVariant[]
+  features: ProductFeature[];
+  warranty: Warranty;
 }
 
 export interface SubcategoryProducts {
