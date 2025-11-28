@@ -23,7 +23,7 @@ export default function Footer() {
           <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
               src={"/images/company-logo.svg"}
-              alt="Logo"
+              alt=""
               width={150}
               unoptimized
               height={25}
@@ -134,7 +134,7 @@ export default function Footer() {
           <Link href={`/`}>
             <Image
               src={"/images/adenzo-logo-footer.png"}
-              alt="Logo"
+              alt=""
               width={150}
               height={25}
               priority={true}
@@ -153,6 +153,7 @@ export default function Footer() {
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/about-us' target='_blank'>About Us</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/faq' target='_blank'>FAQs</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/terms-&-conditions' target='_blank'>Terms and conditions</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/blogs' target='_blank'>Blogs</a>
         </div>
       </div>
     </div>

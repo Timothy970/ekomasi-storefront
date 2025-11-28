@@ -189,7 +189,7 @@ export default function SignUp() {
                 <div className="w-[50%] lg:min-w-[50%] lg:min-h-full hidden lg:block relative">
                     <Image
                         src="/images/registration.png"
-                        alt="Logo"
+                        alt=""
                         fill
                         priority
                         unoptimized

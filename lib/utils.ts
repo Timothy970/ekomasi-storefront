@@ -112,3 +112,8 @@ export const FEATURE_DESIGN_TYPES = [
   "two-images",
   "one-image",
 ]
+
+export function truncateText(text: string, limit = 100): string {
+  if (!text) return "";
+  return text.length > limit ? text.substring(0, limit) + "..." : text;
+}
