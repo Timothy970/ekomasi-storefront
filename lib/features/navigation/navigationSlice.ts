@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, FeaturedProduct, HomeDataWrapper, MinMaxData, Pagination, Product, ProductFeature, StaticContent, SubcategoryProducts, } from "../types";
+import { Category, FeaturedProduct, HomeDataWrapper, MinMaxData, Pagination, Product, ProductFeature, Review, StaticContent, SubcategoryProducts, } from "../types";
 import { getCategories, getCategoryById, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getProductFeatures, getProductReviews, getStaticContents, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
@@ -17,6 +17,7 @@ interface NavigationSliceState {
 	minMaxPriceRange: MinMaxData | null;
 	staticContents: StaticContent[] | [];
 	productFeatures: ProductFeature[] | [];
+	productReviews: Review[] | null;
 }
 
 const initialState: NavigationSliceState = {
@@ -34,6 +35,7 @@ const initialState: NavigationSliceState = {
 	minMaxPriceRange: null,
 	staticContents: [],
 	productFeatures: [],
+	productReviews: null,
 };
 
 export const navigationSlice = createAppSlice({

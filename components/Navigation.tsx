@@ -22,7 +22,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     useEffect(() => {
         dispatch(getCategoriesAsync())
         dispatch(getHomeDataAsync())
-    }, [])
+    }, [dispatch])
 
     return (
         <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || openReviewModal || isShareWishlistModalOpen || openGuestCheckoutModal ? 'overflow-hidden' : ''}`}>

@@ -20,7 +20,6 @@ export default function Order() {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const { openReviewModal } = useReview();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
-    console.log(order, 'orders')
 
     const fetchOrder = async (isIntervalFetch = false) => {
         if (!params?.id) return;

@@ -10,14 +10,14 @@ import { useReview } from '@/app/ClientLayout'
 import { getOrderAsync } from '@/lib/features/cart/cartSlice'
 import { ToastType } from '@/lib/features/toast/toastSlice'
 
-interface ReviewModal {
+interface ReviewModalProps {
     setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>;
     openReviewModal: boolean;
     productReviewId: string | undefined;
     orderId: string
 }
 
-export default function ReviewModal({ setProductReviewId, productReviewId, orderId }: ReviewModal) {
+export default function ReviewModal({ setProductReviewId, productReviewId, orderId }: ReviewModalProps) {
     const [score, setScore] = useState(0);
     const [details, setDetails] = useState("");
     const userProfile = useAppSelector(selectUserProfile)
@@ -27,6 +27,10 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
     const handleReviewResponse = (message: string, success: ToastType) => {
         dispatch(getOrderAsync(orderId))
         triggerToast(message, success)
+        setScore(0);
+        setDetails("");
+        setOpenReviewModal(false)
+        setProductReviewId(undefined)
     }
 
     const handleSubmit = () => {
@@ -45,11 +49,6 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
                 dispatch(addReviewAsync({ ...data, handleReviewResponse }))
             }
         }
-
-        setScore(0);
-        setDetails("");
-        setOpenReviewModal(false)
-        setProductReviewId(undefined)
     };
 
     if (!openReviewModal) {

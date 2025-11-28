@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getProductAsync, selectProductStatus, selectProduct } from '@/lib/features/navigation/navigationSlice'
+import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -39,8 +39,7 @@ export default function ProductDetail() {
   const { setOpenGuestCheckoutModal } = useGuestCheckout()
   const { setIsBuyNow } = useIsBuyNow()
   const url = typeof window !== "undefined" ? window.location.href : "";
-
-  console.log(product, 'product')
+  const [warranty, setWarranty] = useState("")
 
   useEffect(() => {
     if (product) {
@@ -101,6 +100,7 @@ export default function ProductDetail() {
   useEffect(() => {
     if (params?.product_id) {
       dispatch(getProductAsync(params?.product_id))
+      dispatch(getProductReviewsAsync(params?.product_id))
     }
   }, [dispatch, params?.product_id])
 
@@ -152,6 +152,23 @@ export default function ProductDetail() {
     }
   }
 
+
+  useEffect(() => {
+    if (!product?.warranty) {
+      setWarranty("No warranty information available.");
+      return;
+    }
+
+    const { warranty_type, warranty_period, manufacturing_date, expiry_date } = product.warranty;
+
+    const mfgDate = manufacturing_date ? new Date(manufacturing_date).toLocaleDateString() : "N/A";
+    const expDate = expiry_date ? new Date(expiry_date).toLocaleDateString() : "N/A";
+
+    const text = `This product comes with a ${warranty_type} warranty valid for ${warranty_period}. Manufactured on: ${mfgDate}. Warranty expiry date: ${expDate}.`;
+
+    setWarranty(text);
+  }, [product?.warranty]);
+
   useEffect(() => {
     if (product) {
       if (product.stock_quantity > 0) {
@@ -188,7 +205,7 @@ export default function ProductDetail() {
 
       case "copy":
         navigator.clipboard.writeText(url);
-        alert("Link copied!");
+        triggerToast("Link copied!", "success");
         break;
     }
   };
@@ -357,17 +374,19 @@ export default function ProductDetail() {
                   </div>
                 </div>
 
-                <Accordion title="Warranty">
-                  warranty content
-                </Accordion>
+                {
+                  warranty && <Accordion title="Warranty">
+                    <span>{warranty}</span>
+                  </Accordion>
+                }
               </div>
             </div>
           </div>
         </div>
 
-        <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
+        {/* <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <ProductDetailsReviews />
-        </div>
+        </div> */}
 
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <NowTrending title="You may also like" />
@@ -375,7 +394,7 @@ export default function ProductDetail() {
 
         {
           product?.features?.length > 0 && <ProductFeatureSection
-            productFeatures={product?.features}
+            features={product?.features}
           />
         }
       </div>

@@ -15,7 +15,7 @@ export default function Accordion({
     <div className="w-full border-b border-black">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between bg-red-400 py-[1rem]"
+        className="w-full flex items-center justify-between py-[1rem]"
       >
         <span className="font-[600] text-[1.125rem]">{title}</span>
 
