@@ -22,7 +22,7 @@ export default function page() {
     useEffect(() => {
         if (blog?.updated_at) {
             const date = blog?.updated_at ? new Date(blog?.updated_at) : null;
-            
+
             if (date) {
                 setPublishedAt(date?.toLocaleDateString())
             }
@@ -33,7 +33,7 @@ export default function page() {
         <Navigation>
             <div className={`w-full px-[1rem] h-full flex flex-col max-w-[90rem] mx-auto mb-[2rem] md:mb-[2.5rem]`}>
                 {
-                    blog?.banner_image_url && <div className="w-full h-[30rem]">
+                    blog?.banner_image_url && <div className="w-full h-[15rem] md:h-[20rem] lg:h-[25rem] xl:h-[30rem]">
                         <NextImage
                             src={blog?.banner_image_url}
                             width={40}
@@ -45,9 +45,9 @@ export default function page() {
                     </div>
                 }
 
-                <h1 className='text-[2.8rem] font-[700] mt-[2rem]'>{blog?.title}</h1>
+                <h1 className='text-[1.5rem] md:text-[2rem] font-[700] mt-[2rem]'>{blog?.title}</h1>
 
-                <div className='flex flex-row justify-between items-center'>
+                <div className='flex flex-row justify-between items-center mt-[1.5rem]'>
                     <div className='flex items-center justify-center'>
                         <div className="w-[5rem] h-[5rem]">
                             <NextImage
@@ -92,7 +92,7 @@ export default function page() {
                     </div>
                 </div>
 
-                <div className='mt-[2rem] lg:mt-[2.5rem]'>
+                <div className='mt-[1rem] lg:mt-[1.5rem]'>
                     {
                         blog?.image_url && <div className="w-full relative">
                             <div className='h-[28rem]'>
@@ -115,10 +115,10 @@ export default function page() {
                                     blog.sections.map((section, idx) => (
                                         <div
                                             key={idx}
-                                            className="p-4"
+                                            className="p-4 flex flex-col gap-y-[1rem]"
                                         >
                                             {section.title && (
-                                                <h2 className="font-[700] text-base my-[0.7rem]">
+                                                <h2 className="font-[700] text-base lg:text-[1.125rem] my-[0.7rem]">
                                                     {section.title}
                                                 </h2>
                                             )}
@@ -126,7 +126,7 @@ export default function page() {
                                             {section.paragraphs?.map((p, pIdx) => (
                                                 <div
                                                     key={pIdx}
-                                                    className="text-[0.875rem] text-gray-800 mb-2 break-words"
+                                                    className="text-[0.875rem] lg:text-base text-gray-800 mb-2 break-words"
                                                 >
                                                     {customParser(p.text)}
                                                 </div>

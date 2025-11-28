@@ -12,7 +12,6 @@ export async function getBlogs(query: string): Promise<GetBlogsResponse | null> 
     }
 }
 
-
 export async function getBlog(blog_id: string): Promise<GetBlogResponse> {
     try {
         const response = await api.get<GetBlogResponse>(`blogs/${blog_id}`, { headers: { requiresAuth: true } });
