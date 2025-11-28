@@ -768,3 +768,9 @@ export interface GetBlogsResponse {
   message: string;
   status_code: number
 }
+
+export interface GetBlogResponse {
+  data: Content;
+  message: string;
+  status_code: number
+}

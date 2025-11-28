@@ -1,5 +1,8 @@
+"use client"
 import { Content } from '@/lib/features/types'
+import { truncateText } from '@/lib/utils';
 import Image from 'next/image'
+import Link from 'next/link';
 import React from 'react'
 
 export default function BlogCard({ blog }: { blog: Content }) {
@@ -8,11 +11,12 @@ export default function BlogCard({ blog }: { blog: Content }) {
             year: "numeric",
             month: "short",
             day: "numeric",
-        })
-        : "";
+        }) : "";
+    const shortDescription = truncateText(blog?.description ?? "", 100);
+
 
     return (
-        <div className='w-full flex flex-col gap-y-[1.5rem]'>
+        <Link href={`/blogs/${blog?.blog_id}`} className='w-full flex flex-col gap-y-[1.5rem]'>
             {
                 blog?.banner_image_url && <div className="w-full h-[15rem] lg:h-[18rem] relative">
                     <Image
@@ -28,7 +32,7 @@ export default function BlogCard({ blog }: { blog: Content }) {
 
             <div className='flex flex-col'>
                 <h3 className='text-[1.5rem] font-[700]'>{blog?.title}</h3>
-                <p className='text-[0.875rem] md:text-base'>{blog?.description}</p>
+                <p className='text-[0.875rem] md:text-base'>{shortDescription}</p>
 
                 <div className='mt-[1.5rem] flex gap-x-[1rem]'>
                     <div className="w-[3rem] h-[3rem] rounded-full relative">
@@ -61,6 +65,6 @@ export default function BlogCard({ blog }: { blog: Content }) {
 
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }

@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { getBlogs } from "./blogAPI";
+import { getBlog, getBlogs } from "./blogAPI";
 import { Content, Pagination } from "../features/types";
 
 interface BlogSliceState {
@@ -57,6 +57,34 @@ export const blogSlice = createAppSlice({
 				},
 			}
 		),
+		getBlogAsync: create.asyncThunk(
+			async (blog_id: string) => {
+				const response = await getBlog(blog_id)
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code) {
+						state.success = true
+						state.message = action.payload?.message
+						state.blog = action?.payload?.data
+					} else {
+						state.success = false
+						state.message = action.payload?.message
+						state.blogs = null
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = ""
+				},
+			}
+		),
 	}),
 	selectors: {
 		selectBlog: (state: BlogSliceState) => state.blog || null,
@@ -68,6 +96,6 @@ export const blogSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetStatus, resetMessage, getBlogsAsync } = blogSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectMessage, selectBlogs } = blogSlice.selectors;
+export const { resetSuccess, resetStatus, resetMessage, getBlogsAsync, getBlogAsync } = blogSlice.actions; // Export actions
+export const { selectStatus, selectSuccess, selectMessage, selectBlogs, selectBlog } = blogSlice.selectors;
 export const blogReducer = blogSlice.reducer;

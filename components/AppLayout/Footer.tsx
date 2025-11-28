@@ -153,6 +153,7 @@ export default function Footer() {
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/about-us' target='_blank'>About Us</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/faq' target='_blank'>FAQs</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/terms-&-conditions' target='_blank'>Terms and conditions</a>
+          <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/blogs' target='_blank'>Blogs</a>
         </div>
       </div>
     </div>
