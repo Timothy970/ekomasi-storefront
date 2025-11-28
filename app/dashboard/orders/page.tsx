@@ -1,53 +1,58 @@
-"use client"
-import DashboardLayout from '@/components/AppLayout/DashboardLayout'
-import DashboardOrders from '@/components/DashboardOrders'
-import Navigation from '@/components/Navigation'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { getOrdersAsync, selectUserOrders } from '@/lib/features/cart/cartSlice'
-import { Order } from '@/lib/features/types'
-import { selectUserToken } from '@/lib/features/user/userSlice'
-import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+"use client";
+import DashboardLayout from "@/components/AppLayout/DashboardLayout";
+import DashboardOrders from "@/components/DashboardOrders";
+import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { getOrdersAsync, selectUserOrders } from "@/lib/features/cart/cartSlice";
+import { selectUserToken } from "@/lib/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Order } from "@/lib/features/types";
+import { isCancelledOrder, isOngoingOrder } from "@/lib/utils";
 
 export default function Orders() {
-    const router = useRouter()
-    const token = useAppSelector(selectUserToken)
-    const dispatch = useAppDispatch()
-    const orders = useAppSelector(selectUserOrders)
+    const router = useRouter();
+    const token = useAppSelector(selectUserToken);
+    const dispatch = useAppDispatch();
+    const orders = useAppSelector(selectUserOrders);
     const [ongoingOrders, setOngoingOrders] = useState<Order[]>([]);
     const [cancelledOrders, setCancelledOrders] = useState<Order[]>([]);
 
     useEffect(() => {
-        if (token) {
-            dispatch(getOrdersAsync())
-        }
-    }, [token])
+        if (!token) return;
+
+        const fetchOrders = () => dispatch(getOrdersAsync());
+
+        fetchOrders();
+
+        const interval = setInterval(fetchOrders, 30_000);
+
+        return () => clearInterval(interval);
+    }, [token, dispatch]);
 
     useEffect(() => {
-        if (orders?.length) {
-            const ongoing = orders.filter((order) => order.order_status === "pending" || order.order_status === "delivered");
-            const cancelled = orders.filter((order) => order.order_status === "canceled" || order.order_status === "returned");
-
-            setOngoingOrders(ongoing);
-            setCancelledOrders(cancelled);
-        } else {
+        if (!orders?.length) {
             setOngoingOrders([]);
             setCancelledOrders([]);
+            return;
         }
+
+        setOngoingOrders(orders.filter(isOngoingOrder));
+        setCancelledOrders(orders.filter(isCancelledOrder));
     }, [orders]);
 
     const handleStartShopping = () => {
-        router.replace('/')
-    }
+        router.replace("/");
+    };
 
     return (
         <Navigation>
             <DashboardLayout>
                 <div className="space-y-4">
-                    <div className='bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]'>
-                        <div className='flex flex-col gap-y-[1rem]'>
+                    <div className="bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]">
+                        <div className="flex flex-col gap-y-[1rem]">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="48"
@@ -63,48 +68,64 @@ export default function Orders() {
                                     strokeLinejoin="round"
                                 />
                             </svg>
-                            <p className='text-[1.5rem] font-bold'>My Orders</p>
+                            <p className="text-[1.5rem] font-bold">My Orders</p>
                         </div>
                     </div>
 
-                    {
-                        !orders?.length && <div className='bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]'>
-                            <div className='flex flex-col gap-y-[1rem]'>
-                                <p className='text-[1.125rem] font-semibold'>No active orders yet!</p>
-                                <p className='text-[1.125rem]'>Currently, you have no active orders. Find something you love. We’ve curated new styles just for you.</p>
-                                <Button onClick={handleStartShopping} className='mt-[2rem] max-w-[20rem]'>Start Shopping</Button>
+                    {!orders?.length && (
+                        <div className="bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]">
+                            <div className="flex flex-col gap-y-[1rem]">
+                                <p className="text-[1.125rem] font-semibold">
+                                    No active orders yet!
+                                </p>
+                                <p className="text-[1.125rem]">
+                                    Currently, you have no active orders. Find something you love.
+                                </p>
+                                <Button
+                                    onClick={handleStartShopping}
+                                    className="mt-[2rem] max-w-[20rem]"
+                                >
+                                    Start Shopping
+                                </Button>
                             </div>
                         </div>
-                    }
+                    )}
 
-                    {
-                        orders?.length > 0 && <Tabs defaultValue="ongoing" className="w-full bg-white">
-                            <TabsList className="border-b gap-x-[1rem] rounded-none bg-white border-none text-wrap">
+                    {orders?.length > 0 && (
+                        <Tabs defaultValue="ongoing" className="w-full bg-white">
+                            <TabsList className="border-b gap-x-[1rem] rounded-none bg-white border-none">
                                 <TabsTrigger
                                     value="ongoing"
-                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700]
+                                        data-[state=active]:border-b-[#804A9D]
+                                        data-[state=active]:font-semibold
+                                        data-[state=active]:text-[#804A9D]"
                                 >
                                     ONGOING / DELIVERED
                                 </TabsTrigger>
+
                                 <TabsTrigger
-                                    value="canceled"
-                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    value="cancelled"
+                                    className="data-[state=active]:border-b-2 font-[700]
+                                        data-[state=active]:border-b-[#804A9D]
+                                        data-[state=active]:font-semibold
+                                        data-[state=active]:text-[#804A9D]"
                                 >
                                     CANCELLED / RETURNED
                                 </TabsTrigger>
                             </TabsList>
 
-                            <TabsContent value="ongoing" className='w-full'>
+                            <TabsContent value="ongoing" className="w-full">
                                 <DashboardOrders orders={ongoingOrders} />
                             </TabsContent>
 
-                            <TabsContent value="canceled" className='w-full'>
+                            <TabsContent value="cancelled" className="w-full">
                                 <DashboardOrders orders={cancelledOrders} />
                             </TabsContent>
                         </Tabs>
-                    }
+                    )}
                 </div>
             </DashboardLayout>
         </Navigation>
-    )
+    );
 }

@@ -1,8 +1,8 @@
 type: node-next
 ingress: true
 
-env:
-  - name: NODE_NEXT
-    value: development
-  - name: NEXT_PUBLIC_API_BASE_URL
-    value: "https://api.uat.adenzo.shop.ke/api/"
+allowed_networks:
+  adenzo:
+    - 197.248.216.187/32
+    - 197.254.97.46/32
+    - 197.248.201.151/32

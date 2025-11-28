@@ -61,6 +61,13 @@ export interface Image {
   is_primary: boolean;
 }
 
+export interface Warranty {
+  warranty_type: string;
+  warranty_period: string;
+  manufacturing_date: string;
+  expiry_date: string;
+}
+
 export interface Product {
   product_id?: string;
   id?: string;
@@ -79,6 +86,8 @@ export interface Product {
   liked_by_user?: boolean;
   tag: string;
   product_variants?: MallVariant[]
+  features: ProductFeature[];
+  warranty: Warranty;
 }
 
 export interface SubCategory {
@@ -263,6 +272,31 @@ export interface FeaturedProductsResponse {
 
 export interface ProductResponse {
   data: Product;
+  message: string;
+  status_code: number;
+};
+
+export interface ProductFeature {
+  feature_id: string;
+  description: string;
+  id: string
+  title: string
+  header: string
+  image?: File | string;
+  image_position: "Left" | "Center" | "Right"
+  previewUrl?: string | null
+  file?: File | null;
+  product_specifications?: string[];
+  top_section?: {
+    title: string;
+    description: string;
+  }[];
+  images?: string[];
+  design_type?: string;
+}
+
+export interface ProductFeaturedResponse {
+  data: ProductFeature[];
   message: string;
   status_code: number;
 };
@@ -527,6 +561,8 @@ export interface Order {
   sub_total: number;
   created_at: string;
   order_status: string;
+  delivery_status: string;
+  payment_status: string;
   total_amount: number;
   total_discount: number;
   items: OrderItem[];
@@ -732,6 +768,30 @@ export interface StaticContent {
   };
   path?: string;
 }
+
+export interface Review {
+  review_id: string;
+  product_id: string;
+  user_id: string;
+  details: string;
+  score: number;
+  created_at: string;
+}
+
+export interface ReviewResponse {
+  data: Review;
+  message: string;
+  status_code: number;
+}
+
+export interface ReviewsResponse {
+  data: {
+    pagination: Pagination;
+    reviews: Review[];
+  };
+  message: string;
+  status_code: number;
+};
 
 export interface ContentAppSection {
   position?: number;

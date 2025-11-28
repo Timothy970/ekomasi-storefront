@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { OtpRequestParams, SignInParams, SignUpParams, UpdateUserProfilePayload, User, UserData, VerifyOtpParams } from "../types";
-import { getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
+import { addProductReview, getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
 import { ToastType } from "../toast/toastSlice";
 
 interface UserSliceState {
@@ -107,6 +107,36 @@ export const userSlice = createAppSlice({
 					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.phoneOrEmailValue = action.meta.arg.phone_number || action.meta.arg.email || ""
 						state.message = "OTP sent"
+						state.success = true;
+					}
+
+					state.status = "idle";
+				},
+				rejected: (state) => {
+					state.status = "failed";
+					state.message = "";
+					state.success = false;
+				},
+			},
+		),
+		addReviewAsync: create.asyncThunk(
+			async ({ productId, user_id, score, details, handleReviewResponse }: { productId: string, user_id: string, score: number, details: string, handleReviewResponse: (message: string, success: ToastType) => void }) => {
+				const response = await addProductReview({ productId, user_id, score, details });
+
+				if (response?.status_code === 201) {
+					handleReviewResponse(response?.message, "success")
+				} else {
+					handleReviewResponse(response?.message, "error")
+				}
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
+						state.message = ""
 						state.success = true;
 					}
 
@@ -250,6 +280,6 @@ export const userSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { signUpUserAsync, signInUserAsync, resetSuccess, resetStatus, setOtpResendExpiry, resetOtpResendExpiry, resetMessage, requestOtpAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync } = userSlice.actions; // Export actions
+export const { signUpUserAsync, signInUserAsync, resetSuccess, resetStatus, setOtpResendExpiry, resetOtpResendExpiry, resetMessage, requestOtpAsync, addReviewAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync } = userSlice.actions; // Export actions
 export const { selectUser, selectStatus, selectOtpResendExpiry, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;

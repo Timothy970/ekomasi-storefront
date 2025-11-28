@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -84,6 +84,40 @@ export async function getProduct(product_id: string): Promise<ProductResponse | 
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ProductResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
+export async function getProductReviews(product_id: string): Promise<ReviewsResponse | null> {
+  try {
+    const response = await api.get<ReviewsResponse>(`products/${product_id}/reviews`, {
+      headers: { requiresAuth: false },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ReviewsResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
+export async function getProductFeatures(product_id: string): Promise<ProductFeaturedResponse | null> {
+  try {
+    const response = await api.get<ProductFeaturedResponse>(`product/features/${product_id}`, {
+      headers: { requiresAuth: true },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ProductFeaturedResponse>;
     if (err.response) {
       return err.response.data;
     }
