@@ -1,14 +1,26 @@
+"use client"
+import BlogCard from '@/components/BlogCard'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { getBlogsAsync, selectBlogs } from '@/lib/blog/blogSlice'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function blogs() {
+  const dispatch = useAppDispatch();
+  const blogs = useAppSelector(selectBlogs)
+  console.log(blogs, 'blogs')
+
+  useEffect(() => {
+    dispatch(getBlogsAsync(""))
+  }, [])
+
   return (
     <Navigation>
-      <div className='w-full flex items-center justify-center flex-col  mt-[2rem] md:mt-[2.5rem]'>
+      <div className='w-full flex items-center justify-center flex-col  mt-[2rem] md:mt-[2.5rem] mb-[2rem] md:mb-[2.5rem]'>
         <div className='flex gap-[1rem]'>
           <h2 className='text-[2rem] font-[700] md:text-[3rem]'>Adenzo </h2>
           <h2 className='text-[2rem] font-[200] md:text-[3rem] text-[#E8298A]'>Blogs</h2>
@@ -21,7 +33,7 @@ export default function blogs() {
         <div className='w-full flex items-center justify-center mt-[2rem] gap-x-[1rem] px-[1rem] md:px-[3rem]'>
           <Input className='w-ful max-w-[22rem] h-[2.5rem]' />
 
-          <Button className='h-[2.5rem]'>
+          <Button className='h-[2.5rem] text-[0.875rem] text-base'>
             Sign Up
           </Button>
         </div>
@@ -33,7 +45,7 @@ export default function blogs() {
         <div className="w-full h-[20rem] lg:h-[40rem] relative mt-[2.5rem]">
           <Image
             src="/images/blogs.jpg"
-            alt="Logo"
+            alt=""
             fill
             unoptimized
             priority
@@ -41,16 +53,24 @@ export default function blogs() {
           />
         </div>
 
-        <div>
-          <h2>Latest Blogs</h2>
+        <div className='flex flex-col items-start justify-start w-full px-[1rem] md:px-[3rem] mt-[2rem] md:mt-[2.5rem]'>
+          <h2 className='text-[1.5rem] md:text-[2rem] text-start'>Latest blog posts</h2>
 
-          <div>
-            
-          </div>
+          {
+            blogs && blogs?.length > 0 ? <div className='mt-[2rem] md:mt-[2.5rem]'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-[2rem] md:gap-y-[2.5rem] gap-x-[1rem] md:gap-x-[1.5rem]'>
+                {
+                  blogs?.map((blog) => {
+                    return <BlogCard key={blog?.blog_id} blog={blog} />
+                  })
+                }
+
+              </div>
+            </div> : <div className='flex items-center justify-center'>
+              <p>No blogs to show.</p>
+            </div>
+          }
         </div>
-
-
-
       </div>
     </Navigation>
   )

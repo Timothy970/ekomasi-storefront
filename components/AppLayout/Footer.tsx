@@ -23,7 +23,7 @@ export default function Footer() {
           <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
               src={"/images/company-logo.svg"}
-              alt="Logo"
+              alt=""
               width={150}
               unoptimized
               height={25}
@@ -134,7 +134,7 @@ export default function Footer() {
           <Link href={`/`}>
             <Image
               src={"/images/adenzo-logo-footer.png"}
-              alt="Logo"
+              alt=""
               width={150}
               height={25}
               priority={true}
