@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { OtpRequestParams, OtpResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UpdateUserProfilePayload, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
+import { OtpRequestParams, OtpResponse, ReviewResponse, SignInParams, SignInResponse, SignUpParams, SignUpResponse, UpdateUserProfilePayload, UserDetailsResponse, VerifyOtpParams, VerifyOtpResponse, } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function signUpUser({ phone_number, email }: SignUpParams): Promise<SignUpResponse> {
@@ -44,19 +44,17 @@ export async function signIn({ phone_number, email }: SignInParams): Promise<Sig
     }
 }
 
-export async function addProductReview({ productId, user_id, score, details }: {
-    productId: string, user_id: string, score: number, details: string
-}): Promise<SignInResponse> {
+export async function addProductReview({ productId, user_id, score, details }: { productId: string, user_id: string, score: number, details: string }): Promise<ReviewResponse> {
     try {
         let payload: Record<string, string | number> = {};
         payload = { user_id, score, details }
 
-        const response = await api.post<SignInResponse>(`products/${productId}/reviews`, payload, { headers: { requiresAuth: true } });
+        const response = await api.post<ReviewResponse>(`products/${productId}/reviews`, payload, { headers: { requiresAuth: true } });
 
         return response.data;
     } catch (error) {
-        const err = error as AxiosError<SignInResponse>;
-        return err.response?.data as SignInResponse;
+        const err = error as AxiosError<ReviewResponse>;
+        return err.response?.data as ReviewResponse;
     }
 }
 

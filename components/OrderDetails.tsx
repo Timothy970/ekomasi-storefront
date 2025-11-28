@@ -69,8 +69,8 @@ export default function OrderDetails({ order, setProductReviewId }: OrderDetails
                 </div>
 
                 {
-                  order?.order_status === ORDER_STATUS?.COMPLETED &&
-                  order?.delivery_status === DELIVERY_STATUS?.DELIVERED && <div>
+                  ((order?.order_status === ORDER_STATUS?.COMPLETED && order?.delivery_status === DELIVERY_STATUS?.DELIVERED) ||
+                    (order?.order_status === "Delivered" && order?.delivery_status === DELIVERY_STATUS?.DELIVERED)) && <div>
                     <Button onClick={() => {
                       setOpenReviewModal(true)
                       setProductReviewId(item?.product_id)

@@ -79,7 +79,7 @@ export interface Product {
   liked_by_user?: boolean;
   tag: string;
   product_variants?: MallVariant[]
-  features: ProductFeature [];
+  features: ProductFeature[];
 }
 
 export interface SubCategory {
@@ -749,4 +749,19 @@ export interface StaticContent {
     create: string;
   };
   path?: string;
+}
+
+export interface Review {
+  review_id: string;
+  product_id: string;
+  user_id: string;
+  details: string;
+  score: number;
+  created_at: string;
+}
+
+export interface ReviewResponse {
+  data: Review;
+  message: string;
+  status_code: number
 }
