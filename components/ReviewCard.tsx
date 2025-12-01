@@ -1,11 +1,10 @@
 import React from "react";
 
 interface ReviewCardProps {
-  rating: number;
-  date: string;
-  reviewer: string;
-  title: string;
-  reviewText: string;
+  user: string;
+  details: string;
+  score: number;
+  created_at: string;
 }
 
 const StarIcon = () => (
@@ -24,11 +23,10 @@ const StarIcon = () => (
 );
 
 export default function ReviewCard({
-  rating,
-  date,
-  reviewer,
-  title,
-  reviewText,
+  user,
+  created_at,
+  score,
+  details,
 }: ReviewCardProps) {
   const stars = Array(5).fill(0);
 
@@ -37,16 +35,20 @@ export default function ReviewCard({
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-1">
           {stars.map((_, i) =>
-            i < rating ? <StarIcon key={i} /> : <div key={i} className="w-[20px] h-[19px]" />
+            i < score ? <StarIcon key={i} /> : <div key={i} className="w-[20px] h-[19px]" />
           )}
         </div>
-        <span className="text-[#666] font-[400]">{date}</span>
+        <span className="text-[#666] font-[400]">
+          {new Date(created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </span>
       </div>
 
-      <span className="font-[400] block">{reviewer}</span>
-      <p className="font-[500] text-[1.25rem] mt-[0.5rem]">{title}</p>
-
-      <p className="mt-[0.5rem]">{reviewText}</p>
+      <span className="font-[400] block">{user}</span>
+      <p className="mt-[0.5rem]">{details}</p>
     </div>
   );
 }

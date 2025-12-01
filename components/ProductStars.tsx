@@ -1,8 +1,7 @@
 import React from "react";
 
-export default function ProductStars() {
-  const stars = Array(5).fill(0);
-
+export default function ProductStars({ avarageScore }: { avarageScore: number }) {
+  const stars = Array(avarageScore).fill(0);
   return (
     <div className="flex gap-1">
       {stars.map((_, index) => (

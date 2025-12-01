@@ -775,13 +775,21 @@ export interface StaticContent {
   path?: string;
 }
 
-export interface Review {
-  review_id: string;
-  product_id: string;
-  user_id: string;
-  details: string;
+export interface ScoreCounts {
   score: number;
-  created_at: string;
+  count: number;
+}
+
+export interface Review {
+  reviews: {
+    review_id: string;
+    user: string;
+    details: string;
+    score: number;
+    created_at: string;
+  }[];
+  average_score: number;
+  score_counts: ScoreCounts[];
 }
 
 export interface ReviewResponse {
@@ -793,7 +801,7 @@ export interface ReviewResponse {
 export interface ReviewsResponse {
   data: {
     pagination: Pagination;
-    reviews: Review[];
+    reviews: Review;
   };
   message: string;
   status_code: number;
@@ -917,7 +925,7 @@ export interface FlashSalesDealsResponse {
 
 export interface FlashSaleDealData {
   deals: Deal;
-  pagination: Pagination
+  pagination: Pagination;
 }
 
 export interface DealResponse {

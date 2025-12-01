@@ -9,7 +9,7 @@ import { Crumb } from '@/lib/features/types'
 import DealsProductListing from '@/components/DealsProductListing'
 import { getDealByIdAsync, selectDeal, selectDealStatus } from '@/lib/features/navigation/navigationSlice'
 
-export default function deals() {
+export default function Deals() {
     const dispatch = useAppDispatch();
     const searchParams = useSearchParams();
     const pagination = useAppSelector(selectPagination);

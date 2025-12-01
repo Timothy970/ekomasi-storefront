@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
     getDealsAsync,
     selectDeals,
-    selectFeatured,
 } from "@/lib/features/navigation/navigationSlice";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,8 +18,7 @@ export default function FlashDeals({ title }: { title: string }) {
     const [cardW, setCardW] = useState(0);
     const GAP_PX = 16;
     const dispatch = useAppDispatch();
-    const featured = useAppSelector(selectFeatured);
-    const deals = useAppSelector(selectDeals)
+    const deals = useAppSelector(selectDeals);
 
     useLayoutEffect(() => {
         const update = () => {
@@ -57,7 +55,7 @@ export default function FlashDeals({ title }: { title: string }) {
         dispatch(getDealsAsync({ query: "" }));
     }, [dispatch]);
 
-    const maxIndex = featured?.length ? Math.max(0, featured.length - visibleCount) : 0;
+    const maxIndex = deals?.deals?.length ? Math.max(0, deals?.deals?.length - visibleCount) : 0;
 
     const canPrev = index > 0;
     const canNext = index < maxIndex;
