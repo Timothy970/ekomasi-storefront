@@ -88,6 +88,7 @@ export interface Product {
   product_variants?: MallVariant[]
   features: ProductFeature[];
   warranty: Warranty;
+  details: string[];
 }
 
 export interface SubCategory {
