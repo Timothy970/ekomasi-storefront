@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { ORDER_STATUS } from '@/lib/utils';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -157,7 +158,7 @@ export default function Order() {
 
                 <OrderDetailsFlow order={order} />
 
-                {order.order_status.toLowerCase() === "delivered" &&
+                {order.order_status.toLowerCase() === ORDER_STATUS.COMPLETED.toLowerCase() || order.order_status.toLowerCase() === "delivered" &&
                     <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
                         <div className='flex w-full justify-between max-w-56 items-start border-t border-[#AAA] pt-[1.25rem]'>
                             <h3 className='font-bold'>Return Items?</h3>
