@@ -1,4 +1,5 @@
 import CustomerTestimonials from "@/components/CustomerTestimonials";
+import FlashDeals from "@/components/FlashDeals";
 import HomeBanner from "@/components/HomeBanner";
 import HomeCategories from "@/components/HomeCategories";
 import MothersDayBundle from "@/components/MothersDayBundle";
@@ -15,6 +16,11 @@ export default function Home() {
       <div className="px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full">
         <NowTrending title="Now Trending" />
       </div>
+
+      <div className="px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full">
+        <FlashDeals title="Flash Sales" />
+      </div>
+      
       <CustomerTestimonials />
       <TalkToUs />
       <MothersDayBundle />

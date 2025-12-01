@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, FeaturedProductsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -92,6 +92,40 @@ export async function getProduct(product_id: string): Promise<ProductResponse | 
   }
 }
 
+export async function getDealById(deal_id: string): Promise<DealResponse | null> {
+  try {
+    const response = await api.get<DealResponse>(`products/deals/${deal_id}`, {
+      headers: { requiresAuth: true },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<DealResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
+export async function getProductBundles(): Promise<ProductBundlesResponse | null> {
+  try {
+    const response = await api.get<ProductBundlesResponse>(`products/bundles`, {
+      headers: { requiresAuth: true },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ProductBundlesResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
 export async function getProductReviews(product_id: string): Promise<ReviewsResponse | null> {
   try {
     const response = await api.get<ReviewsResponse>(`products/${product_id}/reviews`, {
@@ -134,6 +168,17 @@ export async function getHomeDate(): Promise<HomeDataResponse> {
   } catch (error) {
     const err = error as AxiosError<HomeDataResponse>;
     return err.response?.data as HomeDataResponse;
+  }
+}
+
+export async function getDeals(query: string): Promise<FlashSalesDealsResponse> {
+  try {
+    const response = await axios.get<FlashSalesDealsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/deals?${query}`);
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<FlashSalesDealsResponse>;
+    return err.response?.data as FlashSalesDealsResponse;
   }
 }
 

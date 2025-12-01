@@ -1,38 +1,42 @@
 "use client"
 import Navigation from '@/components/Navigation'
-import { getSearchResultsAsync, selectPagination, selectSearchResults, selectStatus } from '@/lib/features/mall/mallSlice'
+import { selectPagination } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState } from 'react'
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import ProductListingLayout from '@/components/ProductListingLayout'
-import { useFilterQuery } from '../ClientLayout'
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useFilterQuery } from '../../ClientLayout'
 import { Crumb } from '@/lib/features/types'
+import DealsProductListing from '@/components/DealsProductListing'
+import { getDealByIdAsync, selectDeal, selectDealStatus } from '@/lib/features/navigation/navigationSlice'
 
-export default function categories() {
-    const dispatch = useAppDispatch()
+export default function deals() {
+    const dispatch = useAppDispatch();
     const searchParams = useSearchParams();
-    const products = useAppSelector(selectSearchResults)
-    const pagination = useAppSelector(selectPagination)
-    const { query, setQuery } = useFilterQuery()
-    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
-    const status = useAppSelector(selectStatus)
+    const pagination = useAppSelector(selectPagination);
+    const { query, setQuery } = useFilterQuery();
+    const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([]);
+    const dealStatus = useAppSelector(selectDealStatus);
     const pathname = usePathname();
-    const router = useRouter()
+    const router = useRouter();
+    const params = useParams<{ id: string }>();
+    const deal = useAppSelector(selectDeal)
 
     useEffect(() => {
         let crumbs = []
 
         crumbs?.push({
             link: ``,
-            name: "Categories"
+            name: "Flash Deals"
         })
-        
+
         setBreadCrumb(crumbs)
     }, [])
 
     useEffect(() => {
         const formattedQuery = query.startsWith("?") ? query : `?${query}`;
-        dispatch(getSearchResultsAsync({ query: formattedQuery }));
+        if (params?.id) {
+            dispatch(getDealByIdAsync(params?.id));
+        }
 
         const newUrl = `${pathname}${formattedQuery}`
         router.replace(newUrl, { scroll: false })
@@ -40,6 +44,7 @@ export default function categories() {
 
     useEffect(() => {
         const sp = searchParams.toString();
+
         if (sp !== query) {
             setQuery(sp);
         }
@@ -66,16 +71,16 @@ export default function categories() {
     return (
         <Navigation>
             {
-                <ProductListingLayout
+                <DealsProductListing
                     listingDescription={""}
-                    listingName={"Products"}
-                    products={products ?? []}
-                    pagination={pagination}
+                    listingName={deal?.deals?.name ?? ""}
+                    products={deal?.deals?.products ?? []}
+                    pagination={deal?.pagination ?? null}
                     handlePrev={handlePrev}
                     handleNext={handleNext}
                     crumbs={breadCrumb}
-                    status={status}
-                    page="categories"
+                    status={dealStatus}
+                    page="deals"
                 />
             }
         </Navigation>
