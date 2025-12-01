@@ -117,3 +117,10 @@ export function truncateText(text: string, limit = 100): string {
   if (!text) return "";
   return text.length > limit ? text.substring(0, limit) + "..." : text;
 }
+
+
+export const RETURN_STATUS = {
+  REJECTED: "rejected",
+  APPROVED: "approved",
+  PENDING: "pending",
+}
