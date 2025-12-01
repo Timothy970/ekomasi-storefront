@@ -35,6 +35,7 @@ export const ORDER_STATUS = {
   PROCESSING: "Processing",
   CANCELLED: "Cancelled",
   COMPLETED: "Completed",
+  DELIVERED: "Delivered",
 };
 
 export const DELIVERY_STATUS = {
@@ -52,6 +53,7 @@ export const orderStatusOptions = [
   { value: ORDER_STATUS.PROCESSING, label: "Processing" },
   { value: ORDER_STATUS.CANCELLED, label: "Cancelled" },
   { value: ORDER_STATUS.COMPLETED, label: "Completed" },
+  { value: ORDER_STATUS.DELIVERED, label: "Delivered" },
 ];
 
 export const deliveryStatusOptions = [
@@ -85,13 +87,14 @@ export const isOngoingOrder = (order: Order) => {
     ORDER_STATUS.CONFIRMED,
     ORDER_STATUS.PROCESSING,
     ORDER_STATUS.COMPLETED,
-  ];
+    ORDER_STATUS.DELIVERED,
+  ].map(status => status.toLowerCase());
 
   const ongoingDeliveryStatuses = [
     DELIVERY_STATUS.NOT_SHIPPED,
     DELIVERY_STATUS.SHIPPED,
     DELIVERY_STATUS.OUT_FOR_DELIVERY,
-  ];
+  ].map(status => status.toLowerCase());
 
   return (
     ongoingOrderStatuses.includes(order.order_status?.toLowerCase()) ||
