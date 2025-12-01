@@ -27,3 +27,9 @@ export const scrollToTop = () => {
     behavior: "smooth",
   })
 }
+
+export const RETURN_STATUS = {
+  REJECTED: "rejected",
+  APPROVED: "approved",
+  PENDING: "pending",
+}

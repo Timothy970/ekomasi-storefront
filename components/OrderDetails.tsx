@@ -40,6 +40,7 @@ export default function OrderDetails({ order, toReturn, onCloseReturn }: OrderDe
       })),
       reason: reason,
     };
+
     const response = await dispatch(createReturnsAsync(payload)).unwrap();
     if (response?.status_code === 201) {
       setCheckedValues([]);

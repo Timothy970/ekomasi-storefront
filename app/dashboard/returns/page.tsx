@@ -1,6 +1,6 @@
 "use client"
 import DashboardLayout from '@/components/AppLayout/DashboardLayout'
-import DashboardReturns from '@/components/DashboardReturns'
+import ReturnsList from '@/components/ReturnsList'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { PackageX } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { RETURN_STATUS } from '@/lib/utils'
 
 export default function Return() {
     const router = useRouter()
@@ -29,9 +30,17 @@ export default function Return() {
 
     useEffect(() => {
         if (returns?.length) {
-            const pending = returns.filter((returnItem) => returnItem.status.toLowerCase() === "pending");
-            const approved = returns.filter((returnItem) => returnItem.status.toLowerCase() === "approved");
-            const rejected = returns.filter((returnItem) => returnItem.status.toLowerCase() === "rejected");
+            const pending = returns.filter(
+                r => r.status === RETURN_STATUS.PENDING
+            );
+
+            const approved = returns.filter(
+                r => r.status === RETURN_STATUS.APPROVED
+            );
+
+            const rejected = returns.filter(
+                r => r.status === RETURN_STATUS.REJECTED
+            );
 
             setPendingReturns(pending);
             setApprovedReturns(approved);
@@ -92,14 +101,14 @@ export default function Return() {
                             </TabsList>
 
                             <TabsContent value="pending" className='w-full'>
-                                <DashboardReturns returns={pendingReturns} />
+                                <ReturnsList returns={pendingReturns} />
                             </TabsContent>
 
                             <TabsContent value="approved" className='w-full'>
-                                <DashboardReturns returns={approvedReturns} />
+                                <ReturnsList returns={approvedReturns} />
                             </TabsContent>
                             <TabsContent value="rejected" className='w-full'>
-                                <DashboardReturns returns={rejectedReturns} />
+                                <ReturnsList returns={rejectedReturns} />
                             </TabsContent>
                         </Tabs>
                     }
