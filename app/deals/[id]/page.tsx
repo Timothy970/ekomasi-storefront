@@ -20,7 +20,6 @@ export default function deals() {
     const router = useRouter();
     const params = useParams<{ id: string }>();
     const deal = useAppSelector(selectDeal)
-    console.log(deal, 'deal')
 
     useEffect(() => {
         let crumbs = []

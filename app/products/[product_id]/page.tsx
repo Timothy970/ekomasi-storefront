@@ -42,7 +42,6 @@ export default function ProductDetail() {
   const url = typeof window !== "undefined" ? window.location.href : "";
   const [warranty, setWarranty] = useState("");
   const productBundles = useAppSelector(selectProductBundles);
-  console.log(productBundles, 'productBundles')
 
   useEffect(() => {
     if (product) {
@@ -392,14 +391,12 @@ export default function ProductDetail() {
         {/* <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <ProductDetailsReviews />
         </div> */}
-
+{/* 
         <div className='w-full mt-[2rem] md:mt-[2.5rem] px-[1rem] md:px-[3rem]'>
           {
             productBundles?.bundles && productBundles?.bundles?.length > 0 && <BundleList bundles={productBundles?.bundles} />
           }
-        </div>
-
-
+        </div> */}
 
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <NowTrending title="You may also like" />
