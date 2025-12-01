@@ -256,9 +256,9 @@ export default function ProductDetail() {
         <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
           <div className='w-full flex flex-col md:flex-row items-stretch gap-x-[1rem]'>
             {
-              product && <div className='w-full h-full flex-1'>
+              product ? <div className='w-full h-full flex-1'>
                 <ProductImages />
-              </div>
+              </div> : <></>
             }
 
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
@@ -268,20 +268,24 @@ export default function ProductDetail() {
 
               <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 {
-                  reviews?.average_score && <ProductStars avarageScore={reviews?.average_score} />
+                  reviews?.average_score !== undefined ? <ProductStars avarageScore={reviews?.average_score} /> : <></>
                 }
 
                 {
-                  reviews?.average_score && <span>{reviews?.average_score} {reviews?.average_score > 1 ? "stars" : "star"} </span>
+                  reviews?.average_score !== undefined ? <span>{reviews?.average_score} {reviews?.average_score > 1 ? "stars" : "star"} </span> : <></>
                 }
 
-                <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
                 {
-                  reviewPagination?.total_items && <span>{reviewPagination?.total_items} {reviewPagination?.total_items > 1 ? "Reviews" : "Review"}</span>
+                  reviews?.average_score !== undefined && reviewPagination?.total_items !== undefined ? <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span> : <></>
+                }
+
+                {
+                  reviewPagination?.total_items !== undefined ? <span>{reviewPagination?.total_items} {reviewPagination?.total_items > 1 ? "Reviews" : "Review"}</span> : <></>
                 }
               </div>
+
               {
-                product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product?.description)}</div>
+                product?.description ? <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product?.description)}</div> : <></>
               }
 
               <div className='mt-[1.5rem] min-h-[2.5rem]'>
@@ -312,13 +316,13 @@ export default function ProductDetail() {
               </div>
 
               {
-                product && product && product?.stock_quantity > 0 && <div className='mt-[1.5rem]'>
+                product && product && product?.stock_quantity > 0 ? <div className='mt-[1.5rem]'>
                   <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
                   <ProductQuantity
                     setQuantity={setQuantity}
                     quantity={quantity}
                   />
-                </div>
+                </div> : <></>
               }
 
               {
