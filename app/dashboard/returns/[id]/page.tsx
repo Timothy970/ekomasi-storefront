@@ -1,31 +1,25 @@
 "use client";
 import Navigation from '@/components/Navigation';
-import { getReturnAsync, selectReturn } from '@/lib/features/returns/returnSlice';
+import { getReturnAsync, selectReturn, selectStatus } from '@/lib/features/returns/returnSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import StatusBanner from '@/components/StatusBannerComponent';
 
-export default function Return() {
+export default function Returns() {
     const params = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
     const returnData = useAppSelector(selectReturn);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const state = useAppSelector(selectStatus)
 
     useEffect(() => {
         if (params?.id) {
-            dispatch(getReturnAsync(params.id))
-                .unwrap()
-                .catch(() => setError(true))
-                .finally(() => setLoading(false));
-        } else {
-            setError(true);
-            setLoading(false);
+            dispatch(getReturnAsync(params.id)).unwrap()
         }
     }, [params?.id, dispatch]);
 
-    if (loading) {
+    if (state === "loading") {
         return (
             <Navigation>
                 <div className="w-full flex justify-center items-center min-h-[50vh]">
@@ -35,7 +29,7 @@ export default function Return() {
         );
     }
 
-    if (error || !returnData) {
+    if (!returnData) {
         return (
             <Navigation>
                 <div className="w-full flex flex-col justify-center items-center min-h-[50vh] text-center px-4">
@@ -48,63 +42,12 @@ export default function Return() {
         );
     }
 
-    const renderStatusBanner = () => {
-        if (returnData.status === "Rejected") {
-            return (
-                <div className="w-full flex items-center justify-center bg-[#FF3B308F]">
-                    <div className="flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
-                            <path
-                                d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z"
-                                fill="black"
-                            />
-                        </svg>
-                        <p className="text-[0.875rem]">Your Return Request Was Rejected.</p>
-                    </div>
-                </div>
-            );
-        }
-
-        if (returnData.status === "Pending") {
-            return (
-                <div className="w-full flex items-center justify-center bg-[#FFA5008F]">
-                    <div className="flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
-                            <path
-                                d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z"
-                                fill="black"
-                            />
-                        </svg>
-                        <p className="text-[0.875rem]">Your Return Request Is Pending Review.</p>
-                    </div>
-                </div>
-            );
-        }
-
-        return (
-            <div className="w-full flex items-center justify-center bg-[rgba(52,199,89,0.58)]">
-                <div className="flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
-                        <path
-                            d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z"
-                            fill="black"
-                        />
-                    </svg>
-                    <p className="text-[0.875rem]">Your Return Request Was Successfully Approved.</p>
-                </div>
-            </div>
-        );
-    };
-
     return (
         <Navigation>
             <div className="max-w-[90rem] w-full mx-auto flex flex-col items-center justify-center mb-[2rem] md:mb-[2.5rem] mt-[2rem]">
-                {renderStatusBanner()}
-
+                <StatusBanner status={returnData.status.charAt(0).toUpperCase() + returnData.status.slice(1)} />
                 <div className="w-full flex items-center flex-col mt-[1rem] lg:mt-[2.5rem]">
-
                     <h2 className="text-[1.125rem] lg:text-[1.5rem] font-bold mt-[1rem]">Return Details</h2>
-
                     <div className="flex flex-col items-center mt-[0.5rem] gap-y-[0.5rem]">
                         <div className="flex text-custom-black gap-x-[0.5rem]">
                             <span className="font-medium text-base lg:text-[1.125rem]">Your return:</span>

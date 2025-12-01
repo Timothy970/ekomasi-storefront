@@ -5,13 +5,13 @@ import React from 'react';
 import { Returns } from '@/lib/features/types';
 import moment from "moment";
 
-interface DashboardReturnsProps {
+interface ReturnsListProps {
     returns: Returns[];
 }
 
-export default function DashboardReturns({ returns }: DashboardReturnsProps) {
+export default function ReturnsList({ returns }: ReturnsListProps) {
     if (!returns || returns.length === 0) {
-        return <p className="text-sm text-gray-500">No returns to display.</p>;
+        return <div className="flex items-center justify-center"><p className="text-sm text-gray-500">No returns to display.</p></div>;
     }
 
     return (

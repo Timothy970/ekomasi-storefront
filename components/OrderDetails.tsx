@@ -45,6 +45,7 @@ export default function OrderDetails({ order, setProductReviewId, toReturn, onCl
       })),
       reason: reason,
     };
+
     const response = await dispatch(createReturnsAsync(payload)).unwrap();
     if (response?.status_code === 201) {
       setCheckedValues([]);
