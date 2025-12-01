@@ -1,13 +1,18 @@
 import React from 'react'
 import RatingBreakdown from './RatingBreakdown'
 import CustomerReviews from './CustomerReviews'
+import { selectProductReviews, selectReviewPagination } from '@/lib/features/navigation/navigationSlice'
+import { useAppSelector } from '@/lib/hooks'
 
 export default function ProductCustomerReview() {
+    const reviews = useAppSelector(selectProductReviews)
+    const reviewPagination = useAppSelector(selectReviewPagination)
+
     return (
         <div className="w-full mt-[0.5rem] flex flex-col lg:flex-row gap-x-[1rem]">
             <div className='flex flex-col w-full gap-y-[1rem]'>
                 <div className='flex flex-row items-center gap-x-[1.5rem]'>
-                    <span className='text-[3rem] font-[700]'>5.0</span>
+                    <span className='text-[3rem] font-[700]'>{reviews?.average_score}</span>
 
                     <div className='flex flex-col gap-y-[0.5rem]'>
                         <div className='flex flex-row items-center justify-center gap-x-[0.25rem]'>
@@ -28,14 +33,20 @@ export default function ProductCustomerReview() {
                             </svg>
                         </div>
 
-                        <span className='font-[400] text-[1.125rem]'>5 Reviews</span>
+                        {
+                            reviewPagination?.total_items && <span className='font-[400] text-[1.125rem]'>{reviewPagination?.total_items} {reviewPagination?.total_items > 1 ? "Reviews" : "Review"}</span>
+                        }
                     </div>
                 </div>
 
-                <RatingBreakdown />
+                {
+                    reviews?.score_counts && <RatingBreakdown score_counts={reviews?.score_counts} />
+                }
             </div>
 
-            <CustomerReviews />
+            {
+                reviews && reviews?.reviews?.length > 0 && <CustomerReviews />
+            }
         </div>
     )
 }

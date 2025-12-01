@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync, selectProductBundles, getProductBundlesAsync } from '@/lib/features/navigation/navigationSlice'
+import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync, selectProductBundles, getProductBundlesAsync, selectProductReviews, selectReviewPagination } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -42,6 +42,10 @@ export default function ProductDetail() {
   const url = typeof window !== "undefined" ? window.location.href : "";
   const [warranty, setWarranty] = useState("");
   const productBundles = useAppSelector(selectProductBundles);
+  const reviews = useAppSelector(selectProductReviews)
+  const reviewPagination = useAppSelector(selectReviewPagination)
+
+  console.log(reviews, 'reviews')
 
   useEffect(() => {
     if (product) {
@@ -265,10 +269,18 @@ export default function ProductDetail() {
               <span className='mt-[0.5rem] text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
 
               <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
-                <ProductStars />
-                <span>3.5 stars</span>
+                {
+                  reviews?.average_score && <ProductStars avarageScore={reviews?.average_score} />
+                }
+
+                {
+                  reviews?.average_score && <span>{reviews?.average_score} {reviews?.average_score > 1 ? "stars" : "star"} </span>
+                }
+
                 <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>
-                <span>10 Reviews</span>
+                {
+                  reviewPagination?.total_items && <span>{reviewPagination?.total_items} {reviewPagination?.total_items > 1 ? "Reviews" : "Review"}</span>
+                }
               </div>
               {
                 product?.description && <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product?.description)}</div>
@@ -388,10 +400,10 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
+        <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <ProductDetailsReviews />
-        </div> */}
-{/* 
+        </div>
+        {/* 
         <div className='w-full mt-[2rem] md:mt-[2.5rem] px-[1rem] md:px-[3rem]'>
           {
             productBundles?.bundles && productBundles?.bundles?.length > 0 && <BundleList bundles={productBundles?.bundles} />

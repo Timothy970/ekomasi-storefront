@@ -1,20 +1,29 @@
 import RatingProgressBar from "./RatingProgressBar";
 
-export default function RatingBreakdown() {
-  const ratings = {
-    5: 120,
-    4: 80,
-    3: 30,
-    2: 10,
-    1: 5,
+export default function RatingBreakdown({
+  score_counts,
+}: {
+  score_counts: { score: number; count: number }[];
+}) {
+  const ratings: Record<number, number> = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
   };
 
-  const total =
-    ratings[5] + ratings[4] + ratings[3] + ratings[2] + ratings[1];
+  score_counts?.forEach(({ score, count }) => {
+    if (ratings[score] !== undefined) {
+      ratings[score] = count;
+    }
+  });
+
+  const total = Object.values(ratings).reduce((a, b) => a + b, 0);
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-sm">
-      {([5, 4, 3, 2, 1] as const).map((stars) => (
+      {[5, 4, 3, 2, 1].map((stars) => (
         <div key={stars} className="flex items-center justify-between gap-3 w-full">
           <span className="text-sm">{stars} stars</span>
 

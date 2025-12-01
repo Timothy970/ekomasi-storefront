@@ -18,10 +18,11 @@ interface NavigationSliceState {
 	minMaxPriceRange: MinMaxData | null;
 	staticContents: StaticContent[] | [];
 	productFeatures: ProductFeature[] | [];
-	productReviews: Review[] | null;
+	productReviews: Review | null;
 	productBundles: ProductBundleData | null;
 	deals: FlashSaleDealsData | null;
 	deal: FlashSaleDealData | null;
+	reviewPagination: Pagination | null;
 }
 
 const initialState: NavigationSliceState = {
@@ -44,6 +45,7 @@ const initialState: NavigationSliceState = {
 	deals: null,
 	dealsStatus: "idle",
 	deal: null,
+	reviewPagination: null,
 };
 
 export const navigationSlice = createAppSlice({
@@ -274,25 +276,20 @@ export const navigationSlice = createAppSlice({
 				return response;
 			},
 			{
-				pending: (state) => {
-					state.productStatus = "loading";
+				pending: () => {
 				},
 				fulfilled: (state, action) => {
-					state.productStatus = "idle";
 
 					if (action.payload?.status_code === 200) {
-						state.success = true;
-						// state.product = action.payload.data;
+						state.productReviews = action.payload.data?.reviews;
+						state.reviewPagination = action?.payload.data?.pagination
 					} else {
-						state.success = false;
-						state.featured = null;
+						state.productReviews = null;
+						state.reviewPagination = null;
 					}
 				},
-				rejected: (state, action) => {
-					state.productStatus = "failed";
-					state.message = action.error?.message ?? "";
-					state.success = false;
-					state.product = null;
+				rejected: (state) => {
+					state.productReviews = null;
 				},
 			}
 		),
@@ -339,7 +336,7 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getDealsAsync: create.asyncThunk(
-			async ({query}:{query: string}) => {
+			async ({ query }: { query: string }) => {
 				const response = await getDeals(query);
 				return response;
 			},
@@ -403,10 +400,12 @@ export const navigationSlice = createAppSlice({
 		selectDeals: (state: NavigationSliceState) => state.deals || null,
 		selectDeal: (state: NavigationSliceState) => state.deal || null,
 		selectDealStatus: (state: NavigationSliceState) => state.dealsStatus || null,
+		selectProductReviews: (state: NavigationSliceState) => state.productReviews || null,
+		selectReviewPagination: (state: NavigationSliceState) => state.reviewPagination || null,
 	},
 });
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getDealsAsync, getDealByIdAsync, getProductBundlesAsync, getStaticContentsAsync, getProductFeaturesAsync, getProductReviewsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectDeals, selectDealStatus, selectDeal, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectProductReviews, selectReviewPagination, selectDeals, selectDealStatus, selectDeal, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;
