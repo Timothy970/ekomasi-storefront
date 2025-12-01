@@ -6,6 +6,7 @@ import { PaginationBtns } from './PaginationBtns'
 import CustomBreadcrumb from './CustomBreadcrumb'
 import LoadingIndicator from './LoadingIndicator'
 import { scrollToTop } from '@/lib/utils'
+import DealsProducts from './DealsProducts'
 
 type ProductListingLayoutProps = {
     products: Product[];
@@ -64,7 +65,7 @@ export default function DealsProductListing({
                         }
 
                         {
-                            products && status !== "loading" && <CategoryProducts
+                            products && status !== "loading" && <DealsProducts
                                 products={products}
                             />
                         }
