@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { requestOtpAsync, resetStatus, selectMessage, selectOtpResendExpiry, selectPhoneOrEmailValue, selectStatus, selectUserToken, setOtpResendExpiry, verifyOtpAsync } from '@/lib/features/user/userSlice';
+import { requestOtpAsync, resetStatus, selectOtpResendExpiry, selectPhoneOrEmailValue, selectStatus, selectUserToken, setOtpResendExpiry, verifyOtpAsync } from '@/lib/features/user/userSlice';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
 import LoadingIndicator from './LoadingIndicator';
@@ -14,7 +14,6 @@ export default function OtpForm() {
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
     const dispatch = useAppDispatch()
     const emailOrPhone = useAppSelector(selectPhoneOrEmailValue)
-    const message = useAppSelector(selectMessage)
     const router = useRouter();
     const searchParams = useSearchParams()
     const status = useAppSelector(selectStatus)
@@ -254,7 +253,7 @@ export default function OtpForm() {
                         pattern="[0-9]*"
                         maxLength={1}
                         autoComplete="one-time-code"
-                        className="h-[3.3rem] lg:h-[2.5rem] caret-white text-white w-[3.3rem] lg:w-[3rem] text-center text-xl tracking-wider rounded-2xl border-white"
+                        className="h-[3.3rem] lg:h-[3rem] caret-white text-white w-[3.3rem] lg:w-[3rem] text-center text-xl tracking-wider rounded-2xl border-white"
                         aria-label={`Digit ${idx + 1}`}
                     />
                 ))}

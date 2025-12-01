@@ -19,6 +19,7 @@ interface NavigationSliceState {
 	productFeatures: ProductFeature[] | [];
 	productReviews: Review[] | null;
 	productBundles: ProductBundleData | null;
+	deals: null;
 }
 
 const initialState: NavigationSliceState = {
@@ -38,6 +39,7 @@ const initialState: NavigationSliceState = {
 	productFeatures: [],
 	productReviews: null,
 	productBundles: null,
+	deals: null,
 };
 
 export const navigationSlice = createAppSlice({
@@ -346,10 +348,11 @@ export const navigationSlice = createAppSlice({
 		selectMinMaxPriceRange: (state: NavigationSliceState) => state.minMaxPriceRange,
 		selectStaticContents: (state: NavigationSliceState) => state.staticContents || [],
 		selectProductFeatures: (state: NavigationSliceState) => state.productFeatures || [],
+		selectDeals: (state: NavigationSliceState) => state.deals || [],
 	},
 });
 
 // Export actions and selectors
 export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getProductAsync, getProductBundlesAsync, getStaticContentsAsync, getProductFeaturesAsync, getProductReviewsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
+export const { selectCategories, selectHomeData, selectCategory, selectDeals, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;
