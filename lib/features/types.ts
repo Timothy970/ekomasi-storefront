@@ -892,3 +892,36 @@ export interface ProductBundlesResponse {
   message: string;
   status_code: number;
 };
+
+export interface Deal {
+  deal_id: string;
+  end_date: string;
+  image: string;
+  is_active: boolean;
+  link: string;
+  name: string;
+  products: Product[];
+  start_date: string;
+}
+
+export interface FlashSaleDealsData {
+  deals: Deal[];
+  pagination: Pagination
+}
+
+export interface FlashSalesDealsResponse {
+  data: FlashSaleDealsData;
+  message: string;
+  status_code: number;
+}
+
+export interface FlashSaleDealData {
+  deals: Deal;
+  pagination: Pagination
+}
+
+export interface DealResponse {
+  data: FlashSaleDealData;
+  message: string;
+  status_code: number;
+};
