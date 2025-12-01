@@ -1,6 +1,14 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
+import React, { useState } from 'react'
 import { format, addDays } from "date-fns";
+import { CreateReturnPayload, Order } from '@/lib/features/types';
+import { Checkbox } from './ui/checkbox';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
+import { useAppDispatch } from '@/lib/hooks';
+import { createReturnsAsync } from '@/lib/features/returns/returnSlice';
+import { triggerToast } from '@/app/utils/toastUtils';
 import { CreateReturnPayload, Order } from '@/lib/features/types';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
@@ -11,6 +19,8 @@ import { triggerToast } from '@/app/utils/toastUtils';
 
 type OrderDetailsProps = {
   order: Order
+  toReturn?: boolean
+  onCloseReturn?: () => void
   toReturn?: boolean
   onCloseReturn?: () => void
 }
@@ -78,6 +88,8 @@ export default function OrderDetails({ order, toReturn, onCloseReturn }: OrderDe
             order?.items?.map((item, index) => {
               const isChecked = checkedValues.includes(item.product_id);
 
+              const isChecked = checkedValues.includes(item.product_id);
+
               return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex pb-[1.5rem] md:gap-x-[2rem] justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                 {
                   item?.urls &&
@@ -115,9 +127,34 @@ export default function OrderDetails({ order, toReturn, onCloseReturn }: OrderDe
                     className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
                   />
                 }
+                {toReturn &&
+                  <Checkbox
+                    checked={isChecked}
+                    onCheckedChange={() => handleToggle(item.product_id)}
+                    className="border border-black rounded-none h-[1rem] lg:h-[1.125rem] w-[1rem] lg:w-[1.125rem]"
+                  />
+                }
               </div>
             })
           }
+          {toReturn && (
+            <div
+              className='w-full flex flex-col justify-start items-center gap-y-[1rem]'>
+              <Textarea
+                className="w-full bg-white h-24 rounded-[0.5rem] px-3 py-2 text-[0.875rem]"
+                value={reason}
+                onChange={e => setReason(e.target.value)}
+                placeholder="Add a reason for return"
+              />
+              <Button
+                disabled={checkedValues.length === 0 || reason.trim() === ''}
+                onClick={() => handleReturnItems()} className='bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem] max-w-[12rem]'>
+                <span>Return Items</span>
+              </Button>
+            </div>
+          )
+          }
+
           {toReturn && (
             <div
               className='w-full flex flex-col justify-start items-center gap-y-[1rem]'>
