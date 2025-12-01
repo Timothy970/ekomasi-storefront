@@ -104,7 +104,7 @@ export default function ProductListingLayout({
 
                         {
                             !products || products?.length <= 0 ? <div className='w-full h-full mt-[2.5rem] font-[700] text-[2rem] flex items-center justify-center'>
-                                <p>No Produts Found!</p>
+                                <p>No Products Found!</p>
                             </div> : <></>
                         }
 

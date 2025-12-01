@@ -1,6 +1,5 @@
 "use client"
 import React from 'react'
-import CategoryProducts from './CategoryProducts'
 import type { Crumb, Pagination, Product } from '@/lib/features/types'
 import { PaginationBtns } from './PaginationBtns'
 import CustomBreadcrumb from './CustomBreadcrumb'
@@ -60,7 +59,7 @@ export default function DealsProductListing({
 
                         {
                             !products || products?.length <= 0 ? <div className='w-full h-full mt-[2.5rem] font-[700] text-[2rem] flex items-center justify-center'>
-                                <p>No Produts Found!</p>
+                                <p>No Products Found!</p>
                             </div> : <></>
                         }
 

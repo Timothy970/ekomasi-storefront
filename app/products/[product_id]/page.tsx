@@ -45,8 +45,6 @@ export default function ProductDetail() {
   const reviews = useAppSelector(selectProductReviews)
   const reviewPagination = useAppSelector(selectReviewPagination)
 
-  console.log(reviews, 'reviews')
-
   useEffect(() => {
     if (product) {
       let crumbs = []

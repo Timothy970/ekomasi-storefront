@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, Deal, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeDataWrapper, MinMaxData, Pagination, Product, ProductBundleData, ProductFeature, Review, StaticContent, SubcategoryProducts, } from "../types";
+import { Category, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeDataWrapper, MinMaxData, Pagination, Product, ProductBundleData, ProductFeature, Review, StaticContent, SubcategoryProducts, } from "../types";
 import { getCategories, getCategoryById, getDealById, getDeals, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getProductBundles, getProductFeatures, getProductReviews, getStaticContents, getSubCategoryById } from "./navigationAPI";
 
 interface NavigationSliceState {
@@ -239,7 +239,7 @@ export const navigationSlice = createAppSlice({
 						state.deal = action.payload.data;
 					} else {
 						state.success = false;
-						state.featured = null;
+						state.deal = null;
 					}
 				},
 				rejected: (state, action) => {
@@ -259,6 +259,8 @@ export const navigationSlice = createAppSlice({
 					state.productStatus = "loading";
 				},
 				fulfilled: (state, action) => {
+					state.productStatus = "idle";
+
 					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.productBundles = action.payload.data;
 					} else {
@@ -267,6 +269,7 @@ export const navigationSlice = createAppSlice({
 				},
 				rejected: (state) => {
 					state.productBundles = null;
+					state.productStatus = "failed";
 				},
 			}
 		),

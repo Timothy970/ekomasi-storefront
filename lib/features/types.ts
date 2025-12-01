@@ -925,7 +925,7 @@ export interface FlashSalesDealsResponse {
 
 export interface FlashSaleDealData {
   deals: Deal;
-  pagination: Pagination
+  pagination: Pagination;
 }
 
 export interface DealResponse {
