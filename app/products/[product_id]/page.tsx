@@ -158,6 +158,23 @@ export default function ProductDetail() {
     }
   }
 
+  const groupedVariants = React.useMemo(() => {
+    if (!product?.product_variants) return {};
+
+    return product?.product_variants.reduce((acc, variant) => {
+      let typeKey = variant.variant_type.replace(/_/g, " ");
+
+      if (typeKey.toLowerCase() === "weight") {
+        typeKey = "Weight (kg)";
+      } else {
+        typeKey = typeKey.charAt(0).toUpperCase() + typeKey.slice(1);
+      }
+
+      if (!acc[typeKey]) acc[typeKey] = [];
+      acc[typeKey].push(variant.name);
+      return acc;
+    }, {} as Record<string, string[]>);
+  }, [product?.product_variants]);
 
   useEffect(() => {
     if (!product?.warranty) {
@@ -395,6 +412,17 @@ export default function ProductDetail() {
                 {
                   warranty && <Accordion title="Warranty">
                     <span>{warranty}</span>
+                  </Accordion>
+                }
+                {
+                  product.product_variants && <Accordion title="Specifications">
+                    <ul className="list-disc list-inside ml-5 mt-1">
+                      {Object.entries(groupedVariants)?.map(([variantType, names]) => (
+                        <li key={variantType} className="mb-2">
+                          <strong>{variantType}:</strong> {names.join(", ")}
+                        </li>
+                      ))}
+                    </ul>
                   </Accordion>
                 }
               </div>

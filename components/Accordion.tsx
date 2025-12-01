@@ -12,7 +12,7 @@ export default function Accordion({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="w-full border-b border-black">
+    <div className="w-full border-b border-black pb-[1rem]">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-[1rem]"
