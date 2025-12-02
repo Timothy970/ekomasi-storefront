@@ -190,7 +190,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
 
           <main className="flex-1 p-[1rem] h-full">
-            <div className="md:p-6 h-full">{children}</div>
+            <div className="md:p-6 h-full overflow-y-scroll hide-scrollbar">{children}</div>
           </main>
         </div>
       </div>

@@ -989,13 +989,12 @@ export interface VoucherDesignData {
 export interface CreateVoucherPayload {
   design_id: string;
   amount: number;
-  is_to_expire: boolean;
   to_name: string;
   to_email: string;
   from_name: string;
   delivery_time: string;
   message: string;
-  internal_notes: string;
+  phone_number: string;
 }
 
 export interface SingleVoucherResponse {

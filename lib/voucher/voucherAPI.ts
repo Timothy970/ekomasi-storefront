@@ -40,9 +40,10 @@ export async function uploadVoucherDesign(formData: FormData): Promise<VoucherDe
 
 export async function createVoucher(payload: CreateVoucherPayload): Promise<VoucherResponse> {
     try {
-        const response = await api.post<VoucherResponse>(`admin/vouchers/create`, payload, {
+        const response = await api.post<VoucherResponse>(`vouchers/buy-voucher`, payload, {
             headers: { requiresAuth: true }
         });
+        console.log(response, 'resssss')
 
         return response.data;
     } catch (error) {
@@ -120,7 +121,7 @@ export async function buyVoucher(payload: BuyVoucherPayload): Promise<VoucherRes
         const response = await api.post<VoucherResponse>(`vouchers/buy-voucher`, payload, {
             headers: { requiresAuth: true }
         });
-        
+
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

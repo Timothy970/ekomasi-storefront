@@ -534,12 +534,14 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                     </div>
                 </div>
 
-                {
-                    deliveryType === "ship" && <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                        <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                        <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
-                    </div>
-                }
+                <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                    <span className='text-[0.875rem] font-semibold'>{deliveryType === "ship" ? "Shipping price" : "Pick store"}</span>
+                    <LocationDropdown
+                        deliveryType={deliveryType}
+                        isBuyNow={isBuyNow}
+                        setFormData={setFormData}
+                    />
+                </div>
 
                 <div className='flex flex-col gap-y-[1.5rem]'>
                     <h2 className='font-bold text-[1.5rem]'>Payment</h2>
