@@ -44,6 +44,11 @@ type ShareWishlistModalContextType = {
     setShareWishlistModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type VoucherSuccessModalContextType = {
+    voucherSuccessModalOpen: boolean;
+    setVoucherSuccessModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const FilterContext = createContext<FilterContextType | undefined>(undefined)
 const ReviewContext = createContext<ReviewContextType | undefined>(undefined)
 const GuestCheckoutContext = createContext<GuestCheckoutContextType | undefined>(undefined);
@@ -52,10 +57,17 @@ const IsEditingAdressContext = createContext<isEditingAdressContextType | undefi
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 const QueryContext = createContext<QueryContextType | undefined>(undefined);
 const ShareWishlistModalContext = createContext<ShareWishlistModalContextType | undefined>(undefined);
+const VoucherSuccessModalContext = createContext<VoucherSuccessModalContextType | undefined>(undefined);
 
 export function useFilter() {
     const ctx = useContext(FilterContext)
     if (!ctx) throw new Error("useFilter must be used within FilterProvider")
+    return ctx
+}
+
+export function useVoucher() {
+    const ctx = useContext(VoucherSuccessModalContext)
+    if (!ctx) throw new Error("useVoucher must be used within VoucherProvider")
     return ctx
 }
 
@@ -112,6 +124,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const searchParams = useSearchParams();
     const [query, setQuery] = useState<string>(searchParams.toString());
     const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(false);
+    const [voucherSuccessModalOpen, setVoucherSuccessModalOpen] = useState(true);
 
     useEffect(() => {
         setMounted(true);
@@ -122,24 +135,26 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     }
 
     return (
-        <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
-            <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
-                <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-                    <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
-                        <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
-                            <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-                                <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                                    <QueryContext.Provider value={{ query, setQuery }}>
-                                        <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
-                                            {children}
-                                        </main>
-                                    </QueryContext.Provider>
-                                </SearchContext.Provider>
-                            </GuestCheckoutContext.Provider>
-                        </IsEditingAdressContext.Provider>
-                    </IsBuyNowContext.Provider>
-                </FilterContext.Provider>
-            </ShareWishlistModalContext.Provider>
-        </ReviewContext.Provider>
+        <VoucherSuccessModalContext.Provider value={{ voucherSuccessModalOpen, setVoucherSuccessModalOpen }}>
+            <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
+                <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
+                    <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
+                        <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
+                            <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
+                                <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
+                                    <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
+                                        <QueryContext.Provider value={{ query, setQuery }}>
+                                            <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                                                {children}
+                                            </main>
+                                        </QueryContext.Provider>
+                                    </SearchContext.Provider>
+                                </GuestCheckoutContext.Provider>
+                            </IsEditingAdressContext.Provider>
+                        </IsBuyNowContext.Provider>
+                    </FilterContext.Provider>
+                </ShareWishlistModalContext.Provider>
+            </ReviewContext.Provider>
+        </VoucherSuccessModalContext.Provider>
     )
 }

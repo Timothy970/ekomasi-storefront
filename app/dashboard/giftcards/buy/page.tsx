@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
 import { createVoucherAsync, getVoucherDesignsAsync, getVouchersAsync, selectDesigns } from '@/lib/voucher/voucherSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { CreateVoucherPayload } from '@/lib/features/types'
 import NextImage from '@/components/NextImage'
-export default function page() {
+import { useVoucher } from '@/app/ClientLayout'
+import SuccessModal from '@/components/SuccessModal'
+export default function BuyGiftCards() {
     const [voucherType, setSelectVoucherType] = useState('');
     const [discount, setDiscount] = useState('');
     const [recipientName, setRecipientName] = useState('');
@@ -21,11 +22,46 @@ export default function page() {
     const [deliveryDate, setDeliveryDate] = useState('');
     const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
-    const [expirationDateEnabled, setExpirationDateEnabled] = useState(false);
     const dispatch = useAppDispatch();
     const voucherDesigns = useAppSelector(selectDesigns);
     const router = useRouter();
     const [designImage, setDesignImage] = useState("")
+    const voucherAmounts = [500, 1500, 2500, 3500, 4500, 5500, "Custom"];
+    const [selectedAmount, setSelectedAmount] = useState<number | string>("");
+    const [customAmount, setCustomAmount] = useState("");
+    const { voucherSuccessModalOpen, setVoucherSuccessModalOpen } = useVoucher();
+
+    const REQUIRED_USER_FIELDS: { key: keyof CreateVoucherPayload; label: string }[] = [
+        { key: "design_id", label: "Design" },
+        { key: "amount", label: "Amount" },
+        { key: "to_name", label: "Recipient Name" },
+        { key: "to_email", label: "Recipient Email" },
+        { key: "from_name", label: "Sender Name" },
+        { key: "delivery_time", label: "Delivery Time" },
+        { key: "message", label: "Message" },
+        { key: "phone_number", label: "Phone Number" },
+    ];
+
+    function validateRoleBeforeSave(user: CreateVoucherPayload): boolean {
+        let isValid = true;
+
+        for (const { key, label } of REQUIRED_USER_FIELDS) {
+            const value = user[key];
+
+            if (
+                value === undefined ||
+                value === null ||
+                (Array.isArray(value) && value.length === 0) ||
+                (typeof value === "string" && value.trim() === "")
+            ) {
+                triggerToast(`${label} is required.`, "error");
+                isValid = false;
+                break;
+            }
+        }
+
+        return isValid;
+    }
 
     useEffect(() => {
         dispatch(getVoucherDesignsAsync(""));
@@ -35,8 +71,16 @@ export default function page() {
         if (voucherDesigns?.length > 0) {
             setDesignImage(voucherDesigns[0]?.url)
         }
-
     }, [voucherDesigns])
+
+    useEffect(() => {
+        const amount =
+            selectedAmount === "Custom"
+                ? Number(customAmount)
+                : Number(selectedAmount);
+
+        setDiscount(amount.toString());
+    }, [selectedAmount, customAmount]);
 
     const refetchAndRedirect = (isSuccess: boolean): void => {
         if (isSuccess) {
@@ -48,7 +92,37 @@ export default function page() {
         }
     }
 
+    const validateAmount = (): boolean => {
+        const minAmount = voucherAmounts[0];
+
+        let amountToCheck: number;
+
+        if (selectedAmount === "Custom") {
+            if (!customAmount || isNaN(Number(customAmount)) || Number(customAmount) <= 0) {
+                triggerToast("Please enter a valid custom amount.", "error");
+                return false;
+            }
+            amountToCheck = Number(customAmount);
+        } else {
+            amountToCheck = Number(selectedAmount);
+        }
+
+        if (typeof minAmount === "number" && typeof amountToCheck === "number") {
+            if (amountToCheck <= minAmount) {
+                triggerToast(`Amount must be greater than ${minAmount}.`, "error");
+                return false;
+            }
+        } else {
+            triggerToast("Invalid amount values.", "error");
+            return false;
+        }
+
+        return true;
+    };
+
     const handleCreate = async () => {
+        if (!validateAmount()) return;
+
         const payload: CreateVoucherPayload = {
             design_id: voucherType,
             amount: Number.parseInt(discount, 10),
@@ -59,6 +133,8 @@ export default function page() {
             message: message,
             phone_number: phone,
         };
+
+        if (!validateRoleBeforeSave(payload)) return;
 
         if (payload) {
             await dispatch(createVoucherAsync({ payload, refetchAndRedirect }));
@@ -103,7 +179,7 @@ export default function page() {
                     <div className='relative z-[12] flex flex-col gap-y-[1rem] md:flex-row md:gap-x-[1rem]'>
                         <div className='w-[100%] md:w-[50%]'>
                             {
-                                designImage && <div className=" w-full md:w-[70%] relative h-[15rem] mt-[2.5rem]">
+                                designImage && <div className=" w-full md:w-[70%] relative h-auto mt-[2.5rem]">
                                     <NextImage
                                         src={designImage}
                                         width={40}
@@ -116,7 +192,7 @@ export default function page() {
                             }
                         </div>
 
-                        <div className='w-full md:w-[50%] flex flex-col gap-y-[0.8rem]'>
+                        <div className='w-full md:w-[50%] flex flex-col gap-y-[1.5rem]'>
                             <div className='w-full'>
                                 <span className='font-[700] text-[1.25rem]'>Voucher Design</span>
 
@@ -137,7 +213,7 @@ export default function page() {
                                                 src={design.url}
                                                 width={300}
                                                 height={180}
-                                                className='object-cover w-full h-[5rem] rounded'
+                                                className='object-cover w-full h-auto rounded'
                                                 unoptimized
                                                 alt={design.name}
                                             />
@@ -147,19 +223,37 @@ export default function page() {
                             </div>
 
                             <div className='flex flex-col gap-y-[1rem] w-full'>
-                                <span className='font-[700] text-[1.25rem]'>Amount:</span>
+                                <span className='font-[700] text-[1.25rem]'>Voucher amount</span>
 
-                                <div className='flex flex-col gap-y-[0.75rem] w-full'>
-                                    <span className='font-[400] text-base'>Discount:</span>
-
-                                    <Input
-                                        type='number'
-                                        placeholder='Discount'
-                                        className='h-[2.5rem]'
-                                        value={discount}
-                                        onChange={e => setDiscount(e.target.value)}
-                                    />
+                                <div className='flex flex-row gap-x-[0.5rem] flex-wrap gap-y-[0.5rem]'>
+                                    {voucherAmounts.map((amount, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() => setSelectedAmount(amount)}
+                                            className={`border border-black px-[1rem] py-[0.5rem] text-nowrap cursor-pointer 
+                                                ${selectedAmount === amount ? "bg-[#E82989] border-[#E82989] text-white" : ""}
+                                            `}
+                                        >
+                                            <span>
+                                                {amount === "Custom" ? "Custom" : `KES ${amount}`}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
+
+                                {selectedAmount === "Custom" && (
+                                    <div className='flex flex-col gap-y-[0.75rem] w-full mt-4'>
+                                        <span className='font-[400] text-base'>Enter custom amount:</span>
+
+                                        <Input
+                                            type='number'
+                                            placeholder='Custom amount'
+                                            className='h-[2.5rem]'
+                                            value={customAmount}
+                                            onChange={(e) => setCustomAmount(e.target.value)}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div className='flex flex-col gap-y-[1rem]'>
@@ -246,11 +340,6 @@ export default function page() {
                                 value={message}
                                 onChange={e => setMessage(e.target.value)}
                             />
-
-                            <div className='flex flex-col gap-y-[0.75rem] w-full'>
-                                <span className='font-[400]'>Set Expiration date:</span>
-                                <Switch checked={expirationDateEnabled} onCheckedChange={setExpirationDateEnabled} />
-                            </div>
                         </div>
                     </div>
 
@@ -266,8 +355,14 @@ export default function page() {
                             Cancel
                         </Button>
                     </div>
+
                 </div>
             </DashboardLayout>
+
+            <SuccessModal
+                designImage={designImage}
+                recipientEmail={recipientEmail}
+            />
         </Navigation>
     )
 }
