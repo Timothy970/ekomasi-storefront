@@ -50,16 +50,18 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
                             <p className='text-base font-[400]'>Yay! The code for your e-voucher is below, and i’s also been emailed to you at {recipientEmail} </p>
                         </div>
 
-                        <div className="relative w-full md:w-[36rem] h-auto mt-[2.5rem]">
-                            <NextImage
-                                src={designImage}
-                                width={40}
-                                height={40}
-                                unoptimized
-                                className="object-cover rounded w-full h-full"
-                                alt="Preview"
-                            />
-                        </div>
+                        {
+                            designImage && <div className="relative w-full md:w-[36rem] h-auto mt-[2.5rem]">
+                                <NextImage
+                                    src={designImage}
+                                    width={40}
+                                    height={40}
+                                    unoptimized
+                                    className="object-cover rounded w-full h-full"
+                                    alt="Preview"
+                                />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
