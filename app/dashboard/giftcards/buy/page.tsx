@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { createVoucherAsync, getVoucherDesignsAsync, getVouchersAsync, selectDesigns } from '@/lib/voucher/voucherSlice'
+import { createVoucherAsync, getVoucherDesignsAsync, selectDesigns } from '@/lib/voucher/voucherSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { CreateVoucherPayload } from '@/lib/features/types'
 import NextImage from '@/components/NextImage'
 import { useVoucher } from '@/app/ClientLayout'
 import SuccessModal from '@/components/SuccessModal'
+import { ToastType } from '@/lib/features/toast/toastSlice'
+
 export default function BuyGiftCards() {
     const [voucherType, setSelectVoucherType] = useState('');
     const [discount, setDiscount] = useState('');
@@ -29,7 +31,7 @@ export default function BuyGiftCards() {
     const voucherAmounts = [500, 1500, 2500, 3500, 4500, 5500, "Custom"];
     const [selectedAmount, setSelectedAmount] = useState<number | string>("");
     const [customAmount, setCustomAmount] = useState("");
-    const { voucherSuccessModalOpen, setVoucherSuccessModalOpen } = useVoucher();
+    const { setVoucherSuccessModalOpen } = useVoucher();
 
     const REQUIRED_USER_FIELDS: { key: keyof CreateVoucherPayload; label: string }[] = [
         { key: "design_id", label: "Design" },
@@ -82,13 +84,18 @@ export default function BuyGiftCards() {
         setDiscount(amount.toString());
     }, [selectedAmount, customAmount]);
 
-    const refetchAndRedirect = (isSuccess: boolean): void => {
-        if (isSuccess) {
-            dispatch(getVouchersAsync(""));
-            triggerToast('Voucher created successfully!', 'success');
-            router.push('/vouchers');
+    const handleVoucherPurchase = (message: string, type: ToastType): void => {
+        if (type === "success") {
+            setVoucherSuccessModalOpen(true)
+
+            setTimeout(() => {
+                setVoucherSuccessModalOpen(true)
+                router.push("/dashboard/giftcards")
+
+            }, 2000);
         } else {
-            triggerToast('An error occurred while creating the voucher.', 'error');
+            setVoucherSuccessModalOpen(false)
+            triggerToast(message, type);
         }
     }
 
@@ -102,13 +109,14 @@ export default function BuyGiftCards() {
                 triggerToast("Please enter a valid custom amount.", "error");
                 return false;
             }
+
             amountToCheck = Number(customAmount);
         } else {
             amountToCheck = Number(selectedAmount);
         }
 
         if (typeof minAmount === "number" && typeof amountToCheck === "number") {
-            if (amountToCheck <= minAmount) {
+            if (amountToCheck < minAmount) {
                 triggerToast(`Amount must be greater than ${minAmount}.`, "error");
                 return false;
             }
@@ -120,8 +128,42 @@ export default function BuyGiftCards() {
         return true;
     };
 
+    const normalizePhoneTo254 = (phone: string) => {
+        const cleaned = phone.replace(/\D/g, "");
+
+        if (cleaned.startsWith("0") && cleaned.length === 10) {
+            return "254" + cleaned.slice(1);
+        }
+
+        if (cleaned.startsWith("254") && cleaned.length === 12) {
+            return cleaned;
+        }
+
+        return cleaned;
+    };
+
+    const normalizePhoneForSave = (phone: string) => {
+        let val = phone.trim();
+        if (val.startsWith("0")) {
+            val = "254" + val.slice(1);
+        }
+        return val.replace(/\s+/g, "");
+    };
+
+    const isValidKenyanPhone = (phone: string) => {
+        const regex = /^254\d{9}$/;
+        return regex.test(phone);
+    }
+
     const handleCreate = async () => {
         if (!validateAmount()) return;
+
+        const normalizedPhone = normalizePhoneForSave(phone);
+
+        if (!isValidKenyanPhone(normalizedPhone)) {
+            triggerToast("Please enter a valid Kenyan phone number starting with 0 or 254.", "error")
+            return
+        }
 
         const payload: CreateVoucherPayload = {
             design_id: voucherType,
@@ -131,13 +173,13 @@ export default function BuyGiftCards() {
             from_name: senderName,
             delivery_time: deliveryDate,
             message: message,
-            phone_number: phone,
+            phone_number: normalizedPhone,
         };
 
         if (!validateRoleBeforeSave(payload)) return;
 
         if (payload) {
-            await dispatch(createVoucherAsync({ payload, refetchAndRedirect }));
+            await dispatch(createVoucherAsync({ payload, handleVoucherPurchase }));
         } else {
             triggerToast('Please fill in the form!', 'error');
         }
@@ -259,7 +301,7 @@ export default function BuyGiftCards() {
                             <div className='flex flex-col gap-y-[1rem]'>
                                 <span className='font-[700] text-[1.25rem]'>To:</span>
 
-                                <div className="flex justify-between flex-col md:grid gap-y-[1rem] grid-cols-2 items-center mb-[1.62rem] gap-x-[1.62rem] w-full">
+                                <div className="flex justify-between flex-col gap-y-[1rem] items-center mb-[1.62rem] gap-x-[1.62rem] w-full">
                                     <div className='flex flex-col gap-y-[0.75rem] w-full'>
                                         <span className='font-[400]'>Recipient’s name:</span>
 
@@ -294,7 +336,7 @@ export default function BuyGiftCards() {
                             <div className='flex flex-col gap-y-[1rem] w-full'>
                                 <span className='font-[700] text-[1.25rem]'>From:</span>
 
-                                <div className="flex justify-between flex-col md:grid gap-y-[1rem] grid-cols-2 items-center mb-[1.62rem] gap-x-[1.62rem] w-full">
+                                <div className="flex justify-between flex-col gap-y-[1rem] items-center mb-[1.62rem] gap-x-[1.62rem] w-full">
                                     <div className='flex flex-col gap-y-[0.75rem] w-full'>
                                         <span className='font-[400]'>Enter your name:</span>
 
@@ -330,6 +372,7 @@ export default function BuyGiftCards() {
                                         className='h-[2.5rem]'
                                         value={phone}
                                         onChange={e => setPhone(e.target.value)}
+                                        onBlur={() => setPhone(normalizePhoneTo254(phone))}
                                     />
                                 </div>
                             </div>
@@ -343,19 +386,18 @@ export default function BuyGiftCards() {
                         </div>
                     </div>
 
-                    <div className='w-full flex items-start gap-x-[2rem] mt-[2rem]'>
+                    <div className='w-full flex items-start gap-x-[1rem] mt-[2rem]'>
                         <Button
-                            className='max-w-[10rem] bg-[#E82989] text-white w-full rounded-[0.75rem]'
+                            className='bg-[#E82989] text-white'
                             onClick={handleCreate}
                         >
                             Create
                         </Button>
 
-                        <Button className='max-w-[10rem] w-full rounded-[0.75rem] bg-white border border-black text-black'>
+                        <Button className='bg-white border border-black text-black'>
                             Cancel
                         </Button>
                     </div>
-
                 </div>
             </DashboardLayout>
 

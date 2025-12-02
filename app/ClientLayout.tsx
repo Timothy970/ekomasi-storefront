@@ -124,7 +124,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const searchParams = useSearchParams();
     const [query, setQuery] = useState<string>(searchParams.toString());
     const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(false);
-    const [voucherSuccessModalOpen, setVoucherSuccessModalOpen] = useState(true);
+    const [voucherSuccessModalOpen, setVoucherSuccessModalOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);

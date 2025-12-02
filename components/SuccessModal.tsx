@@ -17,7 +17,7 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
             >
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white max-w-[50rem] relative w-[95%] mx-auto my-auto flex flex-col items-center justify-center p-[2rem] lg:p-[4rem] gap-y-[1rem] overflow-y-scroll hide-scrollbar z-[70]"
+                    className="bg-white max-w-[40rem] relative w-[95%] mx-auto my-auto flex flex-col items-center justify-center p-[2rem] lg:p-[4rem] gap-y-[1rem] overflow-y-scroll hide-scrollbar z-[70]"
                 >
                     <svg className='absolute left-[7rem] top-[3rem] z-[71]' xmlns="http://www.w3.org/2000/svg" width="70" height="65" viewBox="0 0 70 65" fill="none">
                         <path d="M14.1428 62.9755C14.5382 62.9669 15.0227 62.9537 15.5865 62.934C17.2985 62.8742 19.7401 62.7538 22.6451 62.5089C28.4674 62.0181 36.0973 61.0334 43.4293 59.0702C50.8081 57.0943 57.6454 54.1885 62.0948 50.0003C64.2949 47.9294 65.8782 45.5764 66.6909 42.8874C67.5016 40.2047 67.5843 37.0606 66.5911 33.3395C65.3152 28.5592 62.9505 25.794 60.2368 24.1951C57.4639 22.5613 54.1238 22.0289 50.7618 22.12C47.4098 22.2109 44.1818 22.9176 41.7671 23.6172C40.5663 23.9651 39.5817 24.3068 38.9026 24.5592C38.5634 24.6852 38.3011 24.7887 38.1272 24.8591C38.0406 24.8943 37.976 24.9212 37.9348 24.9386C37.9141 24.9473 37.8985 24.9541 37.8899 24.9578C37.886 24.9594 37.8835 24.9607 37.8822 24.9613L37.8814 24.9608L35.4006 26.0409L35.0972 23.3533L35.0977 23.3525C35.0976 23.3511 35.0971 23.3475 35.0965 23.3428L35.0628 23.0888C35.037 22.9029 34.9964 22.6238 34.9362 22.267C34.8157 21.5525 34.6194 20.5289 34.3211 19.3148C33.7212 16.8736 32.7219 13.7247 31.1261 10.7765C29.5253 7.81924 27.3942 5.19314 24.5923 3.60896C21.8501 2.05857 18.2704 1.39317 13.487 2.67987C10.1931 3.56593 7.81639 5.10675 6.10617 7.07318C4.38399 9.05348 3.25128 11.5667 2.61881 14.5139C1.34183 20.4647 2.16438 27.9006 3.95563 35.343C5.736 42.74 8.4183 49.9264 10.6674 55.2823C11.7899 57.9554 12.8001 60.162 13.5279 61.6969C13.7649 62.1969 13.9717 62.6256 14.1428 62.9755Z" stroke="#ADD1CB" strokeWidth="4" />
@@ -47,7 +47,7 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
                     <div className="w-full flex text-center items-center justify-center z-[70] flex-col">
                         <div className='flex flex-col gap-y-[1rem]'>
                             <h2 className='text-[#34C759] text-[3rem]'>Success!</h2>
-                            <p className='text-base font-[400]'>Yay! The code for your e-voucher is below, and i’s also been emailed to you at {recipientEmail} </p>
+                            <p className='text-base font-[400]'>Yay! The code for your e-voucher is below, and has also been emailed to you at {recipientEmail} </p>
                         </div>
 
                         {

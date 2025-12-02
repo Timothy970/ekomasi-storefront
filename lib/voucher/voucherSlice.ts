@@ -1,4 +1,5 @@
 import { createAppSlice } from "../createAppSlice";
+import { ToastType } from "../features/toast/toastSlice";
 import { BuyVoucherPayload, CreateVoucherPayload, Design, Pagination, SingleVoucher, Voucher } from "../features/types";
 import { buyVoucher, createVoucher, getSingleVoucher, getVoucherDesigns } from "./voucherAPI";
 
@@ -65,12 +66,13 @@ export const voucherSlice = createAppSlice({
 			}
 		),
 		createVoucherAsync: create.asyncThunk(
-			async ({ payload, refetchAndRedirect }: { payload: CreateVoucherPayload, refetchAndRedirect: (isSuccess: boolean) => void }) => {
+			async ({ payload, handleVoucherPurchase }: { payload: CreateVoucherPayload, handleVoucherPurchase: (message: string, type: ToastType) => void }) => {
 				const response = await createVoucher(payload);
+
 				if (response?.status_code === 201) {
-					refetchAndRedirect(true);
+					handleVoucherPurchase(response?.message, "success");
 				} else {
-					refetchAndRedirect(false);
+					handleVoucherPurchase(response?.message, "error");
 				}
 				return response
 			},
@@ -169,5 +171,5 @@ export const voucherSlice = createAppSlice({
 
 // Export actions and selectors
 export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, getSingleVoucherAsync, buyVoucherAsync } = voucherSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher} = voucherSlice.selectors;
+export const { selectStatus, selectSuccess, selectPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher } = voucherSlice.selectors;
 export const voucherReducer = voucherSlice.reducer;
