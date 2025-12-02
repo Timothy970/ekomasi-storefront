@@ -120,8 +120,8 @@ export const userSlice = createAppSlice({
 			},
 		),
 		addReviewAsync: create.asyncThunk(
-			async ({ productId, user_id, score, details, handleReviewResponse }: { productId: string, user_id: string, score: number, details: string, handleReviewResponse: (message: string, success: ToastType) => void }) => {
-				const response = await addProductReview({ productId, user_id, score, details });
+			async ({ productId, score, details, handleReviewResponse }: { productId: string, score: number, details: string, handleReviewResponse: (message: string, success: ToastType) => void }) => {
+				const response = await addProductReview({ productId, score, details });
 
 				if (response?.status_code === 201) {
 					handleReviewResponse(response?.message, "success")

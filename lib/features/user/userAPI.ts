@@ -44,10 +44,10 @@ export async function signIn({ phone_number, email }: SignInParams): Promise<Sig
     }
 }
 
-export async function addProductReview({ productId, user_id, score, details }: { productId: string, user_id: string, score: number, details: string }): Promise<ReviewResponse> {
+export async function addProductReview({ productId, score, details }: { productId: string, score: number, details: string }): Promise<ReviewResponse> {
     try {
         let payload: Record<string, string | number> = {};
-        payload = { user_id, score, details }
+        payload = { score, details }
 
         const response = await api.post<ReviewResponse>(`products/${productId}/reviews`, payload, { headers: { requiresAuth: true } });
 
