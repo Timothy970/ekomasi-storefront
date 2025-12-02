@@ -17,7 +17,7 @@ export default function Accordion({
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-[1rem]"
       >
-        <span className="font-[600] text-[1.125rem]">{title}</span>
+        <span className="font-[600] text-base md:text-[1.125rem]">{title}</span>
 
         <ChevronDown
           className={`transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"}`}

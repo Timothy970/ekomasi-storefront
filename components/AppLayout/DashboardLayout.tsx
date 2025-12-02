@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   PackageX,
+  Gift,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout, selectUserProfile, selectUserToken } from "@/lib/features/user/userSlice";
@@ -31,7 +32,7 @@ const dashboardTabs = [
   },
   { name: "Returns", href: "/dashboard/returns", icon: <PackageX className="h-4 w-4" /> },
   { name: "Wishlist", href: "/dashboard/wishlist", icon: <Heart className="h-4 w-4" /> },
-  // { name: "Gift cards & Vouchers", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
+  { name: "Gift Cards", href: "/dashboard/giftcards", icon: <Gift className="h-4 w-4" /> },
   { name: "My details", href: "/dashboard/details", icon: <UserRound className="h-4 w-4" /> },
   { name: "My Address Book", href: "/dashboard/address", icon: <House className="h-4 w-4" /> },
   // {

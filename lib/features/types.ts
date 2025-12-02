@@ -935,3 +935,138 @@ export interface DealResponse {
   message: string;
   status_code: number;
 };
+
+export interface VoucherResponse {
+  data: VoucherData;
+  message: string;
+  status_code: number;
+}
+
+export interface Design {
+  design_id: string;
+  url: string;
+  name: string;
+  status: string;
+  created_at: string;
+}
+
+export interface Voucher {
+  voucher_id: string;
+  from: string;
+  to: string;
+  amount: number;
+  balance: number;
+  code: string;
+  created_at?: string;
+  status: string;
+  expiry_date: string;
+  is_reedemed: boolean;
+}
+
+
+export interface VoucherData {
+  vouchers: Voucher[];
+  pagination: Pagination;
+}
+
+export interface VoucherDesignsResponse {
+  data: VoucherDesignData;
+  message: string;
+  status_code: number;
+}
+
+export interface SingleVoucherDesignsResponse {
+  data: Design;
+  message: string;
+  status_code: number;
+}
+
+export interface VoucherDesignData {
+  designs: Design[];
+  pagination: Pagination;
+}
+
+export interface CreateVoucherPayload {
+  design_id: string;
+  amount: number;
+  is_to_expire: boolean;
+  to_name: string;
+  to_email: string;
+  from_name: string;
+  delivery_time: string;
+  message: string;
+  internal_notes: string;
+}
+
+export interface SingleVoucherResponse {
+  data: SingleVoucher;
+  message: string;
+  status_code: number;
+}
+
+export interface VoucherUsage {
+  history_id: string;
+  amount_redeemed: number;
+  redeemed_date: string;
+  // order_id: string;
+  item_logs: Product[];
+}
+
+export interface SingleVoucher {
+  voucher_id: string;
+  from: string;
+  to: string;
+  amount: number;
+  balance: number;
+  code: string;
+  created_at?: string;
+  status: string;
+  expiry_date: string;
+  is_reedemed: boolean;
+  voucher_history: VoucherUsage[];
+}
+
+export interface VoucherPurchasesResponse {
+  data: VoucherPurchaseData;
+  message: string;
+  status_code: number;
+}
+
+export interface VoucherPurchase {
+  voucher_id: string;
+  code: string;
+  image: string;
+  amount: number;
+  balance: number;
+  from_name: string;
+  to_name: string;
+  from_email: string;
+  to_email: string;
+  message: string;
+  design_url: string;
+  created_at: string;
+  delivery_time: string | null;
+}
+
+export interface SingleVoucherPurchasesResponse {
+  data: VoucherPurchase;
+  message: string;
+  status_code: number;
+}
+
+export interface VoucherPurchaseData {
+  vouchers: VoucherPurchase[];
+  pagination: Pagination;
+}
+
+export interface BuyVoucherPayload {
+  design_id: string;
+  amount: number;
+  from_name: string;
+  to_name: string;
+  to_email: string;
+  message: string;
+  delivery_time: string;
+  phone_number: string;
+  payment_method: string;
+}
