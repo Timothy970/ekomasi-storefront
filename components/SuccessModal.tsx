@@ -2,9 +2,11 @@ import { useVoucher } from '@/app/ClientLayout';
 import { X } from 'lucide-react';
 import React from 'react'
 import NextImage from './NextImage';
+import { useRouter } from 'next/navigation';
 
 export default function SuccessModal({ designImage, recipientEmail }: { designImage: string, recipientEmail: string }) {
     const { voucherSuccessModalOpen, setVoucherSuccessModalOpen } = useVoucher();
+    const router = useRouter();
 
     if (!voucherSuccessModalOpen) {
         return null;
@@ -13,7 +15,10 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
     return (
         <div className="absolute inset-0 z-[6000] h-screen w-screen flex justify-center items-center">
             <div className="absolute bg-black/50 z-[65] h-screen w-screen flex items-center justify-center flex-col"
-                onClick={() => setVoucherSuccessModalOpen(false)}
+                onClick={() => {
+                    setVoucherSuccessModalOpen(false)
+                    router.push("/dashboard/giftcards")
+                }}
             >
                 <div
                     onClick={(e) => e.stopPropagation()}
@@ -39,7 +44,10 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
                         <div className="flex p-[1rem] w-[3rem] h-[3rem] mt-[3rem ] items-center justify-center">
                             <X
                                 className="text-black cursor-pointer"
-                                onClick={() => setVoucherSuccessModalOpen(false)}
+                                onClick={() => {
+                                    setVoucherSuccessModalOpen(false)
+                                    router.push("/dashboard/giftcards")
+                                }}
                             />
                         </div>
                     </div>

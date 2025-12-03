@@ -995,6 +995,7 @@ export interface CreateVoucherPayload {
   delivery_time: string;
   message: string;
   phone_number: string;
+  payment_method?: string;
 }
 
 export interface SingleVoucherResponse {
