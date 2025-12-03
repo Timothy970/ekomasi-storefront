@@ -44,6 +44,7 @@ export default function ProductDetail() {
   const productBundles = useAppSelector(selectProductBundles);
   const reviews = useAppSelector(selectProductReviews)
   const reviewPagination = useAppSelector(selectReviewPagination)
+  const brandVariant = product?.product_variants?.find(v => v.variant_type === "brand");
 
   useEffect(() => {
     if (product) {
@@ -322,10 +323,12 @@ export default function ProductDetail() {
                 }
               </div>
 
-              <div className='flex items-center mt-[0.75rem]'>
-                <span className='mr-2 font-semibold'>Brand:</span>
-                <span className='font-bold underline'>Tommee Tipee</span>
-              </div>
+              {brandVariant && (
+                <div className="flex items-center mt-[0.75rem]">
+                  <span className="mr-2 font-semibold">Brand:</span>
+                  <span className="font-bold underline">{brandVariant.name}</span>
+                </div>
+              )}
 
               <div className='mt-[0.75rem]'>
                 <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
