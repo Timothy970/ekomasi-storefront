@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select"
 import { ArrowUpRight } from 'lucide-react'
 import { useIsEditingAdress } from '@/app/ClientLayout'
+import { getWarehousesAsync } from '@/lib/features/navigation/navigationSlice'
+import WareHouseDropdown from './WareHouseDropdown'
 
 export default function PersonalInformation({ page, cart, isBuyNow }: { page: "member" | "guest", cart: CartData, isBuyNow: boolean }) {
     const [formData, setFormData] = useState<FormData>({
@@ -212,6 +214,10 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
         setIsEditingAddress(false);
     }, [])
 
+    useEffect(() => {
+        dispatch(getWarehousesAsync());
+    }, [dispatch]);
+
     const handleEditAddressClick = () => {
         setIsEditingAddress(true);
         router.push("/dashboard/address");
@@ -236,10 +242,15 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             },
             order_items: orderItems ?? [],
             location_id: formData?.deliveryLocationId ?? "",
+            store_id: formData?.warehouse_id ?? "",
             promo_code: promoCode,
         } as any;
 
-        if (deliveryType !== "ship") {
+        if (deliveryType === "ship") {
+            delete payload.store_id;
+        }
+
+        if (deliveryType === "in store") {
             delete payload.location_id;
         }
 
@@ -537,7 +548,17 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                 {
                     deliveryType === "ship" && <div className='flex flex-col gap-y-[0.5rem] w-full'>
                         <span className='text-[0.875rem] font-semibold'>Shipping price</span>
-                        <LocationDropdown formData={formData} isBuyNow={isBuyNow} setFormData={setFormData} />
+                        <LocationDropdown
+                            isBuyNow={isBuyNow}
+                            setFormData={setFormData}
+                        />
+                    </div>
+                }
+
+                {
+                    deliveryType === "in store" && <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                        <span className='text-[0.875rem] font-semibold'>Select pick up store</span>
+                        <WareHouseDropdown setFormData={setFormData} />
                     </div>
                 }
 

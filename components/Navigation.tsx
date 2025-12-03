@@ -6,9 +6,8 @@ import SideBar from './AppLayout/SideBar';
 import { useAppDispatch } from '@/lib/hooks';
 import { getCategoriesAsync, getHomeDataAsync } from '@/lib/features/navigation/navigationSlice';
 import CategoryFilterModal from './CategoryFilterModal';
-import { useFilter, useGuestCheckout, useIsBuyNow, useReview, useShareWishlistModal } from '@/app/ClientLayout';
+import { useFilter, useGuestCheckout, useIsBuyNow, useReview, useShareWishlistModal, useVoucher } from '@/app/ClientLayout';
 import GuestCheckoutModal from './GuestCheckoutModal';
-import ReviewModal from './ReviewModal';
 
 export default function Navigation({ children }: Readonly<{ children: React.ReactNode; }>) {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +17,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     const { openReviewModal } = useReview()
     const { isBuyNow } = useIsBuyNow()
     const { isShareWishlistModalOpen } = useShareWishlistModal();
+    const { voucherSuccessModalOpen } = useVoucher();
 
     useEffect(() => {
         dispatch(getCategoriesAsync())
@@ -25,7 +25,7 @@ export default function Navigation({ children }: Readonly<{ children: React.Reac
     }, [dispatch])
 
     return (
-        <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || openReviewModal || isShareWishlistModalOpen || openGuestCheckoutModal ? 'overflow-hidden' : ''}`}>
+        <div className={`w-full h-full relative z-0 flex flex-col justify-between ${openFilterModal || voucherSuccessModalOpen || openReviewModal || isShareWishlistModalOpen || openGuestCheckoutModal ? 'overflow-hidden' : ''}`}>
             <div className='flex flex-col w-full z-0 justify-between h-full'>
                 <div className='w-full flex flex-col'>
                     <AppHeader isOpen={isOpen} setIsOpen={setIsOpen} />

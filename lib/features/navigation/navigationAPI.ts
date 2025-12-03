@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse, WarehousesResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -190,4 +190,14 @@ export async function getMinMaxPriceRange(): Promise<MinMaxRangeResponse> {
     const err = error as AxiosError<MinMaxRangeResponse>;
     return err.response?.data as MinMaxRangeResponse;
   }
+}
+
+export async function getWarehouses(): Promise<WarehousesResponse> {
+    try {
+        const response = await api.get<WarehousesResponse>(`warehouses`, { headers: { requiresAuth: false } });
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError<WarehousesResponse>;
+        return err.response?.data as WarehousesResponse;
+    }
 }

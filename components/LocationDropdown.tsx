@@ -15,11 +15,10 @@ import { getBuyNowCartAsync, getCartAsync, selectBuyNowCartId, selectCartId } fr
 type Props = {
     onSelect?: (loc: DeliveryLocation | undefined) => void;
     setFormData: React.Dispatch<React.SetStateAction<FormData>>
-    formData: FormData;
     isBuyNow: boolean
 };
 
-export default function LocationDropdown({ onSelect, formData, setFormData, isBuyNow }: Props) {
+export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Props) {
     const [selectedId, setSelectedId] = React.useState<number | null>(null);
     const locations = useAppSelector(selectLocations)
     const dispatch = useAppDispatch()
