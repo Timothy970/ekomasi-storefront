@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import api from "../utils/axios";
-import { BuyVoucherPayload, CreateVoucherPayload, SingleVoucherResponse, VoucherDesignsResponse, VoucherResponse } from "../features/types";
+import { BuyVoucherPayload, CreateVoucherPayload, RedeemVoucherPayload, RedeemVoucherResponse, SingleVoucherResponse, VoucherDesignsResponse, VoucherResponse } from "../features/types";
 
 export async function getVoucherDesigns(query: string): Promise<VoucherDesignsResponse> {
     try {
@@ -17,7 +17,6 @@ export async function createVoucher(payload: CreateVoucherPayload): Promise<Vouc
         const response = await api.post<VoucherResponse>(`vouchers/buy-voucher`, payload, {
             headers: { requiresAuth: true }
         });
-        console.log(response, 'resssss')
 
         return response.data;
     } catch (error) {
@@ -26,24 +25,12 @@ export async function createVoucher(payload: CreateVoucherPayload): Promise<Vouc
     }
 }
 
-export async function getSingleVoucher(id: string): Promise<SingleVoucherResponse> {
+export async function redeemVoucher(payload: RedeemVoucherPayload): Promise<RedeemVoucherResponse> {
     try {
-        const response = await api.get<SingleVoucherResponse>(`admin/vouchers/${id}`, {
+        const response = await api.post<RedeemVoucherResponse>(`vouchers/redeem`, payload, {
             headers: { requiresAuth: true }
         });
-
-        return response.data;
-    } catch (error) {
-        const err = error as AxiosError;
-        throw err;
-    }
-}
-
-export async function buyVoucher(payload: BuyVoucherPayload): Promise<VoucherResponse> {
-    try {
-        const response = await api.post<VoucherResponse>(`vouchers/buy-voucher`, payload, {
-            headers: { requiresAuth: true }
-        });
+        console.log(response, 'resssssss')
 
         return response.data;
     } catch (error) {

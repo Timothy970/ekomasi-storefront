@@ -3,7 +3,6 @@ import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -26,7 +25,6 @@ export default function BuyGiftCards() {
     const [message, setMessage] = useState('');
     const dispatch = useAppDispatch();
     const voucherDesigns = useAppSelector(selectDesigns);
-    const router = useRouter();
     const [designImage, setDesignImage] = useState("")
     const voucherAmounts = [500, 1500, 2500, 3500, 4500, 5500, "Custom"];
     const [selectedAmount, setSelectedAmount] = useState<number | string>("");

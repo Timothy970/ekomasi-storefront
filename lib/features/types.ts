@@ -1070,3 +1070,13 @@ export interface BuyVoucherPayload {
   phone_number: string;
   payment_method: string;
 }
+
+export interface RedeemVoucherPayload {
+  code: string;
+}
+
+export interface RedeemVoucherResponse {
+  data: VoucherData;
+  message: string;
+  status_code: number;
+}

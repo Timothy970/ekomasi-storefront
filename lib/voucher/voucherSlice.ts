@@ -1,7 +1,7 @@
 import { createAppSlice } from "../createAppSlice";
 import { ToastType } from "../features/toast/toastSlice";
-import { BuyVoucherPayload, CreateVoucherPayload, Design, Pagination, SingleVoucher, Voucher } from "../features/types";
-import { buyVoucher, createVoucher, getSingleVoucher, getVoucherDesigns } from "./voucherAPI";
+import { CreateVoucherPayload, Design, Pagination, RedeemVoucherPayload, SingleVoucher, Voucher } from "../features/types";
+import { createVoucher, getVoucherDesigns, redeemVoucher } from "./voucherAPI";
 
 interface VoucherSliceState {
 	designs: Design[];
@@ -80,18 +80,7 @@ export const voucherSlice = createAppSlice({
 				pending: (state) => {
 					state.status = "loading"
 				},
-				fulfilled: (state, action) => {
-					// if (action.payload?.status_code === 201) {
-					// 	state.success = true
-					// 	state.message = action.payload?.message
-					// 	state.pagination = action?.payload?.data?.pagination
-					// 	state.vouchers = action?.payload?.data?.vouchers
-					// } else {
-					// 	state.success = false
-					// 	state.message = action.payload?.message || "Failed to create voucher."
-					// 	state.pagination = null
-					// 	state.voucher = null
-					// }
+				fulfilled: (state) => {
 					state.status = "idle"
 				},
 				rejected: (state) => {
@@ -101,43 +90,14 @@ export const voucherSlice = createAppSlice({
 				},
 			}
 		),
-		getSingleVoucherAsync: create.asyncThunk(
-			async (voucherId: string) => {
-				const response = await getSingleVoucher(voucherId);
-				return response
-			},
-			{
-				pending: (state) => {
-					state.status = "loading"
-				},
-				fulfilled: (state, action) => {
-					if (action.payload?.status_code === 200) {
-						state.success = true
-						state.message = action.payload?.message
-						state.pagination = null
-						state.singleVoucher = action?.payload?.data
-					} else {
-						state.success = false
-						state.message = action.payload?.message || "Failed to get voucher."
-						state.pagination = null
-						state.singleVoucher = null
-					}
-					state.status = "idle"
-				},
-				rejected: (state) => {
-					state.status = "failed"
-					state.success = false
-					state.message = ""
-				},
-			}
-		),
-		buyVoucherAsync: create.asyncThunk(
-			async ({ payload, refetchAndRedirect }: { payload: BuyVoucherPayload; refetchAndRedirect: (isSuccess: boolean) => void }) => {
-				const response = await buyVoucher(payload);
+		redeemVoucherAsync: create.asyncThunk(
+			async ({ payload, handleVoucherRedeem }: { payload: RedeemVoucherPayload, handleVoucherRedeem: (message: string, type: ToastType) => void }) => {
+				const response = await redeemVoucher(payload);
+
 				if (response?.status_code === 201) {
-					refetchAndRedirect(true);
+					handleVoucherRedeem(response?.message, "success");
 				} else {
-					refetchAndRedirect(false);
+					handleVoucherRedeem(response?.message, "error");
 				}
 				return response
 			},
@@ -145,7 +105,7 @@ export const voucherSlice = createAppSlice({
 				pending: (state) => {
 					state.status = "loading"
 				},
-				fulfilled: (state, action) => {
+				fulfilled: (state) => {
 					state.status = "idle"
 				},
 				rejected: (state) => {
@@ -170,6 +130,6 @@ export const voucherSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, getSingleVoucherAsync, buyVoucherAsync } = voucherSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, redeemVoucherAsync } = voucherSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher } = voucherSlice.selectors;
 export const voucherReducer = voucherSlice.reducer;
