@@ -3,19 +3,16 @@ import Accordion from '@/components/Accordion'
 import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
-import { useAppDispatch } from '@/lib/hooks'
-import { getVouchersAsync } from '@/lib/voucher/voucherSlice'
+import VouchersTable from '@/components/VouchersTable'
+import { useAppSelector } from '@/lib/hooks'
+import { selectVoucherPagination, selectVouchers } from '@/lib/voucher/voucherSlice'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 export default function GiftCards() {
-  const [vouchers, setVouchers] = useState([])
   const router = useRouter();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getVouchersAsync(""))
-  }, [])
+  const vouchers = useAppSelector(selectVouchers)
+  const pagination = useAppSelector(selectVoucherPagination)
 
   return (
     <Navigation>
@@ -35,32 +32,39 @@ export default function GiftCards() {
                 </div>
               }
 
-              <div className='w-full mt-[1rem] md:mt-[2rem] flex gap-x-[1.5rem]'>
-                <Button onClick={() => router?.push("/dashboard/giftcards/buy")} className='text-base text-white bg-[#AF52DE]'>
+              <div className='w-full mt-[1rem] flex gap-x-[1.5rem]'>
+                <Button onClick={() => router?.push("/dashboard/giftcards/buy")} className='h-[2.5rem] text-white bg-[#AF52DE]'>
                   Buy Gift Card
                 </Button>
 
-                <Button onClick={() => router?.push("/dashboard/giftcards/redeem")} className='text-base border text-black border-black bg-[#804A9D14]'>
+                <Button onClick={() => router?.push("/dashboard/giftcards/redeem")} className='h-[2.5rem] border text-black border-black bg-[#804A9D14]'>
                   Redeem Gift Card
                 </Button>
               </div>
+
+              <VouchersTable
+                pagination={pagination}
+                data={vouchers??[]}
+              />
             </div>
           </div>
 
-          <div className='bg-[#804A9D14] flex flex-col gap-y-[1rem] w-full p-[1rem] md:p-[2rem]'>
-            <p className='text-[1.125rem] font-bold'>
-              NEED HELP WITH THESE OPTIONS?
-            </p>
+          {
+            vouchers?.length <= 0 && <div className='bg-[#804A9D14] flex flex-col gap-y-[1rem] w-full p-[1rem] md:p-[2rem]'>
+              <p className='text-[1.125rem] font-bold'>
+                NEED HELP WITH THESE OPTIONS?
+              </p>
 
-            <div className='border-t border-black'>
-              <Accordion title="🎁 What is a gift card?">
-                A gift card is a prepaid card that contains a set amount of money and can be used as a payment method at specific stores, websites, or brands.
-              </Accordion>
-              <Accordion title="💌 What is a gift voucher?">
-                A gift voucher is a prepaid certificate or code that lets someone purchase products or services up to a certain value at a specific store, brand, or platform.
-              </Accordion>
+              <div className='border-t border-black'>
+                <Accordion title="🎁 What is a gift card?">
+                  A gift card is a prepaid card that contains a set amount of money and can be used as a payment method at specific stores, websites, or brands.
+                </Accordion>
+                <Accordion title="💌 What is a gift voucher?">
+                  A gift voucher is a prepaid certificate or code that lets someone purchase products or services up to a certain value at a specific store, brand, or platform.
+                </Accordion>
+              </div>
             </div>
-          </div>
+          }
         </div>
       </DashboardLayout>
     </Navigation>

@@ -12,7 +12,7 @@ import { redeemVoucherAsync } from '@/lib/voucher/voucherSlice'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-export default function redeem() {
+export default function Redeem() {
     const [code, setCode] = useState("");
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -51,7 +51,7 @@ export default function redeem() {
                     <div className='bg-[#804A9D14] w-full flex flex-col gap-y-[1rem] p-[1rem] md:p-[2rem]'>
                         <div className='flex flex-col gap-y-[1rem] gap-x-[1rem]'>
                             <h3 className='text-[1.5rem] font-bold'>Add Gift Card​</h3>
-                            <p className='font-[400] text-[0.875rem]'>Enter the long number and scratch off the panel on your card to reveal your pin as shown below.</p>
+                            <p className='font-[400] text-[0.875rem]'>Enter the long number and scratch off the panel on your card to reveal your PIN as shown below.</p>
                         </div>
 
                         <div className='w-[100%] md:w-[50%]'>

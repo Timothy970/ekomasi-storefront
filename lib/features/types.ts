@@ -478,6 +478,7 @@ export interface FormData {
   paymentPhone?: string;
   deliveryLocationId?: number | string;
   promo_code?: string;
+  warehouse_id?: string;
 }
 
 export interface OrderPayload {
@@ -1081,8 +1082,31 @@ export interface RedeemVoucherResponse {
   status_code: number;
 }
 
+export interface VouchersData {
+  pagination: Pagination;
+  vouchers: Voucher[];
+}
+
 export interface VouchersResponse {
-  data: VoucherData;
+  data: VouchersData;
   message: string;
   status_code: number;
+}
+
+export interface Warehouse {
+  warehouse_id: string
+  name: string
+  location: string
+  warehouse_details: string
+}
+
+export interface WarehousesData {
+  data: Warehouse[]
+  meta: Pagination
+}
+
+export interface WarehousesResponse {
+  data: WarehousesData
+  message: string
+  status_code: number
 }

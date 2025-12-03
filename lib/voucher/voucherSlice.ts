@@ -11,6 +11,7 @@ interface VoucherSliceState {
 	message: string;
 	success: boolean;
 	pagination: Pagination | null;
+	voucherPagination: Pagination | null;
 	voucher: Voucher | null;
 }
 
@@ -22,6 +23,7 @@ const initialState: VoucherSliceState = {
 	message: "",
 	success: false,
 	pagination: null,
+	voucherPagination: null,
 	voucher: null,
 };
 
@@ -52,7 +54,7 @@ export const voucherSlice = createAppSlice({
 						state.designs = action?.payload?.data?.designs
 					} else {
 						state.success = false
-						state.message = action.payload?.message || "Failed to get vouchers."
+						state.message = action.payload?.message || "Failed to get voucher designs."
 						state.pagination = null
 						state.voucher = null
 					}
@@ -78,13 +80,13 @@ export const voucherSlice = createAppSlice({
 					if (action.payload?.status_code === 200) {
 						state.success = true
 						state.message = action.payload?.message
-						// state.pagination = action?.payload?.data?.pagination
-						// state.designs = action?.payload?.data?.designs
+						state.voucherPagination = action?.payload?.data?.pagination
+						state.vouchers = action?.payload?.data?.vouchers
 					} else {
 						state.success = false
-						// state.message = action.payload?.message || "Failed to get vouchers."
-						// state.pagination = null
-						// state.voucher = null
+						state.message = action.payload?.message
+						state.voucherPagination = null
+						state.vouchers = []
 					}
 					state.status = "idle"
 				},
@@ -154,6 +156,7 @@ export const voucherSlice = createAppSlice({
 		selectSuccess: (state: VoucherSliceState) => state.success,
 		selectMessage: (state: VoucherSliceState) => state.message,
 		selectPagination: (state: VoucherSliceState) => state.pagination,
+		selectVoucherPagination: (state: VoucherSliceState) => state.voucherPagination,
 		selectVoucher: (state: VoucherSliceState) => state.voucher,
 		selectSingleVoucher: (state: VoucherSliceState) => state.singleVoucher,
 	},
@@ -161,5 +164,5 @@ export const voucherSlice = createAppSlice({
 
 // Export actions and selectors
 export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, getVouchersAsync, redeemVoucherAsync } = voucherSlice.actions; // Export actions
-export const { selectStatus, selectSuccess, selectPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher } = voucherSlice.selectors;
+export const { selectStatus, selectSuccess, selectPagination, selectVoucherPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher } = voucherSlice.selectors;
 export const voucherReducer = voucherSlice.reducer;
