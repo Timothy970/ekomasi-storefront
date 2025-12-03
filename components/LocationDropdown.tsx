@@ -97,7 +97,7 @@ export default function LocationDropdown({ onSelect, setFormData, isBuyNow, deli
             <SelectContent className="">
                 {locations?.locations.map((loc) => (
                     <SelectItem key={loc.id} value={String(loc.id)}>
-                        {loc.location} — Ksh {loc.charge}
+                        {loc.location}{deliveryType === "in store" ? "" : `— Ksh ${loc.charge}`}
                     </SelectItem>
                 ))}
             </SelectContent>

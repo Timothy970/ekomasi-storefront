@@ -1,10 +1,21 @@
 import { AxiosError } from "axios";
 import api from "../utils/axios";
-import { BuyVoucherPayload, CreateVoucherPayload, RedeemVoucherPayload, RedeemVoucherResponse, SingleVoucherResponse, VoucherDesignsResponse, VoucherResponse } from "../features/types";
+import { CreateVoucherPayload, RedeemVoucherPayload, RedeemVoucherResponse, VoucherDesignsResponse, VoucherResponse, VouchersResponse } from "../features/types";
 
 export async function getVoucherDesigns(query: string): Promise<VoucherDesignsResponse> {
     try {
         const response = await api.get<VoucherDesignsResponse>(`vouchers/designs?${query}`, { headers: { requiresAuth: false } });
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getVouchers(query: string): Promise<VouchersResponse> {
+    try {
+        const response = await api.get<VouchersResponse>(`vouchers${query}`, { headers: { requiresAuth: true } });
+        console.log(response, 'ressss')
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

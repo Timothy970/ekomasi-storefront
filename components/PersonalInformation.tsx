@@ -236,11 +236,14 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
             },
             order_items: orderItems ?? [],
             location_id: formData?.deliveryLocationId ?? "",
+            store_id: formData?.deliveryLocationId ?? "",
             promo_code: promoCode,
         } as any;
 
         if (deliveryType !== "ship") {
             delete payload.location_id;
+        } else {
+            delete payload.store_id;
         }
 
         return payload
@@ -535,11 +538,11 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
                 </div>
 
                 <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                    <span className='text-[0.875rem] font-semibold'>{deliveryType === "ship" ? "Shipping price" : "Pick store"}</span>
+                    <span className='text-[0.875rem] font-semibold'>{deliveryType === "ship" ? "Shipping price" : "Select pick up store"}</span>
                     <LocationDropdown
-                        deliveryType={deliveryType}
                         isBuyNow={isBuyNow}
                         setFormData={setFormData}
+                        deliveryType={deliveryType}
                     />
                 </div>
 

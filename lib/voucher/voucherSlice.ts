@@ -1,7 +1,7 @@
 import { createAppSlice } from "../createAppSlice";
 import { ToastType } from "../features/toast/toastSlice";
 import { CreateVoucherPayload, Design, Pagination, RedeemVoucherPayload, SingleVoucher, Voucher } from "../features/types";
-import { createVoucher, getVoucherDesigns, redeemVoucher } from "./voucherAPI";
+import { createVoucher, getVoucherDesigns, getVouchers, redeemVoucher } from "./voucherAPI";
 
 interface VoucherSliceState {
 	designs: Design[];
@@ -55,6 +55,36 @@ export const voucherSlice = createAppSlice({
 						state.message = action.payload?.message || "Failed to get vouchers."
 						state.pagination = null
 						state.voucher = null
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = ""
+				},
+			}
+		),
+		getVouchersAsync: create.asyncThunk(
+			async (query: string) => {
+				const response = await getVouchers(query);
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true
+						state.message = action.payload?.message
+						// state.pagination = action?.payload?.data?.pagination
+						// state.designs = action?.payload?.data?.designs
+					} else {
+						state.success = false
+						// state.message = action.payload?.message || "Failed to get vouchers."
+						// state.pagination = null
+						// state.voucher = null
 					}
 					state.status = "idle"
 				},
@@ -130,6 +160,6 @@ export const voucherSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, redeemVoucherAsync } = voucherSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, getVoucherDesignsAsync, createVoucherAsync, getVouchersAsync, redeemVoucherAsync } = voucherSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectPagination, selectMessage, selectVoucher, selectVouchers, selectDesigns, selectSingleVoucher } = voucherSlice.selectors;
 export const voucherReducer = voucherSlice.reducer;

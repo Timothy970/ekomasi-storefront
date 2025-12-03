@@ -3,12 +3,19 @@ import Accordion from '@/components/Accordion'
 import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
+import { useAppDispatch } from '@/lib/hooks'
+import { getVouchersAsync } from '@/lib/voucher/voucherSlice'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function GiftCards() {
   const [vouchers, setVouchers] = useState([])
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getVouchersAsync(""))
+  }, [])
 
   return (
     <Navigation>

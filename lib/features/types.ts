@@ -1080,3 +1080,9 @@ export interface RedeemVoucherResponse {
   message: string;
   status_code: number;
 }
+
+export interface VouchersResponse {
+  data: VoucherData;
+  message: string;
+  status_code: number;
+}
