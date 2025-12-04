@@ -329,7 +329,7 @@ export const cartSlice = createAppSlice({
 						if (paymentRes?.data?.errorMessage) {
 							redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage, response?.data?.delivery_id)
 						} else {
-							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order succesfully placed!', response?.data?.delivery_id)
+							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order successfully placed!', response?.data?.delivery_id)
 						}
 					}
 				}

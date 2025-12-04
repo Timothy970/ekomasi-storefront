@@ -290,8 +290,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
                         triggerToast
                     }
                 ))
-
-                // return
             }
         }
     };

@@ -24,7 +24,7 @@ export default function PaymentProcessingModal({
     const [status, setStatus] = useState<'connecting' | 'processing' | 'error' | 'success' | 'failed'>('connecting');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const profile = useAppSelector(selectUserProfile);
-    const [socket, setSocket] = useState<any>(null);
+    const [socket, setSocket] = useState<ReturnType<typeof connectWebSocket> | null>(null);
     const userId = profile?.user_id;
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
@@ -92,7 +92,7 @@ export default function PaymentProcessingModal({
             }
             connection?.close();
         };
-    }, [isOpen, userId, orderId, deliveryId]);
+    }, [isOpen, userId, orderId, deliveryId, timeoutId]);
 
     const handleClearout = (isSuccess: boolean) => {
         setTimeout(() => {
