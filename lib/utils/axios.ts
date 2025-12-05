@@ -4,6 +4,26 @@ import { showToast } from "@/lib/features/toast/toastSlice";
 import { logout, userSlice } from "../features/user/userSlice";
 import { HTTP_STATUS } from "../utils";
 
+const EN_FALLBACK_MESSAGES: Record<number, string> = {
+    400: "Bad request — please check your input.",
+    401: "Session expired. Please log in again.",
+    403: "Access denied.",
+    404: "Resource not found.",
+    500: "Server error — please try again later.",
+};
+
+function getErrorMessage(error: any, status?: number): string {
+    const backend = error?.response?.data;
+
+    if (backend?.message) return backend.message;
+
+    if (status && EN_FALLBACK_MESSAGES[status]) {
+        return EN_FALLBACK_MESSAGES[status];
+    }
+
+    return "An unexpected error occurred — please try again.";
+}
+
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     headers: {
@@ -45,7 +65,7 @@ api.interceptors.response.use(
         if (status === HTTP_STATUS.UNAUTHORIZED) {
             getStore().dispatch(
                 showToast({
-                    message: "Invalid email or phone number.",
+                    message: getErrorMessage(error, status),
                     type: "error",
                 })
             );
@@ -57,7 +77,7 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if ((status === HTTP_STATUS.FORBIDDEN) && !originalRequest._retry) {
+        if (status === HTTP_STATUS.FORBIDDEN && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
@@ -98,46 +118,14 @@ api.interceptors.response.use(
             }
         }
 
-        switch (status) {
-            case HTTP_STATUS.BAD_REQUEST:
-                getStore().dispatch(
-                    showToast({
-                        message:
-                            error.response?.data?.message ||
-                            "Bad request — please check your input.",
-                        type: "error",
-                    })
-                );
-                break;
+        const message = getErrorMessage(error, status);
 
-            case HTTP_STATUS.NOT_FOUND:
-                getStore().dispatch(
-                    showToast({
-                        message: "Resource not found.",
-                        type: "error",
-                    })
-                );
-                break;
-
-            case HTTP_STATUS.SERVER_ERROR:
-                getStore().dispatch(
-                    showToast({
-                        message: "Server error — please try again later.",
-                        type: "error",
-                    })
-                );
-                break;
-
-            default:
-                getStore().dispatch(
-                    showToast({
-                        message:
-                            error.response?.data?.message ||
-                            `Unexpected error (${status}). Please try again.`,
-                        type: "error",
-                    })
-                );
-        }
+        getStore().dispatch(
+            showToast({
+                message,
+                type: "error",
+            })
+        );
 
         return Promise.reject(error);
     }
