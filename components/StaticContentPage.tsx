@@ -36,47 +36,47 @@ export default function StaticContentPage({ contentPath }: StaticContentPageProp
     <div className={`w-full mt-[2rem] lg:mt-[2.5rem] px-[1rem] h-full flex flex-col max-w-[90rem]`}>
       <h1 className='text-[2.8rem] font-[700]'>{content.title}</h1>
 
-      <div className='mt-[2rem] lg:mt-[2.5rem]'>
-        {content.sections && (
-          <div className="w-full flex flex-col gap-y-4 mt-[1rem]">
-            {content.sections.map((section, idx) => (
-              <div key={idx} className="p-4">
-                {section.title && (
-                  <h2 className="font-[700] text-base my-[0.7rem]">{section.title}</h2>
-                )}
+      <p className='text-[1.125rem] mt-[1.5rem]'>{content?.description}</p>
 
-                {section.paragraphs?.map((p, pIdx) => (
-                  <div
-                    key={pIdx}
-                    className="text-[0.875rem] text-gray-800 mb-2 break-words"
-                  >
-                    {p.title && (
-                      <h2 className="font-[700] text-base my-[0.7rem]">{p.title}</h2>
-                    )}
-                    {customParser(p.text)}
+      {content.sections && (
+        <div className="w-full flex flex-col gap-y-4 mt-[1rem]">
+          {content.sections.map((section, idx) => (
+            <div key={idx} className="p-4">
+              {section.title && (
+                <h2 className="font-[700] text-base my-[0.7rem]">{section.title}</h2>
+              )}
+
+              {section.paragraphs?.map((p, pIdx) => (
+                <div
+                  key={pIdx}
+                  className="text-[0.875rem] text-gray-800 mb-2 break-words"
+                >
+                  {p.title && (
+                    <h2 className="font-[700] text-base my-[0.7rem]">{p.title}</h2>
+                  )}
+                  {customParser(p.text)}
+                </div>
+              ))}
+
+              {section.images?.map((img, imgIdx) => (
+                <div key={imgIdx} className='flex flex-col gap-y-[0.5rem]'>
+                  {img.image_url && (
+                    <img
+                      src={img.image_url}
+                      alt={img.alt || `section-image-${imgIdx}`}
+                      className="w-full h-auto object-cover rounded mt-2"
+                    />
+                  )}
+
+                  <div className='border-l border-black pl-2'>
+                    <p>{img.caption}</p>
                   </div>
-                ))}
-
-                {section.images?.map((img, imgIdx) => (
-                  <div key={imgIdx} className='flex flex-col gap-y-[0.5rem]'>
-                    {img.image_url && (
-                      <img
-                        src={img.image_url}
-                        alt={img.alt || `section-image-${imgIdx}`}
-                        className="w-full h-auto object-cover rounded mt-2"
-                      />
-                    )}
-
-                    <div className='border-l border-black pl-2'>
-                      <p>{img.caption}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
