@@ -481,6 +481,11 @@ export interface FormData {
   warehouse_id?: string;
 }
 
+export interface PaymentFormData {
+  phone_number: string;
+  order_id: string;
+}
+
 export interface OrderPayload {
   user_id: string | null;
   is_guest_order: boolean;
