@@ -19,7 +19,7 @@ export default function Footer() {
         <Image unoptimized src="/images/footer-pattern.png" alt="Footer background" fill priority className="object-cover" />
       </div>
 
-      <div className="relative w-full flex flex-col justify-center items-center lg:py-[5rem] z-20 h-auto">
+      <div className="relative w-full flex flex-col justify-center items-center py-[3rem] lg:py-[5rem] z-20 h-auto">
         <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[3rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
           <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
