@@ -87,10 +87,13 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
 
     const isFormComplete = (form: FormData): boolean => {
         const requiredFields = getRequiredFields(page, deliveryType);
+
         for (const { key } of requiredFields) {
             if (isEmpty(form[key])) return false;
         }
+
         if (isEmpty(form.email) && isEmpty(form.phone)) return false;
+        
         return true;
     };
 
@@ -199,6 +202,7 @@ export default function PersonalInformation({ page, cart, isBuyNow }: { page: "m
     useEffect(() => {
         if (address && address.length > 0) {
             const first = address[0];
+
             setFormData((prev) => ({
                 ...prev,
                 address: first.address ?? "",

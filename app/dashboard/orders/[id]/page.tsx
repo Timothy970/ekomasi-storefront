@@ -1,8 +1,9 @@
 "use client";
-import { useReview } from '@/app/ClientLayout';
+import { usePayment, useReview } from '@/app/ClientLayout';
 import Navigation from '@/components/Navigation';
 import OrderDetails from '@/components/OrderDetails';
 import OrderDetailsFlow from '@/components/OrderDetailsFlow';
+import PaymentModal from '@/components/PaymentModal';
 import ReviewModal from '@/components/ReviewModal';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
@@ -12,7 +13,6 @@ import { ORDER_STATUS } from '@/lib/utils';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-
 export default function Order() {
     const params = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
@@ -21,13 +21,13 @@ export default function Order() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false); const [wantsReturn, setWantsReturn] = useState(false);
+    const { openReviewModal } = useReview();
+    const { openPaymentModal } = usePayment();
+    const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
 
     const handleCloseReturn = () => {
         setWantsReturn(false);
     }
-
-    const { openReviewModal } = useReview();
-    const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
 
     const fetchOrder = async (isIntervalFetch = false) => {
         if (!params?.id) return;
@@ -93,7 +93,7 @@ export default function Order() {
                     ${isRefreshing ? "bg-[rgba(0,0,0,0.03)]" : "bg-transparent"}
                 `}
             >
-                {order.order_status === "Cancelled" ? (
+                {order.order_status === ORDER_STATUS?.CANCELLED ? (
                     <div className="w-full flex items-center justify-center bg-[#FF3B308F]">
                         <div className="flex justify-center items-center gap-x-[1rem] font-medium py-[0.75rem]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
@@ -156,7 +156,9 @@ export default function Order() {
                     </div>
                 </div>
 
-                <OrderDetailsFlow order={order} />
+                <OrderDetailsFlow
+                    order={order}
+                />
 
                 {order.order_status.toLowerCase() === ORDER_STATUS.COMPLETED.toLowerCase() || order.order_status.toLowerCase() === "delivered" &&
                     <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
@@ -176,7 +178,12 @@ export default function Order() {
                     </div>
                 }
 
-                <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} setProductReviewId={setProductReviewId} />
+                <OrderDetails
+                    order={order}
+                    toReturn={wantsReturn}
+                    onCloseReturn={handleCloseReturn}
+                    setProductReviewId={setProductReviewId}
+                />
 
                 {openReviewModal && (
                     <ReviewModal
@@ -184,6 +191,13 @@ export default function Order() {
                         setProductReviewId={setProductReviewId}
                         productReviewId={productReviewId}
                         orderId={params?.id}
+                    />
+                )}
+
+                {openPaymentModal && (
+                    <PaymentModal
+                        openPaymentModal={openPaymentModal}
+                        order={order}
                     />
                 )}
             </div>

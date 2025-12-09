@@ -15,10 +15,11 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
         DELIVERY_STATUS.SHIPPED,
         DELIVERY_STATUS.OUT_FOR_DELIVERY,
         DELIVERY_STATUS.DELIVERED,
+        ORDER_STATUS.COMPLETED,
     ]
 
-    const orderIndex = orderFlow.indexOf(order?.order_status ?? "")
-    const deliveryIndex = orderFlow.indexOf(order?.delivery_status ?? "")
+    const orderIndex = orderFlow.indexOf(order?.order_status?.toUpperCase() ?? "")
+    const deliveryIndex = orderFlow.indexOf(order?.delivery_status?.toUpperCase() ?? "")
 
     const stepIndex = Math.max(orderIndex, deliveryIndex)
 
@@ -37,6 +38,7 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
                     }
 
                     let connectorClass = ""
+                    
                     if (order?.order_status === ORDER_STATUS.CANCELLED) {
                         connectorClass = "bg-[#FF3B308F]"
                     } else if (index < stepIndex) {

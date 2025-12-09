@@ -30,20 +30,20 @@ export const scrollToTop = () => {
 }
 
 export const ORDER_STATUS = {
-  PENDING: "Pending",
-  CONFIRMED: "Confirmed",
-  PROCESSING: "Processing",
-  CANCELLED: "Cancelled",
-  COMPLETED: "Completed",
-  DELIVERED: "Delivered",
+  PENDING: "PENDING",
+  CONFIRMED: "CONFIRMED",
+  PROCESSING: "PROCESSING",
+  CANCELLED: "CANCELLED",
+  COMPLETED: "COMPLETED",
+  DELIVERED: "DELIVERED",
 };
 
 export const DELIVERY_STATUS = {
-  NOT_SHIPPED: "Not shipped",
-  SHIPPED: "Shipped",
-  OUT_FOR_DELIVERY: "Out for delivery",
-  DELIVERED: "Delivered",
-  RETURNED: "Returned",
+  NOT_SHIPPED: "NOT SHIPPED",
+  SHIPPED: "SHIPPED",
+  OUT_FOR_DELIVERY: "OUT FOR DELIVERY",
+  DELIVERED: "DELIVERED",
+  RETURNED: "RETURNED",
 };
 
 export const orderStatusOptions = [
