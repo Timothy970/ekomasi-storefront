@@ -7,12 +7,14 @@ import { X } from 'lucide-react';
 
 interface ShareWishlistModalProps {
     isOpen: boolean;
-    onShare: (email: string, message: string) => void;
+    onShare: (email: string, message: string, fullNames: string) => void;
 }
 
 const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare }) => {
     const [email, setEmail] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [fullNames, setFullNames] = useState('');
+    const [emailErrorMessage, setEmailErrorMessage] = useState('');
+    const [fullNamesErrorMessage, setFullNamesErrorMessage] = useState('');
     const [message, setMessage] = useState('');
     const { setShareWishlistModalOpen } = useShareWishlistModal();
 
@@ -20,19 +22,25 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
         e.preventDefault();
 
         if (!email) {
-            setErrorMessage("Please enter an email address.");
+            setEmailErrorMessage("Please enter an email address.");
+            return;
+        }
+
+        if (!fullNames) {
+            setFullNamesErrorMessage("Please enter your full names.");
             return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
-            setErrorMessage("Please enter a valid email address.");
+            setEmailErrorMessage("Please enter a valid email address.");
             return;
         }
 
-        setErrorMessage('');
-        onShare(email, message);
+        setEmailErrorMessage('');
+        setFullNamesErrorMessage('');
+        onShare(email, message, fullNames);
         setEmail('');
         setMessage('');
         setShareWishlistModalOpen(false)
@@ -52,6 +60,21 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
                 <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1rem]'>
                     <div className="block mb-4">
                         <Label className="block text-[0.875rem] font-medium mb-2 text-custom-black">
+                            Your Names
+                        </Label>
+
+                        <Input
+                            type="text"
+                            className="w-full border px-3 py-2 text-[0.875rem]"
+                            value={fullNames}
+                            onChange={e => setFullNames(e.target.value)}
+                            required
+                            placeholder="Enter your name(s)"
+                        />
+                        {fullNamesErrorMessage && <div className="text-red-500 text-[0.75rem]">{fullNamesErrorMessage}</div>}
+                    </div>
+                    <div className="block mb-4">
+                        <Label className="block text-[0.875rem] font-medium mb-2 text-custom-black">
                             Recipient Email
                         </Label>
 
@@ -63,7 +86,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
                             required
                             placeholder="Enter recipient's email"
                         />
-                        {errorMessage && <div className="text-red-500 text-[0.75rem]">{errorMessage}</div>}
+                        {emailErrorMessage && <div className="text-red-500 text-[0.75rem]">{emailErrorMessage}</div>}
                     </div>
 
                     <div className="block mb-6">

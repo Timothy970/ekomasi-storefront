@@ -78,10 +78,11 @@ export default function WishList() {
     }
   };
 
-  const handleShareWishlist = async (email: string, message: string) => {
+  const handleShareWishlist = async (email: string, message: string, fullNames: string) => {
     const data: ShareWishListPayload = {
       email,
       message,
+      sender_name: fullNames
     }
 
     try {
@@ -100,7 +101,7 @@ export default function WishList() {
       triggerToast("Failed to share wishlist.", "error");
     }
   }
-  
+
   return (
     <Navigation>
       <DashboardLayout>

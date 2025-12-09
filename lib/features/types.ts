@@ -723,6 +723,7 @@ export interface Crumb {
 export interface ShareWishListPayload {
   email: string;
   message: string;
+  sender_name: string;
 }
 
 export interface ContentAuthor {
