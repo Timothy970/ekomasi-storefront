@@ -92,7 +92,7 @@ export default function PaymentProcessingModal({
             }
             connection?.close();
         };
-    }, [isOpen, userId, orderId, deliveryId, timeoutId]);
+    }, [isOpen, userId, orderId, deliveryId]);
 
     const handleClearout = (isSuccess: boolean) => {
         setTimeout(() => {
