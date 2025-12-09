@@ -219,7 +219,7 @@ export default function OrderDetails({ order, setProductReviewId, toReturn, onCl
             </div>
 
             {
-              order?.payment_status === "PAID" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem]'>
+              order?.payment_status?.toLowerCase() !== "paid" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem]'>
                 Make Payment
               </Button> : <></>
             }
