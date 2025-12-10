@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [token, router])
 
   return (
-    <div className="flex flex-col w-full min-h-screen justify-start items-center md:z-0 mb-[2rem]">
+    <div className="flex flex-col w-full min-h-screen justify-start items-center md:z-0 mb-[2rem] max-w-[90rem] overflow-hidden mx-auto">
       <div className="w-full px-[1rem] py-3 border-b flex items-center justify-between">
         <div className="w-full max-w-[90rem] lg:px-[3rem] mx-auto flex flex-row items-center justify-between">
           <Breadcrumb>

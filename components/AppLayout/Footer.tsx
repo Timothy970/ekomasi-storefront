@@ -4,11 +4,12 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import SocialLinksFooter from '../SocialLinksFooter'
 import { useAppSelector } from '@/lib/hooks'
-import { selectHomeData } from '@/lib/features/navigation/navigationSlice'
+import { selectCategories, selectHomeData } from '@/lib/features/navigation/navigationSlice'
 import Link from 'next/link'
 
 export default function Footer() {
   const homeData = useAppSelector(selectHomeData)
+  const categories = useAppSelector(selectCategories);
 
   return (
     <div className='relative w-full z-0'>
@@ -31,7 +32,7 @@ export default function Footer() {
               className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 lg:hidden'
             />
             <div className='flex flex-col gap-y-[1.25rem]'>
-              <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>Join our newsletter to stay up to date on features and releases.</h2>
+              <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>👶✨ Hey Mama, Papa, Gogo, Shosho & even Baby! Subscribe to our newsletter for exclusive deals.</h2>
 
               <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
                 <Input className='text-white h-[2.5rem] lg:h-[2.5rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
@@ -46,16 +47,21 @@ export default function Footer() {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full max-w-[60rem]'>
-            {/* <div className='w-full'>
-              <h2 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Categories</h2>
-              <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem]">
-                {categories?.map((cat) => (
-                  <div key={cat.id} className='flex flex-col gap-y-[1rem] mb-[1rem]'>
-                    <span className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{cat.name}</span>
-                  </div>
-                ))}
-              </ul>
-            </div> */}
+            {
+              categories && <div className='w-full'>
+                <h3 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Navigation</h3>
+
+                <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem]">
+                  {categories?.map((cat) => (
+                    <div key={cat.id} className='flex flex-col gap-y-[1rem] mb-[1rem]'>
+                      <Link href={`/category/${cat?.id}`}>
+                        <span className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{cat.name}</span>
+                      </Link>
+                    </div>
+                  ))}
+                </ul>
+              </div>
+            }
 
             {
               homeData?.social_links && <div className='w-full'>
@@ -72,9 +78,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block lg:mb-[3rem]'></div>
+        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block lg:mb-[rem]'></div>
 
-        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[3rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full md:min-h-[18rem] mb-[3rem]'>
+        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[3rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full mt-[2rem] md:mt-[2.5rem]'>
           <div className='flex flex-row gap-x-[1rem]'>
             <div className='flex flex-row '>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -128,9 +134,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block'></div>
+        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block mt-[2rem] md:mt-[2.5rem]'></div>
 
-        <div className='mt-[3rem] hidden w-full lg:flex justify-center items-center'>
+        <div className='hidden w-full lg:flex justify-center items-center mt-[2rem] md:mt-[2.5rem]'>
           <Link href={`/`}>
             <Image
               src={"/images/adenzo-logo-footer.png"}
@@ -144,11 +150,11 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className='mt-[3rem] w-full flex justify-center items-center'>
+        <div className='w-full flex justify-center items-center mt-[2rem] md:mt-[2.5rem]'>
           <h2 className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{homeData?.copyright_text}</h2>
         </div>
 
-        <div className='lg:flex flex-row gap-y-[1rem] hidden gap-x-[2rem] mt-[3rem]'>
+        <div className='lg:flex flex-row gap-y-[1rem] hidden gap-x-[2rem] mt-[2rem] md:mt-[2.5rem]'>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/privacy-policy' target='_blank'>Privacy Policy</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/about-us' target='_blank'>About Us</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/faq' target='_blank'>FAQs</a>
