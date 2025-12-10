@@ -11,7 +11,7 @@ import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
 import { useParams } from 'next/navigation';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
 export default function Order() {

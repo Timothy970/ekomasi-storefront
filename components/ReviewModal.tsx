@@ -87,7 +87,7 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
 
             <div className='bg-white flex hide-scrollbar flex-col items-center justify-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70]'>
                 <div className='flex flex-col justify-center items-center gap-y-[2rem] w-[23rem]'>
-                    <h2 className='font-bold text-[1.125rem]'>{reviewType == 'edit' ? 'Edit your review' : 'Add your review'}</h2>
+                    <h2 className='font-bold text-[1.125rem]'>{reviewType === 'edit' ? 'Edit your review' : 'Add your review'}</h2>
 
                     <div className="flex gap-1">
                         {Array.from({ length: 5 }).map((_, i) => {

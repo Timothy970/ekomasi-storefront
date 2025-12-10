@@ -314,10 +314,8 @@ export const navigationSlice = createAppSlice({
 
 					if (action.payload?.status_code === 200) {
 						state.productReview = action.payload.data?.reviews?.[0];
-						state.reviewPagination = null;
 					} else {
 						state.productReview = null;
-						state.reviewPagination = null;
 					}
 				},
 				rejected: (state) => {

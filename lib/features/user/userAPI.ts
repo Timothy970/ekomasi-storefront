@@ -60,8 +60,7 @@ export async function addProductReview({ productId, score, details }: { productI
 
 export async function editProductReview({ productId, score, details, reviewId }: { productId: string, score: number, details: string, reviewId: string }): Promise<ReviewResponse> {
     try {
-        let payload: Record<string, string | number> = {};
-        payload = { score, details }
+       let payload = { score, details };
         const response = await api.patch<ReviewResponse>(`products/${productId}/reviews/${reviewId}`, payload, { headers: { requiresAuth: true } });
 
         return response.data;
