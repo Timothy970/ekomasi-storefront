@@ -7,7 +7,6 @@ import PaymentModal from '@/components/PaymentModal';
 import ReviewModal from '@/components/ReviewModal';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
-import { getProductReviewAsync } from '@/lib/features/navigation/navigationSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
@@ -25,15 +24,12 @@ export default function Order() {
     const { openReviewModal } = useReview();
     const { openPaymentModal } = usePayment();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
+    const [reviewType, setReviewType] = useState<string>("");
+    const [reviewId, setReviewId] = useState<string | undefined>(undefined);
 
     const handleCloseReturn = () => {
         setWantsReturn(false);
     }
-
-    const { openReviewModal } = useReview();
-    const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
-    const [reviewType, setReviewType] = useState<string>("");
-    const [reviewId, setReviewId] = useState<string | undefined>(undefined);
 
     const fetchOrder = async (isIntervalFetch = false) => {
         if (!params?.id) return;
