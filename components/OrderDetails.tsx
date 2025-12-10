@@ -2,7 +2,7 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { format, addDays } from "date-fns";
 import { CreateReturnPayload, Order } from '@/lib/features/types';
-import { useReview } from '@/app/ClientLayout';
+import { usePayment, useReview } from '@/app/ClientLayout';
 import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
@@ -25,7 +25,7 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
   const [checkedValues, setCheckedValues] = useState<string[]>([])
   const [reason, setReason] = useState('');
   const dispatch = useAppDispatch();
-
+  const { setOpenPaymentModal } = usePayment();
 
   const handleToggle = (productId: string) => {
     setCheckedValues((prevCheckedValues) => {
@@ -221,6 +221,12 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
                 {order?.total_amount}
               </span>
             </div>
+
+            {
+              order?.payment_status?.toLowerCase() !== "paid" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem]'>
+                Make Payment
+              </Button> : <></>
+            }
           </div>
 
           <div className='flex flex-col gap-y-[0.5rem] w-full justify-between items-start pt-[1.25rem]'>

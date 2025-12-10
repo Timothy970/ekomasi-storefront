@@ -80,12 +80,14 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
     return (
         <div className='absolute inset-0 z-[60] h-screen w-screen flex justify-center items-center'>
             <div className='absolute bg-black/50 z-[65] h-screen w-screen' onClick={() => setOpenReviewModal(false)}>
-                <div className='flex p-[1rem] pt-[3rem] w-full justify-end'>
-                    <X className='text-white' />
-                </div>
+
             </div>
 
-            <div className='bg-white flex hide-scrollbar flex-col items-center justify-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70]'>
+            <div className='bg-white relative flex hide-scrollbar flex-col items-center justify-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70]'>
+                <div onClick={() => setOpenReviewModal(false)} className='flex absolute top-1 right-[1rem] p-[1rem] w-full justify-end'>
+                    <X className='text-black' />
+                </div>
+
                 <div className='flex flex-col justify-center items-center gap-y-[2rem] w-[23rem]'>
                     <h2 className='font-bold text-[1.125rem]'>{reviewType == 'edit' ? 'Edit your review' : 'Add your review'}</h2>
 
