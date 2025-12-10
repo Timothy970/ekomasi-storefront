@@ -303,7 +303,8 @@ export const cartSlice = createAppSlice({
 					data: MemberOrderPayload,
 					page: string,
 					fail: boolean,
-					message: string
+					message: string,
+					delivery_id: string
 				) => void,
 				extraPaymentPayload: { phone: string },
 				triggerToast: (message: string, type: ToastType) => void,
@@ -323,12 +324,12 @@ export const cartSlice = createAppSlice({
 					const paymentRes = await makePayment(paymentData)
 
 					if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
-						redirectToOrderDetails(response?.data?.order_id, data, page, false, '')
+						redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id)
 					} else {
 						if (paymentRes?.data?.errorMessage) {
-							redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage)
+							redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage, response?.data?.delivery_id)
 						} else {
-							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order succesfully placed!')
+							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order successfully placed!', response?.data?.delivery_id)
 						}
 					}
 				}
@@ -342,11 +343,11 @@ export const cartSlice = createAppSlice({
 				fulfilled: (state, action) => {
 					if (action.payload?.status_code === 201 && action.payload.data.order_id) {
 						state.success = true;
-						state.cart = null
-						state.buyNowCart = null
-						state.cartId = null
-						state.buyNowcartId = null
-						state.promoCode = null
+						// state.cart = null
+						// state.buyNowCart = null
+						// state.cartId = null
+						// state.buyNowcartId = null
+						// state.promoCode = null
 					} else {
 						state.message = action.payload?.message || "Failed to fetch variants";
 						state.success = false;
@@ -360,6 +361,13 @@ export const cartSlice = createAppSlice({
 				},
 			}
 		),
+		clearCartState: create.reducer((state) => {
+			state.cart = null;
+			state.buyNowCart = null;
+			state.cartId = null;
+			state.buyNowcartId = null;
+			state.promoCode = null;
+		}),
 		deleteProductFromCartAsync: create.asyncThunk(
 			async ({ product_id, refetchCart, cart_id }: { product_id: string, refetchCart: (cart_id: string) => void, cart_id: string }) => {
 				const response = await deleteProductFromCart({ product_id, cart_id });
@@ -488,6 +496,6 @@ export const cartSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { resetSuccess, resetMessage, setPromocode, getCartAsync, getBuyNowCartAsync, addToCartAsync, applyPromoCodeDiscountAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync, getGuestOrderAsync } = cartSlice.actions; // Export actions
+export const { resetSuccess, resetMessage, setPromocode, getCartAsync, getBuyNowCartAsync, addToCartAsync, applyPromoCodeDiscountAsync, createCartAsync, addToBuyNowCartAsync, createBuyNowCartAsync, updateCartAsync, deleteProductFromCartAsync, createOrderAsync, getOrdersAsync, getOrderAsync, getGuestOrderAsync, clearCartState } = cartSlice.actions; // Export actions
 export const { selectStatus, selectSuccess, selectMessage, selectBuyNowCart, selectPromocode, selectBuyNowCartId, selectCart, selectCartId, selectUserOrders, selectUserOrder, selectGuestOrder } = cartSlice.selectors;
 export const cartReducer = cartSlice.reducer;
