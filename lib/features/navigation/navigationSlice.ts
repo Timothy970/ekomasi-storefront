@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { Category, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeDataWrapper, MinMaxData, Pagination, Product, ProductBundleData, ProductFeature, Review, StaticContent, SubcategoryProducts, Warehouse, } from "../types";
-import { getCategories, getCategoryById, getDealById, getDeals, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getProductBundles, getProductFeatures, getProductReviews, getStaticContents, getSubCategoryById, getWarehouses } from "./navigationAPI";
+import { Category, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeDataWrapper, MinMaxData, Pagination, Product, ProductBundleData, ProductFeature, Review, SingleReview, StaticContent, SubcategoryProducts, Warehouse, } from "../types";
+import { getCategories, getCategoryById, getDealById, getDeals, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getProduct, getProductBundles, getProductFeatures, getProductReview, getProductReviews, getStaticContents, getSubCategoryById, getWarehouses } from "./navigationAPI";
 
 interface NavigationSliceState {
 	categories: Category[] | null;
@@ -19,6 +19,7 @@ interface NavigationSliceState {
 	staticContents: StaticContent[] | [];
 	productFeatures: ProductFeature[] | [];
 	productReviews: Review | null;
+	productReview: SingleReview | null;
 	productBundles: ProductBundleData | null;
 	deals: FlashSaleDealsData | null;
 	deal: FlashSaleDealData | null;
@@ -43,6 +44,7 @@ const initialState: NavigationSliceState = {
 	staticContents: [],
 	productFeatures: [],
 	productReviews: null,
+	productReview: null,
 	productBundles: null,
 	deals: null,
 	dealsStatus: "idle",
@@ -300,6 +302,29 @@ export const navigationSlice = createAppSlice({
 				},
 			}
 		),
+		getProductReviewAsync: create.asyncThunk(
+			async ({ product_id, review_id }: { product_id: string; review_id: string }) => {
+				const response = await getProductReview(product_id, review_id);
+				return response;
+			},
+			{
+				pending: () => {
+				},
+				fulfilled: (state, action) => {
+
+					if (action.payload?.status_code === 200) {
+						state.productReview = action.payload.data?.reviews?.[0];
+						state.reviewPagination = null;
+					} else {
+						state.productReview = null;
+						state.reviewPagination = null;
+					}
+				},
+				rejected: (state) => {
+					state.productReview = null;
+				},
+			}
+		),
 		getProductFeaturesAsync: create.asyncThunk(
 			async (product_id: string) => {
 				const response = await getProductFeatures(product_id);
@@ -438,6 +463,7 @@ export const navigationSlice = createAppSlice({
 		selectDeal: (state: NavigationSliceState) => state.deal || null,
 		selectDealStatus: (state: NavigationSliceState) => state.dealsStatus || null,
 		selectProductReviews: (state: NavigationSliceState) => state.productReviews || null,
+		selectProductReview: (state: NavigationSliceState) => state.productReview || null,
 		selectReviewPagination: (state: NavigationSliceState) => state.reviewPagination || null,
 		selectWarehouses: (state: NavigationSliceState) => state.warehouses,
 		selectWarehousePagination: (state: NavigationSliceState) => state.wareHousePagination,
@@ -445,6 +471,6 @@ export const navigationSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getWarehousesAsync, getProductAsync, getDealsAsync, getDealByIdAsync, getProductBundlesAsync, getStaticContentsAsync, getProductFeaturesAsync, getProductReviewsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync } = navigationSlice.actions;
-export const { selectCategories, selectHomeData, selectCategory, selectWarehouses, selectProductReviews, selectReviewPagination, selectDeals, selectDealStatus, selectDeal, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus } = navigationSlice.selectors;
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getWarehousesAsync, getProductAsync, getDealsAsync, getDealByIdAsync, getProductBundlesAsync, getStaticContentsAsync, getProductFeaturesAsync, getProductReviewsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync, getProductReviewAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectWarehouses, selectProductReviews, selectReviewPagination, selectDeals, selectDealStatus, selectDeal, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus, selectProductReview } = navigationSlice.selectors;
 export const navigationReducer = navigationSlice.reducer;

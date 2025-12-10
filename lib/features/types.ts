@@ -531,6 +531,8 @@ export interface OrderItem {
   price?: number;
   stock_quantity?: number;
   urls?: ProductImage[];
+  is_reviewed?: boolean | null;
+  review_id?: string | null;
 }
 
 export interface CreateOrderData {
@@ -801,6 +803,25 @@ export interface ReviewResponse {
   message: string;
   status_code: number;
 }
+
+export interface SingleReview {
+  review_id: string;
+  user: string;
+  score: number;
+  details: string;
+  created_at: string;
+}
+
+export interface ReviewsPayload {
+  reviews: SingleReview[];
+}
+
+export interface SingleReviewResponse {
+  data: ReviewsPayload;
+  message: string;
+  status_code: number;
+}
+
 
 export interface ReviewsResponse {
   data: {

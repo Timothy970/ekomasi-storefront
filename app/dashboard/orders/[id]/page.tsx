@@ -6,11 +6,12 @@ import OrderDetailsFlow from '@/components/OrderDetailsFlow';
 import ReviewModal from '@/components/ReviewModal';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
+import { getProductReviewAsync } from '@/lib/features/navigation/navigationSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { ORDER_STATUS } from '@/lib/utils';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 
 
 export default function Order() {
@@ -28,6 +29,8 @@ export default function Order() {
 
     const { openReviewModal } = useReview();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
+    const [reviewType, setReviewType] = useState<string>("");
+    const [reviewId, setReviewId] = useState<string | undefined>(undefined);
 
     const fetchOrder = async (isIntervalFetch = false) => {
         if (!params?.id) return;
@@ -60,6 +63,7 @@ export default function Order() {
 
         return () => clearInterval(interval);
     }, [params?.id]);
+
 
     if (loading) {
         return (
@@ -176,7 +180,7 @@ export default function Order() {
                     </div>
                 }
 
-                <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} setProductReviewId={setProductReviewId} />
+                <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} setProductReviewId={setProductReviewId} setReviewType={setReviewType} setReviewId={setReviewId} />
 
                 {openReviewModal && (
                     <ReviewModal
@@ -184,6 +188,8 @@ export default function Order() {
                         setProductReviewId={setProductReviewId}
                         productReviewId={productReviewId}
                         orderId={params?.id}
+                        reviewType={reviewType}
+                        reviewId={reviewId}
                     />
                 )}
             </div>

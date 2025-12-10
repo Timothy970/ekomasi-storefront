@@ -58,6 +58,19 @@ export async function addProductReview({ productId, score, details }: { productI
     }
 }
 
+export async function editProductReview({ productId, score, details, reviewId }: { productId: string, score: number, details: string, reviewId: string }): Promise<ReviewResponse> {
+    try {
+        let payload: Record<string, string | number> = {};
+        payload = { score, details }
+        const response = await api.patch<ReviewResponse>(`products/${productId}/reviews/${reviewId}`, payload, { headers: { requiresAuth: true } });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError<ReviewResponse>;
+        return err.response?.data as ReviewResponse;
+    }
+}
+
 export async function requestOtp(params: OtpRequestParams): Promise<OtpResponse> {
     try {
         const response = await api.post<OtpResponse>("auth/resend-otp", params);
