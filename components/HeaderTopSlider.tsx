@@ -7,8 +7,8 @@ import { selectSubCategory } from "@/lib/features/navigation/navigationSlice";
 
 type HeaderTopSliderProps = {
     hoveredCategoryId: string | null;
-    handleMouseEnter: (id: string) => void;
-    handleMouseLeave: () => void;
+    onSliderMouseEnter: () => void;
+    onSliderMouseLeave: () => void;
     subcategories: SubCategory[];
     hoveredCategory?: Category;
     categoryPosition: { left: number; width: number };
@@ -16,19 +16,28 @@ type HeaderTopSliderProps = {
 
 export default function HeaderTopSlider({
     hoveredCategoryId,
-    handleMouseEnter,
-    handleMouseLeave,
+    onSliderMouseEnter,
+    onSliderMouseLeave,
     subcategories,
     hoveredCategory,
     categoryPosition,
 }: HeaderTopSliderProps) {
     const subCategory = useAppSelector(selectSubCategory)
     const [sliderPosition, setSliderPosition] = useState<number>(0);
+    const [screenWidth, setScreenWidth] = useState<number>(0);
     const sliderWidth = 640;
 
     useEffect(() => {
-        if (hoveredCategoryId) {
-            const screenWidth = window.innerWidth;
+        const updateScreenWidth = () => setScreenWidth(window.innerWidth);
+
+        updateScreenWidth();
+        window.addEventListener('resize', updateScreenWidth);
+
+        return () => window.removeEventListener('resize', updateScreenWidth);
+    }, []);
+
+    useEffect(() => {
+        if (hoveredCategoryId && screenWidth > 0) {
             const categoryCenter = categoryPosition.left + (categoryPosition.width / 2);
 
             let calculatedLeft = categoryCenter - (sliderWidth / 2);
@@ -43,12 +52,12 @@ export default function HeaderTopSlider({
 
             setSliderPosition(calculatedLeft);
         }
-    }, [hoveredCategoryId, categoryPosition]);
+    }, [hoveredCategoryId, categoryPosition, screenWidth, sliderWidth]);
 
     return (
         <div
-            onMouseEnter={() => hoveredCategoryId && handleMouseEnter(hoveredCategoryId)}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={onSliderMouseEnter}
+            onMouseLeave={onSliderMouseLeave}
             className="bg-white items-start absolute border-b top-[2.438rem] overflow-hidden transition-all duration-200 ease-in-out z-50 shadow-lg"
             style={{
                 height: hoveredCategoryId ? "20rem" : "0",

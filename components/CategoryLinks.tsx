@@ -54,6 +54,14 @@ export default function CategorySlider() {
             }
         }, 300);
     };
+
+    const maintainHover = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (hoveredCategoryId) {
+            activeHoverRef.current = hoveredCategoryId;
+        }
+    };
+
     const handleMouseLeave = (id: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -100,8 +108,8 @@ export default function CategorySlider() {
             </div>
 
             <HeaderTopSlider
-                handleMouseEnter={() => handleMouseEnter(hoveredCategoryId!, {} as React.MouseEvent<HTMLLIElement>)}
-                handleMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
+                onSliderMouseEnter={maintainHover}
+                onSliderMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
                 hoveredCategoryId={hoveredCategoryId}
                 subcategories={subcategories}
                 hoveredCategory={hoveredCategory}
