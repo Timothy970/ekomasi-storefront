@@ -13,6 +13,7 @@ export default function CategorySlider() {
     const [hoveredCategory, setHoveredCategory] = useState<Category | undefined>();
     const dispatch = useAppDispatch()
     const activeHoverRef = useRef<string | null>(null);
+    const [categoryPosition, setCategoryPosition] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
     useEffect(() => {
         if (hoveredCategoryId) {
@@ -39,10 +40,13 @@ export default function CategorySlider() {
             }
         }
     }, [subcategories, hoveredCategoryId])
-    const handleMouseEnter = (id: string) => {
+    const handleMouseEnter = (id: string, event: React.MouseEvent<HTMLLIElement>) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
         activeHoverRef.current = id;
+        const element = event.currentTarget;
+        const rect = element.getBoundingClientRect();
+        setCategoryPosition({ left: rect.left, width: rect.width });
 
         timeoutRef.current = setTimeout(() => {
             if (activeHoverRef.current === id) {
@@ -50,6 +54,14 @@ export default function CategorySlider() {
             }
         }, 300);
     };
+
+    const maintainHover = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (hoveredCategoryId) {
+            activeHoverRef.current = hoveredCategoryId;
+        }
+    };
+
     const handleMouseLeave = (id: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -82,7 +94,7 @@ export default function CategorySlider() {
                         {categories?.slice(0, 6).map((cat) => (
                             <li
                                 key={cat.id}
-                                onMouseEnter={() => handleMouseEnter(cat.id)}
+                                onMouseEnter={(e) => handleMouseEnter(cat.id, e)}
                                 onMouseLeave={() => handleMouseLeave(cat.id)}
                                 className="flex w-auto  text-[0.875rem] justify-center items-center rounded cursor-pointer transition"
                             >
@@ -96,11 +108,12 @@ export default function CategorySlider() {
             </div>
 
             <HeaderTopSlider
-                handleMouseEnter={() => handleMouseEnter(hoveredCategoryId!)}
-                handleMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
+                onSliderMouseEnter={maintainHover}
+                onSliderMouseLeave={() => handleMouseLeave(hoveredCategoryId!)}
                 hoveredCategoryId={hoveredCategoryId}
                 subcategories={subcategories}
                 hoveredCategory={hoveredCategory}
+                categoryPosition={categoryPosition}
             />
         </div>
     );

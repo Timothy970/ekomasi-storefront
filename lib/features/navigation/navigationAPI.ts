@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SubcategoryProductsResponse, WarehousesResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SingleReviewResponse, SubcategoryProductsResponse, WarehousesResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -135,6 +135,23 @@ export async function getProductReviews(product_id: string): Promise<ReviewsResp
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ReviewsResponse>;
+    if (err.response) {
+      return err.response.data;
+    }
+
+    return null;
+  }
+}
+
+export async function getProductReview(product_id: string, review_id: string ): Promise<SingleReviewResponse | null> {
+  try {
+    const response = await api.get<SingleReviewResponse>(`products/${product_id}/reviews/${review_id}`, {
+      headers: { requiresAuth: false },
+    });
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<SingleReviewResponse>;
     if (err.response) {
       return err.response.data;
     }

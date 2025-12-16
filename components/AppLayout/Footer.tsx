@@ -19,7 +19,7 @@ export default function Footer() {
         <Image unoptimized src="/images/footer-pattern.png" alt="Footer background" fill priority className="object-cover" />
       </div>
 
-      <div className="relative w-full flex flex-col justify-center items-center py-[3rem] lg:py-[5rem] z-20 h-auto">
+      <div className="relative w-full flex flex-col justify-center items-center z-20 h-auto py-[0.75rem]">
         <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[3rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
           <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
@@ -52,7 +52,7 @@ export default function Footer() {
                 <h3 className='text-[0.875rem] not-italic font-semibold leading-6 mb-[1rem]'>Navigation</h3>
 
                 <ul className="flex flex-col list-none p-0 text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem]">
-                  {categories?.map((cat) => (
+                  {categories?.slice(0, 5).map((cat) => (
                     <div key={cat.id} className='flex flex-col gap-y-[1rem] mb-[1rem]'>
                       <Link href={`/category/${cat?.id}`}>
                         <span className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{cat.name}</span>
@@ -80,7 +80,7 @@ export default function Footer() {
 
         <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block lg:mb-[rem]'></div>
 
-        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[3rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full mt-[2rem] md:mt-[2.5rem]'>
+        <div className='hidden max-w-[90rem] px-[1rem] lg:px-[3rem] lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[2rem] gap-x-[2rem] w-full mt-[0.75rem] md:mt-[1rem]'>
           <div className='flex flex-row gap-x-[1rem]'>
             <div className='flex flex-row '>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -134,15 +134,15 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block mt-[2rem] md:mt-[2.5rem]'></div>
+        <div className='border-b border-[rgba(219,181,181,0.44)] w-screen hidden lg:block mt-[0.75rem] md:mt-[1rem]'></div>
 
-        <div className='hidden w-full lg:flex justify-center items-center mt-[2rem] md:mt-[2.5rem]'>
+        <div className='hidden w-full lg:flex justify-center items-center mt-[0.75rem] md:mt-[1rem]'>
           <Link href={`/`}>
             <Image
               src={"/images/adenzo-logo-footer.png"}
               alt=""
-              width={150}
-              height={25}
+              width={120}
+              height={20}
               priority={true}
               unoptimized
               className='w-auto h-[5rem] shrink-0'
@@ -150,11 +150,11 @@ export default function Footer() {
           </Link>
         </div>
 
-        <div className='w-full flex justify-center items-center mt-[2rem] md:mt-[2.5rem]'>
+        <div className='w-full flex justify-center items-center mt-[0.75rem] md:mt-[1rem]'>
           <h2 className='text-white font-poppins text-sm font-normal not-italic leading-[1.3125rem]'>{homeData?.copyright_text}</h2>
         </div>
 
-        <div className='lg:flex flex-row gap-y-[1rem] hidden gap-x-[2rem] mt-[2rem] md:mt-[2.5rem]'>
+        <div className='lg:flex flex-row gap-y-[1rem] hidden gap-x-[2rem] mt-[0.75rem] md:mt-[1rem]'>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/privacy-policy' target='_blank'>Privacy Policy</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/about-us' target='_blank'>About Us</a>
           <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid' href='/faq' target='_blank'>FAQs</a>

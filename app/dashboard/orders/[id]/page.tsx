@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { getOrderAsync, selectUserOrder } from '@/lib/features/cart/cartSlice';
 import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { ORDER_STATUS } from '@/lib/utils';
+import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -24,6 +24,8 @@ export default function Order() {
     const { openReviewModal } = useReview();
     const { openPaymentModal } = usePayment();
     const [productReviewId, setProductReviewId] = useState<string | undefined>(undefined);
+    const [reviewType, setReviewType] = useState<string>("");
+    const [reviewId, setReviewId] = useState<string | undefined>(undefined);
 
     const handleCloseReturn = () => {
         setWantsReturn(false);
@@ -60,6 +62,7 @@ export default function Order() {
 
         return () => clearInterval(interval);
     }, [params?.id]);
+
 
     if (loading) {
         return (
@@ -160,7 +163,9 @@ export default function Order() {
                     order={order}
                 />
 
-                {order.order_status.toLowerCase() === ORDER_STATUS.COMPLETED.toLowerCase() || order.order_status.toLowerCase() === "delivered" &&
+                {
+                    ((order?.order_status.toLowerCase() === ORDER_STATUS?.COMPLETED.toLowerCase() && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase()) ||
+                        (order?.order_status.toLowerCase() === "delivered" && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase())) &&
                     <div className='w-full mt-[2rem] flex flex-col justify-center items-center'>
                         <div className='flex w-full justify-between max-w-56 items-start border-t border-[#AAA] pt-[1.25rem]'>
                             <h3 className='font-bold'>Return Items?</h3>
@@ -178,12 +183,7 @@ export default function Order() {
                     </div>
                 }
 
-                <OrderDetails
-                    order={order}
-                    toReturn={wantsReturn}
-                    onCloseReturn={handleCloseReturn}
-                    setProductReviewId={setProductReviewId}
-                />
+                <OrderDetails order={order} toReturn={wantsReturn} onCloseReturn={handleCloseReturn} setProductReviewId={setProductReviewId} setReviewType={setReviewType} setReviewId={setReviewId} />
 
                 {openReviewModal && (
                     <ReviewModal
@@ -191,6 +191,8 @@ export default function Order() {
                         setProductReviewId={setProductReviewId}
                         productReviewId={productReviewId}
                         orderId={params?.id}
+                        reviewType={reviewType}
+                        reviewId={reviewId}
                     />
                 )}
 

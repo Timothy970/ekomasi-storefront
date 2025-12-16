@@ -1,28 +1,32 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { X } from 'lucide-react'
 import { Textarea } from './ui/textarea'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { addReviewAsync, selectUserProfile } from '@/lib/features/user/userSlice'
+import { addReviewAsync, editReviewAsync, selectUserProfile } from '@/lib/features/user/userSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { useReview } from '@/app/ClientLayout'
 import { getOrderAsync } from '@/lib/features/cart/cartSlice'
 import { ToastType } from '@/lib/features/toast/toastSlice'
+import { getProductReviewAsync, selectProductReview } from '@/lib/features/navigation/navigationSlice'
 
 interface ReviewModalProps {
     setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>;
     openReviewModal: boolean;
     productReviewId: string | undefined;
     orderId: string
+    reviewType: string
+    reviewId?: string | undefined;
 }
 
-export default function ReviewModal({ setProductReviewId, productReviewId, orderId }: ReviewModalProps) {
+export default function ReviewModal({ setProductReviewId, productReviewId, orderId, reviewType, reviewId }: ReviewModalProps) {
     const [score, setScore] = useState(0);
     const [details, setDetails] = useState("");
     const userProfile = useAppSelector(selectUserProfile)
     const dispatch = useAppDispatch()
     const { openReviewModal, setOpenReviewModal } = useReview()
+    const existingReview = useAppSelector(selectProductReview)
 
     const handleReviewResponse = (message: string, success: ToastType) => {
         dispatch(getOrderAsync(orderId))
@@ -32,6 +36,20 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
         setOpenReviewModal(false)
         setProductReviewId(undefined)
     }
+
+    useEffect(() => {
+        if (reviewType === 'edit' && productReviewId && reviewId) {
+            dispatch(getProductReviewAsync({ product_id: productReviewId, review_id: reviewId }));
+        }
+    }, [reviewType, productReviewId, reviewId, dispatch]);
+
+    useEffect(() => {
+        if (reviewType === 'edit' && existingReview) {
+            setScore(existingReview?.score || 0);
+            setDetails(existingReview?.details || "");
+        }
+    }, [reviewType, existingReview]);
+
 
     const handleSubmit = () => {
         if (score === 0) return triggerToast("Please select a star rating", "error");
@@ -46,6 +64,10 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
             }
 
             if (data?.productId && data?.user_id && data?.details) {
+                if (reviewType === 'edit' && reviewId) {
+                    dispatch(editReviewAsync({ ...data, reviewId, handleReviewResponse }))
+                    return;
+                }
                 dispatch(addReviewAsync({ ...data, handleReviewResponse }))
             }
         }
@@ -67,7 +89,7 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
                 </div>
 
                 <div className='flex flex-col justify-center items-center gap-y-[2rem] w-[23rem]'>
-                    <h2 className='font-bold text-[1.125rem]'>Add your review</h2>
+                    <h2 className='font-bold text-[1.125rem]'>{reviewType === 'edit' ? 'Edit your review' : 'Add your review'}</h2>
 
                     <div className="flex gap-1">
                         {Array.from({ length: 5 }).map((_, i) => {
@@ -109,7 +131,7 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
                     />
 
                     <Button onClick={handleSubmit} className='h-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
-                        Submit Review
+                        {reviewType === 'edit' ? 'Update Review' : 'Submit Review'}
                     </Button>
                 </div>
             </div>

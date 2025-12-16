@@ -14,11 +14,13 @@ import { triggerToast } from '@/app/utils/toastUtils';
 type OrderDetailsProps = {
   order: Order;
   setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>
+  setReviewType: React.Dispatch<React.SetStateAction<string>>
   toReturn?: boolean
+  setReviewId?: React.Dispatch<React.SetStateAction<string | undefined>>
   onCloseReturn?: () => void
 }
 
-export default function OrderDetails({ order, setProductReviewId, toReturn, onCloseReturn }: OrderDetailsProps) {
+export default function OrderDetails({ order, setProductReviewId, setReviewType, toReturn, setReviewId, onCloseReturn }: OrderDetailsProps) {
   const { setOpenReviewModal } = useReview()
   const [checkedValues, setCheckedValues] = useState<string[]>([])
   const [reason, setReason] = useState('');
@@ -114,15 +116,17 @@ export default function OrderDetails({ order, setProductReviewId, toReturn, onCl
                 </div>
 
                 {
-                  ((order?.order_status === ORDER_STATUS?.COMPLETED && order?.delivery_status === DELIVERY_STATUS?.DELIVERED) ||
-                    (order?.order_status === "Delivered" && order?.delivery_status === DELIVERY_STATUS?.DELIVERED)) && <div>
+                  ((order?.order_status.toLowerCase() === ORDER_STATUS?.COMPLETED.toLowerCase() && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase()) ||
+                    (order?.order_status.toLowerCase() === "delivered" && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase())) && <div>
                     <Button onClick={() => {
                       setOpenReviewModal(true)
                       setProductReviewId(item?.product_id)
+                      setReviewType(item?.is_reviewed ? 'edit' : 'write')
+                      setReviewId?.(item?.review_id || undefined)
                     }
                     }
                       className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
-                      Write a review
+                      {item?.is_reviewed ? 'Edit Review' : 'Write a Review'}
                     </Button>
                   </div>
                 }
