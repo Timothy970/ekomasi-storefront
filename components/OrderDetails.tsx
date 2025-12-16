@@ -14,7 +14,7 @@ import { triggerToast } from '@/app/utils/toastUtils';
 type OrderDetailsProps = {
   order: Order;
   setProductReviewId: React.Dispatch<React.SetStateAction<string | undefined>>
-  setReviewType: React.Dispatch<React.SetStateAction<string>>
+  setReviewType?: React.Dispatch<React.SetStateAction<string>>
   toReturn?: boolean
   setReviewId?: React.Dispatch<React.SetStateAction<string | undefined>>
   onCloseReturn?: () => void
@@ -121,7 +121,7 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
                     <Button onClick={() => {
                       setOpenReviewModal(true)
                       setProductReviewId(item?.product_id)
-                      setReviewType(item?.is_reviewed ? 'edit' : 'write')
+                      setReviewType?.(item?.is_reviewed ? 'edit' : 'write')
                       setReviewId?.(item?.review_id || undefined)
                     }
                     }
