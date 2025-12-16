@@ -359,6 +359,7 @@ export default function ProductDetail() {
               }
 
               <Button
+                disabled={product && product?.stock_quantity <= 0}
                 onClick={handleAddToBuyNowCart}
                 className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'
               >

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Category, SubCategory } from "@/lib/features/types";
 import TopSliderProducts from "./TopSliderProducts";
 import { useAppSelector } from "@/lib/hooks";
@@ -11,6 +11,7 @@ type HeaderTopSliderProps = {
     handleMouseLeave: () => void;
     subcategories: SubCategory[];
     hoveredCategory?: Category;
+    categoryPosition: { left: number; width: number };
 };
 
 export default function HeaderTopSlider({
@@ -19,17 +20,44 @@ export default function HeaderTopSlider({
     handleMouseLeave,
     subcategories,
     hoveredCategory,
+    categoryPosition,
 }: HeaderTopSliderProps) {
     const subCategory = useAppSelector(selectSubCategory)
+    const [sliderPosition, setSliderPosition] = useState<number>(0);
+    const sliderWidth = 640;
+
+    useEffect(() => {
+        if (hoveredCategoryId) {
+            const screenWidth = window.innerWidth;
+            const categoryCenter = categoryPosition.left + (categoryPosition.width / 2);
+
+            let calculatedLeft = categoryCenter - (sliderWidth / 2);
+
+            if (calculatedLeft < 24) {
+                calculatedLeft = 24;
+            }
+
+            if (calculatedLeft + sliderWidth > screenWidth - 24) {
+                calculatedLeft = screenWidth - sliderWidth - 24;
+            }
+
+            setSliderPosition(calculatedLeft);
+        }
+    }, [hoveredCategoryId, categoryPosition]);
 
     return (
         <div
             onMouseEnter={() => hoveredCategoryId && handleMouseEnter(hoveredCategoryId)}
             onMouseLeave={handleMouseLeave}
-            className="w-full flex justify-center bg-white items-center absolute border-b top-[2.438rem] lg:px-[3rem] left-0 overflow-hidden transition-all duration-200 ease-in-out z-50"
-            style={{ height: hoveredCategoryId ? "20rem" : "0" }}
+            className="bg-white items-start absolute border-b top-[2.438rem] overflow-hidden transition-all duration-200 ease-in-out z-50 shadow-lg"
+            style={{
+                height: hoveredCategoryId ? "20rem" : "0",
+                left: `${sliderPosition}px`,
+                width: "40rem",
+                maxWidth: "calc(100vw - 3rem)"
+            }}
         >
-            <div className="w-full h-full max-w-[90rem] flex justify-between pt-[1rem]">
+            <div className="w-full h-full flex justify-between pt-[1rem] px-[1.5rem]">
                 <div className="w-[27rem] flex flex-wrap content-start gap-y-[0.69rem]">
                     {subcategories.map((sub) => (
                         <Link key={sub.id} href={`/subcategory/${sub.id}`} className="w-1/1">

@@ -64,7 +64,9 @@ export default function BuyGiftCards() {
     }
 
     useEffect(() => {
-        dispatch(getVoucherDesignsAsync(""));
+        const params = new URLSearchParams();
+        params.set("status", "active");
+        dispatch(getVoucherDesignsAsync(params.toString()));
     }, [dispatch]);
 
     useEffect(() => {
