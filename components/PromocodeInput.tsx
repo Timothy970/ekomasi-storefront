@@ -58,11 +58,6 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
       return;
     }
 
-    if (!locationId) {
-      triggerToast("Please select shipping location", "error");
-      return;
-    }
-
     if (cartId) {
       dispatch(
         applyPromoCodeDiscountAsync({
@@ -75,24 +70,6 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
       );
     }
   };
-
-  useEffect(() => {
-    if (code.trim() === "" || !cartId || !locationId) return;
-
-    const timeoutId = setTimeout(() => {
-      dispatch(
-        applyPromoCodeDiscountAsync({
-          code,
-          cart_id: cartId,
-          location_id: locationId,
-          handlePromocodeRes,
-          isBuyNow: isBuyNow
-        })
-      );
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
-  }, [cartId, locationId, dispatch, isBuyNow]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setPromocode(e.target.value));

@@ -26,7 +26,14 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        setIsFormValid(!!formData.phone_number);
+        const phone = formData.phone_number?.trim();
+        // Valid if it's 12 digits starting with 254 or 10 digits starting with 0 or 9 digits
+        const isValid = phone && (
+            /^254\d{9}$/.test(phone) ||
+            /^0\d{9}$/.test(phone) ||
+            /^\d{9}$/.test(phone)
+        );
+        setIsFormValid(!!isValid);
     }, [formData]);
 
     const handlePhoneBlur = (name: keyof PaymentFormData) => {
@@ -95,13 +102,16 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
             <div
                 className="absolute bg-black/50 z-[65] h-screen w-screen"
                 onClick={() => setOpenPaymentModal(false)}
-            >
-                <div className="flex p-[1rem] pt-[3rem] w-full justify-end">
-                    <X className="text-white" />
-                </div>
-            </div>
+            />
 
-            <div className="bg-white flex hide-scrollbar flex-col items-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70]">
+            <div className="bg-white flex hide-scrollbar flex-col items-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70] relative">
+                <button
+                    onClick={() => setOpenPaymentModal(false)}
+                    className="absolute top-[1rem] right-[1rem] p-[0.25rem] hover:bg-gray-100 rounded"
+                >
+                    <X className="w-5 h-5 text-gray-600" />
+                </button>
+
                 <div className="flex flex-col justify-center items-center gap-y-[2rem] w-[23rem]">
                     <h2 className="font-bold text-[1.125rem]">Enter Payment Details</h2>
 
@@ -116,7 +126,7 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
                         />
 
                         <Button
-                            disabled={status === "loading" || !isFormValid || !blurDone}
+                            disabled={status === "loading" || !isFormValid}
                             onClick={handleSubmit}
                             className="h-[2.5rem] bg-[#AF52DE] text-white rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]"
                         >
