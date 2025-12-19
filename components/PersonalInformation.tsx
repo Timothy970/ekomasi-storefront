@@ -60,42 +60,32 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
     const [deliveryId, setDeliveryId] = useState<string | null>(null);
     const [orderData, setOrderData] = useState<MemberOrderPayload | null>(null);
 
-    const ALL_FIELDS: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
-        { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
-        { key: "lastName", label: "Last Name", requiredFor: ["member", "guest"] },
-        { key: "email", label: "Email", requiredFor: ["member", "guest"] },
-        { key: "phone", label: "Phone Number", requiredFor: ["member", "guest"] },
-        // { key: "country", label: "Country", requiredFor: ["member", "guest"] },
-        // { key: "address", label: "Address", requiredFor: ["member", "guest"] },
-        // { key: "city", label: "City", requiredFor: ["member", "guest"] },
-        { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
-        { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
-        // { key: "apartment", label: "Apartment", requiredFor: ["guest"] },
-        // { key: "postalCode", label: "Postal Code", requiredFor: ["guest"] },
-    ];
-
-    useEffect(() => {
-        if (deliveryType === "ship") {
-            ALL_FIELDS.push({ key: "address", label: "Address", requiredFor: ["member", "guest"] });
-            ALL_FIELDS.push({ key: "country", label: "Country", requiredFor: ["member", "guest"] });
-            ALL_FIELDS.push({ key: "apartment", label: "Apartment", requiredFor: ["guest"] });
-            ALL_FIELDS.push({ key: "city", label: "City", requiredFor: ["member", "guest"] });
-        }
-        if (deliveryType === "in store") {
-            // warehouse_id must be required
-            ALL_FIELDS.push({ key: "warehouse_id", label: "Pick Up Store", requiredFor: ["member", "guest"] });
-        }
-    }, [deliveryType]);
-
     const getRequiredFields = (page: "member" | "guest", deliveryType: "ship" | "in store") => {
+        const baseFields: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
+            { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
+            { key: "lastName", label: "Last Name", requiredFor: ["member", "guest"] },
+            { key: "email", label: "Email", requiredFor: ["member", "guest"] },
+            { key: "phone", label: "Phone Number", requiredFor: ["member", "guest"] },
+            { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
+        ];
 
-        let fields = ALL_FIELDS.filter(field => field.requiredFor.includes(page));
-
-        if (deliveryType === "in store") {
-            fields = fields.filter(field => field.key !== "deliveryLocationId");
+        // Add delivery type specific fields
+        if (deliveryType === "ship") {
+            baseFields.push(
+                { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
+                { key: "address", label: "Address", requiredFor: ["member", "guest"] },
+                { key: "country", label: "Country", requiredFor: ["member", "guest"] },
+                { key: "apartment", label: "Apartment", requiredFor: ["guest"] },
+                { key: "city", label: "City", requiredFor: ["member", "guest"] }
+            );
         }
 
-        return fields;
+        if (deliveryType === "in store") {
+            baseFields.push({ key: "warehouse_id", label: "Pick Up Store", requiredFor: ["member", "guest"] });
+        }
+
+        // Filter by page type
+        return baseFields.filter(field => field.requiredFor.includes(page));
     };
 
     const isEmpty = (value: any) =>
@@ -132,13 +122,15 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         }
 
         const phone = form.paymentPhone?.trim();
-        if (phone && !phone.startsWith("254")) {
+        if (phone) {
+            if (!phone.startsWith("254")) {
             triggerToast("Phone number must start with 254.", "error");
             return false;
-        }
-        if (phone && phone.length !== 12) {
+            }
+            if (phone.length !== 12) {
             triggerToast("Phone number must be 12 digits long.", "error");
             return false;
+            }
         }
 
         if (deliveryType === "in store" && isEmpty(form.warehouse_id)) {
