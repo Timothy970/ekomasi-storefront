@@ -60,28 +60,32 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
     const [deliveryId, setDeliveryId] = useState<string | null>(null);
     const [orderData, setOrderData] = useState<MemberOrderPayload | null>(null);
 
-    const ALL_FIELDS: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
-        { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
-        { key: "lastName", label: "Last Name", requiredFor: ["member", "guest"] },
-        { key: "email", label: "Email", requiredFor: ["member", "guest"] },
-        { key: "phone", label: "Phone Number", requiredFor: ["member", "guest"] },
-        { key: "country", label: "Country", requiredFor: ["member", "guest"] },
-        { key: "address", label: "Address", requiredFor: ["member", "guest"] },
-        { key: "city", label: "City", requiredFor: ["member", "guest"] },
-        { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
-        { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
-        { key: "apartment", label: "Apartment", requiredFor: ["guest"] },
-        { key: "postalCode", label: "Postal Code", requiredFor: ["guest"] },
-    ];
-
     const getRequiredFields = (page: "member" | "guest", deliveryType: "ship" | "in store") => {
-        let fields = ALL_FIELDS.filter(field => field.requiredFor.includes(page));
+        const baseFields: { key: keyof FormData; label: string; requiredFor: ("member" | "guest")[] }[] = [
+            { key: "firstName", label: "First Name", requiredFor: ["member", "guest"] },
+            { key: "lastName", label: "Last Name", requiredFor: ["member", "guest"] },
+            { key: "email", label: "Email", requiredFor: ["member", "guest"] },
+            { key: "phone", label: "Phone Number", requiredFor: ["member", "guest"] },
+            { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
+        ];
 
-        if (deliveryType === "in store") {
-            fields = fields.filter(field => field.key !== "deliveryLocationId");
+        // Add delivery type specific fields
+        if (deliveryType === "ship") {
+            baseFields.push(
+                { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
+                { key: "address", label: "Address", requiredFor: ["member", "guest"] },
+                { key: "country", label: "Country", requiredFor: ["member", "guest"] },
+                { key: "apartment", label: "Apartment", requiredFor: ["guest"] },
+                { key: "city", label: "City", requiredFor: ["member", "guest"] }
+            );
         }
 
-        return fields;
+        if (deliveryType === "in store") {
+            baseFields.push({ key: "warehouse_id", label: "Pick Up Store", requiredFor: ["member", "guest"] });
+        }
+
+        // Filter by page type
+        return baseFields.filter(field => field.requiredFor.includes(page));
     };
 
     const isEmpty = (value: any) =>
@@ -98,11 +102,11 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         }
 
         if (isEmpty(form.email) && isEmpty(form.phone)) return false;
-        
+
         return true;
     };
 
-    const validateForm = (form: FormData): boolean => {
+    const validateForm = (form: FormData, deliveryType: "ship" | "in store"): boolean => {
         const requiredFields = getRequiredFields(page, deliveryType);
 
         for (const { key, label } of requiredFields) {
@@ -118,11 +122,21 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         }
 
         const phone = form.paymentPhone?.trim();
-        if (phone && !phone.startsWith("254")) {
+        if (phone) {
+            if (!phone.startsWith("254")) {
             triggerToast("Phone number must start with 254.", "error");
             return false;
+            }
+            if (phone.length !== 12) {
+            triggerToast("Phone number must be 12 digits long.", "error");
+            return false;
+            }
         }
 
+        if (deliveryType === "in store" && isEmpty(form.warehouse_id)) {
+            triggerToast("Please select a pick up store.", "error");
+            return false;
+        }
         return true;
     };
 
@@ -273,7 +287,7 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
             return;
         }
 
-        if (!validateForm(formData)) {
+        if (!validateForm(formData, deliveryType)) {
             return;
         }
 
@@ -450,119 +464,122 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
                             <span>In Store</span>
                         </Button>
                     </div>
-
-                    {address && address.length > 0 ? (
-                        <div className="flex flex-col gap-y-[0.5rem]">
-                            <span className="text-[0.875rem] font-semibold">Saved Address</span>
-
-                            <div className='flex gap-x-[0.5rem]'>
-                                <Select
-                                    defaultValue={address[0].address_id}
-                                    onValueChange={(value) => {
-                                        const selected = address.find((a) => a.address_id === value);
-                                        if (selected) {
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                address: selected.address ?? "",
-                                                apartment: selected.apartment ?? "",
-                                                city: selected.city ?? "",
-                                                country: selected.country ?? "",
-                                                postalCode: selected.zip_code ?? "",
-                                            }));
-                                        }
-                                    }}
-                                >
-                                    <SelectTrigger className="w-full h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]">
-                                        <SelectValue placeholder="Choose an address" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {address.map((addr) => (
-                                            <SelectItem key={addr.address_id} value={addr.address_id}>
-                                                {addr.address}, {addr.city}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-
-                                <Button
-                                    onClick={handleEditAddressClick}
-                                    className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
-                                >
-                                    <ArrowUpRight />
-                                    <span>Edit Address</span>
-                                </Button>
-                            </div>
-                        </div>
-                    ) : (
+                    {deliveryType === "ship" && (
                         <>
-                            {
-                                token && <div className="flex items-center justify-between">
-                                    <p className="text-[0.875rem] text-gray-600">No saved addresses found.</p>
+                            {address && address.length > 0 ? (
+                                <div className="flex flex-col gap-y-[0.5rem]">
+                                    <span className="text-[0.875rem] font-semibold">Saved Address</span>
 
-                                    <Button
-                                        onClick={() => router.push("/dashboard/address")}
-                                        className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
-                                    >
-                                        <ArrowUpRight />
-                                        <span>Add Address</span>
-                                    </Button>
+                                    <div className='flex gap-x-[0.5rem]'>
+                                        <Select
+                                            defaultValue={address[0].address_id}
+                                            onValueChange={(value) => {
+                                                const selected = address.find((a) => a.address_id === value);
+                                                if (selected) {
+                                                    setFormData((prev) => ({
+                                                        ...prev,
+                                                        address: selected.address ?? "",
+                                                        apartment: selected.apartment ?? "",
+                                                        city: selected.city ?? "",
+                                                        country: selected.country ?? "",
+                                                        postalCode: selected.zip_code ?? "",
+                                                    }));
+                                                }
+                                            }}
+                                        >
+                                            <SelectTrigger className="w-full h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]">
+                                                <SelectValue placeholder="Choose an address" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {address.map((addr) => (
+                                                    <SelectItem key={addr.address_id} value={addr.address_id}>
+                                                        {addr.address}, {addr.city}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+
+                                        <Button
+                                            onClick={handleEditAddressClick}
+                                            className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                                        >
+                                            <ArrowUpRight />
+                                            <span>Edit Address</span>
+                                        </Button>
+                                    </div>
                                 </div>
-                            }
+                            ) : (
+                                <>
+                                    {
+                                        token && <div className="flex items-center justify-between">
+                                            <p className="text-[0.875rem] text-gray-600">No saved addresses found.</p>
+
+                                            <Button
+                                                onClick={() => router.push("/dashboard/address")}
+                                                className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                                            >
+                                                <ArrowUpRight />
+                                                <span>Add Address</span>
+                                            </Button>
+                                        </div>
+                                    }
+                                </>
+                            )}
+
+                            <div className='flex flex-col gap-y-[0.5rem]'>
+                                <span className='text-[0.875rem] font-semibold'>Country</span>
+                                <CountrySelect formData={formData} setFormData={setFormData} />
+                            </div>
+
+                            <div className='flex flex-col gap-y-[0.5rem]'>
+                                <span className='text-[0.875rem] font-semibold'>Adress</span>
+                                <Input
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
+                                    required
+                                    placeholder='Address*'
+                                    className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                                />
+                            </div>
+
+                            <div className='flex flex-col gap-y-[0.5rem]'>
+                                <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc.(optional)</span>
+                                <Input
+                                    name="apartment"
+                                    value={formData.apartment}
+                                    onChange={handleChange}
+                                    placeholder='Apartment, suite, etc.(optional)'
+                                    className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                                />
+                            </div>
+
+                            <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
+                                <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                                    <span className='text-[0.875rem] font-semibold'>City</span>
+                                    <Input
+                                        name="city"
+                                        value={formData.city}
+                                        required
+                                        onChange={handleChange}
+                                        placeholder='City'
+                                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                                    />
+                                </div>
+
+                                <div className='flex flex-col gap-y-[0.5rem] w-full'>
+                                    <span className='text-[0.875rem] font-semibold'>ZIP / Postal code (optional)</span>
+                                    <Input
+                                        name="postalCode"
+                                        value={formData.postalCode}
+                                        onChange={handleChange}
+                                        placeholder='Postal code (optional)'
+                                        className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
+                                    />
+                                </div>
+                            </div>
                         </>
                     )}
-
-                    <div className='flex flex-col gap-y-[0.5rem]'>
-                        <span className='text-[0.875rem] font-semibold'>Country</span>
-                        <CountrySelect formData={formData} setFormData={setFormData} />
-                    </div>
-
-                    <div className='flex flex-col gap-y-[0.5rem]'>
-                        <span className='text-[0.875rem] font-semibold'>Adress</span>
-                        <Input
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            required
-                            placeholder='Address*'
-                            className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                        />
-                    </div>
-
-                    <div className='flex flex-col gap-y-[0.5rem]'>
-                        <span className='text-[0.875rem] font-semibold'>Apartment, suite, etc.(optional)</span>
-                        <Input
-                            name="apartment"
-                            value={formData.apartment}
-                            onChange={handleChange}
-                            placeholder='Apartment, suite, etc.(optional)'
-                            className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                        />
-                    </div>
-
-                    <div className='flex flex-col gap-y-[1rem] md:gap-y-0 md:flex-row gap-x-[1rem] w-full justify-between'>
-                        <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                            <span className='text-[0.875rem] font-semibold'>City</span>
-                            <Input
-                                name="city"
-                                value={formData.city}
-                                required
-                                onChange={handleChange}
-                                placeholder='City'
-                                className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                            />
-                        </div>
-
-                        <div className='flex flex-col gap-y-[0.5rem] w-full'>
-                            <span className='text-[0.875rem] font-semibold'>ZIP / Postal code (optional)</span>
-                            <Input
-                                name="postalCode"
-                                value={formData.postalCode}
-                                onChange={handleChange}
-                                placeholder='Postal code (optional)'
-                                className='p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]'
-                            />
-                        </div>
-                    </div>
 
                     {
                         deliveryType === "ship" && <div className='flex flex-col gap-y-[0.5rem] w-full'>

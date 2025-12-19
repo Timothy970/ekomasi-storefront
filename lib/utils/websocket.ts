@@ -22,6 +22,7 @@ export function connectWebSocket(
   const ws = new WebSocket(fullUrl);
 
   ws.onopen = () => {
+    console.log("WebSocket connection opened");
     events.onOpen?.();
   };
 
@@ -35,6 +36,7 @@ export function connectWebSocket(
   };
 
   ws.onerror = (event) => {
+    console.error("WebSocket error observed:", event);
     events.onError?.(event);
   };
 
