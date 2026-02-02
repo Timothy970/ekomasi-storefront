@@ -6,6 +6,8 @@ import { customParser } from "@/lib/utils";
 
 export default function CategoryProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
+  const [mediaType, setMediaType] = useState<"image" | "video">("image");
 
   useEffect(() => {
     if (product?.id) {
@@ -17,6 +19,32 @@ export default function CategoryProductCard({ product }: { product: Product }) {
     }
   }, [product?.id, product?.product_id]);
 
+  useEffect(() => {
+    if (product?.urls && product.urls.length > 0) {
+      // First, try to find gallery or thumbnail images
+      const imageMedia = product.urls.find(
+        (media) => media.type === "gallery" || media.type === "thumbnail"
+      );
+
+      if (imageMedia) {
+        setMediaUrl(imageMedia.url);
+        setMediaType("image");
+      } else {
+        // If no gallery/thumbnail, look for video
+        const videoMedia = product.urls.find((media) => media.type === "video");
+
+        if (videoMedia) {
+          setMediaUrl(videoMedia.url);
+          setMediaType("video");
+        } else {
+          // Fallback to first url if available
+          setMediaUrl(product.urls[0]?.url || null);
+          setMediaType("image");
+        }
+      }
+    }
+  }, [product?.urls]);
+
   if (!productId) {
     return null;
   }
@@ -27,14 +55,25 @@ export default function CategoryProductCard({ product }: { product: Product }) {
       className="block bg-white overflow-hidden cursor-pointer"
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
-        {product.urls?.[0]?.url && (
-          <Image
-            src={product.urls[0].url}
-            alt=""
-            unoptimized
-            fill
-            className="product-card object-cover z-0"
+        {mediaType === "video" && mediaUrl ? (
+          <video
+            src={mediaUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="product-card object-cover z-0 w-full h-full"
           />
+        ) : (
+          mediaUrl && (
+            <Image
+              src={mediaUrl}
+              alt=""
+              unoptimized
+              fill
+              className="product-card object-cover z-0"
+            />
+          )
         )}
 
         {

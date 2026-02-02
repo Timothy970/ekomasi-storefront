@@ -91,6 +91,12 @@ export default function CategorySlider() {
                             </span>
                         </Link>
 
+                        <Link href={"/bundles"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
+                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
+                                Bundles
+                            </span>
+                        </Link>
+
                         {categories?.slice(0, 6).map((cat) => (
                             <li
                                 key={cat.id}

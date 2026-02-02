@@ -54,8 +54,8 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
 
                     <div className="w-full flex text-center items-center justify-center z-[70] flex-col">
                         <div className='flex flex-col gap-y-[1rem]'>
-                            <h2 className='text-[#34C759] text-[3rem]'>Success!</h2>
-                            <p className='text-base font-[400]'>Yay! The code for your e-voucher is below, and has also been emailed to you at {recipientEmail} </p>
+                            <h2 className='text-[#34C759] text-[3rem]'>Almost There!</h2>
+                            <p className='text-base font-[400]'>Your e-voucher code will be emailed to {recipientEmail} once you complete the payment.</p>
                         </div>
 
                         {

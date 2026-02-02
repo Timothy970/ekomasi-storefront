@@ -12,15 +12,17 @@ export default function Home() {
   return (
     <Navigation>
       <HomeBanner />
-      <HomeCategories />
-      <div className="px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full">
+      <div className="px-[1rem] lg:px-[3rem] max-w-[95%] mx-auto w-full">
+        <HomeCategories />
+      </div>
+      <div className="px-[1rem] lg:px-[3rem] max-w-[95%] mx-auto w-full">
         <NowTrending title="Now Trending" />
       </div>
 
-      <div className="px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full">
+      <div className="px-[1rem] lg:px-[3rem] max-w-[95%] mx-auto w-full">
         <FlashDeals title="Flash Sales" />
       </div>
-      
+
       <CustomerTestimonials />
       <TalkToUs />
       <MothersDayBundle />

@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react'
 import NowTrending from "@/components/NowTrending";
 import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync, selectProductBundles, getProductBundlesAsync, selectProductReviews, selectReviewPagination } from '@/lib/features/navigation/navigationSlice'
+import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync, selectProductReviews, selectReviewPagination } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
@@ -22,7 +22,6 @@ import { ShoppingBag } from 'lucide-react'
 import Accordion from '@/components/Accordion'
 import { ProductDetailsReviews } from '@/components/ProductDetailsReviews'
 import ProductFeatureSection from '@/components/ProductFeatureSection'
-import BundleList from '@/components/BundleList'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -41,7 +40,6 @@ export default function ProductDetail() {
   const { setIsBuyNow } = useIsBuyNow()
   const url = typeof window !== "undefined" ? window.location.href : "";
   const [warranty, setWarranty] = useState("");
-  const productBundles = useAppSelector(selectProductBundles);
   const reviews = useAppSelector(selectProductReviews)
   const reviewPagination = useAppSelector(selectReviewPagination)
   const brandVariant = product?.product_variants?.find(v => v.variant_type === "brand");
@@ -107,7 +105,6 @@ export default function ProductDetail() {
       dispatch(getProductAsync(params?.product_id))
       dispatch(getProductReviewsAsync(params?.product_id))
     }
-    dispatch(getProductBundlesAsync())
 
   }, [dispatch, params?.product_id])
 
@@ -437,12 +434,6 @@ export default function ProductDetail() {
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <ProductDetailsReviews />
         </div>
-        {/* 
-        <div className='w-full mt-[2rem] md:mt-[2.5rem] px-[1rem] md:px-[3rem]'>
-          {
-            productBundles?.bundles && productBundles?.bundles?.length > 0 && <BundleList bundles={productBundles?.bundles} />
-          }
-        </div> */}
 
         <div className='px-[1rem] lg:px-[3rem] mb-[2rem] lg:mb-[2.5rem]'>
           <NowTrending title="You may also like" />

@@ -13,6 +13,7 @@ import NextImage from '@/components/NextImage'
 import { useVoucher } from '@/app/ClientLayout'
 import SuccessModal from '@/components/SuccessModal'
 import { ToastType } from '@/lib/features/toast/toastSlice'
+import MpesaPaymentModal from '@/components/MpesaPaymentModal'
 
 export default function BuyGiftCards() {
     const [voucherType, setSelectVoucherType] = useState('');
@@ -21,8 +22,8 @@ export default function BuyGiftCards() {
     const [recipientEmail, setRecipientEmail] = useState('');
     const [senderName, setSenderName] = useState('');
     const [deliveryDate, setDeliveryDate] = useState('');
-    const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
+    const [showMpesaModal, setShowMpesaModal] = useState(false);
     const dispatch = useAppDispatch();
     const voucherDesigns = useAppSelector(selectDesigns);
     const [designImage, setDesignImage] = useState("")
@@ -39,7 +40,6 @@ export default function BuyGiftCards() {
         { key: "from_name", label: "Sender Name" },
         { key: "delivery_time", label: "Delivery Time" },
         { key: "message", label: "Message" },
-        { key: "phone_number", label: "Phone Number" },
     ];
 
     function validateRoleBeforeSave(user: CreateVoucherPayload): boolean {
@@ -152,11 +152,30 @@ export default function BuyGiftCards() {
     const handleCreate = async () => {
         if (!validateAmount()) return;
 
-        const normalizedPhone = normalizePhoneForSave(phone);
+        const payload: CreateVoucherPayload = {
+            design_id: voucherType,
+            amount: Number.parseInt(discount, 10),
+            to_name: recipientName,
+            to_email: recipientEmail,
+            from_name: senderName,
+            delivery_time: deliveryDate,
+            message: message,
+            phone_number: "", // Will be filled from modal
+            payment_method: "mpesa",
+        };
+
+        if (!validateRoleBeforeSave(payload)) return;
+
+        // Show Mpesa modal to get phone number
+        setShowMpesaModal(true);
+    };
+
+    const handlePhoneSubmit = async (phoneNumber: string) => {
+        const normalizedPhone = normalizePhoneForSave(phoneNumber);
 
         if (!isValidKenyanPhone(normalizedPhone)) {
             triggerToast("Please enter a valid Kenyan phone number starting with 0 or 254.", "error")
-            return
+            return;
         }
 
         const payload: CreateVoucherPayload = {
@@ -171,13 +190,8 @@ export default function BuyGiftCards() {
             payment_method: "mpesa",
         };
 
-        if (!validateRoleBeforeSave(payload)) return;
-
-        if (payload) {
-            await dispatch(createVoucherAsync({ payload, handleVoucherPurchase }));
-        } else {
-            triggerToast('Please fill in the form!', 'error');
-        }
+        setShowMpesaModal(false);
+        await dispatch(createVoucherAsync({ payload, handleVoucherPurchase }));
     };
 
     return (
@@ -358,20 +372,6 @@ export default function BuyGiftCards() {
                                 </div>
                             </div>
 
-                            <div className='flex flex-col gap-y-[1rem] w-full'>
-                                <div className='flex flex-col gap-y-[0.75rem] w-full'>
-                                    <span className='font-[400]'>Enter your phone number:</span>
-
-                                    <Input
-                                        placeholder='Phone'
-                                        className='h-[2.5rem]'
-                                        value={phone}
-                                        onChange={e => setPhone(e.target.value)}
-                                        onBlur={() => setPhone(normalizePhoneTo254(phone))}
-                                    />
-                                </div>
-                            </div>
-
                             <Textarea
                                 placeholder='Message'
                                 className='min-h-[10rem] w-full mt-[1rem]'
@@ -399,6 +399,14 @@ export default function BuyGiftCards() {
             <SuccessModal
                 designImage={designImage}
                 recipientEmail={recipientEmail}
+            />
+
+            <MpesaPaymentModal
+                isOpen={showMpesaModal}
+                onClose={() => setShowMpesaModal(false)}
+                totalAmount={Number.parseInt(discount, 10) || 0}
+                type="mpesa"
+                onApplyVoucher={(phoneNumber) => handlePhoneSubmit(phoneNumber)}
             />
         </Navigation>
     )

@@ -59,6 +59,7 @@ export interface Image {
   image_id: string;
   url: string;
   is_primary: boolean;
+  type: string;
 }
 
 export interface Warranty {
@@ -910,13 +911,7 @@ export interface ReturnResponse {
   status_code: number;
 }
 
-export interface Bundle {
-  bundle_description: string;
-  bundle_id: string;
-  bundle_name: string;
-  bundle_price: number;
-  compare_at_price: number;
-  keep_selling_when_out_of_stock: boolean;
+export interface Bundle extends Omit<Product, 'products'> {
   products: Product[];
 }
 

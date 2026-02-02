@@ -109,9 +109,9 @@ export async function getDealById(deal_id: string): Promise<DealResponse | null>
   }
 }
 
-export async function getProductBundles(): Promise<ProductBundlesResponse | null> {
+export async function getProductBundles(query: string): Promise<ProductBundlesResponse | null> {
   try {
-    const response = await api.get<ProductBundlesResponse>(`products/bundles`, {
+    const response = await api.get<ProductBundlesResponse>(`products/bundles?${query}`, {
       headers: { requiresAuth: true },
     });
 

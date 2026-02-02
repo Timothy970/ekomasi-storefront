@@ -5,14 +5,57 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function HomeCategories() {
   const categories = useAppSelector(selectCategories)
   const router = useRouter()
+  const [offsetX, setOffsetX] = useState(0);
+  const animationRef = useRef<number | null>(null);
+  const GAP_PX = 16;
+
+  // Duplicate categories for seamless loop
+  const duplicatedCategories = useMemo(() => {
+    if (!categories?.length) return [];
+    return [...categories.slice(0, 10), ...categories.slice(0, 10), ...categories.slice(0, 10)];
+  }, [categories]);
+
+  useEffect(() => {
+    if (!duplicatedCategories.length) return;
+
+    const animate = () => {
+      setOffsetX((prevOffset) => {
+        // Calculate single set width (10 categories + gaps)
+        const cardWidth = window.innerWidth < 640 ? 128 : window.innerWidth < 768 ? 160 : window.innerWidth < 1024 ? 192 : 208;
+        const singleSetWidth = 10 * (cardWidth + GAP_PX);
+
+        const newOffset = prevOffset + 0.5; // Adjust speed here (higher = faster)
+
+        // Reset when we've scrolled through one complete set
+        if (newOffset >= singleSetWidth) {
+          return 0;
+        }
+
+        return newOffset;
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [duplicatedCategories.length]);
 
   return (
     <div className="w-full flex justify-center items-center relative z-0 pt-[6rem]">
-      <div className="w-full absolute top-0 h-[14rem]">
+      {/* <div className="w-full absolute top-0 h-[14rem]">
         <div className="relative w-full">
           <svg
             viewBox="0 0 1440 240"
@@ -116,9 +159,9 @@ export default function HomeCategories() {
             </defs>
           </svg>
         </div>
-      </div>
+      </div> */}
 
-      <div className="max-w-[90rem] w-full px-[1rem] lg:px-[3rem] z-10 bg-transparent">
+      <div className="max-w-[90rem] w-full">
         <div className="flex justify-between items-center">
           <div className="flex flex-col gap-y-[1rem]">
             <h2 className="text-[2.25rem] not-italic font-bold leading-[2.1rem]">Categories</h2>
@@ -142,28 +185,41 @@ export default function HomeCategories() {
             </svg>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-[0.5rem] gap-y-9 md:gap-x-6 lg:gap-x-[0.938rem] sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 items-stretch">
-            {categories?.slice(0, 10)?.map((category) => (
-              <Link key={category.id} href={`/category/${category?.id}`}>
-                <div className="overflow-hidden flex flex-col justify-center items-center">
-                  <div className="relative w-full h-auto min-h-[18rem] sm:min-h-[18rem] md:min-h-[20rem]">
-                    <Image
-                      src={category?.image_url}
-                      alt={category?.name}
-                      fill
-                      unoptimized
-                      style={{ objectFit: "cover" }}
-                      className="product-card h-full w-full"
-                      priority
-                    />
-                  </div>
+          <div
+            className="overflow-hidden"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <div
+              className="flex flex-nowrap gap-[0.5rem]"
+              style={{
+                transform: `translateX(-${offsetX}px)`,
+                transition: 'none'
+              }}
+            >
+              {duplicatedCategories?.map((category, i) => (
+                <Link key={`${category.id}-${i}`} href={`/category/${category?.id}`}>
+                  <div
+                    className="shrink-0 overflow-hidden bg-white w-[8rem] sm:w-[10rem] md:w-[12rem] lg:w-[13rem]"
+                  >
+                    <div className="relative w-full h-[10rem] sm:h-[12rem] md:h-[13rem] lg:h-[14rem]">
+                      <Image
+                        src={category?.image_url}
+                        alt={category?.name}
+                        fill
+                        unoptimized
+                        style={{ objectFit: "cover" }}
+                        className="product-card h-full w-full"
+                        priority
+                      />
+                    </div>
 
-                  <div className="px-2 pb-3 flex flex-col gap-[1rem] mt-[0.75rem] w-full justify-center lg:items-center">
-                    <h3 className="text-[0.875rem] lg:text-base font-bold lg:font-light leading-[1.5rem]">{category.name}</h3>
+                    <div className="px-2 pb-3 flex flex-col gap-[1rem] mt-[0.75rem] w-full justify-center lg:items-center">
+                      <h3 className="text-[0.75rem] lg:text-sm font-bold lg:font-light leading-[1.2rem]">{category.name}</h3>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>

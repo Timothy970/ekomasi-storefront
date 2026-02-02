@@ -15,22 +15,22 @@ export default function BundleList({ bundles }: Props) {
                     key={index.toString()}
                     className="border rounded-2xl shadow-sm bg-white p-5"
                 >
-                    <h2 className="text-lg font-semibold">{bundle.bundle_name}</h2>
+                    <h2 className="text-lg font-semibold">{bundle.name}</h2>
 
                     <p
                         className="text-sm text-gray-600 mt-2 line-clamp-2"
-                        dangerouslySetInnerHTML={{ __html: bundle.bundle_description }}
+                        dangerouslySetInnerHTML={{ __html: bundle.description }}
                     />
 
-                    <div className="mt-3 flex items-center gap-3">
-                        <span className="text-xl font-bold">${bundle.bundle_price}</span>
+                    {/* <div className="mt-3 flex items-center gap-3">
+                        <span className="text-xl font-bold">${bundle.price}</span>
 
                         {bundle.compare_at_price > bundle.bundle_price && (
                             <span className="line-through text-gray-400">
                                 ${bundle.compare_at_price}
                             </span>
                         )}
-                    </div>
+                    </div> */}
 
                     {/* Add first product image */}
                     {bundle.products?.[0]?.urls?.[0]?.url && (
