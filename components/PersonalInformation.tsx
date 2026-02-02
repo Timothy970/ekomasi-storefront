@@ -69,7 +69,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
             { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
         ];
 
-        // Add delivery type specific fields
         if (deliveryType === "ship") {
             baseFields.push(
                 { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
@@ -124,12 +123,12 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         const phone = form.paymentPhone?.trim();
         if (phone) {
             if (!phone.startsWith("254")) {
-            triggerToast("Phone number must start with 254.", "error");
-            return false;
+                triggerToast("Phone number must start with 254.", "error");
+                return false;
             }
             if (phone.length !== 12) {
-            triggerToast("Phone number must be 12 digits long.", "error");
-            return false;
+                triggerToast("Phone number must be 12 digits long.", "error");
+                return false;
             }
         }
 
