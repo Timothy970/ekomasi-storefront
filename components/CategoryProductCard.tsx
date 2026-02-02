@@ -21,7 +21,6 @@ export default function CategoryProductCard({ product }: { product: Product }) {
 
   useEffect(() => {
     if (product?.urls && product.urls.length > 0) {
-      // First, try to find gallery or thumbnail images
       const imageMedia = product.urls.find(
         (media) => media.type === "gallery" || media.type === "thumbnail"
       );
@@ -30,14 +29,12 @@ export default function CategoryProductCard({ product }: { product: Product }) {
         setMediaUrl(imageMedia.url);
         setMediaType("image");
       } else {
-        // If no gallery/thumbnail, look for video
         const videoMedia = product.urls.find((media) => media.type === "video");
 
         if (videoMedia) {
           setMediaUrl(videoMedia.url);
           setMediaType("video");
         } else {
-          // Fallback to first url if available
           setMediaUrl(product.urls[0]?.url || null);
           setMediaType("image");
         }
