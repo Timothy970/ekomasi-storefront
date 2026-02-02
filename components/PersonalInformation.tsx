@@ -83,7 +83,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
             baseFields.push({ key: "warehouse_id", label: "Pick Up Store", requiredFor: ["member", "guest"] });
         }
 
-        // Filter by page type
         return baseFields.filter(field => field.requiredFor.includes(page));
     };
 
