@@ -304,7 +304,8 @@ export const cartSlice = createAppSlice({
 					page: string,
 					fail: boolean,
 					message: string,
-					delivery_id: string
+					delivery_id: string,
+					skipPayment?: boolean
 				) => void,
 				extraPaymentPayload: { phone: string },
 				triggerToast: (message: string, type: ToastType) => void,
@@ -316,22 +317,27 @@ export const cartSlice = createAppSlice({
 				}
 
 				if (response?.data?.order_id) {
-					let paymentData = {
-						"phone_number": extraPaymentPayload?.phone,
-						"order_id": response?.data?.order_id,
-					}
-
-					const paymentRes = await makePayment(paymentData)
-
-					if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
-						redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id)
-					} else {
-						if (paymentRes?.data?.errorMessage) {
-							redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage, response?.data?.delivery_id)
-						} else {
-							redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order successfully placed!', response?.data?.delivery_id)
+					if (response?.data?.total > 0) {
+						let paymentData = {
+							"phone_number": extraPaymentPayload?.phone,
+							"order_id": response?.data?.order_id,
 						}
+
+						const paymentRes = await makePayment(paymentData)
+
+						if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
+							redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id)
+						} else {
+							if (paymentRes?.data?.errorMessage) {
+								redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage, response?.data?.delivery_id)
+							} else {
+								redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order successfully placed!', response?.data?.delivery_id)
+							}
+						}
+					} else {
+						redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id, true)
 					}
+
 				}
 
 				return response;

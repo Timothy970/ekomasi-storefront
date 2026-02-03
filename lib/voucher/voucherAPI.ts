@@ -14,7 +14,7 @@ export async function getVoucherDesigns(query: string): Promise<VoucherDesignsRe
 
 export async function getVouchers(query: string): Promise<VouchersResponse> {
     try {
-        const response = await api.get<VouchersResponse>(`vouchers/me${query}`, { headers: { requiresAuth: true } });
+        const response = await api.get<VouchersResponse>(`vouchers/me?${query}`, { headers: { requiresAuth: true } });
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

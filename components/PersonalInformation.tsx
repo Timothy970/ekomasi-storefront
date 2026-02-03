@@ -69,7 +69,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
             { key: "paymentPhone", label: "Payment Phone Number", requiredFor: ["member", "guest"] },
         ];
 
-        // Add delivery type specific fields
         if (deliveryType === "ship") {
             baseFields.push(
                 { key: "deliveryLocationId", label: "Delivery Location", requiredFor: ["member", "guest"] },
@@ -84,7 +83,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
             baseFields.push({ key: "warehouse_id", label: "Pick Up Store", requiredFor: ["member", "guest"] });
         }
 
-        // Filter by page type
         return baseFields.filter(field => field.requiredFor.includes(page));
     };
 
@@ -124,12 +122,12 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         const phone = form.paymentPhone?.trim();
         if (phone) {
             if (!phone.startsWith("254")) {
-            triggerToast("Phone number must start with 254.", "error");
-            return false;
+                triggerToast("Phone number must start with 254.", "error");
+                return false;
             }
             if (phone.length !== 12) {
-            triggerToast("Phone number must be 12 digits long.", "error");
-            return false;
+                triggerToast("Phone number must be 12 digits long.", "error");
+                return false;
             }
         }
 
@@ -293,7 +291,7 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
 
         let personalFormDetails = orderPayload(formData)
 
-        if (cart?.total) {
+        if (cart) {
             let extraPaymentPayload = {
                 phone: formData?.paymentPhone ?? "",
             }
@@ -312,7 +310,18 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         }
     };
 
-    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, fail = false, message = '', delivery_id: string) => {
+    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, fail = false, message = '', delivery_id: string, skipPayment = false) => {
+        if (skipPayment) {
+            triggerToast("Order placed successfully!", "success");
+            dispatch(clearCartState());
+            if (page === "member") {
+                router.push(`/dashboard/orders/${order_id}`)
+            } else if (page === "guest") {
+                router.push(`/guest/orders/${order_id}/${data?.guest_personal_details?.email}/${data?.guest_personal_details?.phone}`)
+            }
+            return;
+        }
+
         if (!fail) {
             processPayment?.(true);
             setDeliveryId(delivery_id);
@@ -323,8 +332,6 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
         } else {
             triggerToast(`${message}`, "success");
         }
-
-
     }
 
     const handlePaymentConfirmed = async () => {

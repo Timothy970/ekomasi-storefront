@@ -256,8 +256,8 @@ export const navigationSlice = createAppSlice({
 			}
 		),
 		getProductBundlesAsync: create.asyncThunk(
-			async () => {
-				const response = await getProductBundles();
+			async ({ query }: { query: string }) => {
+				const response = await getProductBundles(query);
 				return response;
 			},
 			{
@@ -269,12 +269,15 @@ export const navigationSlice = createAppSlice({
 
 					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
 						state.productBundles = action.payload.data;
+						state.pagination = action.payload.data?.pagination;
 					} else {
 						state.productBundles = null;
+						state.pagination = null;
 					}
 				},
 				rejected: (state) => {
 					state.productBundles = null;
+					state.pagination = null;
 					state.productStatus = "failed";
 				},
 			}

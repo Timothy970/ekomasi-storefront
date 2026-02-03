@@ -13,11 +13,14 @@ import { triggerToast } from '@/app/utils/toastUtils';
 import { deleteProductFromWishList } from '@/lib/features/wishlist/wishlistAPI';
 
 export default function ProductImages() {
-    const [current, setCurrent] = useState(0);
     const product = useAppSelector(selectProduct)
     const token = useAppSelector(selectUserToken)
     const dispatch = useAppDispatch()
     const wishStatus = useAppSelector(selectStatus)
+
+    // Find video index to prioritize it, otherwise start at 0
+    const videoIndex = product?.urls?.findIndex(media => media.type === "video") ?? -1;
+    const [current, setCurrent] = useState(videoIndex >= 0 ? videoIndex : 0);
 
     const prevSlide = () => {
         const urlsLength = product?.urls?.length ? product?.urls.length - 1 : 0;
@@ -75,13 +78,30 @@ export default function ProductImages() {
                           ${index === current ? "border border-[#E8298A] scale-105" : "opacity-70 hover:opacity-100"}`}
                             onClick={() => setCurrent(index)}
                         >
-                            <Image
-                                src={image?.url}
-                                alt=""
-                                fill
-                                unoptimized
-                                className="object-cover rounded-md"
-                            />
+                            {image.type === "video" ? (
+                                <>
+                                    <video
+                                        src={image?.url}
+                                        className="object-cover rounded-md w-full h-full"
+                                        muted
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="bg-black bg-opacity-50 rounded-full p-2">
+                                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <Image
+                                    src={image?.url}
+                                    alt=""
+                                    fill
+                                    unoptimized
+                                    className="object-cover rounded-md"
+                                />
+                            )}
                         </div>
                     ))}
                 </div>
@@ -114,11 +134,22 @@ export default function ProductImages() {
                             className="relative h-[30rem] md:h-[30.125rem]"
                         >
                             {
-                                product?.urls[current].url && <img
-                                    src={product?.urls[current].url}
-                                    alt="Product"
-                                    className="w-full h-full object-cover rounded-md z-0"
-                                />
+                                product?.urls[current].type === "video" ? (
+                                    <video
+                                        src={product?.urls[current].url}
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className="w-full h-full object-cover rounded-md z-0"
+                                    />
+                                ) : (
+                                    product?.urls[current].url && <img
+                                        src={product?.urls[current].url}
+                                        alt="Product"
+                                        className="w-full h-full object-cover rounded-md z-0"
+                                    />
+                                )
                             }
                         </motion.div>
                     </AnimatePresence>

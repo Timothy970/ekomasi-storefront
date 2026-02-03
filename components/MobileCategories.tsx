@@ -49,6 +49,12 @@ export default function MobileCategories() {
                     </span>
                 </Link>
 
+                <Link href={"/bundles"} className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
+                    <span className="text-custom-black font-poppins text-[0.875rem] font-medium leading-[1.5rem]">
+                        Bundles
+                    </span>
+                </Link>
+
                 {categories?.map((cat, index) => (
                     <li key={index} className="w-full">
                         <div className="flex justify-between items-center border-t border-[#AAA] py-[0.5rem] w-full h-[2.75rem]">
