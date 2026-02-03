@@ -4,6 +4,14 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
+const validatePhoneNumber = (number: string): boolean => {
+    const phoneRegex = /^(?:\+?2547\d{8}|\+?2541\d{8}|07\d{8}|01\d{8})$/;
+    return (
+        phoneRegex.test(number) &&
+        (number.length === 10 || number.length === 12)
+    );
+};
+
 export interface VoucherPaymentModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -24,14 +32,6 @@ const MpesaPaymentModal = ({ isOpen, onClose, totalAmount, onApplyVoucher }: Vou
             setError("Please enter a phone number");
             return;
         }
-
-        const validatePhoneNumber = (number: string): boolean => {
-            const phoneRegex = /^(?:\+?2547\d{8}|\+?2541\d{8}|07\d{8}|01\d{8})$/;
-            return (
-                phoneRegex.test(number) &&
-                (number.length === 10 || number.length === 12)
-            );
-        };
 
         setIsValidating(true);
         setError("");

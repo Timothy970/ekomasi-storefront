@@ -2,15 +2,14 @@
 import Navigation from '@/components/Navigation';
 import { selectStatus } from '@/lib/features/mall/mallSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import React, { use, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout';
 import { useFilterQuery } from '../ClientLayout';
 import { Crumb, Product } from '@/lib/features/types';
-import { triggerToast } from '../utils/toastUtils';
 import { getProductBundlesAsync, selectPagination, selectProductBundles } from '@/lib/features/navigation/navigationSlice';
 
-export default function NewIn() {
+export default function Bundles() {
     const dispatch = useAppDispatch();
     const searchParams = useSearchParams();
     const productBundles = useAppSelector(selectProductBundles);
