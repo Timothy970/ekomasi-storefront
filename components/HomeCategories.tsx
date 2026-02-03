@@ -5,16 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function HomeCategories() {
   const categories = useAppSelector(selectCategories)
   const router = useRouter()
   const [offsetX, setOffsetX] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const animationRef = useRef<number | null>(null);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const GAP_PX = 16;
+  const CARD_WIDTH = typeof window !== 'undefined'
+    ? (window.innerWidth < 640 ? 128 : window.innerWidth < 768 ? 160 : window.innerWidth < 1024 ? 192 : 208)
+    : 208;
 
   // Duplicate categories for seamless loop
   const duplicatedCategories = useMemo(() => {
@@ -22,16 +26,49 @@ export default function HomeCategories() {
     return [...categories.slice(0, 10), ...categories.slice(0, 10), ...categories.slice(0, 10)];
   }, [categories]);
 
+  const singleSetWidth = 10 * (CARD_WIDTH + GAP_PX);
+
+  const prev = () => {
+    setIsPaused(true);
+    setOffsetX((current) => {
+      const newOffset = current - (CARD_WIDTH + GAP_PX);
+      return newOffset < 0 ? singleSetWidth + newOffset : newOffset;
+    });
+
+    // Clear existing timer and set new one to resume after 3 seconds
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+    }
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 3000);
+  };
+
+  const next = () => {
+    setIsPaused(true);
+    setOffsetX((current) => {
+      const newOffset = current + (CARD_WIDTH + GAP_PX);
+      return newOffset >= singleSetWidth ? newOffset - singleSetWidth : newOffset;
+    });
+
+    // Clear existing timer and set new one to resume after 3 seconds
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+    }
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 3000);
+  };
+
+  const canPrev = true;
+  const canNext = true;
+
   useEffect(() => {
-    if (!duplicatedCategories.length) return;
+    if (!duplicatedCategories.length || isPaused) return;
 
     const animate = () => {
       setOffsetX((prevOffset) => {
-        // Calculate single set width (10 categories + gaps)
-        const cardWidth = window.innerWidth < 640 ? 128 : window.innerWidth < 768 ? 160 : window.innerWidth < 1024 ? 192 : 208;
-        const singleSetWidth = 10 * (cardWidth + GAP_PX);
-
-        const newOffset = prevOffset + 0.5; // Adjust speed here (higher = faster)
+        const newOffset = prevOffset + 1.0; // Increased speed
 
         // Reset when we've scrolled through one complete set
         if (newOffset >= singleSetWidth) {
@@ -51,7 +88,16 @@ export default function HomeCategories() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [duplicatedCategories.length]);
+  }, [duplicatedCategories.length, isPaused, singleSetWidth]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) {
+        clearTimeout(resumeTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full flex justify-center items-center relative z-0 pt-[6rem]">
@@ -220,6 +266,29 @@ export default function HomeCategories() {
                 </Link>
               ))}
             </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
+            <Button
+              className="rounded-full border border-black"
+              onClick={prev}
+              variant="outline"
+              size="icon"
+              aria-label="Previous"
+              disabled={!canPrev}
+            >
+              <ChevronLeft className="h-[2.5rem] w-[3rem]" />
+            </Button>
+            <Button
+              className="rounded-full border border-black"
+              onClick={next}
+              variant="outline"
+              size="icon"
+              aria-label="Next"
+              disabled={!canNext}
+            >
+              <ChevronRight className="h-[2.5rem] w-[3rem] rounded-full" />
+            </Button>
           </div>
         </div>
       </div>
