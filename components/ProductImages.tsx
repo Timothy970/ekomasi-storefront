@@ -150,7 +150,6 @@ export default function ProductImages() {
                                         playing
                                         loop
                                         muted
-                                        playsInline
                                         width="100%"
                                         height="100%"
                                         className="product-card object-cover z-0 w-full h-full"

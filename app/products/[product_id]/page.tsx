@@ -416,7 +416,11 @@ export default function ProductDetail() {
                     <Accordion title="Bundle Products">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">
                         {product.products.map((item) => (
-                          <div key={item.product_id + item.sku} className="flex flex-col items-center">
+                          <div 
+                            key={item.product_id + item.sku} 
+                            className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => router.push(`/products/${item.product_id}`)}
+                          >
                             <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
                               <Image
                                 src={item.urls?.[0]?.url || item.images?.[0]?.url || ''}
@@ -426,7 +430,7 @@ export default function ProductDetail() {
                               />
                             </div>
                             <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
-                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price}</span>
+                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
                           </div>
                         ))}
                       </div>

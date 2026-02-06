@@ -90,7 +90,7 @@ export interface Product {
   features: ProductFeature[];
   warranty: Warranty;
   details: string[];
-  //for bundles threre is a products array since they contain multiple products
+  //for bundles there is a products array since they contain multiple products
   products?: Product[];
 }
 
