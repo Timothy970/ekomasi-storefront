@@ -90,6 +90,8 @@ export interface Product {
   features: ProductFeature[];
   warranty: Warranty;
   details: string[];
+  //for bundles threre is a products array since they contain multiple products
+  products?: Product[];
 }
 
 export interface SubCategory {
@@ -1131,4 +1133,18 @@ export interface WarehousesResponse {
   data: WarehousesData
   message: string
   status_code: number
+}
+
+export interface ReactPlayerProps {
+    url: string;
+    controls?: boolean;
+    width?: string | number;
+    height?: string | number;
+    style?: React.CSSProperties;
+    playing?: boolean;
+    loop?: boolean;
+    muted?: boolean;
+    volume?: number;
+    playbackRate?: number;
+    [key: string]: any;
 }

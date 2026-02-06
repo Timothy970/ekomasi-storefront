@@ -13,7 +13,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
-import { Crumb } from '@/lib/features/types'
+import { Crumb, Product } from '@/lib/features/types'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import { customParser } from '@/lib/utils'
 import { selectUserToken } from '@/lib/features/user/userSlice'
@@ -22,6 +22,7 @@ import { ShoppingBag } from 'lucide-react'
 import Accordion from '@/components/Accordion'
 import { ProductDetailsReviews } from '@/components/ProductDetailsReviews'
 import ProductFeatureSection from '@/components/ProductFeatureSection'
+import Image from 'next/image'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -410,6 +411,28 @@ export default function ProductDetail() {
                   </div>
                 </div>
 
+                {
+                  product?.products && product.products.length > 0 && (
+                    <Accordion title="Bundle Products">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">
+                        {product.products.map((item) => (
+                          <div key={item.product_id + item.sku} className="flex flex-col items-center">
+                            <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
+                              <Image
+                                src={item.urls?.[0]?.url || item.images?.[0]?.url || ''}
+                                alt={item.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
+                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </Accordion>
+                  )
+                }
                 {
                   warranty && <Accordion title="Warranty">
                     <span>{warranty}</span>

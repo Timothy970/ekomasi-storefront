@@ -119,6 +119,7 @@ export default function ProductListingLayout({
                         {
                             products && status !== "loading" && <CategoryProducts
                                 products={products}
+                                gridCols={isBundlesPage ? 4 : 3}
                             />
                         }
                     </div>
