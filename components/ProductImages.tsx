@@ -11,6 +11,11 @@ import { createWishListAsync, getWishListsAsync, selectStatus } from '@/lib/feat
 import LoadingIndicator from './LoadingIndicator';
 import { triggerToast } from '@/app/utils/toastUtils';
 import { deleteProductFromWishList } from '@/lib/features/wishlist/wishlistAPI';
+import dynamic from 'next/dynamic';
+import { ReactPlayerProps } from '@/lib/features/types';
+const ReactPlayer = dynamic(() => import('react-player'), {
+    ssr: false
+}) as React.ComponentType<ReactPlayerProps>;
 
 export default function ProductImages() {
     const product = useAppSelector(selectProduct)
@@ -80,10 +85,15 @@ export default function ProductImages() {
                         >
                             {image.type === "video" ? (
                                 <>
-                                    <video
-                                        src={image?.url}
-                                        className="object-cover rounded-md w-full h-full"
+                                    <ReactPlayer
+                                        url={image.url}
+                                        playing
+                                        loop
                                         muted
+                                        playsInline
+                                        width="100%"
+                                        height="100%"
+                                        className="product-card object-cover z-0 w-full h-full"
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="bg-black bg-opacity-50 rounded-full p-2">
@@ -135,13 +145,14 @@ export default function ProductImages() {
                         >
                             {
                                 product?.urls[current].type === "video" ? (
-                                    <video
-                                        src={product?.urls[current].url}
-                                        autoPlay
+                                    <ReactPlayer
+                                        url={product?.urls[current].url}
+                                        playing
                                         loop
                                         muted
-                                        playsInline
-                                        className="w-full h-full object-cover rounded-md z-0"
+                                        width="100%"
+                                        height="100%"
+                                        className="product-card object-cover z-0 w-full h-full"
                                     />
                                 ) : (
                                     product?.urls[current].url && <img

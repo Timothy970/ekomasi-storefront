@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Product } from "@/lib/features/types";
+import type { Product, ReactPlayerProps } from "@/lib/features/types";
 import { customParser } from "@/lib/utils";
+import dynamic from "next/dynamic";
+const ReactPlayer = dynamic(() => import('react-player'), {
+  ssr: false
+}) as React.ComponentType<ReactPlayerProps>;
 
 export default function CategoryProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -53,12 +57,14 @@ export default function CategoryProductCard({ product }: { product: Product }) {
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
         {mediaType === "video" && mediaUrl ? (
-          <video
-            src={mediaUrl}
-            autoPlay
+          <ReactPlayer
+            url={mediaUrl}
+            playing
             loop
             muted
             playsInline
+            width="100%"
+            height="100%"
             className="product-card object-cover z-0 w-full h-full"
           />
         ) : (
