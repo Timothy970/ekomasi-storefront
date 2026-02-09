@@ -3,9 +3,13 @@
 
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import type { ReactPlayerProps } from '@/lib/features/types';
+import "plyr-react/plyr.css";
 
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false }) as React.ComponentType<ReactPlayerProps>;
+// Dynamic import for Plyr to avoid SSR issues
+const Plyr = dynamic<any>(() => import('plyr-react').then(mod => mod.Plyr), {
+    ssr: false,
+    loading: () => <div className="plyr-placeholder" />
+});
 
 interface VideoPlayerProps {
     url: string;
@@ -42,19 +46,43 @@ const VideoPlayer = ({
         return <div style={{ width, height }} className={className} />; // Placeholder to prevent layout shift
     }
 
+    const getProvider = (url: string) => {
+        if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+        if (url.includes('vimeo.com')) return 'vimeo';
+        return 'html5';
+    };
+
+    const provider = getProvider(url);
+    // For YouTube/Vimeo, Plyr expects the video ID as src, not the full URL
+    const videoSrc = provider !== 'html5' ? url.split('/').pop()?.split('?')[0] : url;
+
+    const plyrSource: any = {
+        type: 'video',
+        sources: [
+            {
+                src: videoSrc,
+                provider: provider,
+            },
+        ],
+    };
+
+    const plyrOptions = {
+        autoplay: playing,
+        muted: muted,
+        loop: { active: loop },
+        controls: controls ? ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'] : [],
+        settings: ['quality', 'speed'],
+        playsinline: playsInline,
+        ...config
+    };
+
     return (
-        <ReactPlayer
-            url={url}
-            width={width}
-            height={height}
-            playing={playing}
-            muted={muted}
-            loop={loop}
-            controls={controls}
-            playsInline={playsInline}
-            config={config}
-            className={className}
-        />
+        <div className={className} style={{ width, height, overflow: 'hidden' }}>
+            <Plyr
+                source={plyrSource}
+                options={plyrOptions}
+            />
+        </div>
     );
 };
 
