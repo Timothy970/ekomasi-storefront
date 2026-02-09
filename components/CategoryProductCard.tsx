@@ -22,19 +22,21 @@ export default function CategoryProductCard({ product }: { product: Product }) {
 
   useEffect(() => {
     if (product?.urls && product.urls.length > 0) {
-      const imageMedia = product.urls.find(
-        (media) => media.type === "gallery" || media.type === "thumbnail"
-      );
+      // 1. Check for video first to ensure it's displayed if available
+      const videoMedia = product.urls.find((media) => media.type === "video");
 
-      if (imageMedia) {
-        setMediaUrl(imageMedia.url);
-        setMediaType("image");
+      if (videoMedia) {
+        setMediaUrl(videoMedia.url);
+        setMediaType("video");
       } else {
-        const videoMedia = product.urls.find((media) => media.type === "video");
+        // 2. Fallback to image if no video is found
+        const imageMedia = product.urls.find(
+          (media) => media.type === "gallery" || media.type === "thumbnail"
+        );
 
-        if (videoMedia) {
-          setMediaUrl(videoMedia.url);
-          setMediaType("video");
+        if (imageMedia) {
+          setMediaUrl(imageMedia.url);
+          setMediaType("image");
         } else {
           setMediaUrl(product.urls[0]?.url || null);
           setMediaType("image");
