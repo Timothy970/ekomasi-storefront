@@ -133,5 +133,47 @@ export const COVER_VIDEO_CONFIG = {
     attributes: {
       style: { objectFit: "cover", width: "100%", height: "100%" },
     },
+    forceVideo: true,
+  },
+  youtube: {
+    playerVars: {
+      showinfo: 0,
+      controls: 0,
+      modestbranding: 1,
+      rel: 0,
+      autoplay: 1,
+    },
+  },
+  vimeo: {
+    playerOptions: {
+      background: true,
+      muted: true,
+      loop: true,
+      autopause: false,
+    },
+  },
+  facebook: {
+    attributes: {
+      style: { objectFit: "cover", width: "100%", height: "100%" },
+    },
+  },
+  dailymotion: {
+    params: {
+      controls: false,
+      'queue-enable': false,
+    },
+  },
+  twitch: {
+    options: {
+      autoplay: true,
+      muted: true,
+    },
+  },
+  wistia: {
+    options: {
+      autoPlay: true,
+      muted: true,
+      controlsVisibleOnLoad: false,
+    },
   },
 };

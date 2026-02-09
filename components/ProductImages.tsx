@@ -88,7 +88,7 @@ export default function ProductImages() {
                                 <>
                                     <ReactPlayer
                                         url={image.url}
-                                        playing={true}
+                                        playing={false}
                                         loop={true}
                                         muted={true}
                                         playsInline={true}
@@ -96,6 +96,7 @@ export default function ProductImages() {
                                         height="100%"
                                         config={COVER_VIDEO_CONFIG}
                                         className="product-card object-cover z-0 w-full h-full"
+                                        style={{ pointerEvents: 'none' }}
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="bg-black bg-opacity-50 rounded-full p-2">
@@ -147,17 +148,20 @@ export default function ProductImages() {
                         >
                             {
                                 product?.urls[current].type === "video" ? (
-                                    <ReactPlayer
-                                        url={product?.urls[current].url}
-                                        playing={true}
-                                        loop={true}
-                                        muted={true}
-                                        playsInline={true}
-                                        width="100%"
-                                        height="100%"
-                                        config={COVER_VIDEO_CONFIG}
-                                        className="product-card object-cover z-0 w-full h-full"
-                                    />
+                                    <div className="w-full h-full">
+                                        <ReactPlayer
+                                            url={product?.urls[current].url}
+                                            playing={true}
+                                            loop={true}
+                                            muted={true}
+                                            playsInline={true}
+                                            controls={false}
+                                            width="100%"
+                                            height="100%"
+                                            config={COVER_VIDEO_CONFIG}
+                                            className="product-card object-cover z-0"
+                                        />
+                                    </div>
                                 ) : (
                                     product?.urls[current].url && <img
                                         src={product?.urls[current].url}

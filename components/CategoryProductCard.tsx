@@ -63,6 +63,7 @@ export default function CategoryProductCard({ product }: { product: Product }) {
             loop={true}
             muted={true}
             playsInline={true}
+            controls={false}
             width="100%"
             height="100%"
             config={COVER_VIDEO_CONFIG}
