@@ -131,49 +131,77 @@ export const RETURN_STATUS = {
 export const COVER_VIDEO_CONFIG = {
   file: {
     attributes: {
-      style: { objectFit: "cover", width: "100%", height: "100%" },
-    },
-    forceVideo: true,
-  },
-  youtube: {
-    playerVars: {
-      showinfo: 0,
-      controls: 0,
-      modestbranding: 1,
-      rel: 0,
-      autoplay: 1,
-    },
-  },
-  vimeo: {
-    playerOptions: {
-      background: true,
+      // Direct HTML5 video attributes
+      style: { 
+        objectFit: "cover", 
+        width: "100%", 
+        height: "100%" 
+      },
+      autoPlay: true,
       muted: true,
       loop: true,
-      autopause: false,
+      playsInline: true,
+    },
+    forceVideo: true, // Ensures files without extensions still play
+  },
+
+  youtube: {
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      rel: 0,            // Don't show related videos from other channels
+      showinfo: 0,
+      modestbranding: 1, // Hide YouTube logo as much as possible
+      iv_load_policy: 3, // Hide annotations
+      mute: 1,           // YouTube-specific mute param
+      // Note: For YouTube to loop, you ideally need the Video ID 
+      // passed to the 'playlist' parameter.
+      loop: 1,
     },
   },
+
+  vimeo: {
+    playerOptions: {
+      background: true,  // Automatically hides controls and loops
+      muted: true,
+      autopause: false,  // Prevents other players from stopping this one
+      portrait: false,
+      title: false,
+      byline: false,
+    },
+  },
+
+  twitch: {
+    options: {
+      autoplay: true,
+      muted: true,
+      controls: false,
+    },
+  },
+
   facebook: {
     attributes: {
       style: { objectFit: "cover", width: "100%", height: "100%" },
     },
   },
-  dailymotion: {
-    params: {
-      controls: false,
-      'queue-enable': false,
-    },
-  },
-  twitch: {
-    options: {
-      autoplay: true,
-      muted: true,
-    },
-  },
+
   wistia: {
     options: {
       autoPlay: true,
       muted: true,
+      silentAutoPlay: "allow", // Wistia specific bypass
       controlsVisibleOnLoad: false,
+      videoFoam: true, // Makes it responsive
+    },
+  },
+
+  dailymotion: {
+    params: {
+      autoplay: true,
+      mute: true,
+      controls: false,
+      "ui-start-screen-info": false,
+      "ui-logo": false,
     },
   },
 };

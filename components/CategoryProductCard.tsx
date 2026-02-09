@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Product, ReactPlayerProps } from "@/lib/features/types";
+import type { Product } from "@/lib/features/types";
 import { customParser, COVER_VIDEO_CONFIG } from "@/lib/utils";
-import dynamic from "next/dynamic";
-const ReactPlayer = dynamic(() => import('react-player'), {
-  ssr: false
-}) as React.ComponentType<ReactPlayerProps>;
+import VideoPlayer from "./VideoPlayer";
 
 export default function CategoryProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -57,15 +54,8 @@ export default function CategoryProductCard({ product }: { product: Product }) {
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
         {mediaType === "video" && mediaUrl ? (
-          <ReactPlayer
+          <VideoPlayer
             url={mediaUrl}
-            playing={true}
-            loop={true}
-            muted={true}
-            playsInline={true}
-            controls={false}
-            width="100%"
-            height="100%"
             config={COVER_VIDEO_CONFIG}
             className="product-card object-cover z-0 w-full h-full"
           />
