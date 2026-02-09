@@ -127,3 +127,11 @@ export const RETURN_STATUS = {
   APPROVED: "approved",
   PENDING: "pending",
 }
+
+export const COVER_VIDEO_CONFIG = {
+  file: {
+    attributes: {
+      style: { objectFit: "cover", width: "100%", height: "100%" },
+    },
+  },
+};

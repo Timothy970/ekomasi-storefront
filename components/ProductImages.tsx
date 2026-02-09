@@ -11,6 +11,7 @@ import { createWishListAsync, getWishListsAsync, selectStatus } from '@/lib/feat
 import LoadingIndicator from './LoadingIndicator';
 import { triggerToast } from '@/app/utils/toastUtils';
 import { deleteProductFromWishList } from '@/lib/features/wishlist/wishlistAPI';
+import { COVER_VIDEO_CONFIG } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { ReactPlayerProps } from '@/lib/features/types';
 const ReactPlayer = dynamic(() => import('react-player'), {
@@ -93,13 +94,7 @@ export default function ProductImages() {
                                         playsInline={true}
                                         width="100%"
                                         height="100%"
-                                        config={{
-                                            file: {
-                                                attributes: {
-                                                    style: { objectFit: "cover", width: "100%", height: "100%" },
-                                                },
-                                            },
-                                        }}
+                                        config={COVER_VIDEO_CONFIG}
                                         className="product-card object-cover z-0 w-full h-full"
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
@@ -160,13 +155,7 @@ export default function ProductImages() {
                                         playsInline={true}
                                         width="100%"
                                         height="100%"
-                                        config={{
-                                            file: {
-                                                attributes: {
-                                                    style: { objectFit: "cover", width: "100%", height: "100%" },
-                                                },
-                                            },
-                                        }}
+                                        config={COVER_VIDEO_CONFIG}
                                         className="product-card object-cover z-0 w-full h-full"
                                     />
                                 ) : (
