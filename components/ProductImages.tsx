@@ -85,6 +85,7 @@ export default function ProductImages() {
                                 <>
                                     <VideoPlayer
                                         url={image.url}
+                                        playing={false} // Disable autoplay for thumbnails to prevent browser blocking/performance issues
                                         config={COVER_VIDEO_CONFIG}
                                         className="product-card object-cover z-0 w-full h-full"
                                     />
