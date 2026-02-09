@@ -90,24 +90,64 @@ const VideoPlayer = ({
     };
 
     return (
-        <div className={`video-player-container ${className}`} style={{ width, height, overflow: 'hidden' }}>
-            <div className="plyr__wrapper" style={{ height: '100%', width: '100%' }}>
-                <Plyr
-                    source={plyrSource}
-                    options={plyrOptions}
-                />
+        <div
+            className={`video-player-wrapper ${className}`}
+            style={{
+                width: width,
+                height: height,
+                position: 'relative',
+                overflow: 'hidden',
+                backgroundColor: '#000'
+            }}
+        >
+            <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <div style={{ width: '100%', height: '100%' }}>
+                    <Plyr
+                        source={plyrSource}
+                        options={plyrOptions}
+                    />
+                </div>
             </div>
             <style jsx global>{`
-                .video-player-container .plyr {
+                .video-player-wrapper .plyr {
                     height: 100% !important;
                     width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
                 }
-                .video-player-container .plyr__video-wrapper {
+                .video-player-wrapper .plyr__video-wrapper,
+                .video-player-wrapper .plyr__video-embed {
                     height: 100% !important;
+                    width: 100% !important;
+                    padding-bottom: 0 !important;
+                    background: transparent;
                 }
-                .video-player-container .plyr video {
+                .video-player-wrapper .plyr__poster {
+                    background-size: cover;
+                }
+                .video-player-wrapper .plyr iframe,
+                .video-player-wrapper .plyr video {
                     height: 100% !important;
+                    width: 100% !important;
                     object-fit: cover;
+                    /* For YouTube iframe, we often need to scale it to cover if the aspect ratio differs */
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) scale(1.1); /* Slightly overscale to ensure cover effect for iframes */
+                }
+                /* Hide YouTube/Vimeo controls and logos if possible through CSS if Plyr options aren't enough */
+                .video-player-wrapper .plyr__video-embed iframe {
+                    pointer-events: none;
                 }
             `}</style>
         </div>
