@@ -59,12 +59,19 @@ export default function CategoryProductCard({ product }: { product: Product }) {
         {mediaType === "video" && mediaUrl ? (
           <ReactPlayer
             url={mediaUrl}
-            playing
-            loop
-            muted
-            playsInline
+            playing={true}
+            loop={true}
+            muted={true}
+            playsInline={true}
             width="100%"
             height="100%"
+            config={{
+              file: {
+                attributes: {
+                  style: { objectFit: "cover", width: "100%", height: "100%" },
+                },
+              },
+            }}
             className="product-card object-cover z-0 w-full h-full"
           />
         ) : (

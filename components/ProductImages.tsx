@@ -87,12 +87,19 @@ export default function ProductImages() {
                                 <>
                                     <ReactPlayer
                                         url={image.url}
-                                        playing
-                                        loop
-                                        muted
-                                        playsInline
+                                        playing={true}
+                                        loop={true}
+                                        muted={true}
+                                        playsInline={true}
                                         width="100%"
                                         height="100%"
+                                        config={{
+                                            file: {
+                                                attributes: {
+                                                    style: { objectFit: "cover", width: "100%", height: "100%" },
+                                                },
+                                            },
+                                        }}
                                         className="product-card object-cover z-0 w-full h-full"
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center">
@@ -147,11 +154,19 @@ export default function ProductImages() {
                                 product?.urls[current].type === "video" ? (
                                     <ReactPlayer
                                         url={product?.urls[current].url}
-                                        playing
-                                        loop
-                                        muted
+                                        playing={true}
+                                        loop={true}
+                                        muted={true}
+                                        playsInline={true}
                                         width="100%"
                                         height="100%"
+                                        config={{
+                                            file: {
+                                                attributes: {
+                                                    style: { objectFit: "cover", width: "100%", height: "100%" },
+                                                },
+                                            },
+                                        }}
                                         className="product-card object-cover z-0 w-full h-full"
                                     />
                                 ) : (
