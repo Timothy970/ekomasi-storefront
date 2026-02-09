@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product, ReactPlayerProps } from "@/lib/features/types";
-import { customParser } from "@/lib/utils";
+import { customParser, COVER_VIDEO_CONFIG } from "@/lib/utils";
 import dynamic from "next/dynamic";
 const ReactPlayer = dynamic(() => import('react-player'), {
   ssr: false
@@ -59,12 +59,13 @@ export default function CategoryProductCard({ product }: { product: Product }) {
         {mediaType === "video" && mediaUrl ? (
           <ReactPlayer
             url={mediaUrl}
-            playing
-            loop
-            muted
-            playsInline
+            playing={true}
+            loop={true}
+            muted={true}
+            playsInline={true}
             width="100%"
             height="100%"
+            config={COVER_VIDEO_CONFIG}
             className="product-card object-cover z-0 w-full h-full"
           />
         ) : (

@@ -416,8 +416,8 @@ export default function ProductDetail() {
                     <Accordion title="Bundle Products">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">
                         {product.products.map((item) => (
-                          <div 
-                            key={item.product_id + item.sku} 
+                          <div
+                            key={item.product_id}
                             className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
                             onClick={() => router.push(`/products/${item.product_id}`)}
                           >
