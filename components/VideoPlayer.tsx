@@ -52,9 +52,22 @@ const VideoPlayer = ({
         return 'html5';
     };
 
+    const getVideoId = (url: string, provider: string) => {
+        if (provider === 'youtube') {
+            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[7].length === 11) ? match[7] : url;
+        }
+        if (provider === 'vimeo') {
+            const regExp = /^.*(vimeo\.com\/)((channels\/[^\/]+\/)|(groups\/[^\/]+\/content\/)|(album\/[^\/]+\/video\/))?([0-9]+)/;
+            const match = url.match(regExp);
+            return match ? match[6] : url;
+        }
+        return url;
+    };
+
     const provider = getProvider(url);
-    // For YouTube/Vimeo, Plyr expects the video ID as src, not the full URL
-    const videoSrc = provider !== 'html5' ? url.split('/').pop()?.split('?')[0] : url;
+    const videoSrc = getVideoId(url, provider);
 
     const plyrSource: any = {
         type: 'video',
@@ -77,11 +90,26 @@ const VideoPlayer = ({
     };
 
     return (
-        <div className={className} style={{ width, height, overflow: 'hidden' }}>
-            <Plyr
-                source={plyrSource}
-                options={plyrOptions}
-            />
+        <div className={`video-player-container ${className}`} style={{ width, height, overflow: 'hidden' }}>
+            <div className="plyr__wrapper" style={{ height: '100%', width: '100%' }}>
+                <Plyr
+                    source={plyrSource}
+                    options={plyrOptions}
+                />
+            </div>
+            <style jsx global>{`
+                .video-player-container .plyr {
+                    height: 100% !important;
+                    width: 100% !important;
+                }
+                .video-player-container .plyr__video-wrapper {
+                    height: 100% !important;
+                }
+                .video-player-container .plyr video {
+                    height: 100% !important;
+                    object-fit: cover;
+                }
+            `}</style>
         </div>
     );
 };
