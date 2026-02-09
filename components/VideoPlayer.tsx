@@ -51,7 +51,7 @@ const VideoPlayer = ({
             muted={muted}
             loop={loop}
             controls={controls}
-            playsinline={playsInline} // Library specifically looks for lowercase
+            playsInline={playsInline}
             config={config}
             className={className}
         />
