@@ -33,10 +33,7 @@ export default function AutocompleteDropdown() {
         return Array.from(seen.values());
     }, [autocomplete]);
 
-    const handleAutocompleteClick = (e: React.MouseEvent, item: Suggestion) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    const handleAutocompleteClick = (item: Suggestion) => {
         let href = item.link;
         switch (item.type) {
             case "product":
@@ -70,12 +67,12 @@ export default function AutocompleteDropdown() {
                 {uniqueAutocomplete?.map((item, index) => {
                     return (
                         <li key={`${item.type}-${item.id}-${index}`}>
-                            <div
-                                onClick={(e) => handleAutocompleteClick(e, item)}
-                                className="block px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition cursor-pointer"
+                            <button
+                                onClick={() => handleAutocompleteClick(item)}
+                                className="block w-full text-left px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition cursor-pointer"
                             >
                                 {item.display_name}
-                            </div>
+                            </button>
                         </li>
                     );
                 })}
