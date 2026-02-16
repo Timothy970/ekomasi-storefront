@@ -62,7 +62,10 @@ export default function AutocompleteDropdown() {
     if (uniqueAutocomplete == null) return null;
 
     return (
-        <div className="absolute top-full left-0 w-full max-h-[23rem] overflow-y-auto bg-white border border-gray-200 rounded-md ">
+        <div
+            className="absolute top-full left-0 w-full max-h-[23rem] overflow-y-auto bg-white border border-gray-200 rounded-md"
+            onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking inside
+        >
             <ul>
                 {uniqueAutocomplete?.map((item, index) => {
                     return (
