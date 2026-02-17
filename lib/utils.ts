@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import parse from 'html-react-parser';
-import { Order } from "./features/types";
+import { Image, Order } from "./features/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -204,4 +204,12 @@ export const COVER_VIDEO_CONFIG = {
       "ui-logo": false,
     },
   },
+};
+
+export const getProductImageUrl = (urls?: Image[]): string => {
+  const imageMedia = urls?.filter((media) => media.type === "image");
+  const primaryImage = imageMedia?.find((img) => img.is_primary);
+  const imageToShow = primaryImage || imageMedia?.[0];
+
+  return imageToShow?.url || "";
 };
