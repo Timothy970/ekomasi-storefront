@@ -29,17 +29,28 @@ export default function CategoryProductCard({ product }: { product: Product }) {
         setMediaUrl(videoMedia.url);
         setMediaType("video");
       } else {
-        // 2. Fallback to image if no video is found
-        const imageMedia = product.urls.find(
-          (media) => media.type === "gallery" || media.type === "thumbnail"
+        // 2. Check for primary image first
+        const primaryImage = product.urls.find(
+          (media) => media.is_primary === true && (media.type === "gallery" || media.type === "thumbnail")
         );
 
-        if (imageMedia) {
-          setMediaUrl(imageMedia.url);
+        if (primaryImage) {
+          setMediaUrl(primaryImage.url);
           setMediaType("image");
         } else {
-          setMediaUrl(product.urls[0]?.url || null);
-          setMediaType("image");
+          // 3. Fallback to any gallery or thumbnail image
+          const imageMedia = product.urls.find(
+            (media) => media.type === "gallery" || media.type === "thumbnail"
+          );
+
+          if (imageMedia) {
+            setMediaUrl(imageMedia.url);
+            setMediaType("image");
+          } else {
+            // 4. Final fallback to first item in array
+            setMediaUrl(product.urls[0]?.url || null);
+            setMediaType("image");
+          }
         }
       }
     }

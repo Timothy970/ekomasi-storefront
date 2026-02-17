@@ -8,6 +8,7 @@ import { customParser } from '@/lib/utils'
 export default function TopSliderProducts() {
   const subCategory = useAppSelector(selectSubCategory)
 
+
   return (
     <div className='w-full h-full max-w-[27rem] overflow-y-scroll pb-[1rem] mt-[1rem]'>
       <div className="flex flex-col gap-y-[1rem]">
@@ -15,15 +16,19 @@ export default function TopSliderProducts() {
           <Link key={index?.toString()} href={`/products/${product?.product_id}`}>
             <div className='h-[8rem] w-full flex gap-x-[1rem] justify-between items-start'>
               <div className="relative h-full w-[40%] flex-none">
-                {product.urls?.[0]?.url && (
-                  <Image
-                    src={product.urls[0].url}
-                    alt=""
-                    unoptimized
-                    fill
-                    className="object-cover"
-                  />
-                )}
+                {(() => {
+                  const primaryImage = product.urls?.find((img) => img.is_primary);
+                  const imageToShow = primaryImage || product.urls?.[0];
+                  return imageToShow?.url ? (
+                    <Image
+                      src={imageToShow.url}
+                      alt=""
+                      unoptimized
+                      fill
+                      className="object-cover"
+                    />
+                  ) : null;
+                })()}
               </div>
 
               <div className="flex flex-col gap-y-[0.5rem] w-[60%] flex-none">

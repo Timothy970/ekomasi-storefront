@@ -27,15 +27,19 @@ export default function ProductCard({ product }: { product: Product }) {
       className="block bg-white overflow-hidden cursor-pointer"
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
-        {product.urls?.[0]?.url && (
-          <Image
-            src={product.urls[0].url}
-            alt=""
-            unoptimized
-            fill
-            className="product-card object-cover z-0"
-          />
-        )}
+        {(() => {
+          const primaryImage = product.urls?.find((img) => img.is_primary);
+          const imageToShow = primaryImage || product.urls?.[0];
+          return imageToShow?.url ? (
+            <Image
+              src={imageToShow.url}
+              alt=""
+              unoptimized
+              fill
+              className="product-card object-cover z-0"
+            />
+          ) : null;
+        })()}
 
         {
           product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
