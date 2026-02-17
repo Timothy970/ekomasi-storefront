@@ -2,17 +2,18 @@ import React from 'react'
 import Image from 'next/image'
 import type { SubCategoryProduct } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
-import { customParser } from '@/lib/utils'
+import { customParser, getProductImageUrl } from '@/lib/utils'
 
 export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
     const router = useRouter()
+    const imageUrl = getProductImageUrl(product.urls);
 
     return (
         <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.product_id}`)}>
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
                 {
                     product.urls && product.urls[0]?.url && <Image
-                        src={product.urls[0]?.url}
+                        src={imageUrl}
                         alt={product.name}
                         fill
                         unoptimized

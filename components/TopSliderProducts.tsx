@@ -3,7 +3,7 @@ import { useAppSelector } from '@/lib/hooks'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { customParser } from '@/lib/utils'
+import { customParser, getProductImageUrl } from '@/lib/utils'
 
 export default function TopSliderProducts() {
   const subCategory = useAppSelector(selectSubCategory)
@@ -17,8 +17,8 @@ export default function TopSliderProducts() {
               <div className="relative h-full w-[40%] flex-none">
                 {product.urls?.[0]?.url && (
                   <Image
-                    src={product.urls[0].url}
-                    alt=""
+                    src={getProductImageUrl(product.urls)}
+                    alt={product.name}
                     unoptimized
                     fill
                     className="object-cover"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/features/types";
-import { customParser } from "@/lib/utils";
+import { customParser, getProductImageUrl } from "@/lib/utils";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -21,21 +21,22 @@ export default function ProductCard({ product }: { product: Product }) {
     return null;
   }
 
+  const imageUrl = getProductImageUrl(product.urls);
+
   return (
     <Link
       href={`/products/${productId}`}
       className="block bg-white overflow-hidden cursor-pointer"
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
-        {product.urls?.[0]?.url && (
-          <Image
-            src={product.urls[0].url}
-            alt=""
-            unoptimized
-            fill
-            className="product-card object-cover z-0"
-          />
-        )}
+        {<Image
+          src={imageUrl}
+          alt={product.name}
+          unoptimized
+          fill
+          className="product-card object-cover z-0"
+        />
+        }
 
         {
           product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
