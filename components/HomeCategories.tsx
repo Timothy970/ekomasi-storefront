@@ -14,11 +14,12 @@ export default function HomeCategories() {
   const [offsetX, setOffsetX] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [cardWidth, setCardWidth] = useState(208);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const animationRef = useRef<number | null>(null);
   const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const GAP_PX = 16;
 
-  // Calculate card width based on window size
+  // Calculate card width and viewport width based on window size
   useEffect(() => {
     const getCardWidth = () => {
       if (typeof window === 'undefined') return 208;
@@ -30,24 +31,38 @@ export default function HomeCategories() {
 
     const handleResize = () => {
       setCardWidth(getCardWidth());
+      setViewportWidth(window.innerWidth);
     };
 
     // Set initial width
     setCardWidth(getCardWidth());
+    setViewportWidth(typeof window !== 'undefined' ? window.innerWidth : 1440);
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Duplicate categories for seamless loop
+  // Calculate how many cards fit on screen
+  const cardsPerView = useMemo(() => {
+    const maxContainerWidth = Math.min(viewportWidth * 0.9, 1440); // 90rem max
+    return Math.floor(maxContainerWidth / (cardWidth + GAP_PX));
+  }, [viewportWidth, cardWidth]);
+
+  // Only enable auto-scroll if categories overflow the viewport
+  const shouldAutoScroll = categories && categories.length > cardsPerView;
+
+  // Duplicate categories for seamless loop (only if auto-scrolling)
   const duplicatedCategories = useMemo(() => {
     if (!categories?.length) return [];
-    return [...categories.slice(0, 10), ...categories.slice(0, 10), ...categories.slice(0, 10)];
-  }, [categories]);
+    if (!shouldAutoScroll) return categories;
+    // Duplicate the full category list twice for seamless infinite scroll
+    return [...categories, ...categories];
+  }, [categories, shouldAutoScroll]);
 
-  const singleSetWidth = 10 * (cardWidth + GAP_PX);
+  const singleSetWidth = shouldAutoScroll ? categories.length * (cardWidth + GAP_PX) : 0;
 
   const prev = () => {
+    if (!shouldAutoScroll) return;
     setIsPaused(true);
     setOffsetX((current) => {
       const newOffset = current - (cardWidth + GAP_PX);
@@ -64,6 +79,7 @@ export default function HomeCategories() {
   };
 
   const next = () => {
+    if (!shouldAutoScroll) return;
     setIsPaused(true);
     setOffsetX((current) => {
       const newOffset = current + (cardWidth + GAP_PX);
@@ -79,11 +95,11 @@ export default function HomeCategories() {
     }, 3000);
   };
 
-  const canPrev = true;
-  const canNext = true;
+  const canPrev = shouldAutoScroll;
+  const canNext = shouldAutoScroll;
 
   useEffect(() => {
-    if (!duplicatedCategories.length || isPaused) return;
+    if (!duplicatedCategories.length || isPaused || !shouldAutoScroll) return;
 
     const animate = () => {
       setOffsetX((prevOffset) => {
@@ -107,7 +123,7 @@ export default function HomeCategories() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [duplicatedCategories.length, isPaused, singleSetWidth]);
+  }, [duplicatedCategories.length, isPaused, singleSetWidth, shouldAutoScroll]);
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -181,28 +197,30 @@ export default function HomeCategories() {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
-            <Button
-              className="rounded-full border border-black"
-              onClick={prev}
-              variant="outline"
-              size="icon"
-              aria-label="Previous"
-              disabled={!canPrev}
-            >
-              <ChevronLeft className="h-[2.5rem] w-[3rem]" />
-            </Button>
-            <Button
-              className="rounded-full border border-black"
-              onClick={next}
-              variant="outline"
-              size="icon"
-              aria-label="Next"
-              disabled={!canNext}
-            >
-              <ChevronRight className="h-[2.5rem] w-[3rem] rounded-full" />
-            </Button>
-          </div>
+          {shouldAutoScroll && (
+            <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
+              <Button
+                className="rounded-full border border-black"
+                onClick={prev}
+                variant="outline"
+                size="icon"
+                aria-label="Previous"
+                disabled={!canPrev}
+              >
+                <ChevronLeft className="h-[2.5rem] w-[3rem]" />
+              </Button>
+              <Button
+                className="rounded-full border border-black"
+                onClick={next}
+                variant="outline"
+                size="icon"
+                aria-label="Next"
+                disabled={!canNext}
+              >
+                <ChevronRight className="h-[2.5rem] w-[3rem] rounded-full" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
