@@ -2,16 +2,14 @@
 
 import { useSearchModal } from "@/app/ClientLayout";
 import React, { useMemo } from "react";
-import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { selectAutocomplete, setSearchTerm } from "@/lib/features/mall/mallSlice";
+import { selectAutocomplete } from "@/lib/features/mall/mallSlice";
 import { useRouter } from "next/navigation";
 import { Suggestion } from "@/lib/features/types";
 
 export default function AutocompleteDropdown() {
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
     const autocomplete = useAppSelector(selectAutocomplete);
-    const dispatch = useAppDispatch()
     const router = useRouter()
 
     // Remove duplicates, prioritizing products
