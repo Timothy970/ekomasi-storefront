@@ -1,6 +1,6 @@
 import { createAppSlice } from "@/lib/createAppSlice";
 import { OtpRequestParams, SignInParams, SignUpParams, UpdateUserProfilePayload, User, UserData, VerifyOtpParams } from "../types";
-import { addProductReview, editProductReview, getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, verifyOtp } from "./userAPI";
+import { addProductReview, editProductReview, getUserProfile, requestOtp, signIn, signUpUser, updateUserProfile, updateUserProfileVerify, verifyOtp } from "./userAPI";
 import { ToastType } from "../toast/toastSlice";
 
 interface UserSliceState {
@@ -264,6 +264,40 @@ export const userSlice = createAppSlice({
 			async ({ data, fetchUserProfile }: { data: UpdateUserProfilePayload, fetchUserProfile: (message: string, type: ToastType) => void }) => {
 				const response = await updateUserProfile({ data })
 
+				if (response?.status_code == 202) {
+					fetchUserProfile(response?.message, "success")
+				} else {
+					fetchUserProfile(response?.message || "Unable to update user profile", "error")
+
+				}
+
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 202) {
+						state.success = true
+						state.message = action.payload?.message
+					} else {
+						state.success = false
+						state.message = action.payload?.message || "Failed to get user profile."
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = "Invalid or expired OTP"
+				},
+			}
+		),
+		updateUserProfileVerifyAsync: create.asyncThunk(
+			async ({ otp, fetchUserProfile }: { otp: string, fetchUserProfile: (message: string, type: ToastType) => void }) => {
+				const response = await updateUserProfileVerify(otp )
+
 				if (response?.status_code == 200) {
 					fetchUserProfile(response?.message, "success")
 				} else {
@@ -310,6 +344,6 @@ export const userSlice = createAppSlice({
 });
 
 // Export actions and selectors
-export const { signUpUserAsync, signInUserAsync, resetSuccess, resetStatus, setOtpResendExpiry, resetOtpResendExpiry, resetMessage, requestOtpAsync, addReviewAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync, editReviewAsync } = userSlice.actions; // Export actions
+export const { signUpUserAsync, signInUserAsync, resetSuccess, resetStatus, setOtpResendExpiry, resetOtpResendExpiry, resetMessage, requestOtpAsync, addReviewAsync, verifyOtpAsync, getUserProfileAsync, logout, updateUserProfileAsync, editReviewAsync, updateUserProfileVerifyAsync } = userSlice.actions; // Export actions
 export const { selectUser, selectStatus, selectOtpResendExpiry, selectSuccess, selectUserToken, selectMessage, selectPhoneOrEmailValue, selectUserProfile, selectExpiresIn, selectUserRefreshToken } = userSlice.selectors;
 export const userReducer = userSlice.reducer;

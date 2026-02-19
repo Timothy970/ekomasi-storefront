@@ -116,3 +116,18 @@ export async function updateUserProfile({ data }: { data: UpdateUserProfilePaylo
     }
 }
 
+export async function updateUserProfileVerify(otp: string): Promise<UserDetailsResponse | null> {
+    try {
+        const payload = {
+            "otp": otp
+        }
+        const response = await api.patch<UserDetailsResponse>("user/me/verify-update", payload, {
+            headers: { requiresAuth: true },
+        });
+
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}

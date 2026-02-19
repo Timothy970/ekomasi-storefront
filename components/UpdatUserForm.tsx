@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { triggerToast } from "@/app/utils/toastUtils"
 import { ToastType } from "@/lib/features/toast/toastSlice"
+import VerifyOtpModal from "./VerifyOtpModal"
 
 export default function UpdateUserForm() {
     const dispatch = useAppDispatch()
@@ -20,6 +21,8 @@ export default function UpdateUserForm() {
         email: "",
         phone_number: "",
     })
+    const [isOtpModalOpen, setIsOtpModalOpen] = useState(false)
+    const [otpVerifyValue, setOtpVerifyValue] = useState("")
 
     const formatPhoneForDisplay = (phone: string) => {
         if (phone.startsWith("254") && phone.length === 12) {
@@ -46,7 +49,13 @@ export default function UpdateUserForm() {
     }
 
     const fetchUserProfile = (message: string, type: ToastType) => {
+        if (type === "success") {
+            setIsOtpModalOpen(true)
+        }
         triggerToast(message, type)
+    }
+
+    const handleVerifySuccess = () => {
         dispatch(getUserProfileAsync())
     }
 
@@ -104,6 +113,11 @@ export default function UpdateUserForm() {
 
     return (
         <div className="space-y-4 w-full">
+            <VerifyOtpModal
+                isOpen={isOtpModalOpen}
+                onClose={() => setIsOtpModalOpen(false)}
+                onVerifySuccess={handleVerifySuccess}
+            />
             <div>
                 <p className="text-[0.875rem]">
                     Feel free to edit any of your details below so your Adenzo account is totally up to date. (* Indicates a required field)
