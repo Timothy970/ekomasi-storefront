@@ -9,32 +9,39 @@ export default function PriceRangeSlider({
     max = 1000,
     step = 10,
     defaultValues = [100, 800],
+    notChangingValues = [0, 1000],
     onChange,
 }: {
     min?: number;
     max?: number;
     step?: number;
     defaultValues?: [number, number];
+    notChangingValues?: [number, number];
     onChange?: (values: [number, number]) => void;
 }) {
     const [values, setValues] = React.useState<[number, number]>(defaultValues);
     const { setQuery } = useFilterQuery()
 
+    React.useEffect(() => {
+        setValues(defaultValues);
+    }, [defaultValues]);
+
     const handleValueChange = (newValues: [number, number]) => {
         setValues(newValues);
         onChange?.(newValues);
     };
+
     const handleClear = () => {
-        setValues([0, 20000]);
+        setValues(notChangingValues);
+        onChange?.(notChangingValues);
 
         const url = new URL(window.location.href);
         const params = new URLSearchParams(url.search);
 
-        params.set("minPrice", "0");
-        params.set("maxPrice", "20000");
+        params.delete("minPrice");
+        params.delete("maxPrice");
 
         const newQuery = "?" + params.toString();
-
         setQuery(newQuery);
 
         url.search = params.toString();
@@ -66,10 +73,10 @@ export default function PriceRangeSlider({
 
             <div className="flex justify-between text-sm mt-[1.5rem]">
                 <Label htmlFor="min" className="text-black text-[1.125rem]">
-                    {defaultValues[0].toLocaleString()}
+                    {values[0].toLocaleString()}
                 </Label>
                 <Label htmlFor="max" className="text-black text-[1.125rem]">
-                    {defaultValues[1].toLocaleString()}
+                    {values[1].toLocaleString()}
                 </Label>
             </div>
         </div>

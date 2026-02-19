@@ -3,12 +3,11 @@ import { getVariantsAsync, selectVariants } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState, useRef } from 'react'
 import Variant from './Variant'
-import { getMinMaxPriceRangeAsync, selectCategory, selectMinMaxPriceRange } from '@/lib/features/navigation/navigationSlice'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { getMinMaxPriceRangeAsync, selectMinMaxPriceRange } from '@/lib/features/navigation/navigationSlice'
+import { usePathname, useRouter } from 'next/navigation'
 import PriceRangeSlider from './PriceRangeSlider'
 import { Button } from './ui/button'
 import { useFilterQuery } from '@/app/ClientLayout'
-import { MinMaxData } from '@/lib/features/types'
 
 interface CategoryFilterParam {
     setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,16 +18,13 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     const dispatch = useAppDispatch()
     const variants = useAppSelector(selectVariants)
     const router = useRouter()
-    const category = useAppSelector(selectCategory)
-    const searchParams = useSearchParams()
     const { setQuery } = useFilterQuery()
     const pathname = usePathname()
-    const minMaxPriceRange = useAppSelector<MinMaxData | null>(selectMinMaxPriceRange)
-    const [minMax, setMinMax] = useState<[number, number]>([0, 20000])
-    const [priceRange, setPriceRange] = useState<[number, number]>([
-        Number(searchParams.get("minPrice")) || 0,
-        Number(searchParams.get("maxPrice")) || 20000,
-    ])
+    const minMaxPriceRange = useAppSelector(selectMinMaxPriceRange)
+    const [min, setMin] = useState(0)
+    const [max, setMax] = useState(0)
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 0])
+    const [defaultPriceRange, setDefaultPriceRange] = useState<[number, number]>([0, 0])
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
     useEffect(() => {
@@ -38,12 +34,15 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
 
     useEffect(() => {
         if (minMaxPriceRange) {
-            setMinMax([
-                minMaxPriceRange?.cheapest_product?.price ?? 0,
-                minMaxPriceRange?.expensive_product?.price ?? 20000,
-            ])
+            const newMin = minMaxPriceRange?.cheapest_product?.price ?? 0;
+            const newMax = minMaxPriceRange?.expensive_product?.price ?? 0;
+            setMin(newMin);
+            setMax(newMax);
+            setPriceRange([newMin, newMax]);
+            setDefaultPriceRange([newMin, newMax]);
         }
-    }, [minMaxPriceRange])
+    }, [minMaxPriceRange]);
+
 
     const updateQueryParams = (values: [number, number]) => {
         if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -67,44 +66,25 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
         updateQueryParams(values)
     }
 
-    const handleCategoryClick = (id: string) => {
-        if (id) {
-            setOpenFilterModal(false)
-            router.push(`/subcategory/${id}`)
-        }
-    }
-
     const handleClearAll = () => {
         window.location.href = window.location.pathname
     }
 
     return (
         <div className="mt-4 lg:mt-0 w-full h-auto">
-            {category?.subcategories && page === "category" && (
-                <div className="w-full mb-[1.5rem] flex flex-col gap-y-[1rem]">
-                    {category?.subcategories.map((cat, index) => (
-                        <div key={index.toString()}>
-                            <div
-                                onClick={() => handleCategoryClick(cat?.id)}
-                                className="w-full text-custom-black cursor-pointer text-[0.875rem] lg:text-[1rem] mb-2"
-                            >
-                                {cat?.name}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
             {
-                minMaxPriceRange && <div className="flex flex-col items-center justify-center">
-                    <PriceRangeSlider
-                        min={minMax[0] ?? 0}
-                        max={minMax[1] ?? 20000}
-                        step={50}
-                        defaultValues={priceRange}
-                        onChange={handlePriceChange}
-                    />
-                </div>
+                min > 1 && max > 1 && (
+                    <div className="flex flex-col items-center justify-center">
+                        <PriceRangeSlider
+                            min={min}
+                            max={max}
+                            step={50}
+                            defaultValues={priceRange}
+                            notChangingValues={defaultPriceRange}
+                            onChange={handlePriceChange}
+                        />
+                    </div>
+                )
             }
 
             <div className="flex flex-col gap-y-[1.5rem]">
