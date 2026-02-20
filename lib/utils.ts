@@ -207,7 +207,7 @@ export const COVER_VIDEO_CONFIG = {
 };
 
 export const getProductImageUrl = (urls?: Image[]): string => {
-  const imageMedia = urls?.filter((media) => media.type === "image");
+  const imageMedia = urls?.filter((media) => media.type === "gallery" || media.type === "thumbnail");
   const primaryImage = imageMedia?.find((img) => img.is_primary);
   const imageToShow = primaryImage || imageMedia?.[0];
 
