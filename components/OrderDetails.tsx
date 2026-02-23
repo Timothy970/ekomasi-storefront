@@ -10,6 +10,7 @@ import { Textarea } from './ui/textarea';
 import { useAppDispatch } from '@/lib/hooks';
 import { createReturnsAsync } from '@/lib/features/returns/returnSlice';
 import { triggerToast } from '@/app/utils/toastUtils';
+import NoImage from './NoImage';
 
 type OrderDetailsProps = {
   order: Order;
@@ -83,19 +84,20 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
           {
             order?.items?.map((item, index) => {
               const isChecked = checkedValues.includes(item.product_id);
-
+              const productImage = item.urls && item.urls.length > 0 ? item.urls[0].url : null;
               return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex pb-[1.5rem] md:gap-x-[2rem] justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                 {
-                  item?.urls &&
-                  <div className="relative w-1/3 h-[13.5rem] min-w-[9rem] max-w-[6rem] max-h-[9rem] md:min-w-[12rem] md:max-w-[12rem] md:max-h-[12rem] flex-shrink-0">
-                    <Image
-                      src={item?.urls[0]?.url}
-                      alt={''}
-                      fill
-                      unoptimized
-                      className="object-cover h-full w-full"
-                    />
-                  </div>
+                  productImage ? (
+                    <div className="relative w-1/3 h-[13.5rem] min-w-[9rem] max-w-[6rem] max-h-[9rem] md:min-w-[12rem] md:max-w-[12rem] md:max-h-[12rem] flex-shrink-0">
+                      <Image
+                        src={productImage}
+                        alt={''}
+                        fill
+                        unoptimized
+                        className="object-cover h-full w-full"
+                      />
+                    </div>
+                  ) : (<NoImage />)
                 }
 
                 <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>

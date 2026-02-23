@@ -15,7 +15,7 @@ import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import { Crumb, Product } from '@/lib/features/types'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import { customParser } from '@/lib/utils'
+import { customParser, getProductImageUrl } from '@/lib/utils'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout, useIsBuyNow } from '@/app/ClientLayout'
 import { ShoppingBag } from 'lucide-react'
@@ -23,6 +23,7 @@ import Accordion from '@/components/Accordion'
 import { ProductDetailsReviews } from '@/components/ProductDetailsReviews'
 import ProductFeatureSection from '@/components/ProductFeatureSection'
 import Image from 'next/image'
+import NoImage from '@/components/NoImage'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -421,14 +422,16 @@ export default function ProductDetail() {
                             className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
                             onClick={() => router.push(`/products/${item.product_id}`)}
                           >
-                            <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
-                              <Image
-                                src={item.urls?.[0]?.url || item.images?.[0]?.url || ''}
-                                alt={item.name}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
+                            {item.urls || item.images ? (
+                              <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
+                                <Image
+                                  src={getProductImageUrl(item.urls || item.images)}
+                                  alt={item.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            ) : (<NoImage />)}
                             <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
                             <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
                           </div>

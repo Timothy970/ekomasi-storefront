@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { customParser } from "@/lib/utils";
+import NoImage from "./NoImage";
 
 export default function CategoryBanner({ imageUrl, description, title }: { imageUrl: string, description: string, title: string }) {
   return (
     <div className="relative w-full mx-auto overflow-hidden bg-black/40 h-[34.375rem] md:h-[30.125rem] z-0">
-      {
-        imageUrl && <Image
+      {imageUrl ? (
+        <Image
           src={imageUrl}
           alt=""
           fill
@@ -14,7 +15,9 @@ export default function CategoryBanner({ imageUrl, description, title }: { image
           unoptimized
           className="object-cover z-0"
         />
-      }
+      ) : (
+        <NoImage />
+      )}
 
       <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center z-10 h-full">
         <div className="bg-black/40 lg:bg-transparent p-4 w-full h-full flex justify-center items-start flex-col max-w-[90rem]">

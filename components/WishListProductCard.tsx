@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { Trash } from 'lucide-react'
 import { Product } from '@/lib/features/types'
-import { customParser } from '@/lib/utils'
+import { customParser, getProductImageUrl } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
@@ -11,6 +11,7 @@ import { deleteProductFromWishListAsync, getWishListsAsync, selectDeleteStatus }
 import LoadingIndicator from './LoadingIndicator'
 import { triggerToast } from '@/app/utils/toastUtils'
 import { addToCartAsync, createCartAsync, getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
+import NoImage from './NoImage'
 
 export default function WishListProductCard({ product, pageType }: { product: Product; pageType: "wishlist" | "shared" }) {
     const router = useRouter()
@@ -80,13 +81,15 @@ export default function WishListProductCard({ product, pageType }: { product: Pr
         )
     }
 
+    const imageUrl = getProductImageUrl(product.urls);
+
     return (
         <div className='cursor-pointer' onClick={() => router.push(`/products/${product?.product_id}`)}>
             <div className="overflow-hidden flex flex-col justify-center items-center">
                 {
-                    product && product?.urls !== undefined && product?.urls.length > 0 && <div className="relative w-full h-[15rem] sm:h-[20rem] md:h-[20rem]">
+                    imageUrl ? (<div className="relative w-full h-[15rem] sm:h-[20rem] md:h-[20rem]">
                         <Image
-                            src={product?.urls[0]?.url}
+                            src={imageUrl}
                             alt={product?.name}
                             fill
                             style={{ objectFit: "cover" }}
@@ -100,6 +103,7 @@ export default function WishListProductCard({ product, pageType }: { product: Pr
                             </div>
                         }
                     </div>
+                    ) : (<NoImage />)
                 }
 
                 <div className=" pb-3 flex flex-col gap-y-1 mt-[0.75rem] w-full justify-center">

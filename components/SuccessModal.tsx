@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import React from 'react'
 import NextImage from './NextImage';
 import { useRouter } from 'next/navigation';
+import NoImage from './NoImage';
 
 export default function SuccessModal({ designImage, recipientEmail }: { designImage: string, recipientEmail: string }) {
     const { voucherSuccessModalOpen, setVoucherSuccessModalOpen } = useVoucher();
@@ -59,7 +60,7 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
                         </div>
 
                         {
-                            designImage && <div className="relative w-full md:w-[36rem] h-auto mt-[2.5rem]">
+                            designImage ? (<div className="relative w-full md:w-[36rem] h-auto mt-[2.5rem]">
                                 <NextImage
                                     src={designImage}
                                     width={40}
@@ -69,7 +70,7 @@ export default function SuccessModal({ designImage, recipientEmail }: { designIm
                                     alt="Preview"
                                 />
                             </div>
-                        }
+                            ) : (<NoImage />)}
                     </div>
                 </div>
             </div>

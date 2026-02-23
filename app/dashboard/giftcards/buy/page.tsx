@@ -14,6 +14,7 @@ import { useVoucher } from '@/app/ClientLayout'
 import SuccessModal from '@/components/SuccessModal'
 import { ToastType } from '@/lib/features/toast/toastSlice'
 import MpesaPaymentModal from '@/components/MpesaPaymentModal'
+import NoImage from '@/components/NoImage'
 
 export default function BuyGiftCards() {
     const [voucherType, setSelectVoucherType] = useState('');
@@ -230,7 +231,7 @@ export default function BuyGiftCards() {
                     <div className='relative z-[12] flex flex-col gap-y-[1rem] md:flex-row md:gap-x-[1rem]'>
                         <div className='w-[100%] md:w-[50%]'>
                             {
-                                designImage && <div className=" w-full md:w-[70%] relative h-auto mt-[2.5rem]">
+                                designImage ? (<div className=" w-full md:w-[70%] relative h-auto mt-[2.5rem]">
                                     <NextImage
                                         src={designImage}
                                         width={40}
@@ -240,6 +241,7 @@ export default function BuyGiftCards() {
                                         alt="Preview"
                                     />
                                 </div>
+                                ) : (<NoImage />)
                             }
                         </div>
 
@@ -260,7 +262,7 @@ export default function BuyGiftCards() {
                                                 setDesignImage(design.url);
                                             }}
                                         >
-                                            <NextImage
+                                            {design.url ? (<NextImage
                                                 src={design.url}
                                                 width={300}
                                                 height={180}
@@ -268,6 +270,7 @@ export default function BuyGiftCards() {
                                                 unoptimized
                                                 alt={design.name}
                                             />
+                                            ) : (<NoImage />)}
                                         </div>
                                     ))}
                                 </div>

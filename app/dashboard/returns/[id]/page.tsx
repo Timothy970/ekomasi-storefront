@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import StatusBanner from '@/components/StatusBannerComponent';
+import { getProductImageUrl } from '@/lib/utils';
+import NoImage from '@/components/NoImage';
 
 export default function Returns() {
     const params = useParams<{ id: string }>();
@@ -76,16 +78,17 @@ export default function Returns() {
 
                                     return <div key={index?.toString()} className='gap-x-[0.75rem] w-full flex pb-[1.5rem] md:gap-x-[2rem] justify-start items-start border-b border-[rgba(0,0,0,0.40)]'>
                                         {
-                                            item?.urls &&
-                                            <div className="relative w-1/3 h-[13.5rem] min-w-[9rem] max-w-[6rem] max-h-[9rem] md:min-w-[12rem] md:max-w-[12rem] md:max-h-[12rem] flex-shrink-0">
-                                                <Image
-                                                    src={item?.urls[0]?.url}
-                                                    alt={''}
-                                                    fill
-                                                    unoptimized
-                                                    className="object-cover h-full w-full"
-                                                />
-                                            </div>
+                                            item?.urls && item?.urls.length > 0 ? (
+                                                <div className="relative w-1/3 h-[13.5rem] min-w-[9rem] max-w-[6rem] max-h-[9rem] md:min-w-[12rem] md:max-w-[12rem] md:max-h-[12rem] flex-shrink-0">
+                                                    <Image
+                                                        src={getProductImageUrl(item?.urls)}
+                                                        alt={''}
+                                                        fill
+                                                        unoptimized
+                                                        className="object-cover h-full w-full"
+                                                    />
+                                                </div>
+                                            ) : (<NoImage />)
                                         }
 
                                         <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>

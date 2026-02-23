@@ -1,6 +1,7 @@
 "use client"
 import Navigation from '@/components/Navigation'
 import NextImage from '@/components/NextImage'
+import NoImage from '@/components/NoImage'
 import { getBlogAsync, selectBlog } from '@/lib/blog/blogSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { customParser } from '@/lib/utils'
@@ -33,7 +34,7 @@ export default function page() {
         <Navigation>
             <div className={`w-full px-[1rem] h-full flex flex-col max-w-[90rem] mx-auto mb-[2rem] md:mb-[2.5rem]`}>
                 {
-                    blog?.banner_image_url && <div className="w-full h-[15rem] md:h-[20rem] lg:h-[25rem] xl:h-[30rem]">
+                    blog?.banner_image_url ? (<div className="w-full h-[15rem] md:h-[20rem] lg:h-[25rem] xl:h-[30rem]">
                         <NextImage
                             src={blog?.banner_image_url}
                             width={40}
@@ -43,7 +44,8 @@ export default function page() {
                             alt="banner-image-url"
                         />
                     </div>
-                }
+                    ) : (<NoImage />
+                    )}
 
                 <h1 className='text-[1.5rem] md:text-[2rem] font-[700] mt-[2rem]'>{blog?.title}</h1>
 
@@ -94,7 +96,7 @@ export default function page() {
 
                 <div className='mt-[1rem] lg:mt-[1.5rem]'>
                     {
-                        blog?.image_url && <div className="w-full relative">
+                        blog?.image_url ? (<div className="w-full relative">
                             <div className='h-[28rem]'>
                                 <NextImage
                                     src={blog?.image_url}
@@ -106,6 +108,7 @@ export default function page() {
                                 />
                             </div>
                         </div>
+                        ) : (<NoImage />)
                     }
 
                     {
