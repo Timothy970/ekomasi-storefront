@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/features/types";
 import { customParser, getProductImageUrl } from "@/lib/utils";
+import NoImage from "./NoImage";
 
 export default function ProductCard({ product }: { product: Product }) {
   const [productId, setProductId] = useState<string | null>(null);
@@ -29,20 +30,24 @@ export default function ProductCard({ product }: { product: Product }) {
       className="block bg-white overflow-hidden cursor-pointer"
     >
       <div className="relative w-full h-[18rem] sm:h-[20rem] md:h-[20rem] lg:h-[22rem]">
-        {<Image
-          src={imageUrl}
-          alt={product.name}
-          unoptimized
-          fill
-          className="product-card object-cover z-0"
-        />
-        }
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            unoptimized
+            fill
+            className="product-card object-cover z-0"
+          />
+        ) : (
+          <NoImage />
+        )}
 
         {
-          product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
+          product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute top-0 left-0 z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem]">
             <span className="text-[0.75rem] text-white font-bold">{product?.tag}</span>
           </div>
         }
+
       </div>
 
       <div className="pt-4">

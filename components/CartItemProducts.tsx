@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useParams, useRouter } from 'next/navigation'
 import { deleteProductFromCartAsync, getCartAsync, selectCart, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
 import { customParser } from '@/lib/utils'
+import NoImage from './NoImage'
 
 export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
     const dispatch = useAppDispatch()
@@ -67,15 +68,16 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
     return (
         <div className='gap-x-[0.75rem] w-full flex justify-between items-start py-[0.75rem] border-b border-[rgba(0,0,0,0.40)]'>
             {
-                item?.product?.urls?.length && <div className="relative w-[40%]  h-[10rem] sm:h-[15rem] md:h-[15rem]">
+                item?.product?.urls?.length ? (<div className="relative w-[40%]  h-[10rem] sm:h-[15rem] md:h-[15rem]">
                     <Image
                         src={item?.product?.urls[0]?.url}
-                        alt=""
+                        alt={item?.product?.name}
                         fill
                         className="object-cover"
                         unoptimized
                     />
                 </div>
+                ) : (<NoImage />)
             }
 
             <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>

@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from './ui/button';
 import { Order } from '@/lib/features/types';
 import moment from "moment";
+import NoImage from './NoImage';
 
 interface DashboardOrdersProps {
   orders: Order[];
@@ -23,15 +24,17 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
         return (
           <div key={order?.order_id} className="overflow-hidden cursor-pointer w-full py-[2rem] flex flex-row border-b border-[rgba(0,0,0,0.40)] gap-x-[0.5rem]">
             {
-              firstItem?.urls && <div className="relative w-1/3 h-[13.5rem] min-w-[6rem] max-w-[6rem] max-h-[6rem] md:min-w-[9rem] md:max-w-[9rem] md:max-h-[9rem] flex-shrink-0">
-                <Image
-                  src={firstItem?.urls[0]?.url}
-                  alt={''}
-                  fill
-                  unoptimized
-                  className="object-cover h-full w-full"
-                />
-              </div>
+              firstItem?.urls?.[0]?.url ? (
+                <div className="relative w-1/3 h-[13.5rem] min-w-[6rem] max-w-[6rem] max-h-[6rem] md:min-w-[9rem] md:max-w-[9rem] md:max-h-[9rem] flex-shrink-0">
+                  <Image
+                    src={firstItem?.urls[0]?.url}
+                    alt={''}
+                    fill
+                    unoptimized
+                    className="object-cover h-full w-full"
+                  />
+                </div>
+              ) : (<NoImage />)
             }
 
             <div className="flex w-full flex-col pl-4 lg:flex-row">
@@ -74,6 +77,6 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
           </div>
         );
       })}
-    </div>
+    </div >
   );
 }

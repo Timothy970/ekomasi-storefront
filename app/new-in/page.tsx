@@ -3,11 +3,10 @@ import Navigation from '@/components/Navigation';
 import { getSearchResultsAsync, selectPagination, selectSearchResults, selectStatus } from '@/lib/features/mall/mallSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout';
 import { useFilterQuery } from '../ClientLayout';
 import { Crumb } from '@/lib/features/types';
-import { triggerToast } from '../utils/toastUtils';
 
 export default function NewIn() {
   const dispatch = useAppDispatch();
@@ -17,8 +16,6 @@ export default function NewIn() {
   const { query, setQuery } = useFilterQuery();
   const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([]);
   const status = useAppSelector(selectStatus);
-  const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     setBreadCrumb([
@@ -42,15 +39,12 @@ export default function NewIn() {
   useEffect(() => {
     const formattedQuery = addSalesTag(query);
     dispatch(getSearchResultsAsync({ query: formattedQuery }));
-
-    const newUrl = `${pathname}${formattedQuery}`;
-    router.replace(newUrl, { scroll: false });
-  }, [query, dispatch, pathname, router]);
+  }, [query, dispatch]);
 
   const updateQueryParam = (param: string, value: string | number) => {
     const params = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query);
     params.set(param, value.toString());
-    params.set("tag", "New In"); 
+    params.set("tag", "New In");
     return `?${params.toString()}`;
   };
 

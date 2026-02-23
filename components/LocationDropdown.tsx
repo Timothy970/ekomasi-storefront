@@ -94,7 +94,7 @@ export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Pr
                 <SelectValue placeholder="Select shipping location..." />
             </SelectTrigger>
             <SelectContent className="">
-                {locations?.locations.map((loc) => (
+                {(locations?.locations ?? []).map((loc) => (
                     <SelectItem key={loc.id} value={String(loc.id)}>
                         {loc.location} — Ksh {loc.charge}
                     </SelectItem>

@@ -376,12 +376,12 @@ export interface DeliveryLocation {
 }
 
 export interface LocationData {
-  locations: DeliveryLocation[]
+  locations: DeliveryLocation[] | null
   pagination: Pagination
 }
 
 export interface LocationsResponse {
-  data: LocationData
+  data: LocationData 
   message: string
   status_code: number
 }

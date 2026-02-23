@@ -2,6 +2,7 @@
 import { ProductFeature } from "@/lib/features/types";
 import { customParser } from "@/lib/utils";
 import Image from "next/image";
+import NoImage from "./NoImage";
 
 export function FeaturePreview({ feature }: { feature: ProductFeature }) {
     const {
@@ -61,7 +62,7 @@ export function FeaturePreview({ feature }: { feature: ProductFeature }) {
                 <div className="font-[400]">{customParser(description)}</div>
             </div>
 
-            {src && (
+            {src ? (
                 <div className="relative h-[40rem] w-full">
                     <Image
                         src={src}
@@ -72,6 +73,8 @@ export function FeaturePreview({ feature }: { feature: ProductFeature }) {
                         className="object-cover h-full w-full mx-auto"
                     />
                 </div>
+            ) : (
+                <NoImage />
             )}
         </div>
     );

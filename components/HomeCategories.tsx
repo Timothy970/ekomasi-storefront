@@ -11,147 +11,95 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function HomeCategories() {
   const categories = useAppSelector(selectCategories)
   const router = useRouter()
-  const [offsetX, setOffsetX] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [cardWidth, setCardWidth] = useState(208);
-  const [viewportWidth, setViewportWidth] = useState(0);
-  const animationRef = useRef<number | null>(null);
-  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const GAP_PX = 16;
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Calculate card width and viewport width based on window size
+  // Split categories into 2 rows based on count
+  const { firstRow, secondRow } = useMemo(() => {
+    if (!categories?.length) return { firstRow: [], secondRow: [] };
+
+    const total = categories.length;
+
+    // If 6 or less, put all in first row
+    if (total <= 6) {
+      return { firstRow: categories, secondRow: [] };
+    }
+
+    // If more than 6, distribute between rows
+    // First row gets 6, remaining go to second row
+    // If more than 12, distribute evenly
+    if (total <= 12) {
+      return {
+        firstRow: categories.slice(0, 6),
+        secondRow: categories.slice(6)
+      };
+    }
+
+    // More than 12: distribute evenly
+    const half = Math.ceil(total / 2);
+    return {
+      firstRow: categories.slice(0, half),
+      secondRow: categories.slice(half)
+    };
+  }, [categories]);
+
+  // Check if scroll buttons should be enabled
+  const checkScrollButtons = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
   useEffect(() => {
-    const getCardWidth = () => {
-      if (typeof window === 'undefined') return 208;
-      if (window.innerWidth < 640) return 128;
-      if (window.innerWidth < 768) return 160;
-      if (window.innerWidth < 1024) return 192;
-      return 208;
-    };
-
-    const handleResize = () => {
-      setCardWidth(getCardWidth());
-      setViewportWidth(window.innerWidth);
-    };
-
-    // Set initial width
-    setCardWidth(getCardWidth());
-    setViewportWidth(typeof window !== 'undefined' ? window.innerWidth : 1440);
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Calculate how many cards fit on screen
-  const cardsPerView = useMemo(() => {
-    const maxContainerWidth = Math.min(viewportWidth * 0.9, 1440); // 90rem max
-    return Math.floor(maxContainerWidth / (cardWidth + GAP_PX));
-  }, [viewportWidth, cardWidth]);
-
-  // Only enable auto-scroll if categories overflow the viewport
-  const shouldAutoScroll = categories && categories.length > cardsPerView;
-
-  // Duplicate categories for seamless loop (only if auto-scrolling)
-  const duplicatedCategories = useMemo(() => {
-    if (!categories?.length) return [];
-    if (!shouldAutoScroll) return categories;
-    // Duplicate the full category list twice for seamless infinite scroll
-    return [...categories, ...categories];
-  }, [categories, shouldAutoScroll]);
-
-  const singleSetWidth = shouldAutoScroll ? categories.length * (cardWidth + GAP_PX) : 0;
+    checkScrollButtons();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScrollButtons);
+      const resizeObserver = new ResizeObserver(checkScrollButtons);
+      resizeObserver.observe(container);
+      return () => {
+        container.removeEventListener('scroll', checkScrollButtons);
+        resizeObserver.disconnect();
+      };
+    }
+  }, [categories]);
 
   const prev = () => {
-    if (!shouldAutoScroll) return;
-    setIsPaused(true);
-    setOffsetX((current) => {
-      const newOffset = current - (cardWidth + GAP_PX);
-      return newOffset < 0 ? singleSetWidth + newOffset : newOffset;
+    if (!scrollContainerRef.current) return;
+    scrollContainerRef.current.scrollBy({
+      left: -300,
+      behavior: 'smooth'
     });
-
-    // Clear existing timer and set new one to resume after 3 seconds
-    if (resumeTimerRef.current) {
-      clearTimeout(resumeTimerRef.current);
-    }
-    resumeTimerRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 3000);
   };
 
   const next = () => {
-    if (!shouldAutoScroll) return;
-    setIsPaused(true);
-    setOffsetX((current) => {
-      const newOffset = current + (cardWidth + GAP_PX);
-      return newOffset >= singleSetWidth ? newOffset - singleSetWidth : newOffset;
+    if (!scrollContainerRef.current) return;
+    scrollContainerRef.current.scrollBy({
+      left: 300,
+      behavior: 'smooth'
     });
-
-    // Clear existing timer and set new one to resume after 3 seconds
-    if (resumeTimerRef.current) {
-      clearTimeout(resumeTimerRef.current);
-    }
-    resumeTimerRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 3000);
   };
 
-  const canPrev = shouldAutoScroll;
-  const canNext = shouldAutoScroll;
-
-  useEffect(() => {
-    if (!duplicatedCategories.length || isPaused || !shouldAutoScroll) return;
-
-    const animate = () => {
-      setOffsetX((prevOffset) => {
-        const newOffset = prevOffset + 1.0; // Increased speed
-
-        // Reset when we've scrolled through one complete set
-        if (newOffset >= singleSetWidth) {
-          return 0;
-        }
-
-        return newOffset;
-      });
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [duplicatedCategories.length, isPaused, singleSetWidth, shouldAutoScroll]);
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (resumeTimerRef.current) {
-        clearTimeout(resumeTimerRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <div className="w-full flex justify-center items-center relative z-0 pt-[6rem]">
+    <div className="w-full flex justify-center items-center relative z-0 pt-[3rem] sm:pt-[4rem] md:pt-[5rem] lg:pt-[6rem]">
       <div className="max-w-[90rem] w-full">
-        <div className="flex justify-between items-center">
-          <div className="flex flex-col gap-y-[1rem]">
-            <h2 className="text-[2.25rem] not-italic font-bold leading-[2.1rem]">Categories</h2>
-            <p className="text-custom-black font-poppins text-[1.125rem] font-normal leading-[1.3125rem] mt-[1rem]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-col gap-y-[0.5rem] sm:gap-y-[1rem]">
+            <h2 className="text-[1.5rem] sm:text-[1.875rem] lg:text-[2.25rem] not-italic font-bold leading-tight">Categories</h2>
+            <p className="text-custom-black font-poppins text-[0.875rem] sm:text-[1rem] lg:text-[1.125rem] font-normal leading-tight">
               Discover our pushchairs, baby clothing, nursery furniture and more
             </p>
           </div>
 
-          <Button onClick={() => router.push("/categories")} className="h-[3.438rem] hidden lg:flex min-w-[13rem] bg-transparent text-black justify-center items-center border rounded-full border-black">
-            <span className="text-[1rem]">View All</span>
+          <Button onClick={() => router.push("/categories")} className="h-[2.75rem] sm:h-[3rem] lg:h-[3.438rem] hidden sm:flex min-w-[10rem] lg:min-w-[13rem] bg-transparent text-black justify-center items-center border rounded-full border-black">
+            <span className="text-[0.875rem] sm:text-[1rem]">View All</span>
           </Button>
         </div>
 
-        <div className="mt-[5rem] pb-[1rem] relative">
-          <div className="absolute -right-[1rem] z-50 pointer-events-none lg:-right-[2rem] top-2 w-full flex items-start justify-end h-[50%]">
+        <div className="mt-[2rem] sm:mt-[3rem] md:mt-[4rem] lg:mt-[5rem] pb-[1rem] relative">
+          <div className="absolute -right-[1rem] z-50 pointer-events-none lg:-right-[2rem] top-2 w-full hidden md:flex items-start justify-end h-[50%]">
             <svg className="mt-[4.18rem]" xmlns="http://www.w3.org/2000/svg" width="70" height="66" viewBox="0 0 70 66" fill="none">
               <path d="M14.6907 63.1617C15.086 63.1531 15.5705 63.1398 16.1344 63.1202C17.8463 63.0604 20.288 62.9399 23.193 62.6951C29.0152 62.2043 36.6452 61.2196 43.9772 59.2563C51.3559 57.2805 58.1932 54.3747 62.6427 50.1865C64.8427 48.1155 66.4261 45.7626 67.2387 43.0735C68.0495 40.3909 68.1321 37.2468 67.1389 33.5257C65.863 28.7454 63.4983 25.9801 60.7847 24.3812C58.0118 22.7475 54.6717 22.215 51.3096 22.3062C47.9577 22.397 44.7297 23.1037 42.315 23.8033C41.1141 24.1513 40.1296 24.4929 39.4504 24.7453C39.1113 24.8714 38.849 24.9748 38.6751 25.0453C38.5885 25.0804 38.5239 25.1074 38.4826 25.1248C38.462 25.1334 38.4464 25.1402 38.4377 25.1439C38.4339 25.1456 38.4313 25.1469 38.4301 25.1474L38.4292 25.1469L35.9484 26.227L35.6451 23.5395L35.6456 23.5387C35.6454 23.5373 35.645 23.5337 35.6444 23.529L35.6106 23.2749C35.5849 23.089 35.5443 22.81 35.4841 22.4531C35.3636 21.7386 35.1673 20.7151 34.8689 19.501C34.269 17.0598 33.2697 13.9109 31.6739 10.9627C30.0731 8.0054 27.942 5.37929 25.1402 3.79512C22.398 2.24473 18.8182 1.57933 14.0348 2.86603C10.7409 3.75208 8.36424 5.29291 6.65403 7.25934C4.93184 9.23964 3.79913 11.7529 3.16666 14.7C1.88968 20.6509 2.71223 28.0868 4.50348 35.5291C6.28385 42.9261 8.96615 50.1126 11.2152 55.4685C12.3377 58.1415 13.3479 60.3482 14.0757 61.8831C14.3128 62.3831 14.5196 62.8117 14.6907 63.1617Z" stroke="#ADD1CB" strokeWidth="4" />
             </svg>
@@ -161,66 +109,104 @@ export default function HomeCategories() {
           </div>
 
           <div
-            className="overflow-hidden"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            ref={scrollContainerRef}
+            className="overflow-x-auto overflow-y-hidden -mx-4 sm:mx-0 px-4 sm:px-0"
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              WebkitOverflowScrolling: "touch"
+            }}
           >
-            <div
-              className="flex flex-nowrap gap-[0.5rem]"
-              style={{
-                transform: `translateX(-${offsetX}px)`,
-                transition: 'none'
-              }}
-            >
-              {duplicatedCategories?.map((category, i) => (
-                <Link key={`${category.id}-${i}`} href={`/category/${category?.id}`}>
-                  <div
-                    className="shrink-0 overflow-hidden bg-white w-[8rem] sm:w-[10rem] md:w-[12rem] lg:w-[13rem]"
-                  >
-                    <div className="relative w-full h-[10rem] sm:h-[12rem] md:h-[13rem] lg:h-[14rem]">
-                      <Image
-                        src={category?.image_url}
-                        alt={category?.name}
-                        fill
-                        unoptimized
-                        style={{ objectFit: "cover" }}
-                        className="product-card h-full w-full"
-                        priority
-                      />
-                    </div>
+            <div className="flex flex-col gap-[0.75rem] sm:gap-[1rem]">
+              {/* First Row */}
+              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-[0.5rem] sm:gap-[0.75rem] md:gap-[1rem]">
+                {firstRow?.map((category) => (
+                  <Link key={category.id} href={`/category/${category?.id}`}>
+                    <div
+                      className="category-card overflow-hidden bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="relative w-full aspect-square">
+                        <Image
+                          src={category?.image_url}
+                          alt={category?.name}
+                          fill
+                          unoptimized
+                          style={{ objectFit: "cover" }}
+                          className="product-card h-full w-full"
+                          priority
+                        />
+                      </div>
 
-                    <div className="px-2 pb-3 flex flex-col gap-[1rem] mt-[0.75rem] w-full justify-center lg:items-center">
-                      <h3 className="text-[0.75rem] lg:text-sm font-bold lg:font-light leading-[1.2rem]">{category.name}</h3>
+                      <div className="px-1.5 sm:px-2 pb-2 sm:pb-3 flex flex-col gap-[0.5rem] sm:gap-[1rem] mt-[0.5rem] sm:mt-[0.75rem] w-full justify-center lg:items-center">
+                        <h3 className="text-[0.625rem] sm:text-[0.75rem] lg:text-sm font-bold lg:font-light leading-tight line-clamp-2">{category.name}</h3>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Second Row */}
+              {secondRow.length > 0 && (
+                <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-[0.5rem] sm:gap-[0.75rem] md:gap-[1rem]">
+                  {secondRow?.map((category) => (
+                    <Link key={category.id} href={`/category/${category?.id}`}>
+                      <div
+                        className="category-card overflow-hidden bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="relative w-full aspect-square">
+                          <Image
+                            src={category?.image_url}
+                            alt={category?.name}
+                            fill
+                            unoptimized
+                            style={{ objectFit: "cover" }}
+                            className="product-card h-full w-full"
+                            priority
+                          />
+                        </div>
+
+                        <div className="px-1.5 sm:px-2 pb-2 sm:pb-3 flex flex-col gap-[0.5rem] sm:gap-[1rem] mt-[0.5rem] sm:mt-[0.75rem] w-full justify-center lg:items-center">
+                          <h3 className="text-[0.625rem] sm:text-[0.75rem] lg:text-sm font-bold lg:font-light leading-tight line-clamp-2">{category.name}</h3>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {shouldAutoScroll && (
-            <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
+          {(canScrollLeft || canScrollRight) && (
+            <div className="flex items-center justify-center sm:justify-end gap-[0.75rem] sm:gap-[1rem] mt-[1rem] sm:mt-[1.5rem]">
               <Button
-                className="rounded-full border border-black"
+                className="rounded-full border border-black w-10 h-10 sm:w-12 sm:h-12"
                 onClick={prev}
                 variant="outline"
                 size="icon"
                 aria-label="Previous"
-                disabled={!canPrev}
+                disabled={!canScrollLeft}
               >
-                <ChevronLeft className="h-[2.5rem] w-[3rem]" />
+                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
               <Button
-                className="rounded-full border border-black"
+                className="rounded-full border border-black w-10 h-10 sm:w-12 sm:h-12"
                 onClick={next}
                 variant="outline"
                 size="icon"
                 aria-label="Next"
-                disabled={!canNext}
+                disabled={!canScrollRight}
               >
-                <ChevronRight className="h-[2.5rem] w-[3rem] rounded-full" />
+                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
               </Button>
             </div>
           )}
+
+          {/* View All Button for Mobile */}
+          <div className="sm:hidden mt-4">
+            <Button onClick={() => router.push("/categories")} className="w-full h-[2.75rem] bg-transparent text-black justify-center items-center border rounded-full border-black">
+              <span className="text-[0.875rem]">View All Categories</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import type { SubCategoryProduct } from '@/lib/features/types'
 import { useRouter } from 'next/navigation'
 import { customParser, getProductImageUrl } from '@/lib/utils'
+import NoImage from './NoImage'
 
 export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
     const router = useRouter()
@@ -12,13 +13,14 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
         <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.product_id}`)}>
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
                 {
-                    product.urls && product.urls[0]?.url && <Image
+                    product.urls && product.urls[0]?.url ? (<Image
                         src={imageUrl}
                         alt={product.name}
                         fill
                         unoptimized
                         className="object-cover"
                     />
+                    ) : (<NoImage />)
                 }
 
             </div>

@@ -10,6 +10,7 @@ import {
 } from "@/lib/features/navigation/navigationSlice";
 import Link from "next/link";
 import Image from "next/image";
+import NoImage from "./NoImage";
 
 export default function FlashDeals({ title }: { title: string }) {
     const [index, setIndex] = useState(0);
@@ -98,7 +99,7 @@ export default function FlashDeals({ title }: { title: string }) {
                                         >
                                             <div className="h-[13.5rem] sm:h-[14rem] md:h-[15rem] lg:h-[16rem] overflow-hidden relative">
                                                 {
-                                                    deal.image && <Image
+                                                    deal.image ? (<Image
                                                         alt={"trending"}
                                                         fill
                                                         src={deal.image}
@@ -107,6 +108,7 @@ export default function FlashDeals({ title }: { title: string }) {
                                                         priority
                                                         style={{ objectFit: "cover" }}
                                                     />
+                                                    ) : (<NoImage />)
                                                 }
 
                                             </div>

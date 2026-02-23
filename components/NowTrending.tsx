@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { customParser } from "@/lib/utils";
+import NoImage from "./NoImage";
 
 export default function NowTrending({ title }: { title: string }) {
   const [index, setIndex] = useState(0);
@@ -89,43 +90,49 @@ export default function NowTrending({ title }: { title: string }) {
                 animate={{ x: -(index * (cardW + GAP_PX)) }}
                 transition={{ type: "spring", stiffness: 380, damping: 40 }}
               >
-                {featured?.map((p, i) => (
-                  <Link key={i.toString()} href={`/products/${p.product_id}`}>
-                    <div
-                      ref={i === 0 ? cardRef : undefined}
-                      className="shrink-0 overflow-hidden bg-white w-[10rem] sm:w-[13rem] md:w-[16rem] mr-[1rem]"
-                    >
-                      <div className="h-[13.5rem] sm:h-[14rem] md:h-[15rem] lg:h-[16rem] overflow-hidden relative">
-                        <Image
-                          alt={"trending"}
-                          fill
-                          src={p.urls[0]?.url}
-                          className="product-card rounded-t-md"
-                          unoptimized
-                          priority
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
+                {featured?.map((p, i) => {
+                  const productImage = p.urls && p.urls.length > 0 ? p.urls[0].url : null;
+                  return (
+                    <Link key={i.toString()} href={`/products/${p.product_id}`}>
+                      <div
+                        ref={i === 0 ? cardRef : undefined}
+                        className="shrink-0 overflow-hidden bg-white w-[10rem] sm:w-[13rem] md:w-[16rem] mr-[1rem]"
+                      >
+                        {productImage ? (
+                          <div className="h-[13.5rem] sm:h-[14rem] md:h-[15rem] lg:h-[16rem] overflow-hidden relative">
+                            <Image
+                              alt={"trending"}
+                              fill
+                              src={productImage}
+                              className="product-card rounded-t-md"
+                              unoptimized
+                              priority
+                              style={{ objectFit: "cover" }}
+                            />
+                          </div>
+                        ) : (
+                          <NoImage />
+                        )}
+                        <div className="pt-4 ">
+                          <h3 className="text-[0.875rem] lg:text-base font-bold lg:font-light leading-[1.5rem]">
+                            {p.category_name}
+                          </h3>
 
-                      <div className="pt-4 ">
-                        <h3 className="text-[0.875rem] lg:text-base font-bold lg:font-light leading-[1.5rem]">
-                          {p.category_name}
-                        </h3>
+                          <div className="text-custom-black font-[600] text-[0.875rem] lg:text-base leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
+                            {customParser(p.name)}
+                          </div>
 
-                        <div className="text-custom-black font-[600] text-[0.875rem] lg:text-base leading-[1.3rem] mt-1 line-clamp-2 capitalize text-wrap">
-                          {customParser(p.name)}
+                          <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
+                            {"KES " +
+                              new Intl.NumberFormat("en-KE", {
+                                minimumFractionDigits: 0,
+                              }).format(p.price ?? 0)}
+                          </p>
                         </div>
-
-                        <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
-                          {"KES " +
-                            new Intl.NumberFormat("en-KE", {
-                              minimumFractionDigits: 0,
-                            }).format(p.price ?? 0)}
-                        </p>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </motion.div>
             </div>
 

@@ -206,7 +206,41 @@ export const COVER_VIDEO_CONFIG = {
   },
 };
 
+export const extractVideoId = (url: string): { id: string; provider: "youtube" | "vimeo" | "html5" } | null => {
+  if (!url) return null;
+
+  // YouTube
+  const ytRegExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+  const ytMatch = url.match(ytRegExp);
+  if (ytMatch && ytMatch[7].length === 11) {
+    return { id: ytMatch[7], provider: "youtube" };
+  }
+
+  // YouTube Shortened
+  try {
+    const urlObj = new URL(url);
+    if (urlObj.hostname === 'youtu.be') {
+      return { id: urlObj.pathname.slice(1), provider: "youtube" };
+    }
+  } catch (e) {}
+
+  // Vimeo
+  const vimeoRegExp = /^.*(vimeo\.com\/)((channels\/[^\/]+\/)|(groups\/[^\/]+\/content\/)|(album\/[^\/]+\/video\/))?([0-9]+)/;
+  const vimeoMatch = url.match(vimeoRegExp);
+  if (vimeoMatch) {
+    return { id: vimeoMatch[6], provider: "vimeo" };
+  }
+
+  // HTML5 (if it looks like a direct video link or common video host)
+  if (url.match(/\.(mp4|webm|ogg)$/i) || url.includes('blob:') || !url.includes('.')) {
+     return { id: url, provider: "html5" };
+  }
+
+  return null;
+};
+
 export const getProductImageUrl = (urls?: Image[]): string => {
+
   const imageMedia = urls?.filter((media) => media.type === "gallery" || media.type === "thumbnail");
   const primaryImage = imageMedia?.find((img) => img.is_primary);
   const imageToShow = primaryImage || imageMedia?.[0];

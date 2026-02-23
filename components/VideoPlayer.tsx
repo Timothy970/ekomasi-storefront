@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import "plyr-react/plyr.css";
+import { extractVideoId } from '@/lib/utils';
 
 // Dynamic import for Plyr to avoid SSR issues
 const Plyr = dynamic<any>(() => import('plyr-react').then(mod => mod.Plyr), {
@@ -46,48 +47,42 @@ const VideoPlayer = ({
         return <div style={{ width, height }} className={className} />; // Placeholder to prevent layout shift
     }
 
-    const getProvider = (url: string) => {
-        if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
-        if (url.includes('vimeo.com')) return 'vimeo';
-        return 'html5';
-    };
+    const videoInfo = extractVideoId(url);
 
-    const getVideoId = (url: string, provider: string) => {
-        if (provider === 'youtube') {
-            const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[7].length === 11) ? match[7] : url;
-        }
-        if (provider === 'vimeo') {
-            const regExp = /^.*(vimeo\.com\/)((channels\/[^\/]+\/)|(groups\/[^\/]+\/content\/)|(album\/[^\/]+\/video\/))?([0-9]+)/;
-            const match = url.match(regExp);
-            return match ? match[6] : url;
-        }
-        return url;
-    };
+    if (!videoInfo) {
+        return (
+            <div
+                className={`video-player-placeholder ${className}`}
+                style={{ width, height, backgroundColor: '#f3f4f6' }}
+            />
+        );
+    }
 
-    const provider = getProvider(url);
-    const videoSrc = getVideoId(url, provider);
+    const { id: videoSrc, provider } = videoInfo;
+
+    const finalProvider = (provider === 'youtube' && videoSrc.includes('/') && !videoSrc.includes('youtube')) ? 'html5' : provider;
 
     const plyrSource: any = {
         type: 'video',
         sources: [
             {
                 src: videoSrc,
-                provider: provider,
+                provider: finalProvider,
             },
         ],
     };
 
     const plyrOptions = {
-        autoplay: playing,
         muted: muted,
+        autoplay: playing,
         loop: { active: loop },
         controls: controls ? ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen'] : [],
         settings: ['quality', 'speed'],
         playsinline: playsInline,
-        ...config
+        ...config,
+        // muted: true, // Force muted to true as per user request
     };
+
 
     return (
         <div
@@ -112,6 +107,7 @@ const VideoPlayer = ({
             }}>
                 <div style={{ width: '100%', height: '100%' }}>
                     <Plyr
+                        key={videoSrc}
                         source={plyrSource}
                         options={plyrOptions}
                     />

@@ -4,6 +4,8 @@ import Link from 'next/link';
 import React from 'react';
 import { Returns } from '@/lib/features/types';
 import moment from "moment";
+import { getProductImageUrl } from '@/lib/utils';
+import NoImage from './NoImage';
 
 interface DashboardReturnsProps {
     returns: Returns[];
@@ -18,19 +20,20 @@ export default function DashboardReturns({ returns }: DashboardReturnsProps) {
         <div className=" flex flex-col items-start justify-start">
             {returns.map((returnItem) => {
                 const firstItem = returnItem?.products[0];
-
+                const imageUrl = getProductImageUrl(firstItem?.urls);
                 return (
                     <div key={returnItem?.return_id} className="overflow-hidden cursor-pointer w-full py-[2rem] flex flex-row border-b border-[rgba(0,0,0,0.40)] gap-x-[0.5rem]">
                         {
-                            firstItem?.urls && <div className="relative w-1/3 h-[13.5rem] min-w-[6rem] max-w-[6rem] max-h-[6rem] md:min-w-[9rem] md:max-w-[9rem] md:max-h-[9rem] flex-shrink-0">
+                            imageUrl ? (<div className="relative w-1/3 h-[13.5rem] min-w-[6rem] max-w-[6rem] max-h-[6rem] md:min-w-[9rem] md:max-w-[9rem] md:max-h-[9rem] flex-shrink-0">
                                 <Image
-                                    src={firstItem?.urls[0]?.url}
+                                    src={imageUrl}
                                     alt={''}
                                     fill
                                     unoptimized
                                     className="object-cover h-full w-full"
                                 />
                             </div>
+                            ) : (<NoImage />)
                         }
 
                         <div className="flex w-full flex-col pl-4 lg:flex-row">

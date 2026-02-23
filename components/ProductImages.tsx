@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
@@ -12,7 +12,8 @@ import LoadingIndicator from './LoadingIndicator';
 import { triggerToast } from '@/app/utils/toastUtils';
 import { deleteProductFromWishList } from '@/lib/features/wishlist/wishlistAPI';
 import VideoPlayer from './VideoPlayer';
-import { COVER_VIDEO_CONFIG } from '@/lib/utils';
+import { COVER_VIDEO_CONFIG, extractVideoId } from '@/lib/utils';
+import NoImage from './NoImage';
 
 
 export default function ProductImages() {
@@ -21,9 +22,20 @@ export default function ProductImages() {
     const dispatch = useAppDispatch()
     const wishStatus = useAppSelector(selectStatus)
 
-    // Find video index to prioritize it, otherwise start at 0
-    const videoIndex = product?.urls?.findIndex(media => media.type === "video") ?? -1;
-    const [current, setCurrent] = useState(videoIndex >= 0 ? videoIndex : 0);
+    const [current, setCurrent] = useState(0);
+    const productId = product?.id || product?.product_id || null;
+
+    // Prioritize video when product URLs change
+    useEffect(() => {
+        if (product?.urls && product.urls.length > 0) {
+            const videoIndex = product.urls.findIndex(media => media.type === "video" && extractVideoId(media.url));
+            setCurrent(videoIndex >= 0 ? videoIndex : 0);
+        }
+    }, [product?.urls]);
+
+    if (!productId) {
+        return null;
+    }
 
     const prevSlide = () => {
         const urlsLength = product?.urls?.length ? product?.urls.length - 1 : 0;
@@ -74,38 +86,36 @@ export default function ProductImages() {
         <div className="w-full h-full flex flex-row justify-between gap-x-[1rem]">
             {
                 product?.urls?.length && <div className="w-auto flex flex-col gap-y-[1rem] hide-scrollbar max-h-[43rem] overflow-y-scroll pr-[1rem]">
-                    {product?.urls.map((image, index) => (
+                    {product?.urls.map((media, index) => (
                         <div
                             key={index.toString()}
                             className={`relative w-full h-[6.25rem] min-w-[6.25rem] min-h-[6.25rem] max-h-[6.25rem] rounded-md overflow-hidden cursor-pointer transition-all
                           ${index === current ? "border border-[#E8298A] scale-105" : "opacity-70 hover:opacity-100"}`}
                             onClick={() => setCurrent(index)}
                         >
-                            {image.type === "video" ? (
-                                <>
-                                    <VideoPlayer
-                                        url={image.url}
-                                        playing={false} // Disable autoplay for thumbnails to prevent browser blocking/performance issues
-                                        config={COVER_VIDEO_CONFIG}
-                                        className="product-card object-cover z-0 w-full h-full"
-                                    />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="bg-black bg-opacity-50 rounded-full p-2">
-                                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <Image
-                                    src={image?.url}
-                                    alt=""
-                                    fill
-                                    unoptimized
-                                    className="object-cover rounded-md"
-                                />
-                            )}
+                            {(() => {
+                                if (media.type === "video" && media.url && extractVideoId(media.url)) {
+                                    return (
+                                        <VideoPlayer
+                                            url={media.url}
+                                            config={COVER_VIDEO_CONFIG}
+                                            className="product-card object-cover z-0 w-full h-full"
+                                        />
+                                    );
+                                } else if (media.url) {
+                                    return (
+                                        <Image
+                                            src={media.url}
+                                            alt=""
+                                            unoptimized
+                                            fill
+                                            className="product-card object-cover z-0"
+                                        />
+                                    );
+                                } else {
+                                    return <NoImage />;
+                                }
+                            })()}
                         </div>
                     ))}
                 </div>
@@ -128,34 +138,44 @@ export default function ProductImages() {
                 }
 
                 {
-                    product?.urls?.length && <AnimatePresence mode="wait">
-                        <motion.div
-                            key={product?.urls[current].image_id}
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -50 }}
-                            transition={{ duration: 0.5 }}
-                            className="relative h-[30rem] md:h-[30.125rem]"
-                        >
-                            {
-                                product?.urls[current].type === "video" ? (
-                                    <div className="w-full h-full">
-                                        <VideoPlayer
-                                            url={product?.urls[current].url}
-                                            config={COVER_VIDEO_CONFIG}
-                                            className="product-card object-cover z-0"
-                                        />
-                                    </div>
-                                ) : (
-                                    product?.urls[current].url && <img
-                                        src={product?.urls[current].url}
-                                        alt="Product"
-                                        className="w-full h-full object-cover rounded-md z-0"
-                                    />
-                                )
-                            }
-                        </motion.div>
-                    </AnimatePresence>
+                    product?.urls && product.urls.length > 0 ? (
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={product.urls[current]?.image_id || current}
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -50 }}
+                                transition={{ duration: 0.5 }}
+                                className="relative h-[30rem] md:h-[30.125rem]"
+                            >
+                                {
+                                    product.urls[current]?.type === "video" && extractVideoId(product.urls[current].url) ? (
+                                        <div className="w-full h-full">
+                                            <VideoPlayer
+                                                url={product.urls[current].url}
+                                                config={COVER_VIDEO_CONFIG}
+                                                className="product-card object-cover z-0"
+                                            />
+                                        </div>
+                                    ) : (
+                                        product.urls[current]?.url ? (
+                                            <img
+                                                src={product.urls[current].url}
+                                                alt="Product"
+                                                className="w-full h-full object-cover rounded-md z-0"
+                                            />
+                                        ) : (
+                                            <NoImage />
+                                        )
+                                    )
+                                }
+                            </motion.div>
+                        </AnimatePresence>
+                    ) : (
+                        <div className="relative h-[30rem] md:h-[30.125rem]">
+                            <NoImage />
+                        </div>
+                    )
                 }
 
                 {
