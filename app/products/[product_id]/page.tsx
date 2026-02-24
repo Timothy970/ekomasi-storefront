@@ -24,6 +24,7 @@ import { ProductDetailsReviews } from '@/components/ProductDetailsReviews'
 import ProductFeatureSection from '@/components/ProductFeatureSection'
 import Image from 'next/image'
 import NoImage from '@/components/NoImage'
+import { calculateDiscountedPrice, formatPrice } from '@/lib/utils/priceUtils'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -281,7 +282,20 @@ export default function ProductDetail() {
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
               <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
 
-              <span className='mt-[0.5rem] text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
+              <div className="mt-[0.5rem] flex items-baseline gap-2 flex-wrap">
+                {product?.discount_type && product?.discount ? (
+                  <>
+                    <span className="text-lg lg:text-[1.5rem] font-bold text-[#D0021B]">
+                      {formatPrice(calculateDiscountedPrice(product.price, product.discount_type, product.discount))}
+                    </span>
+                    <span className="text-[1.125rem] text-gray-500 line-through">
+                      {formatPrice(product.price)}
+                    </span>
+                  </>
+                ) : (
+                  <span className='text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
+                )}
+              </div>
 
               <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
                 {
@@ -433,7 +447,18 @@ export default function ProductDetail() {
                               </div>
                             ) : (<NoImage />)}
                             <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
-                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
+                            {item.discount_type && item.discount ? (
+                              <>
+                                <span className="text-[1.25rem] font-bold text-[#D0021B]">
+                                  {formatPrice(calculateDiscountedPrice(item.price, item.discount_type, item.discount))}
+                                </span>
+                                <span className="text-[0.875rem] text-gray-500 line-through">
+                                  {formatPrice(item.price)}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
+                            )}
                           </div>
                         ))}
                       </div>

@@ -11,8 +11,15 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import NoImage from "./NoImage";
+import CountdownTimer from "./CountdownTimer";
 
-export default function FlashDeals({ title }: { title: string }) {
+interface FlashDealsProps {
+    title: string;
+    discountType?: 'percentage' | 'fixed';
+    discountValue?: number;
+}
+
+export default function FlashDeals({ title, discountType, discountValue }: FlashDealsProps) {
     const [index, setIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);
@@ -113,10 +120,15 @@ export default function FlashDeals({ title }: { title: string }) {
 
                                             </div>
 
-                                            <div className="pt-4 ">
+                                            <div className="pt-4 space-y-2">
                                                 <h3 className="text-[0.875rem] lg:text-base font-bold lg:font-light leading-[1.5rem]">
                                                     {deal?.name}
                                                 </h3>
+                                                {deal?.end_date && (
+                                                    <div className="scale-75 origin-left">
+                                                        <CountdownTimer endDate={deal.end_date} />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </Link>

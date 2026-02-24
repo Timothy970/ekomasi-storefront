@@ -22,7 +22,6 @@ export default function UpdateUserForm() {
         phone_number: "",
     })
     const [isOtpModalOpen, setIsOtpModalOpen] = useState(false)
-    const [otpVerifyValue, setOtpVerifyValue] = useState("")
 
     const formatPhoneForDisplay = (phone: string) => {
         if (phone.startsWith("254") && phone.length === 12) {
