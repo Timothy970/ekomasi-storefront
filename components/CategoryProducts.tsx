@@ -9,7 +9,7 @@ export default function CategoryProducts({ products, gridCols = 3 }: { products:
                 products && <div className={`grid grid-cols-2 md:grid-cols-3 ${gridCols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-4 sm:gap-6`}>
                     {products.map((product, index) => (
                         <CategoryProductCard
-                            key={index?.toString()} product={product}
+                            key={index?.toString()} product={product} discountType={product?.discount_type} discountValue={product?.discount}
                         />
                     ))}
                 </div>

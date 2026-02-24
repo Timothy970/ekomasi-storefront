@@ -5,8 +5,19 @@ import type { Product } from "@/lib/features/types";
 import { customParser, COVER_VIDEO_CONFIG, getProductImageUrl, extractVideoId } from "@/lib/utils";
 import VideoPlayer from "./VideoPlayer";
 import NoImage from "./NoImage";
+import { calculateDiscountedPrice, formatPrice } from "@/lib/utils/priceUtils";
 
-export default function CategoryProductCard({ product }: { product: Product }) {
+interface CategoryProductCardProps {
+  product: Product;
+  discountType?: 'percentage' | 'fixed' | string | null;
+  discountValue?: number | string | null;
+}
+
+export default function CategoryProductCard({
+  product,
+  discountType,
+  discountValue
+}: CategoryProductCardProps) {
   const [productId, setProductId] = useState<string | null>(null);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
@@ -89,9 +100,22 @@ export default function CategoryProductCard({ product }: { product: Product }) {
         <div className="text-custom-black font-poppins text-sm lg:text-[1.125rem] leading-[1.3rem] mt-1 line-clamp-2 capitalize">
           {customParser(product.name)}
         </div>
-        <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
-          KES {product.price}
-        </p>
+        <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+          {discountType && discountValue ? (
+            <>
+              <p className="text-[1.25rem] font-bold text-[#D0021B]">
+                {formatPrice(calculateDiscountedPrice(product.price, discountType, discountValue))}
+              </p>
+              <p className="text-[0.875rem] text-gray-500 line-through">
+                {formatPrice(product.price)}
+              </p>
+            </>
+          ) : (
+            <p className="text-[1.25rem] font-bold text-custom-black">
+              {formatPrice(product.price)}
+            </p>
+          )}
+        </div>
       </div>
     </Link>
   );

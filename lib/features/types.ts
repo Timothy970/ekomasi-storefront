@@ -92,6 +92,8 @@ export interface Product {
   details: string[];
   //for bundles there is a products array since they contain multiple products
   products?: Product[];
+  discount?: number;
+  discount_type?: string;
 }
 
 export interface SubCategory {

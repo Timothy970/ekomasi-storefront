@@ -3,11 +3,14 @@ import Navigation from '@/components/Navigation'
 import { selectPagination } from '@/lib/features/mall/mallSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import React, { useEffect, useState } from 'react'
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useFilterQuery } from '../../ClientLayout'
 import { Crumb } from '@/lib/features/types'
 import DealsProductListing from '@/components/DealsProductListing'
 import { getDealByIdAsync, selectDeal, selectDealStatus } from '@/lib/features/navigation/navigationSlice'
+import CountdownTimer from '@/components/CountdownTimer'
+import Image from 'next/image'
+import NoImage from '@/components/NoImage'
 
 export default function Deals() {
     const dispatch = useAppDispatch();
@@ -16,8 +19,6 @@ export default function Deals() {
     const { query, setQuery } = useFilterQuery();
     const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([]);
     const dealStatus = useAppSelector(selectDealStatus);
-    const pathname = usePathname();
-    const router = useRouter();
     const params = useParams<{ id: string }>();
     const deal = useAppSelector(selectDeal)
 
@@ -33,14 +34,10 @@ export default function Deals() {
     }, [])
 
     useEffect(() => {
-        const formattedQuery = query.startsWith("?") ? query : `?${query}`;
         if (params?.id) {
             dispatch(getDealByIdAsync(params?.id));
         }
-
-        const newUrl = `${pathname}${formattedQuery}`
-        router.replace(newUrl, { scroll: false })
-    }, [query, dispatch]);
+    }, [dispatch]);
 
     useEffect(() => {
         const sp = searchParams.toString();
@@ -70,7 +67,31 @@ export default function Deals() {
 
     return (
         <Navigation>
-            {
+            <div className='w-full'>
+                {deal?.deals?.end_date && (
+                    <div className="relative w-full mx-auto overflow-hidden h-[12rem] md:h-[10rem] z-0">
+                        {deal.deals.image ? (
+                            <Image
+                                src={deal.deals.image}
+                                alt={deal.deals.name || "Deal image"}
+                                fill
+                                priority
+                                unoptimized
+                                className="object-cover z-0"
+                                style={{ objectFit: 'cover' }}
+                            />
+                        ) : (
+                            <NoImage />
+                        )}
+                        {/* Overlay for better contrast */}
+                        <div className="absolute inset-0 bg-black/60 z-10" />
+                        {/* Centered content */}
+                        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4">
+                            <p className='text-sm uppercase tracking-widest font-medium opacity-80 text-[#e8298a] text-center'>Offer ends in:</p>
+                            <CountdownTimer endDate={deal.deals.end_date} />
+                        </div>
+                    </div>
+                )}
                 <DealsProductListing
                     listingDescription={""}
                     listingName={deal?.deals?.name ?? ""}
@@ -82,7 +103,7 @@ export default function Deals() {
                     status={dealStatus}
                     page="deals"
                 />
-            }
+            </div>
         </Navigation>
     )
 }
