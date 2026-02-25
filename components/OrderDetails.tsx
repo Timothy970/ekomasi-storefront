@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { format, addDays } from "date-fns";
 import { CreateReturnPayload, Order } from '@/lib/features/types';
 import { usePayment, useReview } from '@/app/ClientLayout';
@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/lib/hooks';
 import { createReturnsAsync } from '@/lib/features/returns/returnSlice';
 import { triggerToast } from '@/app/utils/toastUtils';
 import NoImage from './NoImage';
+import { usePathname } from 'next/navigation';
 
 type OrderDetailsProps = {
   order: Order;
@@ -27,6 +28,14 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
   const [reason, setReason] = useState('');
   const dispatch = useAppDispatch();
   const { setOpenPaymentModal } = usePayment();
+  const pathName = usePathname();
+  const [toWriteReview, setToWriteReview] = useState(true)
+
+  useEffect(() => {
+    if (pathName && pathName.includes("guest")) {
+      setToWriteReview(false);
+    }
+  }, [pathName]);
 
   const handleToggle = (productId: string) => {
     setCheckedValues((prevCheckedValues) => {
@@ -118,8 +127,8 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
                 </div>
 
                 {
-                  ((order?.order_status.toLowerCase() === ORDER_STATUS?.COMPLETED.toLowerCase() && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase()) ||
-                    (order?.order_status.toLowerCase() === "delivered" && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase())) && <div>
+                  ((order?.order_status.toLowerCase() === ORDER_STATUS?.COMPLETED.toLowerCase() && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase() && toWriteReview) ||
+                    (order?.order_status.toLowerCase() === "delivered" && order?.delivery_status.toLowerCase() === DELIVERY_STATUS?.DELIVERED.toLowerCase() && toWriteReview)) && <div>
                     <Button onClick={() => {
                       setOpenReviewModal(true)
                       setProductReviewId(item?.product_id)
