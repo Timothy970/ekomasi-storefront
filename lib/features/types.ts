@@ -94,6 +94,7 @@ export interface Product {
   products?: Product[];
   discount?: number;
   discount_type?: string;
+  bundle_quantity?: number;
 }
 
 export interface SubCategory {

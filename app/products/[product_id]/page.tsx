@@ -459,6 +459,12 @@ export default function ProductDetail() {
                             ) : (
                               <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
                             )}
+                            {/* Bundle Quantity Badge */}
+                            {item.bundle_quantity && item.bundle_quantity > 0 && (
+                              <span className="bg-[#D0021B] text-white text-xs text-center font-semibold px-2 py-1 rounded-full shadow-sm">
+                                x{item.bundle_quantity}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
