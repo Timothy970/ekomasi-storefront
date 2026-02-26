@@ -1151,3 +1151,20 @@ export interface ReactPlayerProps {
     playbackRate?: number;
     [key: string]: any;
 }
+
+export interface HomeBannerInfo {
+  id?: number;
+  heading: string;
+  text: string;
+  image_url: string;
+  button_text: string;
+  button_url: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface GetBannersResponse {
+  data: HomeBannerInfo[] | null;
+  message: string;
+  status_code: number;
+}

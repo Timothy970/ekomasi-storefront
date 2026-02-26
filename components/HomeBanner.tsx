@@ -4,52 +4,81 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { customParser } from "@/lib/utils";
+import { HomeBannerInfo } from "@/lib/features/types";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { getBannersAsync, selectBanners } from "@/lib/features/navigation/navigationSlice";
 
 export default function HomeBanner() {
     const [current, setCurrent] = useState(0);
     const router = useRouter()
+    const [slides, setSlides] = useState<HomeBannerInfo[]>([]);
+    const apiBanners = useAppSelector(selectBanners)
+    const dispatch = useAppDispatch();
 
-    const slides = [
+    useEffect(() => {
+        dispatch(getBannersAsync());
+    }, [dispatch]);
+
+
+    const banners: HomeBannerInfo[] = [
         {
             id: 1,
-            title: "Excitement Starts Here: Welcome to Adenzo!",
-            description: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
-            image: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            buttonText: "Find the Perfect Gift",
-            link: "/search",
+            heading: "Excitement Starts Here: Welcome to Adenzo!",
+            text: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
+            image_url: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            button_text: "Find the Perfect Gift",
+            button_url: "/search",
         },
         {
             id: 2,
-            title: "Excitement Starts Here:",
-            description: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
-            image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            buttonText: "Discover Our Collections",
-            link: "/search",
+            heading: "Excitement Starts Here:",
+            text: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
+            image_url: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            button_text: "Discover Our Collections",
+            button_url: "/search",
         },
         {
             id: 3,
-            title: "Because Dads Do It Too",
-            description: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
-            image: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            buttonText: "Shop Travel Essentials",
-            link: "/search",
+            heading: "Because Dads Do It Too",
+            text: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
+            image_url: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            button_text: "Shop Travel Essentials",
+            button_url: "/search",
         },
     ];
 
     useEffect(() => {
+        if (apiBanners && apiBanners.length > 0) {
+            setSlides(apiBanners);
+        } else {
+            setSlides(banners);
+        }
+    }, [apiBanners]);
+
+    useEffect(() => {
         const interval = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % slides.length);
+            if (slides && slides.length > 0) {
+                setCurrent((prev) => (prev + 1) % slides.length);
+            }
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [slides]);
 
     const prevSlide = () => {
-        setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+        if (slides && slides.length > 0) {
+            setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+        }
     };
 
     const nextSlide = () => {
-        setCurrent((prev) => (prev + 1) % slides.length);
+        if (slides && slides.length > 0) {
+            setCurrent((prev) => (prev + 1) % slides.length);
+        }
     };
+
+    if (!slides || slides.length === 0) {
+        return null;
+    }
 
     return (
         <div className="relative w-full mx-auto overflow-hidden bg-black/40">
@@ -63,23 +92,23 @@ export default function HomeBanner() {
                     className="relative h-[34.375rem] md:h-[30.125rem] lg:h-[34.75rem]"
                 >
                     <img
-                        src={slides[current].image}
-                        alt={slides[current].title}
+                        src={slides[current].image_url}
+                        alt={slides[current].heading}
                         className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 lg:bg-black/40 flex flex-col justify-center items-center text-center">
                         <div className="bg-black/40 lg:bg-transparent p-4 w-[80%] lg:max-w-[55rem]">
                             <h2 className="text-white text-center font-roboto text-[2rem] lg:text-[3.5rem] font-bold leading-[3rem] lg:leading-[4.2rem]">
-                                {slides[current].title}
+                                {slides[current].heading}
                             </h2>
                             <div className="text-white text-center font-poppins text-[1.125rem] font-normal leading-[1.95rem] mt-[2.5rem] lg:mt-[1.5rem] lg:text-[1.5rem] lg:leading-[1.6875rem]">
-                                {customParser(slides[current].description)}
+                                {customParser(slides[current].text)}
                             </div>
                         </div>
 
-                        <Button onClick={() => router.push(slides[current].link)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
+                        <Button onClick={() => router.push(slides[current].button_url)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
-                                {slides[current].buttonText}
+                                {slides[current].button_text}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">
                                     <path d="M1.70697 11.4496L7.41397 5.74264L1.70697 0.0356445L0.292969 1.44964L4.58597 5.74264L0.292969 10.0356L1.70697 11.4496Z" fill="white" />
                                 </svg>
