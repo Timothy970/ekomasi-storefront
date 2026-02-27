@@ -36,48 +36,44 @@ export default function PaymentProcessingModal({
 
         setTimeoutId(timeout);
 
-        const params: Record<string, string> = {};
-        if (orderId && deliveryId) {
-            params.order_id = orderId;
-            params.delivery_id = deliveryId;
-        }
+        const connection = connectWebSocket(
+            { order_id: orderId as string, delivery_id: deliveryId as string },
+            {
+                onOpen: () => {
+                    setStatus('processing');
+                },
+                onMessage: (msg) => {
+                    if (timeoutId) {
+                        clearTimeout(timeoutId);
+                        setTimeoutId(null);
+                    }
 
-        const connection = connectWebSocket(params, {
-            onOpen: () => {
-                setStatus('processing');
-            },
-            onMessage: (msg) => {
-                if (timeoutId) {
-                    clearTimeout(timeoutId);
-                    setTimeoutId(null);
-                }
-
-                if (msg.event === 'payment_success') {
-                    setStatus('success');
-                    handleClearout(true);
-                } else if (msg.event === 'payment_failed') {
-                    setStatus('failed');
-                    setErrorMessage(msg.message || 'Payment was not successful. Please try again.');
-                    handleClearout(false);
-                } else if (msg.event === 'payment_error') {
+                    if (msg.event === 'payment_success') {
+                        setStatus('success');
+                        handleClearout(true);
+                    } else if (msg.event === 'payment_failed') {
+                        setStatus('failed');
+                        setErrorMessage(msg.message || 'Payment was not successful. Please try again.');
+                        handleClearout(false);
+                    } else if (msg.event === 'payment_error') {
+                        setStatus('error');
+                        setErrorMessage(msg.message || 'An error occurred during payment processing');
+                        handleClearout(false);
+                    }
+                },
+                onError: (err) => {
+                    if (timeoutId) {
+                        clearTimeout(timeoutId);
+                        setTimeoutId(null);
+                    }
                     setStatus('error');
-                    setErrorMessage(msg.message || 'An error occurred during payment processing');
+                    setErrorMessage('Connection error. Please try again.');
                     handleClearout(false);
-                }
-            },
-            onError: (err) => {
-                if (timeoutId) {
-                    clearTimeout(timeoutId);
-                    setTimeoutId(null);
-                }
-                setStatus('error');
-                setErrorMessage('Connection error. Please try again.');
-                handleClearout(false);
-            },
-            onClose: (event) => {
-                console.log("WebSocket closed", event);
-            },
-        });
+                },
+                onClose: (event) => {
+                    console.log("WebSocket closed", event);
+                },
+            });
 
         setSocket(connection);
 
