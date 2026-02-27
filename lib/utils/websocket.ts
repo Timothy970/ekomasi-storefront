@@ -9,16 +9,16 @@ export type WebSocketEvents = {
 const BASE_WS_URL = process.env.NEXT_PUBLIC_WS_BASE_URL || "ws://localhost:8009/ws";
 
 export function connectWebSocket(
-  params: Record<string, string>,
+  params: string | Record<string, string>,
   events: WebSocketEvents = {}
 ) {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const urlParams = new URLSearchParams(params).toString();
+  const queryParams = typeof params === "string" ? { key: params } : params;
+  const urlParams = new URLSearchParams(queryParams).toString();
   const fullUrl = `${BASE_WS_URL}?${urlParams}`;
-
   const ws = new WebSocket(fullUrl);
 
   ws.onopen = () => {
