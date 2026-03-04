@@ -2,8 +2,47 @@
 import { getStaticContentsAsync, selectStaticContents } from '@/lib/features/navigation/navigationSlice';
 import { StaticContent } from '@/lib/features/types';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { customParser } from '@/lib/utils';
+import { customParser, staticPageParser } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
+import "react-quill-new/dist/quill.snow.css";
+import Navigation from './Navigation';
+import CustomBreadcrumb from './CustomBreadcrumb';
+
+// Custom styles for static page content to support Quill alignment and image wrapping
+const staticPageStyles = `
+  .static-content-container .ql-align-center {
+    text-align: center;
+  }
+  .static-content-container .ql-align-right {
+    text-align: right;
+  }
+  .static-content-container .ql-align-justify {
+    text-align: justify;
+  }
+  .static-content-container img.ql-align-left {
+    float: left;
+    margin: 0 1rem 1rem 0;
+    max-width: 100%;
+  }
+  .static-content-container img.ql-align-right {
+    float: right;
+    margin: 0 0 1rem 1rem;
+    max-width: 100%;
+  }
+  .static-content-container img.ql-align-center {
+    display: block;
+    margin: 0 auto 1rem auto;
+    max-width: 100%;
+  }
+  .static-content-container img {
+    height: auto; /* Allow the height to be set by the resize handle or be auto */
+  }
+  .static-content-container .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+`;
 
 interface StaticContentPageProps {
   contentPath: string;
@@ -33,50 +72,69 @@ export default function StaticContentPage({ contentPath }: StaticContentPageProp
   }
 
   return (
-    <div className={`w-full mt-[2rem] lg:mt-[2.5rem] px-[1rem] h-full flex flex-col max-w-[90rem]`}>
-      <h1 className='text-[2.8rem] font-[700]'>{content.title}</h1>
-
-      <p className='text-[1.125rem] mt-[1.5rem]'>{content?.description}</p>
-
-      {content.sections && (
-        <div className="w-full flex flex-col gap-y-4 mt-[1rem]">
-          {content.sections.map((section, idx) => (
-            <div key={idx} className="p-4">
-              {section.title && (
-                <h2 className="font-[700] text-base my-[0.7rem]">{section.title}</h2>
-              )}
-
-              {section.paragraphs?.map((p, pIdx) => (
-                <div
-                  key={pIdx}
-                  className="text-[0.875rem] text-gray-800 mb-2 break-words"
-                >
-                  {p.title && (
-                    <h2 className="font-[700] text-base my-[0.7rem]">{p.title}</h2>
-                  )}
-                  {customParser(p.text)}
-                </div>
-              ))}
-
-              {section.images?.map((img, imgIdx) => (
-                <div key={imgIdx} className='flex flex-col gap-y-[0.5rem]'>
-                  {img.image_url && (
-                    <img
-                      src={img.image_url}
-                      alt={img.alt || `section-image-${imgIdx}`}
-                      className="w-full h-auto object-cover rounded mt-2"
-                    />
-                  )}
-
-                  <div className='border-l border-black pl-2'>
-                    <p>{img.caption}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
+    <Navigation>
+      <style>{staticPageStyles}</style>
+      <div className={`w-full mt-[2rem] lg:mt-[2.5rem] px-[1rem] h-full flex flex-col max-w-[90rem] static-content-container mx-auto`}>
+        <div className="mb-4">
+          <CustomBreadcrumb crumbs={[{ name: content?.title || "", link: `#` }]} />
         </div>
-      )}
-    </div>
+        <h1 className='text-[2.8rem] font-[700]'>{content.title}</h1>
+        {content.content ? (
+          <div className='text-[1rem] mt-[1.5rem] clearfix'>
+            {staticPageParser(content.content)}
+          </div>
+        ) : (
+          <>
+            {content?.description && (
+              <div className='text-[1.125rem] mt-[1.5rem] clearfix'>
+                {staticPageParser(content.description)}
+              </div>
+            )}
+
+            {content.sections && (
+              <div className="w-full flex flex-col gap-y-4 mt-[1rem]">
+                {content.sections.map((section, idx) => (
+                  <div key={idx} className="py-4 clearfix">
+                    {section.title && (
+                      <h2 className="font-[700] text-2xl my-[0.7rem]">{section.title}</h2>
+                    )}
+
+                    {section.paragraphs?.map((p, pIdx) => (
+                      <div
+                        key={pIdx}
+                        className="text-[1rem] text-gray-800 mb-2 break-words leading-relaxed clearfix"
+                      >
+                        {p.title && (
+                          <h3 className="font-[700] text-xl my-[0.7rem]">{p.title}</h3>
+                        )}
+                        {staticPageParser(p.text)}
+                      </div>
+                    ))}
+
+                    {section.images?.map((img, imgIdx) => (
+                      <div key={imgIdx} className='flex flex-col gap-y-[0.5rem] my-4 clearfix'>
+                        {img.image_url && (
+                          <img
+                            src={img.image_url}
+                            alt={img.alt || `section-image-${imgIdx}`}
+                            className="max-w-full h-auto object-cover rounded mt-2"
+                          />
+                        )}
+
+                        {img.caption && (
+                          <div className='border-l-4 border-black pl-3 py-1 bg-gray-50'>
+                            <p className='text-sm text-gray-600 italic'>{img.caption}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </Navigation>
   );
 }

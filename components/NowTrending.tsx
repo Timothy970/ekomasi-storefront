@@ -12,6 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { customParser } from "@/lib/utils";
 import NoImage from "./NoImage";
+import { calculateDiscountedPrice } from "@/lib/utils/priceUtils";
 
 export default function NowTrending({ title }: { title: string }) {
   const [index, setIndex] = useState(0);
@@ -122,12 +123,31 @@ export default function NowTrending({ title }: { title: string }) {
                             {customParser(p.name)}
                           </div>
 
-                          <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
-                            {"KES " +
-                              new Intl.NumberFormat("en-KE", {
-                                minimumFractionDigits: 0,
-                              }).format(p.price ?? 0)}
-                          </p>
+                          <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+                            {p.discount_type && p.discount ? (
+                              <>
+                                <p className="text-[1.25rem] font-bold text-[#D0021B]">
+                                  {"KES " +
+                                    new Intl.NumberFormat("en-KE", {
+                                      minimumFractionDigits: 0,
+                                    }).format(calculateDiscountedPrice(p.price, p.discount_type, p.discount))}
+                                </p>
+                                <p className="text-[0.875rem] text-gray-500 line-through">
+                                  {"KES " +
+                                    new Intl.NumberFormat("en-KE", {
+                                      minimumFractionDigits: 0,
+                                    }).format(p.price ?? 0)}
+                                </p>
+                              </>
+                            ) : (
+                              <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
+                                {"KES " +
+                                  new Intl.NumberFormat("en-KE", {
+                                    minimumFractionDigits: 0,
+                                  }).format(p.price ?? 0)}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </Link>

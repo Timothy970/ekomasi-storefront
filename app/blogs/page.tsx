@@ -27,7 +27,7 @@ export default function blogs() {
           </div>
 
           <div className='mt-[2.5rem] w-full text-center max-w-[48rem] px-[1rem] md:px-[3rem]'>
-            <p className='text-[1.125rem]'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.</p>
+            <p className='text-[1.125rem]'>Discover the latest trends, tips, and insights from the world of fashion and lifestyle. Our blog is dedicated to bringing you expert advice, product recommendations, and inspiring stories to elevate your shopping experience.</p>
           </div>
 
           <div className='w-full flex items-center justify-center mt-[2rem] gap-x-[1rem] px-[1rem] md:px-[3rem]'>

@@ -1,40 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Adenzo E-commerce App
 
-## Getting Started
+A modern, high-performance e-commerce platform built with Next.js 15, featuring a robust admin dashboard and a seamless shopping experience.
 
-First, run the development server:
+## 🚀 Key Features
+
+- **Storefront**: Browse products, categories, and subcategories.
+- **User Management**: Authentication with Google OAuth, profile management, and address books.
+- **Cart & Wishlist**: Persistent cart and shared wishlist functionality.
+- **Checkout & Payments**: Integrated checkout flow with support for multiple payment methods (including M-Pesa).
+- **Admin Dashboard**: Comprehensive management of products, orders, categories, blogs, and banners.
+- **Real-time Updates**: WebSocket integration for live status updates.
+- **Marketing Tools**: Vouchers and deals management.
+
+## 🛠 Tech Stack
+
+- **Frontend**: [Next.js 15](https://nextjs.org/) (App Router), [React 19](https://react.dev/)
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/) with [Redux Persist](https://github.com/rt2zz/redux-persist)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/), [Lucide React](https://lucide.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Data Fetching**: [Axios](https://axios-http.com/)
+- **Tables**: [TanStack Table v8](https://tanstack.com/table/v8)
+
+## 📦 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Setup
+
+Create a `.env.local` file in the root directory and add the following variables:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=your_api_url
+NEXT_PUBLIC_REDUX_SECRET_KEY=your_secret_key
+NEXT_PUBLIC_WS_BASE_URL=your_websocket_url
+```
+
+### Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3009](http://localhost:3009) to view the application.
 
-For docker for dev use  `docker compose -f docker-compose.dev.yml up --build`
+### Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To create a production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+## 🐳 Docker Support
 
-To learn more about Next.js, take a look at the following resources:
+For development with Docker:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Project Structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
+- `app/`: Next.js App Router pages and layouts.
+- `components/`: Reusable UI components.
+- `lib/`: Redux slices, custom hooks, and utility functions.
+- `public/`: Static assets.
+- `docs/`: Technical and project documentation.

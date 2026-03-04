@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { deleteProductFromCartAsync, getCartAsync, selectCart, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
 import { customParser } from '@/lib/utils'
 import NoImage from './NoImage'
+import { calculateDiscountedPrice } from '@/lib/utils/priceUtils'
 
 export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
     const dispatch = useAppDispatch()
@@ -83,11 +84,30 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
             <div className='w-[60%] flex flex-col gap-y-[0.5rem]'>
                 <div className='flex justify-between items-center'>
                     <span className='font-[600] text-[1rem]'>{item?.product?.category_name}</span>
-                    <span className='font-semibold text-[1rem] uppercase'>
-                        {"KES " + new Intl.NumberFormat("en-KE", {
-                            minimumFractionDigits: 0,
-                        }).format(item?.product?.price ?? 0)}
-                    </span>
+                    <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+                        {item?.product?.discount_type && item?.product?.discount ? (
+                            <>
+                                <span className="text-[1.25rem] font-bold text-[#D0021B]">
+                                    {"KES " +
+                                        new Intl.NumberFormat("en-KE", {
+                                            minimumFractionDigits: 0,
+                                        }).format(calculateDiscountedPrice(item?.product?.price, item?.product?.discount_type, item?.product?.discount))}
+                                </span>
+                                <span className="text-[0.875rem] text-gray-500 line-through">
+                                    {"KES " +
+                                        new Intl.NumberFormat("en-KE", {
+                                            minimumFractionDigits: 0,
+                                        }).format(item?.product?.price ?? 0)}
+                                </span>
+                            </>
+                        ) : (
+                            <span className='font-semibold text-[1rem] uppercase'>
+                                {"KES " + new Intl.NumberFormat("en-KE", {
+                                    minimumFractionDigits: 0,
+                                }).format(item?.product?.price ?? 0)}
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 <span className='text-[0.875rem] md:text-[1.125rem] capitalize font-[700]'>{item?.product?.name}</span>
@@ -138,6 +158,6 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
                     </div>
                 }
             </div>
-        </div>
+        </div >
     )
 }
