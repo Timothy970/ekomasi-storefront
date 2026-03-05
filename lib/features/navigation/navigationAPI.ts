@@ -1,5 +1,5 @@
 import api from "@/lib/utils/axios";
-import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetBannersResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SingleReviewResponse, SubcategoryProductsResponse, WarehousesResponse } from "../types";
+import { CategoriesResponse, CategoryResponse, DealResponse, FeaturedProductsResponse, FlashSalesDealsResponse, GetBannersResponse, GetPartnersResponse, GetStaticContentsResponse, HomeDataResponse, MinMaxRangeResponse, ProductBundlesResponse, ProductFeaturedResponse, ProductResponse, ReviewsResponse, SingleReviewResponse, SubcategoryProductsResponse, WarehousesResponse } from "../types";
 import axios, { AxiosError } from "axios";
 
 export async function getCategories(): Promise<CategoriesResponse> {
@@ -222,6 +222,16 @@ export async function getWarehouses(): Promise<WarehousesResponse> {
 export async function getBanners(): Promise<GetBannersResponse> {
     try {
         const response = await api.get<GetBannersResponse>(`home/sliders`, { headers: { requiresAuth: true } });
+        return response.data;
+    } catch (error) {
+        const err = error as AxiosError;
+        throw err;
+    }
+}
+
+export async function getPartners(): Promise<GetPartnersResponse> {
+    try {
+        const response = await api.get<GetPartnersResponse>(`partners`, { headers: { requiresAuth: false } });
         return response.data;
     } catch (error) {
         const err = error as AxiosError;
