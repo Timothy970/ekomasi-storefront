@@ -1,6 +1,8 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { getPartnersAsync, selectPartners } from "@/lib/features/navigation/navigationSlice";
 
 const baseBrands = [
     "/images/brands/brand1.png",
@@ -15,10 +17,27 @@ const baseBrands = [
 ];
 
 export default function Brands() {
+    const dispatch = useAppDispatch();
+    const fetchedBrands = useAppSelector(selectPartners);
+    const [brandsToUse, setBrandsToUse] = React.useState<string[]>(baseBrands);
+
+    useEffect(() => {
+        dispatch(getPartnersAsync());
+    }, [dispatch]);
+
+    //if we have fetched brands, use them, otherwise fallback to baseBrands
+    useEffect(() => {
+        const fetchedBrandUrls = fetchedBrands?.map(partner => partner.image_url) || [];
+        if (fetchedBrands && fetchedBrands.length > 0) {
+            setBrandsToUse(fetchedBrandUrls);
+        }
+        console.log("Fetched Brands:", fetchedBrandUrls);
+    }, [fetchedBrands]);
+
     const brands = useMemo(() => {
         const multiplied: string[] = [];
         for (let i = 0; i < 10; i++) {
-            multiplied.push(...baseBrands);
+            multiplied.push(...brandsToUse);
         }
         return multiplied;
     }, []);

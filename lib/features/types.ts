@@ -1173,3 +1173,15 @@ export interface GetBannersResponse {
   message: string;
   status_code: number;
 }
+
+export interface GetPartnersResponse {
+  data: Partner[];
+  message: string;
+  status_code: number;
+}
+
+export interface Partner {
+  partner_id: string;
+  name: string;
+  image_url: string;
+}
