@@ -276,6 +276,8 @@ export interface FeaturedProduct {
   last_updated: string;
   urls: ProductImage[];
   category_name: string;
+  discount?: number;
+  discount_type?: string;
 }
 
 export interface FeaturedProductsResponse {
@@ -409,6 +411,8 @@ export interface CartProduct {
   urls: ProductUrl[];
   product_variants: null | Record<string, any>;
   category_name: string;
+  discount?: number;
+  discount_type?: string;
 }
 
 export interface CartItem {
@@ -790,6 +794,7 @@ export interface StaticContent {
     create: string;
   };
   path?: string;
+  content?: string;
 }
 
 export interface ScoreCounts {

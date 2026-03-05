@@ -247,3 +247,10 @@ export const getProductImageUrl = (urls?: Image[]): string => {
 
   return imageToShow?.url || "";
 };
+
+export function staticPageParser(string: string | undefined) {
+  if (string) {
+    return parse(string)
+  }
+  return string
+}
