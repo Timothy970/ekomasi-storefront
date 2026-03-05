@@ -518,7 +518,7 @@ export const navigationSlice = createAppSlice({
 		selectWarehousePagination: (state: NavigationSliceState) => state.wareHousePagination,
 		selectBanners: (state: NavigationSliceState) => state.banners || null,
 		selectPartners: (state: NavigationSliceState) => state.partners || null,
-		},
+	},
 });
 
 // Export actions and selectors

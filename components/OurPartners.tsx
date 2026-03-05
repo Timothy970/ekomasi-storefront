@@ -31,7 +31,6 @@ export default function Brands() {
         if (fetchedBrands && fetchedBrands.length > 0) {
             setBrandsToUse(fetchedBrandUrls);
         }
-        console.log("Fetched Brands:", fetchedBrandUrls);
     }, [fetchedBrands]);
 
     const brands = useMemo(() => {
@@ -40,7 +39,7 @@ export default function Brands() {
             multiplied.push(...brandsToUse);
         }
         return multiplied;
-    }, []);
+    }, [brandsToUse]);
 
     return (
         <div className="overflow-hidden w-full max-w-[90rem] mx-auto mt-[2rem] mb-[2.25rem] flex items-center flex-col justify-center">
