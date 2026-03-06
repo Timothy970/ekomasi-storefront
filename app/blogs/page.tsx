@@ -4,14 +4,55 @@ import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getBlogsAsync, selectBlogs } from '@/lib/blog/blogSlice'
+import { subscribeAsync } from '@/lib/features/user/userSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
+import { triggerToast } from '../utils/toastUtils'
+import { ToastType } from '@/lib/features/toast/toastSlice'
 
-export default function blogs() {
+export default function Blogs() {
   const dispatch = useAppDispatch();
   const blogs = useAppSelector(selectBlogs)
+  const [email, setEmail] = React.useState("")
+  const [emailError, setEmailError] = React.useState("")
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  useEffect(() => {
+    if (emailError) {
+      const timer = setTimeout(() => {
+        setEmailError("")
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [emailError])
+
+  const handleSignUp = async () => {
+    if (!email) {
+      setEmailError("Email is required")
+      return
+    }
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address")
+      return
+    }
+    setEmailError("")
+    await dispatch(subscribeAsync({
+      email, handleSubscribe: (message: string, type: ToastType) => {
+        if (type === "success") {
+          setEmail("")
+        }
+        triggerToast(message, type)
+      }
+    }))
+  }
+
 
   useEffect(() => {
     dispatch(getBlogsAsync(""))
@@ -30,12 +71,23 @@ export default function blogs() {
             <p className='text-[1.125rem]'>Discover the latest trends, tips, and insights from the world of fashion and lifestyle. Our blog is dedicated to bringing you expert advice, product recommendations, and inspiring stories to elevate your shopping experience.</p>
           </div>
 
-          <div className='w-full flex items-center justify-center mt-[2rem] gap-x-[1rem] px-[1rem] md:px-[3rem]'>
-            <Input className='w-ful max-w-[22rem] h-[2.5rem]' />
+          <div className='w-full flex flex-col items-center justify-center mt-[2rem] gap-x-[1rem] px-[1rem] md:px-[3rem]'>
+            <div className="flex w-full gap-x-[0.75rem] items-center justify-center">
 
-            <Button className='h-[2.5rem] text-[0.875rem] text-base'>
-              Sign Up
-            </Button>
+              <Input className={`w-ful max-w-[22rem] h-[2.5rem] ${emailError ? "border-red-500" : ""}`} placeholder='Enter your email'
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button className='h-[2.5rem] text-[0.875rem] text-base'
+                onClick={handleSignUp}>
+                Subscribe
+              </Button>
+            </div>
+
+            {emailError && (
+              <span className="text-red-500 text-[0.75rem]">
+                {emailError}
+              </span>
+            )}
           </div>
 
           <div className='w-full flex items-center justify-center mt-[1rem] px-[1rem] md:px-[3rem]'>

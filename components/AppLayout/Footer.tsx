@@ -1,15 +1,66 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import SocialLinksFooter from '../SocialLinksFooter'
-import { useAppSelector } from '@/lib/hooks'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectCategories, selectHomeData } from '@/lib/features/navigation/navigationSlice'
 import Link from 'next/link'
+import { subscribeAsync } from '@/lib/features/user/userSlice'
+import { ToastType } from '@/lib/features/toast/toastSlice'
+import { triggerToast } from '@/app/utils/toastUtils'
 
 export default function Footer() {
   const homeData = useAppSelector(selectHomeData)
   const categories = useAppSelector(selectCategories);
+  const [email, setEmail] = React.useState("")
+  const [emailError, setEmailError] = React.useState("")
+  const dispatch = useAppDispatch();
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  useEffect(() => {
+    if (emailError) {
+      const timer = setTimeout(() => {
+        setEmailError("")
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [emailError])
+
+  useEffect(() => {
+    if (emailError) {
+      const timer = setTimeout(() => {
+        setEmailError("")
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [email])
+
+  const handleSignUp = async () => {
+    if (!email) {
+      setEmailError("Email is required")
+      return
+    }
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address")
+      return
+    }
+    setEmailError("")
+    await dispatch(subscribeAsync({
+      email, handleSubscribe: (message: string, type: ToastType) => {
+        if (type === "success") {
+          setEmail("")
+        }
+        triggerToast(message, type)
+      }
+    }))
+  }
+
 
   return (
     <div className='relative w-full z-0'>
@@ -34,12 +85,30 @@ export default function Footer() {
             <div className='flex flex-col gap-y-[1.25rem]'>
               <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>👶✨ Hey Mama, Papa, Gogo, Shosho & even Baby! Subscribe to our newsletter for exclusive deals.</h2>
 
-              <div className='flex flex-col lg:flex-row w-full gap-y-[1.25rem] lg:gap-x-[1rem]'>
-                <Input className='text-white h-[2.5rem] lg:h-[2.5rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem]' placeholder='Enter your email' />
+              <div className="flex flex-col w-full gap-y-[0.5rem]">
 
-                <Button className='bg-white text-custom-black h-[2.5rem] lg:h-[2.5rem] lg:w-[8rem]'>
-                  Subscribe
-                </Button>
+                <div className="flex w-full gap-x-[0.75rem] items-start">
+                  <Input
+                    className={`text-white h-[2.5rem] text-[0.875rem] w-full not-italic font-normal leading-[1.95rem] lg:min-w-[25rem] ${emailError ? "border-red-500" : ""
+                      }`}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+
+                  <Button
+                    className="bg-white text-custom-black h-[2.5rem] lg:w-[8rem] w-full"
+                    onClick={handleSignUp}
+                  >
+                    Subscribe
+                  </Button>
+                </div>
+
+                {emailError && (
+                  <span className="text-red-500 text-[0.75rem]">
+                    {emailError}
+                  </span>
+                )}
               </div>
 
               <p className='text-white font-poppins text-xs font-normal not-italic leading-[1.125rem]'>By subscribing you agree to with our <span className='underline'>Privacy Policy</span> and provide consent to receive updates from our company.</p>

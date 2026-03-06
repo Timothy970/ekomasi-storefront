@@ -1185,3 +1185,9 @@ export interface Partner {
   name: string;
   image_url: string;
 }
+
+export interface SubsribeResponse {
+  data: null;
+  message: string;
+  status_code: number;
+}
