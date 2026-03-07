@@ -3,10 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
-import {
-    selectStatus,
-    updateUserProfileVerifyAsync,
-} from '@/lib/features/user/userSlice'
+import { selectStatus, updateUserProfileVerifyAsync } from '@/lib/features/user/userSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from './LoadingIndicator'
 import { X } from 'lucide-react'
