@@ -26,7 +26,16 @@ import { getWarehousesAsync } from '@/lib/features/navigation/navigationSlice'
 import WareHouseDropdown from './WareHouseDropdown'
 import PaymentProcessingModal from './PaymentProcessingModal'
 
-export default function PersonalInformation({ page, cart, isBuyNow, processPayment }: { page: "member" | "guest", cart: CartData, isBuyNow: boolean, processPayment?: (isProcessing: boolean) => void }) {
+type PersonalInformationProps = {
+    readonly page: "member" | "guest"
+    readonly cart: CartData
+    readonly isBuyNow: boolean
+    readonly processPayment?: (isProcessing: boolean) => void
+    readonly onLocationIdChange?: (locationId: string | null) => void
+};
+
+export default function PersonalInformation(props: PersonalInformationProps) {
+    const { page, cart, isBuyNow, processPayment, onLocationIdChange } = props;
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
         lastName: '',
@@ -141,6 +150,15 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
     useEffect(() => {
         setIsFormValid(isFormComplete(formData));
     }, [formData, deliveryType]);
+
+    useEffect(() => {
+        if (deliveryType === "in store") {
+            onLocationIdChange?.(formData?.warehouse_id ?? null);
+            return;
+        }
+
+        onLocationIdChange?.(null);
+    }, [deliveryType, formData?.warehouse_id, onLocationIdChange]);
 
     useEffect(() => {
         if (token) {
@@ -625,7 +643,7 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
                     } */}
 
                         <RadioGroup defaultValue="mpesa" className="flex flex-col gap-y-[1rem]">
-                            <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                            {/* <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
                                 <RadioGroupItem value="card" id="card" disabled />
                                 <Label htmlFor="card">Credit or Debit Card</Label>
                             </div>
@@ -633,17 +651,17 @@ export default function PersonalInformation({ page, cart, isBuyNow, processPayme
                             <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
                                 <RadioGroupItem value="paypal" id="paypal" disabled />
                                 <Label htmlFor="paypal">Paypal</Label>
-                            </div>
+                            </div> */}
 
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="mpesa" id="mpesa" checked />
                                 <Label htmlFor="mpesa">Mpesa</Label>
                             </div>
 
-                            <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
+                            {/* <div className="flex items-center space-x-2 opacity-50 cursor-not-allowed">
                                 <RadioGroupItem value="airtel" id="airtel" disabled />
                                 <Label htmlFor="airtel">Airtel</Label>
-                            </div>
+                            </div> */}
                         </RadioGroup>
 
                         <div className='flex flex-col gap-y-[1.5rem]'>

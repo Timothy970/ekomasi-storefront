@@ -73,7 +73,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
     return (
         <div className="mt-4 lg:mt-0 w-full h-auto">
             {
-                min > 1 && max > 1 && (
+                max > 1 && (
                     <div className="flex flex-col items-center justify-center">
                         <PriceRangeSlider
                             min={min}

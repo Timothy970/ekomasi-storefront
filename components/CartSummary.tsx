@@ -6,7 +6,6 @@ import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
 import { getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
 import { CartData } from '@/lib/features/types'
-import PromocodeInput from './PromocodeInput'
 
 export default function CartSummary({ cart }: { cart: CartData }) {
     const { setOpenGuestCheckoutModal } = useGuestCheckout()
@@ -16,23 +15,12 @@ export default function CartSummary({ cart }: { cart: CartData }) {
     const params = useParams<{ cart_id: string }>()
     const searchParams = useSearchParams();
     const cartId = useAppSelector(selectCartId)
-    const promoFromUrl = searchParams.get("promo_code");
 
     const handleContinueToCheckout = () => {
         if (token == null) {
             setOpenGuestCheckoutModal(true)
         } else {
             let url = '/checkout/member?';
-            let queryAdded = false;
-
-            if (promoFromUrl) {
-                if (queryAdded) {
-                    url += `&promo_code=${promoFromUrl}`;
-                } else {
-                    url += `promo_code=${promoFromUrl}`;
-                }
-            }
-
             router.push(url);
         }
     }
@@ -63,14 +51,6 @@ export default function CartSummary({ cart }: { cart: CartData }) {
             </p>
 
             <div className='mt-[1.5rem] flex flex-col w-full'>
-                <div className='flex flex-row justify-between items-center w-full'>
-                    <span className='text-base font-[400]'>Do you have a Promo Code ?</span>
-                </div>
-
-                <PromocodeInput
-                    cartId={cartId}
-                    isBuyNow={false}
-                />
 
                 <div className='mt-[1.5rem]'>
                     <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>

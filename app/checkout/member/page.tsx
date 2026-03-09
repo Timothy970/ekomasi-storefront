@@ -10,6 +10,7 @@ import React from 'react'
 export default function MemberCheckout() {
   const cart = useAppSelector(selectCart)
   const cartId = useAppSelector(selectCartId)
+  const [locationId, setLocationId] = React.useState<string | null>(null);
 
   if (!cart) {
     return (
@@ -40,6 +41,7 @@ export default function MemberCheckout() {
               cart={cart}
               cartId={cartId}
               isBuyNow={false}
+              locationId={locationId ? Number(locationId) : null}
             />
           </div>
 
@@ -48,6 +50,7 @@ export default function MemberCheckout() {
               page="member"
               cart={cart}
               isBuyNow={false}
+              onLocationIdChange={setLocationId}
             />
           }
         </div>
