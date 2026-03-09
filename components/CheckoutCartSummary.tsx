@@ -9,9 +9,10 @@ type CheckoutCartSummaryProps = {
     cartId: string | null;
     cart: CartData;
     isBuyNow: boolean;
+    locationId?: number | null;
 };
 
-export default function CheckoutCartSummary({ cart, cartId, isBuyNow }: CheckoutCartSummaryProps) {
+export default function CheckoutCartSummary({ cart, cartId, isBuyNow, locationId }: CheckoutCartSummaryProps) {
     const token = useAppSelector(selectUserToken)
 
     return (
@@ -33,6 +34,7 @@ export default function CheckoutCartSummary({ cart, cartId, isBuyNow }: Checkout
                     <PromocodeInput
                         cartId={cartId}
                         isBuyNow={isBuyNow}
+                        locationId={locationId ?? null}
                     />
                 </>
             }

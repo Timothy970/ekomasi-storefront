@@ -1,56 +1,25 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { triggerToast } from "@/app/utils/toastUtils";
 import { applyPromoCodeDiscountAsync, setPromocode } from "@/lib/features/cart/cartSlice";
 import { ToastType } from "@/lib/features/toast/toastSlice";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 type PromocodeInputProps = {
   cartId: string | null;
   isBuyNow: boolean;
+  locationId?: number | null;
 };
 
-export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps) {
+export default function PromocodeInput({ cartId, isBuyNow, locationId }: PromocodeInputProps) {
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const code = useAppSelector((state) => state.cart.promoCode || "");
-  const id = searchParams.get("location_id");
-  const num = Number(id);
-  const locationId = !isNaN(num) && num > 0 ? num : null;
-  const debounceDelay = 500;
 
   const handlePromocodeRes = (message: string, errorType: ToastType) => {
     triggerToast(message, errorType);
   };
-
-  useEffect(() => {
-    const promoFromUrl = searchParams.get("promo_code");
-    if (promoFromUrl) {
-      dispatch(setPromocode(promoFromUrl));
-    }
-  }, [dispatch, searchParams]);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (code.trim() === "") {
-        params.delete("promo_code");
-        dispatch(setPromocode(null));
-      } else {
-        params.set("promo_code", code);
-      }
-
-      router.replace(`${pathname}?${params.toString()}`, undefined);
-    }, debounceDelay);
-
-    return () => clearTimeout(handler);
-  }, [code, dispatch, pathname, router, searchParams]);
 
   const applyPromoCode = () => {
     if (!code.trim()) {
@@ -63,7 +32,7 @@ export default function PromocodeInput({ cartId, isBuyNow }: PromocodeInputProps
         applyPromoCodeDiscountAsync({
           code,
           cart_id: cartId,
-          location_id: locationId,
+          location_id: locationId ?? null,
           handlePromocodeRes,
           isBuyNow: isBuyNow
         })
