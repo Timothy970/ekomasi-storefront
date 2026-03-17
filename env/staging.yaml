@@ -1,4 +1,13 @@
 type: node-next
+name: adenzo-app  
 ingress: true
 
-allowed_networks: {}
+allowed_networks:
+  adenzo:
+    - 197.248.216.187/32
+    - 197.254.97.46/32
+    - 197.248.201.151/32
+    - 197.248.237.119/32
+    - 196.96.164.35/32
+    - 105.161.159.114/32
+    - 86.27.109.78/32
