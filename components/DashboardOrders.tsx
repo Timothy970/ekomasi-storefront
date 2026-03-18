@@ -72,7 +72,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                 </Link>
               </div>
 
-              <Button className="w-[6rem] h-[2.5rem] text-[0.875rem] my-[1rem]">Reorder</Button>
+              {/* <Button className="w-[6rem] h-[2.5rem] text-[0.875rem] my-[1rem]">Reorder</Button> */}
             </div>
           </div>
         );
