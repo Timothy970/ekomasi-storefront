@@ -71,7 +71,7 @@ api.interceptors.response.use(
             );
 
             setTimeout(() => {
-                window.location.href = "/user/signup";
+                window.location.href = "/user/login";
             }, 2000);
 
             return Promise.reject(error);
@@ -113,7 +113,7 @@ api.interceptors.response.use(
                 getStore().dispatch(logout());
 
                 setTimeout(() => {
-                    window.location.href = "/user/signup";
+                    window.location.href = "/user/login";
                 }, 2000);
             }
         }

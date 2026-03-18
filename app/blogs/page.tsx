@@ -44,15 +44,16 @@ export default function Blogs() {
     }
     setEmailError("")
     await dispatch(subscribeAsync({
-      email, handleSubscribe: (message: string, type: ToastType) => {
-        if (type === "success") {
-          setEmail("")
-        }
-        triggerToast(message, type)
-      }
+      email, handleSubscribe: handleSubscribe
     }))
   }
 
+  const handleSubscribe = (message: string, type: ToastType) => {
+    if (type === "success") {
+      setEmail("")
+    }
+    triggerToast(message, type)
+  }
 
   useEffect(() => {
     dispatch(getBlogsAsync(""))
@@ -75,6 +76,7 @@ export default function Blogs() {
             <div className="flex w-full gap-x-[0.75rem] items-center justify-center">
 
               <Input className={`w-ful max-w-[22rem] h-[2.5rem] ${emailError ? "border-red-500" : ""}`} placeholder='Enter your email'
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Button className='h-[2.5rem] text-[0.875rem] text-base'

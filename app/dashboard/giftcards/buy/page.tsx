@@ -73,6 +73,7 @@ export default function BuyGiftCards() {
     useEffect(() => {
         if (voucherDesigns?.length > 0) {
             setDesignImage(voucherDesigns[0]?.url)
+            setSelectVoucherType(voucherDesigns[0]?.design_id)
         }
     }, [voucherDesigns])
 
@@ -230,14 +231,15 @@ export default function BuyGiftCards() {
 
                     <div className='relative z-[12] flex flex-col gap-y-[1rem] md:flex-row md:gap-x-[1rem]'>
                         <div className='w-[100%] md:w-[50%]'>
+                            <span className='font-[600] text-sm text-gray-500 mb-2 block'>Selected Design Preview</span>
                             {
-                                designImage ? (<div className=" w-full md:w-[70%] relative h-auto mt-[2.5rem]">
+                                designImage ? (<div className=" w-full md:w-[70%] relative h-auto">
                                     <NextImage
                                         src={designImage}
                                         width={40}
                                         height={40}
                                         unoptimized
-                                        className="object-cover rounded w-full h-full"
+                                        className="object-cover rounded w-full h-full border-2 border-[#E82989]/20 shadow-lg"
                                         alt="Preview"
                                     />
                                 </div>
@@ -250,29 +252,45 @@ export default function BuyGiftCards() {
                                 <span className='font-[700] text-[1.25rem]'>Voucher Design</span>
 
                                 <div className='w-full mt-[1rem] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
-                                    {voucherDesigns?.map((design) => (
-                                        <div
-                                            key={design.design_id}
-                                            className={`cursor-pointer rounded-lg overflow-hidden transition-all ${voucherType === design.design_id
-                                                ? 'border-[#E82989] ring-2 ring-[#E82989]'
-                                                : 'border-gray-300'
-                                                }`}
-                                            onClick={() => {
-                                                setSelectVoucherType(design.design_id);
-                                                setDesignImage(design.url);
-                                            }}
-                                        >
-                                            {design.url ? (<NextImage
-                                                src={design.url}
-                                                width={300}
-                                                height={180}
-                                                className='object-cover w-full h-auto rounded'
-                                                unoptimized
-                                                alt={design.name}
-                                            />
-                                            ) : (<NoImage />)}
+                                    {voucherDesigns?.length > 0 ? (
+                                        voucherDesigns.map((design) => (
+                                            <div
+                                                key={design.design_id}
+                                                className={`relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 ${voucherType === design.design_id
+                                                    ? 'border-[#E82989] ring-2 ring-[#E82989] scale-[1.02] shadow-md'
+                                                    : 'border-gray-200 hover:border-[#E82989]/50'
+                                                    } border`}
+                                                onClick={() => {
+                                                    setSelectVoucherType(design.design_id);
+                                                    setDesignImage(design.url);
+                                                }}
+                                            >
+                                                {design.url ? (
+                                                    <>
+                                                        <NextImage
+                                                            src={design.url}
+                                                            width={300}
+                                                            height={180}
+                                                            className='object-cover w-full h-auto rounded'
+                                                            unoptimized
+                                                            alt={design.name}
+                                                        />
+                                                        {voucherType === design.design_id && (
+                                                            <div className="absolute top-1 right-1 bg-[#E82989] rounded-full p-1 shadow-sm">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                                </svg>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                ) : (<NoImage />)}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="col-span-full py-8 text-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                                            <p className="text-gray-500 font-medium">There are no designs yet</p>
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             </div>
 
