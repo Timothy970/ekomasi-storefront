@@ -1,4 +1,5 @@
 type: node-next
+name: adenzo-app  
 ingress: true
 
 allowed_networks:
