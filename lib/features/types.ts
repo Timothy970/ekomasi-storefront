@@ -69,6 +69,14 @@ export interface Warranty {
   expiry_date: string;
 }
 
+export interface VariantSelection {
+  variant_ids: string[];
+  name: string;
+  sku: string;
+  additional_price: number;
+  stock_quantity: number;
+}
+
 export interface Product {
   product_id?: string;
   id?: string;
@@ -95,6 +103,7 @@ export interface Product {
   discount?: number;
   discount_type?: string;
   bundle_quantity?: number;
+  variant_selection?: VariantSelection[];
 }
 
 export interface SubCategory {
@@ -321,6 +330,7 @@ export interface AddToCartRequest {
   product_id: string;
   cart_id: string;
   quantity: number;
+  variation_sku?: string;
 }
 
 export interface ApplyPromoCodeDiscountRequest {
@@ -332,7 +342,8 @@ export interface ApplyPromoCodeDiscountRequest {
 export interface CreateCartRequest {
   product_id: string;
   quantity: number;
-  cart_id?: string
+  cart_id?: string;
+  variation_sku?: string;
 }
 
 export interface WishList {
@@ -430,6 +441,7 @@ export interface CartItem {
   last_updated: string;   // ISO date string
   urls: ProductUrl[];
   product_variants: null | Record<string, any>; // adjust if variants have structure
+  variation_sku?: string | null;
 }
 
 export interface CartData {
@@ -539,6 +551,7 @@ export interface MemberOrderPayload {
 export interface OrderItem {
   product_id: string;
   variant_id?: string | null;
+  variation_sku?: string | null;
   quantity: number;
   unit_price?: number;
   name?: string;

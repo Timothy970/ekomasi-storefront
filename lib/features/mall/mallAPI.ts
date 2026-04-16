@@ -14,7 +14,7 @@ export async function getVariants(): Promise<GetVariantsResponse> {
 
 export async function getLocations(): Promise<LocationsResponse> {
     try {
-        const response = await axios.get<LocationsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}locations`);
+        const response = await axios.get<LocationsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}locations?size=10000`);
 
         return response.data;
     } catch (error) {
