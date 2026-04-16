@@ -428,8 +428,10 @@ export default function ProductDetail() {
                     {product.variant_selection.map((variant) => (
                       <div
                         key={variant.sku}
-                        className={`px-3 py-2 border rounded text-sm ${variant.stock_quantity === 0 ? 'bg-[ #E8298A] text-gray-400 border-gray-200' : 'border-black hover:bg-[ #ee84b9] hover:text-white cursor-default transition-colors'}`}
-                      >
+                        className={`px-3 py-2 border rounded text-sm ${variant.stock_quantity === 0
+                          ? 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-[#E8298A] text-white border-[#E8298A] hover:bg-[#ee84b9] cursor-pointer transition-colors'
+                          }`}>
                         {variant.name}
                       </div>
                     ))}
