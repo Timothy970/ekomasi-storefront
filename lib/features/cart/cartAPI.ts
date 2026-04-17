@@ -74,7 +74,8 @@ export async function updateCart(data: CreateCartRequest): Promise<CreateCartRes
             `${process.env.NEXT_PUBLIC_API_BASE_URL}cart/update/${data?.cart_id}`,
             {
                 product_id: data?.product_id,
-                quantity: data?.quantity
+                quantity: data?.quantity,
+                variation_sku: data?.variation_sku
             },
             {}
         );

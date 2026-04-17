@@ -101,8 +101,8 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		addToCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, cart_id }: { product_id: string, quantity: number, cart_id: string }) => {
-				const response = await addToCart({ product_id, quantity, cart_id });
+			async ({ product_id, quantity, cart_id, variation_sku }: { product_id: string, quantity: number, cart_id: string, variation_sku?: string }) => {
+				const response = await addToCart({ product_id, quantity, cart_id, variation_sku });
 				return response;
 			},
 			{
@@ -168,8 +168,8 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		addToBuyNowCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, cart_id }: { product_id: string, quantity: number, cart_id: string }) => {
-				const response = await addToCart({ product_id, quantity, cart_id });
+			async ({ product_id, quantity, cart_id, variation_sku }: { product_id: string, quantity: number, cart_id: string, variation_sku?: string }) => {
+				const response = await addToCart({ product_id, quantity, cart_id, variation_sku });
 				return response;
 			},
 			{
@@ -195,11 +195,11 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, createAndAdd }: { product_id: string, quantity: number, createAndAdd: (cart_id: string) => void }) => {
-				const response = await createCart({ product_id, quantity });
+			async ({ product_id, quantity, variation_sku, createAndAdd }: { product_id: string, quantity: number, variation_sku?: string, createAndAdd: (cart_id: string, variation_sku?: string) => void }) => {
+				const response = await createCart({ product_id, quantity, variation_sku });
 
 				if (response.data?.cart_id) {
-					createAndAdd(response.data?.cart_id)
+					createAndAdd(response.data?.cart_id, variation_sku)
 				}
 
 				return response;
@@ -227,11 +227,11 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		createBuyNowCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, createAndAddBuyNowCart }: { product_id: string, quantity: number, createAndAddBuyNowCart: (cart_id: string) => void }) => {
-				const response = await createCart({ product_id, quantity });
+			async ({ product_id, quantity, variation_sku, createAndAddBuyNowCart }: { product_id: string, quantity: number, variation_sku?: string, createAndAddBuyNowCart: (cart_id: string, variation_sku?: string) => void }) => {
+				const response = await createCart({ product_id, quantity, variation_sku });
 
 				if (response.data?.cart_id) {
-					createAndAddBuyNowCart(response.data?.cart_id)
+					createAndAddBuyNowCart(response.data?.cart_id, variation_sku)
 				}
 
 				return response;
@@ -259,8 +259,8 @@ export const cartSlice = createAppSlice({
 			}
 		),
 		updateCartAsync: create.asyncThunk(
-			async ({ product_id, quantity, refetchCart, cart_id }: { product_id: string, quantity: number, refetchCart: (cart_id: string) => void, cart_id: string }) => {
-				const response = await updateCart({ product_id, quantity, cart_id });
+			async ({ product_id, quantity, variation_sku, refetchCart, cart_id }: { product_id: string, quantity: number, variation_sku?: string, refetchCart: (cart_id: string) => void, cart_id: string }) => {
+				const response = await updateCart({ product_id, quantity, variation_sku, cart_id });
 
 				if (cart_id) {
 					refetchCart(cart_id)

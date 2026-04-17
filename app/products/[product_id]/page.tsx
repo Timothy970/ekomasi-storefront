@@ -25,6 +25,8 @@ import ProductFeatureSection from '@/components/ProductFeatureSection'
 import Image from 'next/image'
 import NoImage from '@/components/NoImage'
 import { calculateDiscountedPrice, formatPrice } from '@/lib/utils/priceUtils'
+import VariantSelectionModal from '@/components/VariantSelectionModal'
+import { VariantSelection } from '@/lib/features/types'
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -46,6 +48,8 @@ export default function ProductDetail() {
   const reviews = useAppSelector(selectProductReviews)
   const reviewPagination = useAppSelector(selectReviewPagination)
   const brandVariant = product?.product_variants?.find(v => v.variant_type === "brand");
+  const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
+  const [isBuyNowFlow, setIsBuyNowFlow] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -111,7 +115,7 @@ export default function ProductDetail() {
 
   }, [dispatch, params?.product_id])
 
-  const handleAddToCart = async (addedQuantity: number) => {
+  const handleAddToCart = async (addedQuantity: number, variation_sku?: string) => {
     setAddToCartLoading(true)
 
     if (!cartId && product?.product_id && addedQuantity > 0) {
@@ -120,13 +124,14 @@ export default function ProductDetail() {
           {
             product_id: product.product_id,
             quantity: addedQuantity,
+            variation_sku,
             createAndAdd,
           }
         )
       )
     } else {
       if (product?.product_id && cartId) {
-        dispatch(addToCartAsync({ product_id: product?.product_id, quantity: addedQuantity, cart_id: cartId }))
+        dispatch(addToCartAsync({ product_id: product?.product_id, quantity: addedQuantity, cart_id: cartId, variation_sku }))
       }
 
       if (cartId) {
@@ -139,6 +144,70 @@ export default function ProductDetail() {
     setTimeout(() => {
       setAddToCartLoading(false)
     }, 1000)
+  }
+
+  const handleVariantSelectionConfirm = async (selected: { variant: VariantSelection, quantity: number }[]) => {
+    setIsVariantModalOpen(false);
+    setAddToCartLoading(true);
+
+    if (isBuyNowFlow) {
+      // For Buy Now, usually we handle one at a time for checkout redirect
+      // but let's see how createBuyNowCart handles it.
+      // If multiple, we might need a batch add.
+      // For now, let's take the first one or logic as requested.
+      // User said "if 2 different variations selected then we will have two sets with different skus"
+      // This implies cart/order creation.
+
+      const first = selected[0];
+      if (first) {
+        dispatch(
+          createBuyNowCartAsync({
+            product_id: product!.product_id!,
+            quantity: first.quantity,
+            variation_sku: first.variant.sku,
+            createAndAddBuyNowCart,
+          })
+        );
+        setIsBuyNow(true);
+        // If there are more, they won't work well with "Buy Now" redirect if done separately.
+        // But the requirement says "both for cart api and order creation".
+      }
+    } else {
+      // Regular cart addition
+      let currentCartId = cartId;
+
+      for (let i = 0; i < selected.length; i++) {
+        const item = selected[i];
+        if (!currentCartId) {
+          // First item creates the cart
+          const result = await dispatch(createCartAsync({
+            product_id: product!.product_id!,
+            quantity: item.quantity,
+            variation_sku: item.variant.sku,
+            createAndAdd: (id) => { currentCartId = id; }
+          })).unwrap();
+
+          if (result.data?.cart_id) {
+            currentCartId = result.data.cart_id;
+          }
+        } else {
+          // Subsequent items use the existing/newly created cartId
+          await dispatch(addToCartAsync({
+            product_id: product!.product_id!,
+            quantity: item.quantity,
+            cart_id: currentCartId,
+            variation_sku: item.variant.sku
+          })).unwrap();
+        }
+      }
+
+      if (currentCartId) {
+        triggerToast("Items added to cart", "success");
+        dispatch(getCartAsync({ cart_id: currentCartId }));
+      }
+    }
+
+    setAddToCartLoading(false);
   }
 
   const handleAddToBuyNowCart = async () => {
@@ -188,7 +257,7 @@ export default function ProductDetail() {
     const mfgDate = manufacturing_date ? new Date(manufacturing_date).toLocaleDateString() : "N/A";
     const expDate = expiry_date ? new Date(expiry_date).toLocaleDateString() : "N/A";
 
-    const text = `This product comes with a ${warranty_type} warranty valid for ${warranty_period}. Manufactured on: ${mfgDate}. Warranty expiry date: ${expDate}.`;
+    const text = `This product comes with a ${warranty_type} warranty valid for ${warranty_period}.`;
 
     setWarranty(text);
   }, [product?.warranty]);
@@ -283,7 +352,11 @@ export default function ProductDetail() {
               <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
 
               <div className="mt-[0.5rem] flex items-baseline gap-2 flex-wrap">
-                {product?.discount_type && product?.discount ? (
+                {product?.variant_selection && product.variant_selection.length > 0 ? (
+                  <span className='text-lg lg:text-[1.5rem] font-bold'>
+                    {formatPrice(product.price)} - {formatPrice(product.price + Math.max(...product.variant_selection.map(v => v.additional_price)))}
+                  </span>
+                ) : product?.discount_type && product?.discount ? (
                   <>
                     <span className="text-lg lg:text-[1.5rem] font-bold text-[#D0021B]">
                       {formatPrice(calculateDiscountedPrice(product.price, product.discount_type, product.discount))}
@@ -342,14 +415,32 @@ export default function ProductDetail() {
                   <span className="font-bold underline">{brandVariant.name}</span>
                 </div>
               )}
-
-              <div className='mt-[0.75rem]'>
-                <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
-                <ProductColors product={product} />
-              </div>
+              {product?.product_variants?.some(v => v.variant_type.toLowerCase() === "color") && (
+                <div className='mt-[0.75rem]'>
+                  <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
+                  <ProductColors product={product} />
+                </div>
+              )}
+              {product?.variant_selection && product.variant_selection.length > 0 && (
+                <div className='mt-[1rem]'>
+                  <h3 className='text-[0.875rem] font-semibold mb-2'>Available Variations</h3>
+                  <div className='flex flex-wrap gap-2'>
+                    {product.variant_selection.map((variant) => (
+                      <div
+                        key={variant.sku}
+                        className={`px-3 py-2 border rounded text-sm ${variant.stock_quantity === 0
+                          ? 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : 'bg-[#E8298A] text-white border-[#E8298A] hover:bg-[#ee84b9] cursor-pointer transition-colors'
+                          }`}>
+                        {variant.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {
-                product && product && product?.stock_quantity > 0 ? <div className='mt-[1.5rem]'>
+                product && product?.stock_quantity > 0 && (!product?.variant_selection || product.variant_selection.length === 0) ? <div className='mt-[1.5rem]'>
                   <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
                   <ProductQuantity
                     setQuantity={setQuantity}
@@ -361,7 +452,14 @@ export default function ProductDetail() {
               {
                 product && <Button
                   disabled={product && product?.stock_quantity <= 0 || addToCartLoading}
-                  onClick={() => handleAddToCart(quantity)}
+                  onClick={() => {
+                    if (product?.variant_selection && product.variant_selection.length > 0) {
+                      setIsBuyNowFlow(false);
+                      setIsVariantModalOpen(true);
+                    } else {
+                      handleAddToCart(quantity);
+                    }
+                  }}
                   className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
                 >
                   {
@@ -373,14 +471,21 @@ export default function ProductDetail() {
 
               <Button
                 disabled={product && product?.stock_quantity <= 0}
-                onClick={handleAddToBuyNowCart}
+                onClick={() => {
+                  if (product?.variant_selection && product.variant_selection.length > 0) {
+                    setIsBuyNowFlow(true);
+                    setIsVariantModalOpen(true);
+                  } else {
+                    handleAddToBuyNowCart();
+                  }
+                }}
                 className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'
               >
                 Buy Now
               </Button>
 
               <div className='mt-[1.5rem] flex flex-col gap-y-[1.5rem]'>
-                <div className='flex gap-x-[0.5rem] w-full border-b border-b-black py-[1.5rem]'>
+                {/* <div className='flex gap-x-[0.5rem] w-full border-b border-b-black py-[1.5rem]'>
                   <span className='text-base'>Share:</span>
 
                   <div className='flex gap-x-[0.44rem] items-center justify-center'>
@@ -424,7 +529,7 @@ export default function ProductDetail() {
                       <path d="M9.6 0C4.2984 0 0 4.2984 0 9.6C0 11.401 0.505873 13.0801 1.36875 14.5203L0.0859375 19.2L4.86562 17.9453C6.26348 18.74 7.87719 19.2 9.6 19.2C14.9016 19.2 19.2 14.9016 19.2 9.6C19.2 4.2984 14.9016 0 9.6 0ZM6.31406 5.12188C6.47006 5.12188 6.63035 5.12092 6.76875 5.12813C6.93995 5.13213 7.12629 5.14466 7.30469 5.53906C7.51669 6.00786 7.9783 7.18393 8.0375 7.30312C8.0967 7.42233 8.13865 7.56275 8.05625 7.71875C7.97785 7.87875 7.93708 7.97559 7.82188 8.11719C7.70268 8.25479 7.57206 8.42569 7.46406 8.52969C7.34486 8.64889 7.22178 8.77959 7.35938 9.01719C7.49697 9.25479 7.97485 10.0337 8.68125 10.6625C9.58925 11.4737 10.3554 11.723 10.5938 11.8422C10.8321 11.9614 10.9702 11.9428 11.1078 11.7828C11.2494 11.6268 11.7025 11.0915 11.8625 10.8531C12.0185 10.6147 12.1778 10.656 12.3938 10.7344C12.613 10.8128 13.7819 11.3886 14.0203 11.5078C14.2587 11.627 14.415 11.686 14.475 11.7828C14.5366 11.8828 14.5367 12.3589 14.3391 12.9141C14.1415 13.4685 13.1711 14.0046 12.7359 14.0422C12.2967 14.083 11.8868 14.2396 9.88125 13.45C7.46205 12.4972 5.93639 10.0194 5.81719 9.85938C5.69799 9.70337 4.84844 8.57113 4.84844 7.40313C4.84844 6.23112 5.46293 5.65715 5.67812 5.41875C5.89733 5.18035 6.15406 5.12188 6.31406 5.12188Z" fill="#62CE40" />
                     </svg>
                   </div>
-                </div>
+                </div> */}
 
                 {
                   product?.products && product.products.length > 0 && (
@@ -506,6 +611,15 @@ export default function ProductDetail() {
           />
         }
       </div>
+      {product && (
+        <VariantSelectionModal
+          product={product}
+          isOpen={isVariantModalOpen}
+          onClose={() => setIsVariantModalOpen(false)}
+          onConfirm={handleVariantSelectionConfirm}
+          loading={addToCartLoading}
+        />
+      )}
     </Navigation >
   )
 }

@@ -184,6 +184,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
             const mappedItems: OrderItem[] = cart.cart_items.map((item) => ({
                 product_id: item?.product.product_id,
                 quantity: item.quantity,
+                variation_sku: item.variation_sku,
             }));
 
             setOrderItems(mappedItems);
