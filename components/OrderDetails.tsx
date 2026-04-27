@@ -233,11 +233,11 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
               </span>
             </div>
 
-            {
+            {/* {
               order?.payment_status?.toLowerCase() !== "paid" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem]'>
                 Make Payment
               </Button> : <></>
-            }
+            } */}
           </div>
 
           <div className='flex flex-col gap-y-[0.5rem] w-full justify-between items-start pt-[1.25rem]'>
