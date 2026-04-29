@@ -78,3 +78,4 @@ docker compose -f docker-compose.dev.yml up --build
 - `lib/`: Redux slices, custom hooks, and utility functions.
 - `public/`: Static assets.
 - `docs/`: Technical and project documentation.
+
