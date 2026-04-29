@@ -1,6 +1,8 @@
 type: node-next
 ingress: true
 
+port: 3000
+
 allowed_networks:
   adenzo:
     - 197.248.216.187/32
@@ -11,3 +13,4 @@ allowed_networks:
     - 102.215.189.36/32
     - 86.27.109.78/32
     - 192.168.100.20/32
+
