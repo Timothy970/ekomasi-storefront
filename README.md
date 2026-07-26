@@ -63,14 +63,6 @@ To create a production build:
 npm run build
 ```
 
-## 🐳 Docker Support
-
-For development with Docker:
-
-```bash
-docker compose -f docker-compose.dev.yml up --build
-```
-
 ## 📂 Project Structure
 
 - `app/`: Next.js App Router pages and layouts.
