@@ -44,7 +44,7 @@ export default function Address() {
     <Navigation>
       <DashboardLayout>
         <div className="space-y-4">
-          <div className='bg-[#804A9D14] w-full p-[1rem] md:p-[2rem] flex flex-row justify-between'>
+          <div className='bg-secondary-tenant w-full p-[1rem] md:p-[2rem] flex flex-row justify-between'>
             <div className='w-full flex flex-col '>
               <div className='flex flex-col gap-y-[1rem] gap-x-[1rem]'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -68,7 +68,7 @@ export default function Address() {
                   setIsEditingAddress(false)
                   router.back()
                 }}
-                className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                className="bg-secondary-tenant text-[0.75rem] h-[2.5rem] hover:bg-secondary-tenant"
               >
                 <ArrowUpRight />
                 <span>Go back</span>
@@ -97,7 +97,7 @@ export default function Address() {
             {
               address ? <div className='w-full flex flex-col gap-y-[1rem]'>
                 {address?.map((address, index) => {
-                  return <div key={index?.toString()} className='flex flex-col md:flex-row justify-between bg-[#804A9D14] p-[1rem]'>
+                  return <div key={index?.toString()} className='flex flex-col md:flex-row justify-between bg-secondary-tenant p-[1rem]'>
                     <div className='flex flex-col items-start justify-start gap-y-[1rem]'>
                       <span>{profile?.first_name} {profile?.last_name}</span>
                       <span>{address?.apartment}</span>

@@ -277,7 +277,7 @@ export default function OtpForm() {
                 disabled={status === "loading"}
                 onClick={handleSubmit}
                 variant="outline"
-                className='mt-[2rem] w-full max-w-[30rem] bg-[#AF52DE] outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[2.5rem]'
+                className='mt-[2rem] w-full max-w-[30rem] bg-primary-tenant hover:opacity-90 outline-none border-none text-white font-poppins text-[0.875rem] font-normal leading-[195%] h-[3.3rem] lg:h-[2.5rem]'
             >
                 {
                     status == "loading" && <LoadingIndicator textColor="text-white" />

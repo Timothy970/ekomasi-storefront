@@ -23,7 +23,7 @@ export default function HomeBanner() {
     const banners: HomeBannerInfo[] = [
         {
             id: 1,
-            heading: "Excitement Starts Here: Welcome to Adenzo!",
+            heading: "Excitement Starts Here: Welcome to Ekomasi!",
             text: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
             image_url: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             button_text: "Find the Perfect Gift",
@@ -106,7 +106,7 @@ export default function HomeBanner() {
                             </div>
                         </div>
 
-                        <Button onClick={() => router.push(slides[current].button_url)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-[#AF52DE] mt-[1.5rem] lg:mt-[2rem]">
+                        <Button onClick={() => router.push(slides[current].button_url)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-secondary-tenant mt-[1.5rem] lg:mt-[2rem]">
                             <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
                                 {slides[current].button_text}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">

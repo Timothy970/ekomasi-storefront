@@ -3,6 +3,41 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import "@fontsource/league-spartan";
 import "@fontsource/league-spartan/400.css";
 import { useSearchParams } from "next/navigation";
+import axios from 'axios';
+
+export type Tenant = {
+    id: number;
+    name: string;
+    domain: string;
+    app_domain?: string;
+    admin_domain?: string;
+    slogan: string;
+    logo: string;
+    color: string;
+    app_logo?: string;
+    app_color?: string;
+    app_primary_color?: string;
+    app_secondary_color?: string;
+    app_tertiary_color?: string;
+    admin_logo?: string;
+    admin_color?: string;
+    admin_primary_color?: string;
+    admin_secondary_color?: string;
+    admin_tertiary_color?: string;
+}
+
+type TenantContextType = {
+    tenant: Tenant | null;
+    loading: boolean;
+}
+
+const TenantContext = createContext<TenantContextType | undefined>(undefined);
+
+export function useTenant() {
+    const ctx = useContext(TenantContext);
+    if (!ctx) throw new Error("useTenant must be used within TenantProvider");
+    return ctx;
+}
 
 type FilterContextType = {
     openFilterModal: boolean
@@ -138,38 +173,72 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const [isShareWishlistModalOpen, setShareWishlistModalOpen] = useState(false);
     const [voucherSuccessModalOpen, setVoucherSuccessModalOpen] = useState(false);
     const [openPaymentModal, setOpenPaymentModal] = useState(false);
+    
+    const [tenant, setTenant] = useState<Tenant | null>(null);
+    const [tenantLoading, setTenantLoading] = useState(true);
 
     useEffect(() => {
         setMounted(true);
+        const fetchTenant = async () => {
+            try {
+                const baseUrl = (process as any).env?.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8009/api/';
+                const res = await axios.get(`${baseUrl}tenant/active`);
+                if (res.data && res.data.data) {
+                    const t = res.data.data;
+                    setTenant(t);
+                    const primaryColor = t.app_primary_color || t.app_color || t.color || 'var(--primary)';
+                    const secondaryColor = t.app_secondary_color || 'var(--secondary)';
+                    const tertiaryColor = t.app_tertiary_color || '#EEF2FF';
+
+                    document.documentElement.style.setProperty('--primary', primaryColor);
+                    document.documentElement.style.setProperty('--color-primary', primaryColor);
+                    document.documentElement.style.setProperty('--secondary', secondaryColor);
+                    document.documentElement.style.setProperty('--color-secondary', secondaryColor);
+                    document.documentElement.style.setProperty('--minor', tertiaryColor);
+                    document.documentElement.style.setProperty('--tertiary', tertiaryColor);
+                    document.documentElement.style.setProperty('--color-tertiary', tertiaryColor);
+                    if (t.name) {
+                        document.title = t.name + (t.slogan ? ` - ${t.slogan}` : "");
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to fetch active tenant:", e);
+            } finally {
+                setTenantLoading(false);
+            }
+        };
+        fetchTenant();
     }, []);
 
-    if (!mounted) {
-        return <div />;
+    if (!mounted || tenantLoading) {
+        return <div className="min-h-screen flex justify-center items-center font-sans">Loading store...</div>;
     }
 
     return (
-        <PaymentContext.Provider value={{ openPaymentModal, setOpenPaymentModal }}>
-            <VoucherSuccessModalContext.Provider value={{ voucherSuccessModalOpen, setVoucherSuccessModalOpen }}>
-                <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
-                    <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
-                        <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-                            <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
-                                <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
-                                    <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-                                        <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                                            <QueryContext.Provider value={{ query, setQuery }}>
-                                                <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
-                                                    {children}
-                                                </main>
-                                            </QueryContext.Provider>
-                                        </SearchContext.Provider>
-                                    </GuestCheckoutContext.Provider>
-                                </IsEditingAdressContext.Provider>
-                            </IsBuyNowContext.Provider>
-                        </FilterContext.Provider>
-                    </ShareWishlistModalContext.Provider>
-                </ReviewContext.Provider>
-            </VoucherSuccessModalContext.Provider>
-        </PaymentContext.Provider>
+        <TenantContext.Provider value={{ tenant, loading: tenantLoading }}>
+            <PaymentContext.Provider value={{ openPaymentModal, setOpenPaymentModal }}>
+                <VoucherSuccessModalContext.Provider value={{ voucherSuccessModalOpen, setVoucherSuccessModalOpen }}>
+                    <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
+                        <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
+                            <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
+                                <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
+                                    <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
+                                        <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
+                                            <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
+                                                <QueryContext.Provider value={{ query, setQuery }}>
+                                                    <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
+                                                        {children}
+                                                    </main>
+                                                </QueryContext.Provider>
+                                            </SearchContext.Provider>
+                                        </GuestCheckoutContext.Provider>
+                                    </IsEditingAdressContext.Provider>
+                                </IsBuyNowContext.Provider>
+                            </FilterContext.Provider>
+                        </ShareWishlistModalContext.Provider>
+                    </ReviewContext.Provider>
+                </VoucherSuccessModalContext.Provider>
+            </PaymentContext.Provider>
+        </TenantContext.Provider>
     )
 }

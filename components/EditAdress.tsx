@@ -177,7 +177,7 @@ export default function EditAdress({ setEditAdress, editAdressDetails }: AddNewA
                 </div>
             </div>
 
-            <Button disabled={!isFormValid} type='submit' className='h-[2.5rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]'>
+            <Button disabled={!isFormValid} type='submit' className='h-[2.5rem] md:max-w-[19rem] bg-primary-tenant hover:opacity-90 mt-[1.5rem]'>
                 Update address
             </Button>
         </form>

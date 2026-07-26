@@ -157,7 +157,7 @@ export default function SignUp() {
                             <Button
                                 type="submit"
                                 variant="outline"
-                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[2.5rem]'
+                                className='mt-[1rem] w-full bg-primary-tenant hover:opacity-90 outline-none border-none text-white h-[3.3rem] lg:h-[2.5rem]'
                             >
                                 {
                                     status == "loading" && <LoadingIndicator textColor="text-white" />

@@ -3,6 +3,42 @@ export interface User {
   email?: string
 }
 
+export interface WalletTransaction {
+  id: number;
+  type: 'CREDIT' | 'DEBIT' | 'TOPUP' | 'REFUND';
+  amount: number;
+  reference: string;
+  description: string;
+  created_at: string;
+}
+
+export interface WalletData {
+  user_phone: string;
+  balance: number;
+  transactions: WalletTransaction[];
+}
+
+export interface WalletResponse {
+  status_code: number;
+  message: string;
+  data: WalletData;
+}
+
+export interface TopupWalletPayload {
+  phone_number: string;
+  amount: number;
+}
+
+export interface TopupWalletResponse {
+  status_code: number;
+  message: string;
+  data?: {
+    checkout_request_id: string;
+    reference: string;
+  };
+  error?: string;
+}
+
 export interface SignUpParams {
   phone_number?: string
   email?: string

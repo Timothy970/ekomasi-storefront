@@ -64,7 +64,7 @@ export default function Otp() {
                 </div>
             </div>
 
-            <div className='w-full z-20 text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-sm font-normal leading-[150%] mb-[1rem]'>© {new Date().getFullYear()} Adenzo. All rights reserved.</div>
+            <div className='w-full z-20 text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-sm font-normal leading-[150%] mb-[1rem]'>© {new Date().getFullYear()} Ekomasi. All rights reserved.</div>
         </div>
     )
 }

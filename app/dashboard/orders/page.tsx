@@ -51,7 +51,7 @@ export default function Orders() {
         <Navigation>
             <DashboardLayout>
                 <div className="space-y-4">
-                    <div className="bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]">
+                    <div className="bg-secondary-tenant w-full p-[1rem] md:p-[2rem]">
                         <div className="flex flex-col gap-y-[1rem]">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -97,9 +97,9 @@ export default function Orders() {
                                 <TabsTrigger
                                     value="ongoing"
                                     className="data-[state=active]:border-b-2 font-[700]
-                                        data-[state=active]:border-b-[#804A9D]
+                                        data-[state=active]:border-b-[var(--secondary)]
                                         data-[state=active]:font-semibold
-                                        data-[state=active]:text-[#804A9D]"
+                                        data-[state=active]:text-secondary-tenant"
                                 >
                                     ONGOING / DELIVERED
                                 </TabsTrigger>
@@ -107,9 +107,9 @@ export default function Orders() {
                                 <TabsTrigger
                                     value="cancelled"
                                     className="data-[state=active]:border-b-2 font-[700]
-                                        data-[state=active]:border-b-[#804A9D]
+                                        data-[state=active]:border-b-[var(--secondary)]
                                         data-[state=active]:font-semibold
-                                        data-[state=active]:text-[#804A9D]"
+                                        data-[state=active]:text-secondary-tenant"
                                 >
                                     CANCELLED / RETURNED
                                 </TabsTrigger>

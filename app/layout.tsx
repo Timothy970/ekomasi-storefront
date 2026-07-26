@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Adenzo",
+  title: "Ekomasi",
   description: "",
 };
 
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}>
+        <GoogleOAuthProvider clientId={(process as any).env?.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}>
           <StoreProvider>
             <ClientLayout>
               {children}

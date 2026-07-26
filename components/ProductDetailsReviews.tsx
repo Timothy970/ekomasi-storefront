@@ -19,13 +19,13 @@ export function ProductDetailsReviews() {
                 <TabsList className="flex gap-[1.5rem] justify-start border-b border-none bg-transparent p-0">
                     <TabsTrigger
                         value="details"
-                        className="rounded-none bg-white border-b-2 border-l-0 border-t-0 border-r-0 pb-2 shadow-none text-sm font-medium text-[#6C737F] data-[state=active]:border-[#C22172] data-[state=active]:text-[#f7479f]"
+                        className="rounded-none bg-white border-b-2 border-l-0 border-t-0 border-r-0 pb-2 shadow-none text-sm font-medium text-[#6C737F] data-[state=active]:border-secondary-tenant data-[state=active]:text-secondary-tenant"
                     >
                         Details
                     </TabsTrigger>
 
                     <TabsTrigger
-                        className="rounded-none bg-white border-b-2 border-l-0 border-t-0 border-r-0 pb-2 shadow-none text-sm font-medium text-[#6C737F] data-[state=active]:border-[#C22172] data-[state=active]:text-[#f7479f]"
+                        className="rounded-none bg-white border-b-2 border-l-0 border-t-0 border-r-0 pb-2 shadow-none text-sm font-medium text-[#6C737F] data-[state=active]:border-secondary-tenant data-[state=active]:text-secondary-tenant"
                         value="customer-reviews"
                     >
                         Customer Reviews ({reviewPagination?.total_items})

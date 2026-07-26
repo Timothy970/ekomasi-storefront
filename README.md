@@ -1,4 +1,4 @@
-# Adenzo E-commerce App
+# Ekomasi E-commerce App
 
 A modern, high-performance e-commerce platform built with Next.js 15, featuring a robust admin dashboard and a seamless shopping experience.
 

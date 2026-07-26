@@ -7,7 +7,7 @@ const slides = [
     {
         id: 1,
         testimony:
-            "“My daughter-in-law is pretty particular (in a good way!), so I was nervous about buying baby gifts. The Adenzo customer service team helped me pick the perfect items for my new grandson. She was thrilled and said 'Finally, someone who gets what new parents actually need!' Made this grandma very happy”",
+            "“My daughter-in-law is pretty particular (in a good way!), so I was nervous about buying baby gifts. The Ekomasi customer service team helped me pick the perfect items for my new grandson. She was thrilled and said 'Finally, someone who gets what new parents actually need!' Made this grandma very happy”",
         name: "Linda K",
         stars: 5,
     },
@@ -19,7 +19,7 @@ const slides = [
     },
     {
         id: 3,
-        testimony: "“Quick delivery and quality products. Highly recommend Adenzo!”",
+        testimony: "“Quick delivery and quality products. Highly recommend Ekomasi!”",
         name: "Sarah M",
         stars: 5,
     },
@@ -72,7 +72,7 @@ export default function CustomerTestimonials() {
                             >
                                 <div className="flex justify-start gap-[0.5rem] lg:hidden">
                                     {Array.from({ length: slides[index].stars }).map((_, i) => (
-                                        <Star key={i} size={24} color="#AF52DE" />
+                                        <Star key={i} size={24} color='var(--secondary)' />
                                     ))}
                                 </div>
 
@@ -109,7 +109,7 @@ export default function CustomerTestimonials() {
                                 <button
                                     key={i}
                                     onClick={() => setIndex(i)}
-                                    className={`w-[0.5rem] h-[0.5rem] rounded-full ${i === index ? "bg-[#AF52DE]" : "bg-gray-300"}`}
+                                    className={`w-[0.5rem] h-[0.5rem] rounded-full ${i === index ? "bg-secondary-tenant" : "bg-gray-300"}`}
                                     aria-label={`Go to slide ${i + 1}`}
                                 />
                             ))}

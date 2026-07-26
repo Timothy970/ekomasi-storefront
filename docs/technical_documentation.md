@@ -1,7 +1,7 @@
-# Technical Documentation: Adenzo E-commerce App
+# Technical Documentation: Ekomasi E-commerce App
 
 ## 1. Introduction
-Adenzo is a comprehensive e-commerce platform designed for a seamless shopping experience and efficient store management. It leverages modern web technologies to provide a fast, responsive, and secure environment for both customers and administrators.
+Ekomasi is a comprehensive e-commerce platform designed for a seamless shopping experience and efficient store management. It leverages modern web technologies to provide a fast, responsive, and secure environment for both customers and administrators.
 
 ## 2. Project Architecture
 The project follows a modern Next.js 15 architecture using the **App Router**.

@@ -12,12 +12,15 @@ import { getUserProfileAsync, selectUserToken } from '@/lib/features/user/userSl
 import { useRouter } from 'next/navigation'
 import { getWishListsAsync, selectWishLists } from '@/lib/features/wishlist/wishlistSlice'
 import Icons from '../ui/custom-icons'
+import { useTenant } from '@/app/ClientLayout'
+
 interface AppHeaderProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
+  const { tenant } = useTenant()
   const homeData = useAppSelector(selectHomeData)
   const cart = useAppSelector(selectCart)
   const dispatch = useAppDispatch()
@@ -50,16 +53,19 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
     }
   }
 
+  const logoSrc = tenant?.app_logo || tenant?.logo || "/images/ekomasi-logo.png"
+  const logoAlt = tenant?.name || "Logo"
+
   return (
     <div className='w-full flex flex-col items-center z-50 sticky top-0 bg-white'>
-      <div className='h-[1.75rem] w-full bg-[#E8298A] hidden z-50 lg:flex justify-center items-center'>
+      <div className='h-[1.75rem] w-full bg-primary-tenant hidden z-50 lg:flex justify-center items-center' style={{ backgroundColor: 'var(--primary, var(--primary))' }}>
         <div className='w-full max-w-[90rem] flex justify-between items-center h-full px-[1.5rem]'>
           <div className='font-poppins text-[0.875rem]  font-normal leading-[1.95rem] text-white'>
             Call Us: {homeData?.phone_number}
           </div>
 
           <div>
-            <span className='font-poppins text-[0.875rem]  font-normal leading-[1.95rem] text-white'>Our Big Little Event is now on | <span className='underline'>Shop up to 40% off</span></span>
+            <span className='font-poppins text-[0.875rem]  font-normal leading-[1.95rem] text-white'>{tenant?.slogan || "Our Big Little Event is now on"} | <span className='underline'>Shop up to 40% off</span></span>
           </div>
 
           {
@@ -71,16 +77,16 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
       <div className='w-full flex justify-center items-center z-[60] border-b lg:border-none'>
         <div className='w-full h-[3.75rem] px-[1.25rem] lg:px-[3rem] flex flex-row items-center justify-between max-w-[90rem]'>
 
-          <div className='w-[15rem]'>
+          <div className='w-[15rem] flex items-center'>
             <Link href={`/`}>
               <Image
-                src={"/images/company-logo.svg"}
-                alt="Logo"
-                width={150}
-                height={25}
+                src={logoSrc}
+                alt={logoAlt}
+                width={180}
+                height={45}
                 priority={true}
                 unoptimized
-                className='w-[6.625rem] cursor-pointer lg:h-[3.338rem] lg:w-[10.75rem] h-[2.676rem] shrink-0'
+                className='h-8 sm:h-10 lg:h-12 w-auto max-w-[140px] sm:max-w-[170px] lg:max-w-[210px] cursor-pointer shrink-0 object-contain hover:opacity-95 transition-opacity'
               />
             </Link>
           </div>
@@ -108,7 +114,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
                   <div className='flex justify-center items-center relative'>
                     <Icons.HeartIcon />
                     {
-                      wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                      wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                         <span className='text-xs'>{wishlist[0]?.products?.length}</span>
                       </div> : <></>
                     }
@@ -123,7 +129,7 @@ export default function AppHeader({ isOpen, setIsOpen }: AppHeaderProps) {
                 cartId ? <Link href={`/cart/${cartId}`}>
                   <div className='flex justify-center items-center relative'>
                     {cart && cart?.cart_items && cart?.cart_items?.length > 0 && (
-                      <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                      <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                         <span className='text-xs'>
                           {cart?.cart_items?.reduce((sum, item) => sum + (item.quantity || 0), 0)}
                         </span>

@@ -19,7 +19,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
   return (
     <div className=" flex flex-col items-start justify-start">
       {orders.map((order) => {
-        const firstItem = order?.items[0];
+        const firstItem = order?.items?.[0];
 
         return (
           <div key={order?.order_id} className="overflow-hidden cursor-pointer w-full py-[2rem] flex flex-row border-b border-[rgba(0,0,0,0.40)] gap-x-[0.5rem]">
@@ -62,7 +62,7 @@ export default function DashboardOrders({ orders }: DashboardOrdersProps) {
                 </div>
 
                 <Link href={`/dashboard/orders/${order.order_id}`} className="flex items-center justify-start md:gap-x-[0.75rem] gap-x-[0.54rem] min-h-[2.5rem]">
-                  <span className="text-[#AF52DE] text-[0.5rem] md:text-[0.875rem] text-base">See details</span>
+                  <span className="text-secondary-tenant text-[0.5rem] md:text-[0.875rem] text-base">See details</span>
 
                   <div className='h-[1.5rem] w-[1.5rem] flex items-center justify-center'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">

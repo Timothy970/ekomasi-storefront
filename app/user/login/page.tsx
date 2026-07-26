@@ -109,7 +109,7 @@ export default function Login() {
 
                         <div className='flex flex-col mt-[1.25rem] text-center font-poppins text-[1.125rem] font-normal leading-[150%] text-[var(--Color-Scheme-1-Text,#000)]'>
                             <span>Peek-a-boo! </span>
-                            <span>Welcome back to Adenzo 🤗!</span>
+                            <span>Welcome back to Ekomasi 🤗!</span>
                         </div>
 
                         <Exclusive />
@@ -156,7 +156,7 @@ export default function Login() {
                                 disabled={status === "loading"}
                                 type="submit"
                                 variant="outline"
-                                className='mt-[1rem] w-full bg-[#AF52DE] outline-none border-none text-white h-[3.3rem] lg:h-[2.5rem]'
+                                className='mt-[1rem] w-full bg-primary-tenant hover:opacity-90 outline-none border-none text-white h-[3.3rem] lg:h-[2.5rem]'
                             >
                                 {
                                     status == "loading" && <LoadingIndicator textColor="text-white" />

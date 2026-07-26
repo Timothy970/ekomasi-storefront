@@ -123,7 +123,7 @@ export default function PaymentProcessingModal({
                     {status === 'connecting' && (
                         <>
                             <div className="py-4">
-                                <LoadingIndicator textColor="text-[#AF52DE]" />
+                                <LoadingIndicator textColor="text-secondary-tenant" />
                             </div>
                             <p className="text-[0.875rem] text-gray-600 text-center">
                                 Establishing secure connection to payment gateway...
@@ -133,7 +133,7 @@ export default function PaymentProcessingModal({
                     {status === 'processing' && (
                         <>
                             <div className="py-4">
-                                <LoadingIndicator textColor="text-[#AF52DE]" />
+                                <LoadingIndicator textColor="text-secondary-tenant" />
                             </div>
                             <p className="text-[0.875rem] text-gray-600 text-center mb-4">
                                 Please complete the payment on your phone. This may take a few moments...
@@ -153,7 +153,7 @@ export default function PaymentProcessingModal({
 
                                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-[0.5rem]">
                                     <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                        <div className="w-4 h-4 border-2 border-[#AF52DE] border-t-transparent rounded-full animate-spin" />
+                                        <div className="w-4 h-4 border-2 border-secondary-tenant border-t-transparent rounded-full animate-spin" />
                                     </div>
                                     <div className="flex-1">
                                         <p className="text-[0.875rem] font-medium text-gray-900">Payment Authorization</p>

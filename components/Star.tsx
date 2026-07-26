@@ -1,4 +1,4 @@
-export default function Star({ size = 20, color = "#AF52DE" }) {
+export default function Star({ size = 20, color = 'var(--secondary)' }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

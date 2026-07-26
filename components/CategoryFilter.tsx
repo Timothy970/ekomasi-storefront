@@ -103,7 +103,7 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
 
                 <Button
                     onClick={() => setOpenFilterModal(false)}
-                    className="bg-[#E82989] lg:hidden h-[2.5rem] hover:bg-[#E82989] w-[9rem] md:w-[6rem] text-[0.875rem]"
+                    className="bg-secondary-tenant lg:hidden h-[2.5rem] hover:bg-secondary-tenant w-[9rem] md:w-[6rem] text-[0.875rem]"
                 >
                     Close
                 </Button>

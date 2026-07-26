@@ -79,6 +79,37 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Tenant Dynamic Color Palette Utilities */
+.bg-primary-tenant {
+  background-color: var(--primary, var(--primary)) !important;
+}
+.text-primary-tenant {
+  color: var(--primary, var(--primary)) !important;
+}
+.border-primary-tenant {
+  border-color: var(--primary, var(--primary)) !important;
+}
+
+.bg-secondary-tenant {
+  background-color: var(--secondary, var(--secondary)) !important;
+}
+.text-secondary-tenant {
+  color: var(--secondary, var(--secondary)) !important;
+}
+.border-secondary-tenant {
+  border-color: var(--secondary, var(--secondary)) !important;
+}
+
+.bg-minor-tenant {
+  background-color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+}
+.text-minor-tenant {
+  color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+}
+.border-minor-tenant {
+  border-color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);

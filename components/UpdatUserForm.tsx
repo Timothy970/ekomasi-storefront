@@ -119,7 +119,7 @@ export default function UpdateUserForm() {
             />
             <div>
                 <p className="text-[0.875rem]">
-                    Feel free to edit any of your details below so your Adenzo account is totally up to date. (* Indicates a required field)
+                    Feel free to edit any of your details below so your Ekomasi account is totally up to date. (* Indicates a required field)
                 </p>
             </div>
 
@@ -189,7 +189,7 @@ export default function UpdateUserForm() {
                 </div>
 
                 <Button
-                    className="bg-[#AF52DE] h-[2.5rem] mt-[1rem]"
+                    className="bg-secondary-tenant h-[2.5rem] mt-[1rem]"
                     onClick={handleSubmit}
                     disabled={!isFormComplete || !isFormChanged}
                 >

@@ -84,7 +84,7 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
 
                 <div className='w-full flex flex-col justify-center items-center gap-y-[1rem] max-w-[23rem]'>
                     <h2 className='font-bold text-[1.125rem]'>Check out as a Guest</h2>
-                    <p className='text-center text-[1rem]'>You can create a free Adenzo Comfies Member Profile at any point during the checkout process.</p>
+                    <p className='text-center text-[1rem]'>You can create a free Ekomasi Comfies Member Profile at any point during the checkout process.</p>
 
                     <Button onClick={() => handleGuestCheckout()} className='h-[2.5rem] rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">

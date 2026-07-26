@@ -61,7 +61,7 @@ export default function DashboardReturns({ returns }: DashboardReturnsProps) {
                                 </div>
 
                                 <Link href={`/dashboard/returns/${returnItem.return_id}`} className="flex items-center justify-start md:gap-x-[0.75rem] gap-x-[0.54rem] min-h-[2.5rem]">
-                                    <span className="text-[#AF52DE] text-[0.5rem] md:text-[0.875rem] text-base">See details</span>
+                                    <span className="text-secondary-tenant text-[0.5rem] md:text-[0.875rem] text-base">See details</span>
 
                                     <div className='h-[1.5rem] w-[1.5rem] flex items-center justify-center'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="12" viewBox="0 0 8 12" fill="none">

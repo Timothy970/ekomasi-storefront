@@ -83,7 +83,7 @@ export default function Redeem() {
                         </div>
 
                         <div className='mt-[1.5rem]'>
-                            <Button className='bg-[#AF52DE] h-[2.5rem]' onClick={handleRedeemVoucher}>
+                            <Button className='bg-secondary-tenant h-[2.5rem]' onClick={handleRedeemVoucher}>
                                 Save Gift Card
                             </Button>
                         </div>

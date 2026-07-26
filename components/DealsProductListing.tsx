@@ -53,7 +53,7 @@ export default function DealsProductListing({
 
                         {
                             status === "loading" && <div className='mt-[2.5rem]'>
-                                <LoadingIndicator textColor="text-[#AF52DE]" />
+                                <LoadingIndicator textColor="text-secondary-tenant" />
                             </div>
                         }
 
@@ -74,7 +74,7 @@ export default function DealsProductListing({
                         pagination && products?.length > 0 && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                     }
 
-                    <div onClick={scrollToTop} className='bg-[#804A9D] rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
+                    <div onClick={scrollToTop} className='bg-secondary-tenant rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
                         <svg
                             width="40"
                             height="40"

@@ -128,7 +128,7 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
                         <Button
                             disabled={status === "loading" || !isFormValid}
                             onClick={handleSubmit}
-                            className="h-[2.5rem] bg-[#AF52DE] text-white rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]"
+                            className="h-[2.5rem] bg-primary-tenant hover:opacity-90 text-white rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]"
                         >
                             {status === "loading" ? (
                                 <LoadingIndicator textColor="text-white" />

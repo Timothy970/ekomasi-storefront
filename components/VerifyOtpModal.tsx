@@ -168,7 +168,7 @@ export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Ver
                                 pattern="[0-9]*"
                                 maxLength={1}
                                 autoComplete="one-time-code"
-                                className="h-[3.5rem] w-[3.5rem] text-center text-xl font-bold border-gray-300 focus:border-[#AF52DE] focus:ring-1 focus:ring-[#AF52DE]"
+                                className="h-[3.5rem] w-[3.5rem] text-center text-xl font-bold border-gray-300 focus:border-secondary-tenant focus:ring-1 focus:ring-secondary-tenant"
                                 aria-label={`Digit ${idx + 1}`}
                             />
                         ))}
@@ -176,7 +176,7 @@ export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Ver
                     <Button
                         disabled={status === "loading" || value.length !== length}
                         type="submit"
-                        className="w-full bg-[#AF52DE] hover:bg-[#9a47c5] h-[3rem] text-white font-semibold"
+                        className="w-full bg-secondary-tenant hover:opacity-90 h-[3rem] text-white font-semibold"
                     >
                         {status === "loading" && <LoadingIndicator textColor="text-white" />}
                         Verify & Update

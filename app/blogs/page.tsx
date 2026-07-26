@@ -64,8 +64,8 @@ export default function Blogs() {
       <div className='w-full flex items-center justify-center flex-col  mt-[2rem] md:mt-[2.5rem] mb-[2rem] md:mb-[2.5rem]'>
         <div className='w-full mx-auto flex items-center justify-center flex-col max-w-[90rem]'>
           <div className='flex gap-[1rem]'>
-            <h2 className='text-[2rem] font-[700] md:text-[3rem]'>Adenzo </h2>
-            <h2 className='text-[2rem] font-[200] md:text-[3rem] text-[#E8298A]'>Blogs</h2>
+            <h2 className='text-[2rem] font-[700] md:text-[3rem]'>Ekomasi </h2>
+            <h2 className='text-[2rem] font-[200] md:text-[3rem] text-secondary-tenant'>Blogs</h2>
           </div>
 
           <div className='mt-[2.5rem] w-full text-center max-w-[48rem] px-[1rem] md:px-[3rem]'>

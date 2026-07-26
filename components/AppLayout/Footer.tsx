@@ -10,12 +10,16 @@ import { subscribeAsync } from '@/lib/features/user/userSlice'
 import { ToastType } from '@/lib/features/toast/toastSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 
+import { useTenant } from '@/app/ClientLayout'
+
 export default function Footer() {
+  const { tenant } = useTenant()
   const homeData = useAppSelector(selectHomeData)
   const categories = useAppSelector(selectCategories);
   const [email, setEmail] = React.useState("")
   const [emailError, setEmailError] = React.useState("")
   const dispatch = useAppDispatch();
+  const logoSrc = tenant?.app_logo || tenant?.logo || "/images/ekomasi-logo.png"
 
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -74,13 +78,13 @@ export default function Footer() {
         <div className="relative z-20 mx-auto w-full max-w-[90rem] px-[1rem] lg:px-[3rem] text-white flex flex-col sm:gap-x-[2rem] gap-y-[2rem] md:flex-row lg:gap-x-[5rem] md:min-h-[18rem]">
           <div className='flex flex-col gap-y-[1.25rem] sm:max-w-sm md:max-w-full'>
             <Image
-              src={"/images/company-logo.svg"}
-              alt=""
-              width={150}
+              src={logoSrc}
+              alt={tenant?.name || "Logo"}
+              width={180}
+              height={45}
               unoptimized
-              height={25}
               priority={true}
-              className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 lg:hidden'
+              className='h-9 sm:h-11 lg:h-12 w-auto max-w-[150px] sm:max-w-[180px] lg:max-w-[210px] shrink-0 object-contain drop-shadow'
             />
             <div className='flex flex-col gap-y-[1.25rem]'>
               <h2 className='text-white font-poppins text-[0.875rem] not-italic font-normal leading-[1.95rem]'>👶✨ Hey Mama, Papa, Gogo, Shosho & even Baby! Subscribe to our newsletter for exclusive deals.</h2>
@@ -208,7 +212,7 @@ export default function Footer() {
         <div className='hidden w-full lg:flex justify-center items-center mt-[0.75rem] md:mt-[1rem]'>
           <Link href={`/`}>
             <Image
-              src={"/images/adenzo-logo-footer.png"}
+              src={"/images/ekomasi-logo-footer.png"}
               alt=""
               width={120}
               height={20}

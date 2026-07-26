@@ -83,7 +83,7 @@ export default function VariantSelectionModal({
               return (
                 <div 
                   key={variant.sku} 
-                  className={`flex items-center justify-between p-3 border rounded-md ${isOutOfStock ? 'opacity-50' : 'hover:border-[#AF52DE]/50 transition-colors'}`}
+                  className={`flex items-center justify-between p-3 border rounded-md ${isOutOfStock ? 'opacity-50' : 'hover:border-secondary-tenant/50 transition-colors'}`}
                 >
                   <div className='flex-1'>
                     <p className='font-medium text-sm'>{variant.name}</p>
@@ -125,7 +125,7 @@ export default function VariantSelectionModal({
 
         <div className='p-4 border-t bg-gray-50'>
           <Button 
-            className='w-full bg-[#AF52DE] text-white py-6 text-base font-semibold'
+            className='w-full bg-secondary-tenant text-white py-6 text-base font-semibold'
             disabled={totalSelected === 0 || loading}
             onClick={handleConfirm}
           >

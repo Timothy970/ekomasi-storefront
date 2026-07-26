@@ -33,7 +33,7 @@ export default function GiftCards() {
               }
 
               <div className='w-full mt-[1rem] flex gap-x-[1.5rem]'>
-                <Button onClick={() => router?.push("/dashboard/giftcards/buy")} className='h-[2.5rem] text-white bg-[#AF52DE]'>
+                <Button onClick={() => router?.push("/dashboard/giftcards/buy")} className='h-[2.5rem] text-white bg-secondary-tenant'>
                   Buy Gift Card
                 </Button>
 

@@ -130,7 +130,7 @@ export default function ReviewModal({ setProductReviewId, productReviewId, order
                         rows={4}
                     />
 
-                    <Button onClick={handleSubmit} className='h-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
+                    <Button onClick={handleSubmit} className='h-[2.5rem] bg-secondary-tenant hover:bg-secondary-tenant rounded-[1.5rem] w-full flex items-center justify-center gap-x-[0.75rem]'>
                         {reviewType === 'edit' ? 'Update Review' : 'Submit Review'}
                     </Button>
                 </div>

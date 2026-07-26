@@ -60,15 +60,15 @@ export default function Return() {
         <Navigation>
             <DashboardLayout>
                 <div className="space-y-4">
-                    <div className='bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]'>
+                    <div className='bg- secondary-tenant w-full p-[1rem] md:p-[2rem]'>
                         <div className='flex flex-col gap-y-[1rem]'>
-                            <PackageX className='text-[#804A9D] w-[3rem] h-[3rem]' />
+                            <PackageX className='text-secondary-tenant w-[3rem] h-[3rem]' />
                             <p className='text-[1.5rem] font-bold'>My Returned Items</p>
                         </div>
                     </div>
 
                     {
-                        !returns?.length && <div className='bg-[#804A9D14] w-full p-[1rem] md:p-[2rem]'>
+                        !returns?.length && <div className='bg- secondary-tenant w-full p-[1rem] md:p-[2rem]'>
                             <div className='flex flex-col gap-y-[1rem]'>
                                 <p className='text-[1.125rem] font-semibold'>No returned items yet!</p>
                                 <p className='text-[1.125rem]'>Currently, you have no returned items. Find something you love. We’ve curated new styles just for you.</p>
@@ -82,19 +82,19 @@ export default function Return() {
                             <TabsList className="border-b gap-x-[1rem] rounded-none bg-white border-none text-wrap">
                                 <TabsTrigger
                                     value="pending"
-                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[var(--secondary)] data-[state=active]:font-semibold data-[state=active]:text-secondary-tenant border-t-0 border-l-0 border-r-0 rounded-none bg-white"
                                 >
                                     PENDING
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="approved"
-                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[var(--secondary)] data-[state=active]:font-semibold data-[state=active]:text-secondary-tenant border-t-0 border-l-0 border-r-0 rounded-none bg-white"
                                 >
                                     APPROVED
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="rejected"
-                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[#804A9D] data-[state=active]:font-semibold data-[state=active]:text-[#804A9D] border-t-0 border-l-0 border-r-0 rounded-none bg-white"
+                                    className="data-[state=active]:border-b-2 font-[700] data-[state=active]:border-b-[var(--secondary)] data-[state=active]:font-semibold data-[state=active]:text-secondary-tenant border-t-0 border-l-0 border-r-0 rounded-none bg-white"
                                 >
                                     REJECTED
                                 </TabsTrigger>

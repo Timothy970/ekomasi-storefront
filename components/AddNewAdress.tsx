@@ -163,7 +163,7 @@ export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
                 </div>
             </div>
 
-            <Button type='submit' className='h-[2.5rem] md:max-w-[19rem] bg-[#AF52DE] mt-[1.5rem]' disabled={!isFormValid}>
+            <Button type='submit' className='h-[2.5rem] md:max-w-[19rem] bg-primary-tenant hover:opacity-90 mt-[1.5rem]' disabled={!isFormValid}>
                 Add New Address
             </Button>
         </form>

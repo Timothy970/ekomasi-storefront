@@ -89,7 +89,7 @@ export default function CartSummary({ cart }: { cart: CartData }) {
                     </div>
 
                     <div className='w-full flex flex-col justify-between gap-y-[1rem] mt-[1.5rem] mb-[3rem]'>
-                        <Button onClick={handleContinueToCheckout} className='bg-[#AF52DE] h-[3rem] text-[0.875rem]'>
+                        <Button onClick={handleContinueToCheckout} className='bg-primary-tenant hover:opacity-90 h-[3rem] text-[0.875rem]'>
                             Checkout
                         </Button>
 

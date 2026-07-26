@@ -307,7 +307,7 @@ export default function ProductDetail() {
     return (
       <Navigation>
         <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-[#AF52DE]/30 border-t-[#AF52DE] rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-4 border-secondary-tenant/30 border-t-[var(--secondary)] rounded-full animate-spin"></div>
         </div>
       </Navigation>
     );
@@ -324,7 +324,7 @@ export default function ProductDetail() {
           </p>
           <a
             href="/"
-            className="mt-4 px-5 py-2.5 rounded-full bg-[#AF52DE] text-white hover:bg-[#9c3fcb] transition-colors"
+            className="mt-4 px-5 py-2.5 rounded-full bg-secondary-tenant text-white hover:opacity-90 transition-colors"
           >
             Continue Shopping
           </a>
@@ -430,7 +430,7 @@ export default function ProductDetail() {
                         key={variant.sku}
                         className={`px-3 py-2 border rounded text-sm ${variant.stock_quantity === 0
                           ? 'bg-gray-200 text-gray-400 border-gray-200 cursor-not-allowed'
-                          : 'bg-[#E8298A] text-white border-[#E8298A] hover:bg-[#ee84b9] cursor-pointer transition-colors'
+                          : 'bg-secondary-tenant text-white border-secondary-tenant hover:opacity-90 cursor-pointer transition-colors'
                           }`}>
                         {variant.name}
                       </div>
@@ -460,7 +460,7 @@ export default function ProductDetail() {
                       handleAddToCart(quantity);
                     }
                   }}
-                  className='w-full bg-[#AF52DE] mt-[1.5rem] h-[3rem]'
+                  className='w-full bg-primary-tenant hover:opacity-90 mt-[1.5rem] h-[3rem]'
                 >
                   {
                     addToCartLoading && <LoadingIndicator textColor="text-white" />
@@ -479,7 +479,7 @@ export default function ProductDetail() {
                     handleAddToBuyNowCart();
                   }
                 }}
-                className='w-full bg-white border border-black text-[#AF52DE] mt-[0.75rem] h-[3rem]'
+                className='w-full bg-white border border-primary-tenant text-primary-tenant hover:bg-gray-50 mt-[0.75rem] h-[3rem]'
               >
                 Buy Now
               </Button>
@@ -504,15 +504,15 @@ export default function ProductDetail() {
                           <stop stopColor="#FFDD55" />
                           <stop offset="0.328" stopColor="#FF543F" />
                           <stop offset="0.348" stopColor="#FC5245" />
-                          <stop offset="0.504" stopColor="#E64771" />
-                          <stop offset="0.643" stopColor="#D53E91" />
-                          <stop offset="0.761" stopColor="#CC39A4" />
-                          <stop offset="0.841" stopColor="#C837AB" />
+                          <stop offset="0.504" stopColor='var(--secondary)' />
+                          <stop offset="0.643" stopColor='var(--secondary)' />
+                          <stop offset="0.761" stopColor='var(--secondary)' />
+                          <stop offset="0.841" stopColor='var(--secondary)' />
                         </radialGradient>
 
                         <radialGradient id="paint1_radial_16349_2479" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(5.893 2.76929) scale(14.9065 9.9322)">
-                          <stop stopColor="#4168C9" />
-                          <stop offset="0.999" stopColor="#4168C9" stopOpacity="0" />
+                          <stop stopColor='var(--primary)' />
+                          <stop offset="0.999" stopColor='var(--primary)' stopOpacity="0" />
                         </radialGradient>
                       </defs>
                     </svg>

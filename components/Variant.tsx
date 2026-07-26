@@ -110,7 +110,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
     return (
         <div className="flex flex-col mb-[1rem]">
             <div
-                className="bg-[rgba(201,160,255,0.55)] w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none"
+                className="bg-secondary-tenant w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none"
                 onClick={() => toggleDropdown()}
             >
                 <h2 className="text-custom-black font-bold text-[0.875rem] lg:text-[1rem] leading-[1.6875rem] capitalize">

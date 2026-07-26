@@ -239,7 +239,7 @@ export default function BuyGiftCards() {
                                         width={40}
                                         height={40}
                                         unoptimized
-                                        className="object-cover rounded w-full h-full border-2 border-[#E82989]/20 shadow-lg"
+                                        className="object-cover rounded w-full h-full border-2 border-secondary-tenant/20 shadow-lg"
                                         alt="Preview"
                                     />
                                 </div>
@@ -257,8 +257,8 @@ export default function BuyGiftCards() {
                                             <div
                                                 key={design.design_id}
                                                 className={`relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 ${voucherType === design.design_id
-                                                    ? 'border-[#E82989] ring-2 ring-[#E82989] scale-[1.02] shadow-md'
-                                                    : 'border-gray-200 hover:border-[#E82989]/50'
+                                                    ? 'border-secondary-tenant ring-2 ring-secondary-tenant scale-[1.02] shadow-md'
+                                                    : 'border-gray-200 hover:border-secondary-tenant/50'
                                                     } border`}
                                                 onClick={() => {
                                                     setSelectVoucherType(design.design_id);
@@ -276,7 +276,7 @@ export default function BuyGiftCards() {
                                                             alt={design.name}
                                                         />
                                                         {voucherType === design.design_id && (
-                                                            <div className="absolute top-1 right-1 bg-[#E82989] rounded-full p-1 shadow-sm">
+                                                            <div className="absolute top-1 right-1 bg-secondary-tenant rounded-full p-1 shadow-sm">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                                                                     <polyline points="20 6 9 17 4 12"></polyline>
                                                                 </svg>
@@ -303,7 +303,7 @@ export default function BuyGiftCards() {
                                             key={index}
                                             onClick={() => setSelectedAmount(amount)}
                                             className={`border border-black px-[1rem] py-[0.5rem] text-nowrap cursor-pointer 
-                                                ${selectedAmount === amount ? "bg-[#E82989] border-[#E82989] text-white" : ""}
+                                                ${selectedAmount === amount ? "bg-secondary-tenant border-secondary-tenant text-white" : ""}
                                             `}
                                         >
                                             <span>
@@ -404,7 +404,7 @@ export default function BuyGiftCards() {
 
                     <div className='w-full flex items-start gap-x-[1rem] md:gap-x-[2rem] mt-[2rem]'>
                         <Button
-                            className='bg-[#E82989] md:min-w-[10rem] text-white'
+                            className='bg-secondary-tenant md:min-w-[10rem] text-white'
                             onClick={handleCreate}
                         >
                             Create

@@ -32,6 +32,11 @@ const api = axios.create({
     },
 });
 
+if (typeof window !== "undefined") {
+    api.defaults.headers.common["X-Tenant-Domain"] = window.location.host;
+    axios.defaults.headers.common["X-Tenant-Domain"] = window.location.host;
+}
+
 api.interceptors.request.use((config) => {
     if (config.headers?.requiresAuth) {
         const state = getStore().getState();

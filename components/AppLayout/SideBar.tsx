@@ -54,7 +54,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                         <div className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
                             <div className='relative'>
                                 {
-                                    wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                                    wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                                         <span className='text-xs'>{wishlist[0]?.products?.length}</span>
                                     </div> : <></>
                                 }
@@ -87,7 +87,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                         <div className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
                             <div className='relative'>
                                 {
-                                    cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-[#C9A0FF] h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                                    cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                                         <span className='text-xs'>{cart?.cart_items?.length}</span>
                                     </div>
                                 }

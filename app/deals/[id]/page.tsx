@@ -87,7 +87,7 @@ export default function Deals() {
                         <div className="absolute inset-0 bg-black/60 z-10" />
                         {/* Centered content */}
                         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4">
-                            <p className='text-sm uppercase tracking-widest font-medium opacity-80 text-[#e8298a] text-center'>Offer ends in:</p>
+                            <p className='text-sm uppercase tracking-widest font-medium opacity-80 text-secondary-tenant text-center'>Offer ends in:</p>
                             <CountdownTimer endDate={deal.deals.end_date} />
                         </div>
                     </div>

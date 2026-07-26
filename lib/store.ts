@@ -2,7 +2,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userReducer } from "./features/user/userSlice";
 import storage from "redux-persist/lib/storage";
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist'
+import { persistStore, persistReducer } from 'redux-persist';
 import { navigationReducer } from "./features/navigation/navigationSlice";
 import { toastReducer } from "./features/toast/toastSlice";
 import { mallReducer } from "./features/mall/mallSlice";
@@ -14,6 +14,7 @@ import { getStore } from "./storeRef";
 import { blogReducer } from "./blog/blogSlice";
 import { returnReducer } from "./features/returns/returnSlice";
 import { voucherReducer } from "./voucher/voucherSlice";
+import { walletReducer } from "./features/wallet/walletSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -26,10 +27,11 @@ const rootReducer = combineReducers({
   blog: blogReducer,
   returns: returnReducer,
   voucher: voucherReducer,
+  wallet: walletReducer,
 });
 
 const encryptor = encryptTransform({
-  secretKey: process.env.NEXT_PUBLIC_REDUX_SECRET_KEY || "adenzo",
+  secretKey: process.env.NEXT_PUBLIC_REDUX_SECRET_KEY || "ekomasi",
   onError: (error) => {
     console.error("Redux Persist encryption error:", error);
     try {
@@ -50,7 +52,7 @@ const encryptor = encryptTransform({
 
 type RootReducerType = ReturnType<typeof rootReducer>;
 
-const persistConfig: PersistConfig<RootReducerType> = {
+const persistConfig: Parameters<typeof persistReducer>[0] = {
   key: "user",
   storage,
   timeout: undefined,

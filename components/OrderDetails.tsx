@@ -136,7 +136,7 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
                       setReviewId?.(item?.review_id || undefined)
                     }
                     }
-                      className='rounded-[2.5rem] bg-[#AF52DE] hover:bg-[#AF52DE] font-[400]'>
+                      className='rounded-[2.5rem] bg-secondary-tenant hover:bg-secondary-tenant font-[400]'>
                       {item?.is_reviewed ? 'Edit Review' : 'Write a Review'}
                     </Button>
                   </div>
@@ -162,7 +162,7 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
               />
               <Button
                 disabled={checkedValues.length === 0 || reason.trim() === ''}
-                onClick={() => handleReturnItems()} className='bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem] max-w-[12rem]'>
+                onClick={() => handleReturnItems()} className='bg-secondary-tenant hover:bg-secondary-tenant rounded-[0.5rem] h-[2.5rem] max-w-[12rem]'>
                 <span>Return Items</span>
               </Button>
             </div>
@@ -234,7 +234,7 @@ export default function OrderDetails({ order, setProductReviewId, setReviewType,
             </div>
 
             {/* {
-              order?.payment_status?.toLowerCase() !== "paid" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-[#E82989] hover:bg-[#E82989] rounded-[0.5rem] h-[2.5rem]'>
+              order?.payment_status?.toLowerCase() !== "paid" ? <Button onClick={() => setOpenPaymentModal(true)} className='w-full mt-[1.5rem] bg-secondary-tenant hover:bg-secondary-tenant rounded-[0.5rem] h-[2.5rem]'>
                 Make Payment
               </Button> : <></>
             } */}

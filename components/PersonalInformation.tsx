@@ -450,7 +450,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
                     <p className='font-bold text-[1.5rem]'>Delivery</p>
 
                     <div className='flex flex-row gap-x-[1rem] w-full justify-start'>
-                        <Button type='button' onClick={() => setDeliveryType("ship")} className={`px-[3rem] min-w-[10rem] h-[2.5rem] border ${deliveryType === "ship" ? 'bg-[#AF52DE36]' : 'bg-white'} border-[#AF52DE] text-custom-black `}>
+                        <Button type='button' onClick={() => setDeliveryType("ship")} className={`px-[3rem] min-w-[10rem] h-[2.5rem] border ${deliveryType === "ship" ? 'bg-[#AF52DE36]' : 'bg-white'} border-secondary-tenant text-custom-black `}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -527,7 +527,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
 
                                         <Button
                                             onClick={handleEditAddressClick}
-                                            className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                                            className="bg-secondary-tenant text-[0.75rem] h-[2.5rem] hover:bg-secondary-tenant"
                                         >
                                             <ArrowUpRight />
                                             <span>Edit Address</span>
@@ -542,7 +542,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
 
                                             <Button
                                                 onClick={() => router.push("/dashboard/address")}
-                                                className="bg-[#AF52DE] text-[0.75rem] h-[2.5rem] hover:bg-[#AF52DE]"
+                                                className="bg-secondary-tenant text-[0.75rem] h-[2.5rem] hover:bg-secondary-tenant"
                                             >
                                                 <ArrowUpRight />
                                                 <span>Add Address</span>
@@ -684,7 +684,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
                                         return;
                                     }
                                 }}
-                                className={`h-[2.5rem] md:max-w-[19rem] bg-[#AF52DE] ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
+                                className={`h-[2.5rem] md:max-w-[19rem] bg-secondary-tenant ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
                             >
                                 {
                                     status == "loading" && <LoadingIndicator textColor="text-white" />

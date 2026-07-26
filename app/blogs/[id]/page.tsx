@@ -48,7 +48,7 @@ export default function Page() {
                         </div>
 
                         <div>
-                            <h2 className='font-[600] text-[0.875rem]'>{blog?.author?.name || "Adenzo Author"}</h2>
+                            <h2 className='font-[600] text-[0.875rem]'>{blog?.author?.name || "Ekomasi Author"}</h2>
                             <div className='flex flex-row gap-x-[0.23rem] items-center'>
                                 {
                                     blog?.updated_at && <span className='font-[400] text-[0.875rem] text-gray-500'>{publishedAt}</span>

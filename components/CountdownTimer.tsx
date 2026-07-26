@@ -46,26 +46,26 @@ export default function CountdownTimer({ endDate }: CountdownTimerProps) {
 
     return (
         <div className="flex items-center gap-2">
-            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-[#e8298a] text-white rounded">
+            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-secondary-tenant text-white rounded">
                 <span className="text-lg font-bold leading-none">{timeLeft.days}</span>
                 <span className="text-[0.65rem] uppercase">Days</span>
             </div>
             <span className="text-xl font-bold">:</span>
-            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-[#e8298a] text-white rounded">
+            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-secondary-tenant text-white rounded">
                 <span className="text-lg font-bold leading-none">
                     {timeLeft.hours.toString().padStart(2, "0")}
                 </span>
                 <span className="text-[0.65rem] uppercase">Hrs</span>
             </div>
             <span className="text-xl font-bold">:</span>
-            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-[#e8298a] text-white rounded">
+            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-secondary-tenant text-white rounded">
                 <span className="text-lg font-bold leading-none">
                     {timeLeft.minutes.toString().padStart(2, "0")}
                 </span>
                 <span className="text-[0.65rem] uppercase">Min</span>
             </div>
             <span className="text-xl font-bold">:</span>
-            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-[#e8298a] text-white rounded">
+            <div className="flex flex-col items-center min-w-[3rem] p-1 bg-secondary-tenant text-white rounded">
                 <span className="text-lg font-bold leading-none">
                     {timeLeft.seconds.toString().padStart(2, "0")}
                 </span>

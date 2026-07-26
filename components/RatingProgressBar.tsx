@@ -11,7 +11,7 @@ export default function RatingProgressBar({ count, total }: RatingProgressBarPro
     return (
         <div className="w-full bg-[#EEE] h-[0.5rem] rounded-full overflow-hidden">
             <div
-                className="h-full bg-[#AF52DE] transition-all duration-300"
+                className="h-full bg-secondary-tenant transition-all duration-300"
                 style={{ width: `${percentage}%` }}
             />
         </div>

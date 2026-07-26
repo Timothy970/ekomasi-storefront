@@ -119,7 +119,7 @@ const MpesaPaymentModal = ({ isOpen, onClose, totalAmount, onApplyVoucher }: Vou
                     <Button
                         onClick={handleSubmit}
                         disabled={!phoneNumber.trim() || isValidating}
-                        className="px-6 py-3 bg-[#E82989] text-white rounded-xl hover:bg-green-600 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed min-w-[150px]"
+                        className="px-6 py-3 bg-primary-tenant text-white rounded-xl hover:opacity-90 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed min-w-[150px]"
                     >
                         {isValidating ? "Validating..." : "Send STK Push"}
                     </Button>
