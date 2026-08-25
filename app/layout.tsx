@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
-        <GoogleOAuthProvider clientId={(process as any).env?.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ''}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`} suppressHydrationWarning>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
           <StoreProvider>
             <ClientLayout>
               {children}

@@ -181,7 +181,7 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
         setMounted(true);
         const fetchTenant = async () => {
             try {
-                const baseUrl = (process as any).env?.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8009/api/';
+                const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8009/api/';
                 const res = await axios.get(`${baseUrl}tenant/active`);
                 if (res.data && res.data.data) {
                     const t = res.data.data;

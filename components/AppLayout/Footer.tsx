@@ -212,13 +212,13 @@ export default function Footer() {
         <div className='hidden w-full lg:flex justify-center items-center mt-[0.75rem] md:mt-[1rem]'>
           <Link href={`/`}>
             <Image
-              src={"/images/ekomasi-logo-footer.png"}
-              alt=""
+              src={logoSrc}
+              alt={tenant?.name || "Logo"}
               width={120}
               height={20}
               priority={true}
               unoptimized
-              className='w-auto h-[5rem] shrink-0'
+              className='w-auto h-[5rem] shrink-0 object-contain'
             />
           </Link>
         </div>

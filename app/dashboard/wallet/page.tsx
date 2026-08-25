@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Wallet, ArrowDownRight, ArrowUpRight, Plus, RefreshCw, CreditCard, ShieldCheck, Loader2 } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserProfile } from '@/lib/features/user/userSlice'
+import { useTenant } from '@/app/ClientLayout'
 import {
   getWalletBalanceAsync,
   topupWalletMpesaAsync,
@@ -16,6 +17,10 @@ import {
 } from '@/lib/features/wallet/walletSlice'
 
 export default function WalletDashboardPage() {
+  const { tenant } = useTenant()
+  const primaryColor = tenant?.app_primary_color || tenant?.app_color || tenant?.color || 'var(--primary)'
+  const secondaryColor = tenant?.app_secondary_color || 'var(--secondary)'
+
   const dispatch = useAppDispatch()
   const profile = useAppSelector(selectUserProfile)
   const balance = useAppSelector(selectWalletBalance)
@@ -66,14 +71,19 @@ export default function WalletDashboardPage() {
       <DashboardLayout>
         <div className="space-y-6">
           {/* Main Wallet Balance Card */}
-          <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-black rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
+          <div
+            className="rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden transition-all duration-300"
+            style={{
+              background: `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 70%, #0b0f19 100%)`
+            }}
+          >
             <div className="absolute -right-10 -bottom-10 opacity-10">
               <Wallet className="w-64 h-64 text-white" />
             </div>
 
             <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-purple-200 text-sm font-medium">
+                <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
                   <Wallet className="w-4 h-4" />
                   <span>My In-App Wallet & Store Credit</span>
                 </div>
@@ -81,7 +91,7 @@ export default function WalletDashboardPage() {
                   {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
                   KES {(balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </div>
-                <p className="text-xs text-purple-300">
+                <p className="text-xs text-white/80">
                   Instant checkout payment & return store credits linked to {userPhone || "your account"}
                 </p>
               </div>
@@ -89,7 +99,7 @@ export default function WalletDashboardPage() {
               <div className="flex flex-wrap gap-3">
                 <Button
                   onClick={() => setShowTopupModal(true)}
-                  className="bg-white text-purple-950 hover:bg-purple-100 font-bold px-5 py-3 h-auto rounded-xl flex items-center gap-2 shadow-md"
+                  className="bg-white text-gray-900 hover:bg-white/90 font-bold px-5 py-3 h-auto rounded-xl flex items-center gap-2 shadow-md"
                 >
                   <Plus className="w-4 h-4" />
                   Top Up via M-Pesa
@@ -101,9 +111,9 @@ export default function WalletDashboardPage() {
           {/* Quick Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
-              <div className="p-3 bg-purple-100 rounded-lg text-purple-700">
+              <div className="p-3 bg-green-100 rounded-lg text-green-700">
                 <ShieldCheck className="w-6 h-6" />
-              </div>
+              </div>      
               <div>
                 <h4 className="font-semibold text-gray-900 text-sm">Instant Store Refunds</h4>
                 <p className="text-xs text-gray-500">Returned item refunds are credited to wallet in seconds</p>
@@ -179,12 +189,12 @@ export default function WalletDashboardPage() {
           </div>
 
           {/* Wallet Help Accordion */}
-          <div className="bg-[#804A9D14] flex flex-col gap-y-[1rem] w-full p-[1.5rem] md:p-[2rem] rounded-xl border border-purple-200">
+          <div className="bg-[#804A9D14] flex flex-col gap-y-[1rem] w-full p-[1.5rem] md:p-[2rem] rounded-xl border border-green-200">
             <p className="text-[1.125rem] font-bold text-gray-900">
               💡 FREQUENTLY ASKED QUESTIONS ABOUT YOUR WALLET
             </p>
 
-            <div className="border-t border-purple-300">
+            <div className="border-t border-green-300">
               <Accordion title="💳 How does Split Payment work at Checkout?">
                 If your order total is higher than your available wallet balance, the system automatically uses all your wallet funds first, and sends an M-Pesa STK Push prompt to your phone for only the remaining balance!
               </Accordion>
@@ -213,7 +223,7 @@ export default function WalletDashboardPage() {
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="e.g. 254712345678"
                     required
-                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-purple-600 text-sm"
+                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-600 text-sm"
                   />
                 </div>
 
@@ -225,7 +235,7 @@ export default function WalletDashboardPage() {
                         key={amt}
                         type="button"
                         onClick={() => setTopupAmount(amt)}
-                        className={`py-2 text-xs font-bold rounded-lg border ${topupAmount === amt ? 'bg-purple-900 text-white border-purple-900' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
+                        className={`py-2 text-xs font-bold rounded-lg border ${topupAmount === amt ? 'bg-green-900 text-white border-green-900' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
                       >
                         KES {amt}
                       </button>
@@ -237,7 +247,7 @@ export default function WalletDashboardPage() {
                     onChange={(e) => setTopupAmount(e.target.value)}
                     placeholder="Or enter custom amount"
                     required
-                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-purple-600 text-sm"
+                    className="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-600 text-sm"
                   />
                 </div>
 
@@ -251,7 +261,7 @@ export default function WalletDashboardPage() {
                   <Button type="button" onClick={() => setShowTopupModal(false)} className="flex-1 bg-gray-100 text-gray-700 hover:bg-gray-200">
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={status === 'loading'} className="flex-1 bg-purple-900 text-white hover:bg-purple-950">
+                  <Button type="submit" disabled={status === 'loading'} className="flex-1 bg-green-900 text-white hover:bg-green-950">
                     {status === 'loading' ? "Sending STK..." : "Send STK Push"}
                   </Button>
                 </div>

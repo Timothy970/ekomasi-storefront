@@ -5,8 +5,12 @@ import OtpForm from '@/components/OtpForm'
 import { useAppSelector } from '@/lib/hooks'
 import { selectPhoneOrEmailValue, selectUserToken } from '@/lib/features/user/userSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTenant } from '@/app/ClientLayout'
+import Link from 'next/link'
 
 export default function Otp() {
+    const { tenant } = useTenant()
+    const logoSrc = tenant?.app_logo || tenant?.logo || "/images/ekomasi-logo.png"
     const emailOrPhone = useAppSelector(selectPhoneOrEmailValue)
     const router = useRouter()
     const token = useAppSelector(selectUserToken)
@@ -38,15 +42,17 @@ export default function Otp() {
 
             <div className='max-w-[52rem] px-[1.25rem] h-full flex flex-col items-start w-full justify-start z-20'>
                 <div className='w-full max-w-[22rem] flex justify-start items-center lg:justify-start lg:h-auto'>
-                    <Image
-                        src={"/images/company-logo.svg"}
-                        alt="Logo"
-                        width={150}
-                        height={25}
-                        unoptimized
-                        priority={true}
-                        className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem]'
-                    />
+                    <Link href={`/`}>
+                        <Image
+                            src={logoSrc}
+                            alt={tenant?.name || "Logo"}
+                            width={150}
+                            height={45}
+                            unoptimized
+                            priority={true}
+                            className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem] object-contain'
+                        />
+                    </Link>
                 </div>
 
                 <div className='flex justify-center items-center flex-col h-[80%] w-full'>

@@ -11,8 +11,11 @@ import Exclusive from '@/components/Exclusive'
 import { triggerToast } from '@/app/utils/toastUtils'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import Link from 'next/link'
+import { useTenant } from '@/app/ClientLayout'
 
 export default function SignUp() {
+    const { tenant } = useTenant()
+    const logoSrc = tenant?.app_logo || tenant?.logo || "/images/ekomasi-logo.png"
     const [phoneOrEmail, setPhoneOrEmail] = useState<string>("")
     const [error, setError] = useState<string>("")
     const dispatch = useAppDispatch()
@@ -97,13 +100,13 @@ export default function SignUp() {
                     <div className='w-full flex justify-center items-center lg:justify-start lg:h-auto'>
                         <Link href={`/`}>
                             <Image
-                                src={"/images/company-logo.svg"}
-                                alt="Logo"
+                                src={logoSrc}
+                                alt={tenant?.name || "Logo"}
                                 width={150}
-                                height={25}
+                                height={45}
                                 unoptimized
                                 priority={true}
-                                className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem]'
+                                className='w-[6.625rem] lg:h-[3.125rem] lg:w-[9.75rem] h-[2.25rem] shrink-0 mt-[1rem] object-contain'
                             />
                         </Link>
                     </div>
