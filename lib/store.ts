@@ -52,7 +52,7 @@ const encryptor = encryptTransform({
 
 type RootReducerType = ReturnType<typeof rootReducer>;
 
-const persistConfig: Parameters<typeof persistReducer>[0] = {
+const persistConfig: any = {
   key: "user",
   storage,
   timeout: undefined,
