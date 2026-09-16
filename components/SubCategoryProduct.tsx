@@ -1,19 +1,18 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { SubCategoryProduct } from '@/lib/features/types'
-import { useRouter } from 'next/navigation'
 import { customParser, getProductImageUrl } from '@/lib/utils'
 import NoImage from './NoImage'
 
-export default function SubCategoryProduct({ product }: { product: SubCategoryProduct }) {
-    const router = useRouter()
+export default function SubCategoryProduct({ product }: Readonly<{ product: SubCategoryProduct }>) {
     const imageUrl = getProductImageUrl(product.urls);
 
     return (
-        <div className="bg-white overflow-hidden cursor-pointer" onClick={() => router.push(`/products/${product.product_id}`)}>
+        <Link href={`/products/${product.product_id}`} className="block bg-white overflow-hidden cursor-pointer">
             <div className="relative w-full h-[13.5rem] sm:h-[20rem] md:h-[20rem]">
                 {
-                    product.urls && product.urls[0]?.url ? (<Image
+                    product.urls?.[0]?.url ? (<Image
                         src={imageUrl}
                         alt={product.name}
                         fill
@@ -34,6 +33,6 @@ export default function SubCategoryProduct({ product }: { product: SubCategoryPr
                 </div>
                 <p className="mt-2 text-sm font-bold text-custom-black">{product.price}</p>
             </div>
-        </div>
+        </Link>
     )
 }

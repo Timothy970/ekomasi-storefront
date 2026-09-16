@@ -19,7 +19,7 @@ export default function VariantSelectionModal({
   onClose,
   onConfirm,
   loading = false
-}: VariantSelectionModalProps) {
+}: Readonly<VariantSelectionModalProps>) {
   const [quantities, setQuantities] = useState<Record<string, number>>({})
 
   if (!isOpen || !product.variant_selection) {
@@ -55,14 +55,26 @@ export default function VariantSelectionModal({
 
   const totalSelected = Object.values(quantities).reduce((a, b) => a + b, 0)
 
+  let buttonText = 'Add to Cart'
+  if (loading) {
+    buttonText = 'Adding to Cart...'
+  } else if (totalSelected > 0) {
+    buttonText = `Add ${totalSelected} to Cart`
+  }
+
   return (
     <div className='fixed inset-0 z-[100] h-screen w-screen flex justify-center items-center'>
-      <div className='absolute bg-black/50 z-[105] h-screen w-screen' onClick={onClose} />
+      <button 
+        type="button"
+        aria-label="Close modal backdrop" 
+        className='absolute bg-black/50 z-[105] h-screen w-screen cursor-default border-none outline-none' 
+        onClick={onClose} 
+      />
       
       <div className='bg-white flex flex-col w-full max-w-[500px] max-h-[90vh] rounded-lg overflow-hidden z-[110] m-4'>
         <div className='flex items-center justify-between p-4 border-b'>
           <h2 className='font-semibold text-lg'>Select Variations</h2>
-          <button onClick={onClose} className='p-1 hover:bg-gray-100 rounded-full transition-colors'>
+          <button type="button" aria-label="Close dialog" onClick={onClose} className='p-1 hover:bg-gray-100 rounded-full transition-colors'>
             <X size={20} />
           </button>
         </div>
@@ -129,7 +141,7 @@ export default function VariantSelectionModal({
             disabled={totalSelected === 0 || loading}
             onClick={handleConfirm}
           >
-            {loading ? 'Adding to Cart...' : `Add ${totalSelected > 0 ? totalSelected : ''} to Cart`}
+            {buttonText}
           </Button>
         </div>
       </div>

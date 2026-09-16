@@ -1,8 +1,9 @@
 "use client";
+import Image from 'next/image';
 import { getStaticContentsAsync, selectStaticContents } from '@/lib/features/navigation/navigationSlice';
 import { StaticContent } from '@/lib/features/types';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { customParser, staticPageParser } from '@/lib/utils';
+import { customParser } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 import "react-quill-new/dist/quill.snow.css";
 import Navigation from './Navigation';
@@ -48,7 +49,7 @@ interface StaticContentPageProps {
   contentPath: string;
 }
 
-export default function StaticContentPage({ contentPath }: StaticContentPageProps) {
+export default function StaticContentPage({ contentPath }: Readonly<StaticContentPageProps>) {
   const staticContents = useAppSelector(selectStaticContents);
   const dispatch = useAppDispatch();
   const [content, setContent] = useState<StaticContent | null>(null);
@@ -81,42 +82,45 @@ export default function StaticContentPage({ contentPath }: StaticContentPageProp
         <h1 className='text-[2.8rem] font-[700]'>{content.title}</h1>
         {content.content ? (
           <div className='text-[1rem] mt-[1.5rem] clearfix'>
-            {staticPageParser(content.content)}
+            {customParser(content.content)}
           </div>
         ) : (
           <>
             {content?.description && (
               <div className='text-[1.125rem] mt-[1.5rem] clearfix'>
-                {staticPageParser(content.description)}
+                {customParser(content.description)}
               </div>
             )}
 
             {content.sections && (
               <div className="w-full flex flex-col gap-y-4 mt-[1rem]">
                 {content.sections.map((section, idx) => (
-                  <div key={idx} className="py-4 clearfix">
+                  <div key={section.title || (section.position !== undefined ? `section-${section.position}` : `section-${idx}`)} className="py-4 clearfix">
                     {section.title && (
                       <h2 className="font-[700] text-2xl my-[0.7rem]">{section.title}</h2>
                     )}
 
                     {section.paragraphs?.map((p, pIdx) => (
                       <div
-                        key={pIdx}
+                        key={p.title || p.text || `paragraph-${pIdx}`}
                         className="text-[1rem] text-gray-800 mb-2 break-words leading-relaxed clearfix"
                       >
                         {p.title && (
                           <h3 className="font-[700] text-xl my-[0.7rem]">{p.title}</h3>
                         )}
-                        {staticPageParser(p.text)}
+                        {customParser(p.text)}
                       </div>
                     ))}
 
                     {section.images?.map((img, imgIdx) => (
-                      <div key={imgIdx} className='flex flex-col gap-y-[0.5rem] my-4 clearfix'>
+                      <div key={img.image_url || img.alt || img.caption || `image-${imgIdx}`} className='flex flex-col gap-y-[0.5rem] my-4 clearfix'>
                         {img.image_url && (
-                          <img
+                          <Image
                             src={img.image_url}
                             alt={img.alt || `section-image-${imgIdx}`}
+                            width={800}
+                            height={500}
+                            unoptimized
                             className="max-w-full h-auto object-cover rounded mt-2"
                           />
                         )}

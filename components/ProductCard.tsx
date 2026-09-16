@@ -6,7 +6,7 @@ import { customParser, getProductImageUrl } from "@/lib/utils";
 import NoImage from "./NoImage";
 import { calculateDiscountedPrice, formatPrice } from "@/lib/utils/priceUtils";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }: Readonly<{ product: Product }>) {
   const [productId, setProductId] = useState<string | null>(null);
 
   useEffect(() => {

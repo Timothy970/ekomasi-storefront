@@ -302,9 +302,9 @@ export const cartSlice = createAppSlice({
 					cart_id: string,
 					data: MemberOrderPayload,
 					page: string,
-					fail: boolean,
-					message: string,
 					delivery_id: string,
+					fail?: boolean,
+					message?: string,
 					skipPayment?: boolean
 				) => void,
 				extraPaymentPayload: { phone: string },
@@ -313,31 +313,36 @@ export const cartSlice = createAppSlice({
 				const response = await createOrder(data, page);
 
 				if (response?.status_code !== 201 && response?.message) {
-					triggerToast(response?.message, "error")
+					triggerToast(response?.message, "error");
 				}
 
-				if (response?.data?.order_id) {
-					if (response?.data?.total > 0) {
-						let paymentData = {
-							"phone_number": extraPaymentPayload?.phone,
-							"order_id": response?.data?.order_id,
-						}
+				const orderId = response?.data?.order_id;
+				if (!orderId) {
+					return response;
+				}
 
-						const paymentRes = await makePayment(paymentData)
+				const deliveryId = response?.data?.delivery_id;
+				const total = response?.data?.total;
 
-						if (paymentRes?.message && !paymentRes?.data?.errorMessage) {
-							redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id)
-						} else {
-							if (paymentRes?.data?.errorMessage) {
-								redirectToOrderDetails(response?.data?.order_id, data, page, false, paymentRes?.data?.errorMessage, response?.data?.delivery_id)
-							} else {
-								redirectToOrderDetails(response?.data?.order_id, data, page, true, 'Order successfully placed!', response?.data?.delivery_id)
-							}
-						}
-					} else {
-						redirectToOrderDetails(response?.data?.order_id, data, page, false, '', response?.data?.delivery_id, true)
-					}
+				if (total <= 0) {
+					redirectToOrderDetails(orderId, data, page, deliveryId, false, "", true);
+					return response;
+				}
 
+				const paymentData = {
+					phone_number: extraPaymentPayload?.phone,
+					order_id: orderId,
+				};
+
+				const paymentRes = await makePayment(paymentData);
+				const errorMessage = paymentRes?.data?.errorMessage;
+
+				if (paymentRes?.message && !errorMessage) {
+					redirectToOrderDetails(orderId, data, page, deliveryId, false, "");
+				} else if (errorMessage) {
+					redirectToOrderDetails(orderId, data, page, deliveryId, false, errorMessage);
+				} else {
+					redirectToOrderDetails(orderId, data, page, deliveryId, true, "Order successfully placed!");
 				}
 
 				return response;

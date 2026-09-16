@@ -3,19 +3,23 @@ import { Button } from './ui/button'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { X } from 'lucide-react'
 
-interface GuestCheckoutModal {
+interface GuestCheckoutModalProps {
     setOpenGuestCheckoutModal: React.Dispatch<React.SetStateAction<boolean>>
     openGuestCheckoutModal: boolean
     isBuyNow: boolean
 }
 
-export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal, isBuyNow }: GuestCheckoutModal) {
+export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGuestCheckoutModal, isBuyNow }: Readonly<GuestCheckoutModalProps>) {
     const router = useRouter()
     const searchParams = useSearchParams();
     const locationId = searchParams.get("location_id");
 
     const appendLocation = (url: string) => {
-        return locationId ? `${url}${url.includes("?") ? "&" : "?"}location_id=${locationId}` : url;
+        if (!locationId) {
+            return url;
+        }
+        const separator = url.includes("?") ? "&" : "?";
+        return `${url}${separator}location_id=${locationId}`;
     };
 
     if (!openGuestCheckoutModal) {
@@ -45,11 +49,17 @@ export default function GuestCheckoutModal({ openGuestCheckoutModal, setOpenGues
 
     return (
         <div className='absolute inset-0 z-[60] h-screen w-screen flex justify-center items-center'>
-            <div className='absolute bg-black/50 z-[65] h-screen w-screen' onClick={() => setOpenGuestCheckoutModal(false)}>
+            <Button
+                type='button'
+                variant='ghost'
+                aria-label='Close modal'
+                className='absolute bg-black/50 z-[65] h-screen w-screen cursor-default border-0 p-0 text-left rounded-none h-full w-full'
+                onClick={() => setOpenGuestCheckoutModal(false)}
+            >
                 <div className='flex p-[1rem] pt-[3rem] w-full justify-end'>
                     <X className='text-white' />
                 </div>
-            </div>
+            </Button>
             
             <div className='bg-white flex hide-scrollbar flex-col items-center justify-center p-[3rem] gap-y-[1rem] m-[1rem] overflow-y-scroll z-[70]'>
                 <div className='mb-[2rem] border-b border-black pb-[2rem]'>

@@ -4,7 +4,7 @@ import React from "react";
 
 interface HeartIconProps extends React.SVGProps<SVGSVGElement> { }
 
-function HeartIcon({ className, ...props }: HeartIconProps) {
+function HeartIcon({ className, ...props }: Readonly<HeartIconProps>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@ function HeartIcon({ className, ...props }: HeartIconProps) {
   );
 }
 
-function CartIcon({ className, ...props }: HeartIconProps) {
+function CartIcon({ className, ...props }: Readonly<HeartIconProps>) {
   return (
     <svg className={className}
       {...props} xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -32,7 +32,7 @@ function CartIcon({ className, ...props }: HeartIconProps) {
   );
 }
 
-function OrderIcon({ className, ...props }: HeartIconProps) {
+function OrderIcon({ className, ...props }: Readonly<HeartIconProps>) {
   return (
     <svg className={className}
       {...props} xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">

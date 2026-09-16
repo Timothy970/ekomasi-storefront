@@ -33,7 +33,7 @@ export default function ProductListingLayout({
     crumbs,
     status,
     page,
-}: ProductListingLayoutProps) {
+}: Readonly<ProductListingLayoutProps>) {
     const { openFilterModal, setOpenFilterModal } = useFilter()
 
     const isBundlesPage = listingName === "Bundles";
@@ -128,13 +128,21 @@ export default function ProductListingLayout({
                         pagination && products?.length > 0 && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                     }
 
-                    <div onClick={scrollToTop} className='bg-secondary-tenant rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={scrollToTop}
+                        aria-label="Scroll to top"
+                        className='bg-secondary-tenant rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem] p-0 hover:bg-secondary-tenant/80 cursor-pointer'
+                    >
                         <svg
                             width="40"
                             height="40"
                             viewBox="0 0 40 40"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
+                            className="size-full"
                         >
                             <rect width="40" height="40" fill="url(#pattern0_14122_18188)" />
                             <defs>
@@ -155,7 +163,7 @@ export default function ProductListingLayout({
                                 />
                             </defs>
                         </svg>
-                    </div>
+                    </Button>
                 </div>
             </div>
         </div>

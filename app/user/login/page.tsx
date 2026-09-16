@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import SocialLogins from '@/components/SocialLogins'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { resetMessage, resetSuccess, selectMessage, selectStatus, selectUserToken, signInUserAsync } from '@/lib/features/user/userSlice'
@@ -28,8 +27,8 @@ export default function Login() {
     function handlePhoneOrEmail(e: React.FormEvent) {
         e.preventDefault();
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[0-9]{12}$/;  // 254XXXXXXXXX (12 digits for Kenyan numbers)
+        const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
+        const phoneRegex = /^\d{12}$/;  // 254XXXXXXXXX (12 digits for Kenyan numbers)
 
         if (emailRegex.test(phoneOrEmail)) {
             setError("");
@@ -59,17 +58,15 @@ export default function Login() {
             }, 2000);
 
             return () => clearTimeout(timer);
-        } else {
-            if (message) {
-                triggerToast(message, "error");
+        } else if (message) {
+            triggerToast(message, "error");
 
-                const timer = setTimeout(() => {
-                    dispatch(resetSuccess());
-                    dispatch(resetMessage());
-                }, 2000);
+            const timer = setTimeout(() => {
+                dispatch(resetSuccess());
+                dispatch(resetMessage());
+            }, 2000);
 
-                return () => clearTimeout(timer);
-            }
+            return () => clearTimeout(timer);
         }
     }, [message, router]);
 
@@ -112,7 +109,7 @@ export default function Login() {
 
                         <div className='flex flex-col mt-[1.25rem] text-center font-poppins text-[1.125rem] font-normal leading-[150%] text-[var(--Color-Scheme-1-Text,#000)]'>
                             <span>Peek-a-boo! </span>
-                            <span>Welcome back to Ekomasi 🤗!</span>
+                            <span>Welcome back to Ekomasi!</span>
                         </div>
 
                         <Exclusive />
@@ -122,7 +119,7 @@ export default function Login() {
                                 value={phoneOrEmail}
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 onBlur={() => {
-                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                                    const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/
                                     let value = phoneOrEmail.trim()
 
                                     if (!emailRegex.test(value)) {
@@ -181,9 +178,14 @@ export default function Login() {
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
                             <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Don't have an account?</span>
 
-                            <div onClick={handleSignUp}>
-                                <span className='font-roboto text-[0.875rem] font-normal leading-[150%] cursor-pointer text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Sign Up</span>
-                            </div>
+                            <Button
+                                type="button"
+                                variant="link"
+                                onClick={handleSignUp}
+                                className='font-roboto text-[0.875rem] font-normal leading-[150%] cursor-pointer text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto p-0 h-auto'
+                            >
+                                Sign Up
+                            </Button>
                         </div>
                     </div>
                 </div>

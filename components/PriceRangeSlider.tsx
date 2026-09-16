@@ -11,14 +11,14 @@ export default function PriceRangeSlider({
     defaultValues = [100, 800],
     notChangingValues = [0, 1000],
     onChange,
-}: {
+}: Readonly<{
     min?: number;
     max?: number;
     step?: number;
     defaultValues?: [number, number];
     notChangingValues?: [number, number];
     onChange?: (values: [number, number]) => void;
-}) {
+}>) {
     const [values, setValues] = React.useState<[number, number]>(defaultValues);
     const { setQuery } = useFilterQuery()
 

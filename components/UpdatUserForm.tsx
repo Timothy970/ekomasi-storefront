@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { triggerToast } from "@/app/utils/toastUtils"
 import { ToastType } from "@/lib/features/toast/toastSlice"
 import VerifyOtpModal from "./VerifyOtpModal"
+import { Label } from "./ui/label"
 
 export default function UpdateUserForm() {
     const dispatch = useAppDispatch()
@@ -125,9 +126,9 @@ export default function UpdateUserForm() {
 
             <div className="max-w-md flex flex-col gap-y-[1rem]">
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">
+                    <Label className="mb-1 font-semibold">
                         First Name <span className="text-red-400">*</span>
-                    </label>
+                    </Label>
                     <Input
                         value={formData.first_name}
                         onChange={e => handleChange("first_name", e.target.value)}
@@ -136,9 +137,9 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">
+                    <Label className="mb-1 font-semibold">
                         Last Name <span className="text-red-400">*</span>
-                    </label>
+                    </Label>
                     <Input
                         value={formData.last_name}
                         onChange={e => handleChange("last_name", e.target.value)}
@@ -177,9 +178,9 @@ export default function UpdateUserForm() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">
+                    <Label className="mb-1 font-semibold">
                         Phone Number <span className="text-red-400">*</span>
-                    </label>
+                    </Label>
                     <Input
                         placeholder="0797493262"
                         value={formData.phone_number}

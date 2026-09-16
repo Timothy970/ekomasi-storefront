@@ -51,58 +51,156 @@ const dashboardTabs = [
   },
 ];
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+interface DashboardTab {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+function BreadcrumbsNav({ segments }: { readonly segments: string[] }) {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/">Home</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        {segments.map((segment, index) => {
+          const href = "/" + segments.slice(0, index + 1).join("/");
+          const isLast = index === segments.length - 1;
+
+          return (
+            <React.Fragment key={href}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {isLast ? (
+                  <BreadcrumbPage className="capitalize">
+                    {segment}
+                  </BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <div className="capitalize">
+                      {segment}
+                    </div>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </React.Fragment>
+          );
+        })}
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+function UserProfileHeader({ profile }: { readonly profile: { first_name?: string; last_name?: string } | null }) {
+  if (!profile) return null;
+
+  const initials = profile.first_name && profile.last_name
+    ? `${profile.first_name[0]}${profile.last_name[0]}`
+    : "";
+
+  return (
+    <div className="flex flex-row items-start space-y-2 gap-x-[1rem]">
+      <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-secondary-tenant text-black text-[2rem] font-semibold">
+        {initials}
+      </div>
+      <div className="text-black self-center flex flex-col gap-x-[1rem] items-start justify-center">
+        <span className="text-[0.875rem]">Hi</span>
+        <span className="font-bold text-[1rem]">{profile.first_name ?? ""}</span>
+      </div>
+    </div>
+  );
+}
+
+function DashboardTabItem({
+  tab,
+  isActive,
+  wishlistCount,
+  onSelect,
+  onLogout,
+}: {
+  readonly tab: DashboardTab;
+  readonly isActive: boolean;
+  readonly wishlistCount: number;
+  readonly onSelect: () => void;
+  readonly onLogout: () => void;
+}) {
+  if (tab.name === "Logout") {
+    return (
+      <Button
+        variant={isActive ? "default" : "ghost"}
+        className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 underline ${isActive ? "bg-secondary-tenant/50 text-custom-black hover:bg-secondary-tenant/50" : "hover:bg-secondary-tenant/50"}`}
+        onClick={onLogout}
+      >
+        {tab.icon}
+        {tab.name}
+      </Button>
+    );
+  }
+
+  if (tab.name === "Wishlist") {
+    return (
+      <Link href={tab.href}>
+        <Button
+          variant={isActive ? "default" : "ghost"}
+          className={`w-full justify-between rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-secondary-tenant text-custom-black hover:bg-secondary-tenant" : "hover:bg-secondary-tenant/50"}`}
+          onClick={onSelect}
+        >
+          <div className="flex items-center justify-center gap-2">
+            {tab.icon}
+            {tab.name}
+          </div>
+          {wishlistCount > 0 ? (
+            <div className="border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full">
+              <span className="text-[0.875rem]">{wishlistCount}</span>
+            </div>
+          ) : (
+            <span className="text-[0.875rem]">0</span>
+          )}
+        </Button>
+      </Link>
+    );
+  }
+
+  return (
+    <Link href={tab.href}>
+      <Button
+        variant={isActive ? "default" : "ghost"}
+        className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-secondary-tenant/50 text-custom-black hover:bg-secondary-tenant/50" : "hover:bg-secondary-tenant/50"}`}
+        onClick={onSelect}
+      >
+        {tab.icon}
+        {tab.name}
+      </Button>
+    </Link>
+  );
+}
+
+export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const profile = useAppSelector(selectUserProfile)
-  const token = useAppSelector(selectUserToken)
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-  const wishlist = useAppSelector(selectWishLists)
+  const profile = useAppSelector(selectUserProfile);
+  const token = useAppSelector(selectUserToken);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const wishlist = useAppSelector(selectWishLists);
+  const wishlistCount = wishlist?.[0]?.products?.length ?? 0;
+
 
   useEffect(() => {
     if (!token) {
-      router.replace("/")
+      router.replace("/");
     }
-  }, [token, router])
+  }, [token, router]);
 
   return (
     <div className="flex flex-col w-full min-h-screen justify-start items-center md:z-0 mb-[2rem] max-w-[90rem] overflow-hidden mx-auto">
       <div className="w-full px-[1rem] py-3 border-b flex items-center justify-between">
         <div className="w-full max-w-[90rem] lg:px-[3rem] mx-auto flex flex-row items-center justify-between">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="/">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              {segments.map((segment, index) => {
-                const href = "/" + segments.slice(0, index + 1).join("/");
-                const isLast = index === segments.length - 1;
-
-                return (
-                  <React.Fragment key={href}>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      {isLast ? (
-                        <BreadcrumbPage className="capitalize">
-                          {segment}
-                        </BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink asChild>
-                          <div className="capitalize">
-                            {segment}
-                          </div>
-                        </BreadcrumbLink>
-                      )}
-                    </BreadcrumbItem>
-                  </React.Fragment>
-                );
-              })}
-            </BreadcrumbList>
-          </Breadcrumb>
+          <BreadcrumbsNav segments={segments} />
 
 
           <button
@@ -118,75 +216,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="max-w-[90rem] w-full h-full flex flex-row">
           <aside className={`bg-white fixed top-0 left-0 h-full w-3/4 max-w-xs z-50 transform transition-transform duration-300 md:relative md:translate-x-0 md:w-1/4 md:block ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <div className="p-4 flex flex-col gap-2 w-full">
-              {profile && (
-                <div className="flex flex-row items-start space-y-2 gap-x-[1rem]">
-                  <div className="uppercase flex items-center justify-center rounded-full h-[5rem] w-[5rem] bg-secondary-tenant text-black text-[2rem] font-semibold">
-                    {profile.first_name && profile.last_name
-                      ? `${profile.first_name[0]}${profile.last_name[0]}`
-                      : ""}
-                  </div>
-                  <div className="text-black self-center flex flex-col gap-x-[1rem] items-start justify-center">
-                    <span className="text-[0.875rem]">Hi</span>
-                    <span className="font-bold text-[1rem]">{profile?.first_name?.length ? profile?.first_name : ""}</span>
-                  </div>
-                </div>
-              )}
+              <UserProfileHeader profile={profile} />
 
-              {dashboardTabs.map((tab, index) => {
-                const isActive = pathname === tab.href;
-
-                if (tab.name == 'Logout') {
-                  return <Button key={index?.toString()}
-                    variant={isActive ? "default" : "ghost"}
-                    className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${tab.name == 'Logout' ? 'underline' : ''} ${isActive ? "bg-secondary-tenant/50 text-custom-black hover:bg-secondary-tenant/50" : "hover:bg-secondary-tenant/50"}`}
-                    onClick={() => dispatch(logout())}
-                  >
-                    {tab.icon && tab.icon}
-                    {tab.name}
-                  </Button>
-                }
-
-                if (tab.name == 'Wishlist') {
-                  return (
-                    <Link key={tab.name} href={tab.href}>
-                      <Button key={index?.toString()}
-                        variant={isActive ? "default" : "ghost"}
-                        className={`w-full justify-between rounded-sm h-[2.5rem] gap-2 ${isActive ? "bg-secondary-tenant text-custom-black hover:bg-secondary-tenant" : "hover:bg-secondary-tenant/50"}`}
-                        onClick={() => setSidebarOpen(false)}
-                      >
-                        <div className="flex items-center justify-center gap-2">
-                          {tab.icon && tab.icon}
-                          {tab.name}
-                        </div>
-                        {
-                          wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='border-black h-[1.3rem] border w-[2rem] flex justify-center items-center rounded-full'>
-                            <span className='text-[0.875rem]'>{wishlist[0]?.products?.length}</span>
-                          </div> : <span className='text-[0.875rem]'>{0}</span>
-                        }
-                      </Button>
-                    </Link>
-                  )
-                }
-
-                return (
-                  <Link key={tab.name} href={tab.href}>
-                    <Button
-                      variant={isActive ? "default" : "ghost"}
-                      className={`w-full justify-start rounded-sm h-[2.5rem] gap-2 ${tab.name == 'Logout' ? 'underline' : ''} ${isActive ? "bg-secondary-tenant/50 text-custom-black hover:bg-secondary-tenant/50" : "hover:bg-secondary-tenant/50"}`}
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      {tab.icon && tab.icon}
-                      {tab.name}
-                    </Button>
-                  </Link>
-                );
-              })}
+              {dashboardTabs.map((tab) => (
+                <DashboardTabItem
+                  key={tab.name}
+                  tab={tab}
+                  isActive={pathname === tab.href}
+                  wishlistCount={wishlistCount}
+                  onSelect={() => setSidebarOpen(false)}
+                  onLogout={() => dispatch(logout())}
+                />
+              ))}
             </div>
           </aside>
 
           {sidebarOpen && (
-            <div
-              className="fixed inset-0 bg-[black/40] z-40 md:hidden"
+            <button
+              type="button"
+              aria-label="Close sidebar"
+              className="fixed inset-0 bg-[black/40] z-40 md:hidden border-0 p-0 outline-none w-full h-full cursor-default"
               onClick={() => setSidebarOpen(false)}
             />
           )}

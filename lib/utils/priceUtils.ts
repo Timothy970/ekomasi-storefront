@@ -12,8 +12,8 @@ export function calculateDiscountedPrice(
 ): number {
   if (!type || !value) return price;
 
-  const discountValue = typeof value === 'string' ? parseFloat(value) : value;
-  if (isNaN(discountValue)) return price;
+  const discountValue = typeof value === 'string' ? Number.parseFloat(value) : value;
+  if (Number.isNaN(discountValue)) return price;
 
   if (type === "percentage" || type === "%") {
     return Math.max(0, price - (price * discountValue) / 100);

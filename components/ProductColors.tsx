@@ -2,7 +2,7 @@
 import { Product } from "@/lib/features/types";
 import React from "react";
 
-export default function ProductColors({ product }: { product: Product }) {
+export default function ProductColors({ product }: Readonly<{ product: Product }>) {
     const colorVariants = product.product_variants?.filter((v) => v.variant_type.toLowerCase() === "color") || [];
 
     if (!colorVariants) {

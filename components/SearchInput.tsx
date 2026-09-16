@@ -13,7 +13,7 @@ import {
 import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SearchBar({ placeHolderText }: { placeHolderText: string }) {
+export default function SearchBar({ placeHolderText }: Readonly<{ placeHolderText: string }>) {
     const inputRef = useRef<HTMLInputElement>(null);
     const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const { openSearchModal, setOpenSearchModal } = useSearchModal();
@@ -123,7 +123,9 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                         </button>
                     </div>
                 ) : (
-                    <div
+                    <button
+                        type="button"
+                        aria-label="Search"
                         className="absolute right-2 h-full flex items-center cursor-pointer border-l border-[#AAA] w-[2.25rem] justify-center"
                         onClick={() => (!isFocused ? inputRef.current?.focus() : null)}
                     >
@@ -143,7 +145,7 @@ export default function SearchBar({ placeHolderText }: { placeHolderText: string
                                 fill="#444444"
                             />
                         </svg>
-                    </div>
+                    </button>
                 )}
 
                 {openSearchModal && searchValue?.length > 0 && <AutocompleteDropdown />}

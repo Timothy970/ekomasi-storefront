@@ -72,7 +72,7 @@ export default function CustomerTestimonials() {
                             >
                                 <div className="flex justify-start gap-[0.5rem] lg:hidden">
                                     {Array.from({ length: slides[index].stars }).map((_, i) => (
-                                        <Star key={i} size={24} color='var(--secondary)' />
+                                        <Star key={`mobile-star-${slides[index].id}-${i}`} size={24} color='var(--secondary)' />
                                     ))}
                                 </div>
 
@@ -96,7 +96,7 @@ export default function CustomerTestimonials() {
                                     </h4>
                                     <div className="hidden justify-start gap-[0.5rem] mt-[1rem] lg:flex">
                                         {Array.from({ length: slides[index].stars }).map((_, i) => (
-                                            <Star key={i} size={24} color="#FFD700" />
+                                            <Star key={`desktop-star-${slides[index].id}-${i}`} size={24} color="#FFD700" />
                                         ))}
                                     </div>
                                 </div>
@@ -105,9 +105,9 @@ export default function CustomerTestimonials() {
                         </AnimatePresence>
 
                         <div className="lg:hidden absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                            {slides.map((_, i) => (
+                            {slides.map((slide, i) => (
                                 <button
-                                    key={i}
+                                    key={slide.id}
                                     onClick={() => setIndex(i)}
                                     className={`w-[0.5rem] h-[0.5rem] rounded-full ${i === index ? "bg-secondary-tenant" : "bg-gray-300"}`}
                                     aria-label={`Go to slide ${i + 1}`}

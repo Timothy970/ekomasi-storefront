@@ -2,13 +2,15 @@
 
 import { useSearchModal } from "@/app/ClientLayout";
 import React, { useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useAppSelector } from "@/lib/hooks";
 import { selectAutocomplete } from "@/lib/features/mall/mallSlice";
 import { useRouter } from "next/navigation";
 import { Suggestion } from "@/lib/features/types";
 
+import { Button } from "@/components/ui/button";
+
 export default function AutocompleteDropdown() {
-    const { openSearchModal, setOpenSearchModal } = useSearchModal();
+    const { setOpenSearchModal } = useSearchModal();
     const autocomplete = useAppSelector(selectAutocomplete);
     const router = useRouter()
 
@@ -32,7 +34,7 @@ export default function AutocompleteDropdown() {
     }, [autocomplete]);
 
     const handleAutocompleteClick = (item: Suggestion) => {
-        let href = item.link;
+        let href;
         switch (item.type) {
             case "product":
                 href = `/products/${item.id}`;
@@ -43,11 +45,12 @@ export default function AutocompleteDropdown() {
             case "category":
                 href = `/category/${item.id}`;
                 break;
-            case "search":
+            case "search": {
                 const params = new URLSearchParams();
                 params.set("q", item.name);
                 href = `/search?${params.toString()}`;
                 break;
+            }
             default:
                 href = `/search?q=${encodeURIComponent(item?.name.trim())}`;
                 break;
@@ -60,20 +63,19 @@ export default function AutocompleteDropdown() {
     if (uniqueAutocomplete == null) return null;
 
     return (
-        <div
-            className="absolute top-full left-0 w-full max-h-[23rem] overflow-y-auto bg-white border border-gray-200 rounded-md"
-            onMouseDown={(e) => e.preventDefault()} // Prevent blur when clicking inside
-        >
-            <ul>
+        <div className="absolute top-full left-0 w-full max-h-[23rem] overflow-y-auto bg-white border border-gray-200 rounded-md">
+            <ul role="listbox" aria-label="Autocomplete suggestions">
                 {uniqueAutocomplete?.map((item, index) => {
                     return (
-                        <li key={`${item.type}-${item.id}-${index}`}>
-                            <button
+                        <li key={`${item.type}-${item.id}-${index}`} role="option" aria-selected={false}>
+                            <Button
+                                variant="ghost"
                                 onClick={() => handleAutocompleteClick(item)}
-                                className="block w-full text-left px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition cursor-pointer"
+                                onMouseDown={(e) => e.preventDefault()}
+                                className="block w-full text-left px-4 my-1 py-2 text-sm text-gray-800 hover:bg-gray-100 transition cursor-pointer font-normal h-auto rounded-none justify-start"
                             >
                                 {item.display_name}
-                            </button>
+                            </Button>
                         </li>
                     );
                 })}

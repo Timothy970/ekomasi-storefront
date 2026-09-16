@@ -1,12 +1,11 @@
-import React from 'react'
 import { Product, WishList } from '@/lib/features/types';
 import WishListProductCard from './WishListProductCard';
-export default function WishLists({ pageType, wishLists }: { pageType: "wishlist" | "shared", wishLists: WishList[] | null }) {
+export default function WishLists({ pageType, wishLists }: Readonly<{ pageType: "wishlist" | "shared", wishLists: WishList[] | null }>) {
     return (
         <div className='mt-[2rem] pb-[2rem]'>
             <div>
                 {wishLists?.map((wishlist: WishList, index: number) => {
-                    return <div key={index.toString()} className="">
+                    return <div key={wishlist.wishlist_id || `wishlist-${index}`} className="">
                         <h2 className='font-bold text-lg'>{pageType === "wishlist" ? wishlist?.name : "Shared Wishlist"}</h2>
 
                         {
@@ -14,7 +13,7 @@ export default function WishLists({ pageType, wishLists }: { pageType: "wishlist
                                 {
                                     wishlist?.products?.map((product: Product, index: number) => {
                                         return <WishListProductCard
-                                            key={index?.toString()}
+                                            key={product.product_id || product.id || product.sku || `product-${index}`}
                                             product={product}
                                             pageType={pageType}
                                         />

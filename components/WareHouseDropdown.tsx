@@ -19,7 +19,7 @@ type WareHouseDropdownProps = {
 export default function WareHouseDropdown({
     onSelect,
     setFormData,
-}: WareHouseDropdownProps) {
+}: Readonly<WareHouseDropdownProps>) {
     const warehouses = useAppSelector(selectWarehouses);
     const [selectedId, setSelectedId] = useState<string>("");
 

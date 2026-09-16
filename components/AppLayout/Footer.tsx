@@ -22,7 +22,7 @@ export default function Footer() {
   const logoSrc = tenant?.app_logo || tenant?.logo || "/images/ekomasi-logo.png"
 
   const isValidEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
     return emailRegex.test(email);
   };
 
@@ -144,9 +144,9 @@ export default function Footer() {
             }
 
             <div className='flex flex-col gap-y-[1rem] lg:hidden'>
-              <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Privacy Policy</a>
-              <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Terms of Service</a>
-              <a className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Cookies Settings</a>
+              <Link href='/privacy-policy' className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Privacy Policy</Link>
+              <Link href='/terms-&-conditions' className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Terms of Service</Link>
+              <Link href='/cookie-settings' className='text-white font-roboto text-sm font-normal not-italic leading-[1.3125rem] underline underline-offset-auto decoration-solid'>Cookies Settings</Link>
             </div>
           </div>
         </div>

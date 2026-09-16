@@ -4,17 +4,16 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserToken } from '@/lib/features/user/userSlice'
 import { useGuestCheckout } from '@/app/ClientLayout'
-import { getCartAsync, selectCartId } from '@/lib/features/cart/cartSlice'
+import { getCartAsync } from '@/lib/features/cart/cartSlice'
 import { CartData } from '@/lib/features/types'
 
-export default function CartSummary({ cart }: { cart: CartData }) {
+export default function CartSummary({ cart }: Readonly<{ cart: CartData }>) {
     const { setOpenGuestCheckoutModal } = useGuestCheckout()
     const token = useAppSelector(selectUserToken)
     const router = useRouter()
     const dispatch = useAppDispatch()
     const params = useParams<{ cart_id: string }>()
     const searchParams = useSearchParams();
-    const cartId = useAppSelector(selectCartId)
 
     const handleContinueToCheckout = () => {
         if (token == null) {

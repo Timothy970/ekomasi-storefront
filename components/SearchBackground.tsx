@@ -7,8 +7,10 @@ export default function SearchBackground() {
   if (!openSearchModal) return null; 
 
   return (
-    <div
-      className="h-screen w-screen fixed inset-0 z-[1000] bg-black/40"
+    <button
+      type="button"
+      aria-label="Close search overlay"
+      className="h-screen w-screen fixed inset-0 z-[1000] bg-black/40 border-0 p-0 m-0 cursor-default"
       onClick={() => setOpenSearchModal(false)}
     />
   );

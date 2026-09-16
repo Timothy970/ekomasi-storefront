@@ -17,7 +17,7 @@ const countries = [
     { code: "Germany", name: "Germany" },
 ]
 
-export default function CountrySelect({ formData, setFormData }: { formData: FormData, setFormData: React.Dispatch<React.SetStateAction<FormData>> }) {
+export default function CountrySelect({ formData, setFormData }: Readonly<{ formData: FormData, setFormData: React.Dispatch<React.SetStateAction<FormData>> }>) {
     return (
         <Select
             value={formData.country}

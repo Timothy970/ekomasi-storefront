@@ -9,7 +9,7 @@ interface PaginationProps {
   onNext: () => void;
 }
 
-export function PaginationBtns({ meta, onPrev, onNext }: PaginationProps) {
+export function PaginationBtns({ meta, onPrev, onNext }: Readonly<PaginationProps>) {
   return (
     <div className="flex flex-col sm:flex-row w-full justify-center items-center gap-4 mt-[2rem] md:mt-[2.5rem]">
       <Button

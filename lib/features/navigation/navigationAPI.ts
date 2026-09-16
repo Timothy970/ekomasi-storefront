@@ -40,9 +40,9 @@ export async function getCategoryById(id: string, query: string): Promise<Catego
 
 export async function getSubCategoryById(
   id: string,
+  query: string,
   page: number = 1,
-  size: number = 10,
-  query: string
+  size: number = 10
 ): Promise<SubcategoryProductsResponse | null> {
   try {
     const response = await axios.get<SubcategoryProductsResponse>(`${process.env.NEXT_PUBLIC_API_BASE_URL}products/subcategories/${id}?${query}`,

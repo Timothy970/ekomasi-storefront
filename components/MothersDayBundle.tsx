@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { customParser } from "@/lib/utils";
@@ -44,14 +45,6 @@ export default function MothersDayBundle() {
         return () => clearInterval(interval);
     }, []);
 
-    const prevSlide = () => {
-        setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    };
-
-    const nextSlide = () => {
-        setCurrent((prev) => (prev + 1) % slides.length);
-    };
-
     return (
         <div className="relative w-full mx-auto overflow-hidden">
             <div className="bg-black/40">
@@ -64,10 +57,12 @@ export default function MothersDayBundle() {
                         transition={{ duration: 0.5 }}
                         className="relative h-[20.375rem] lg:max-h-[20rem]"
                     >
-                        <img
+                        <Image
                             src={slides[current].image}
                             alt={slides[current].title}
-                            className="w-full h-full object-cover"
+                            fill
+                            unoptimized
+                            className="object-cover"
                         />
                         <div className="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center">
                             <div className="bg-black/40 lg:bg-transparent p-4 w-full h-full flex flex-col justify-center items-center">
@@ -84,9 +79,9 @@ export default function MothersDayBundle() {
             </div>
 
             <div className="absolute bottom-[1rem] hidden lg:flex lg:bottom-[3rem] w-full justify-center items-center space-x-[1.47rem] px-[1rem] lg:px-[3rem] h-[1.5rem]">
-                {slides.map((_, index) => (
+                {slides.map((slide, index) => (
                     <button
-                        key={index}
+                        key={slide.id}
                         onClick={() => setCurrent(index)}
                         className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
                     >

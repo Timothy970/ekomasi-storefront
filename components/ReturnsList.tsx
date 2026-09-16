@@ -11,7 +11,7 @@ interface ReturnsListProps {
     returns: Returns[];
 }
 
-export default function ReturnsList({ returns }: ReturnsListProps) {
+export default function ReturnsList({ returns }: Readonly<ReturnsListProps>) {
     if (!returns || returns.length === 0) {
         return <div className="flex items-center justify-center"><p className="text-sm text-gray-500">No returns to display.</p></div>;
     }

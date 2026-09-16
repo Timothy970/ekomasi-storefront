@@ -20,7 +20,7 @@ interface ReviewModalProps {
     reviewId?: string | undefined;
 }
 
-export default function ReviewModal({ setProductReviewId, productReviewId, orderId, reviewType, reviewId }: ReviewModalProps) {
+export default function ReviewModal({ setProductReviewId, productReviewId, orderId, reviewType, reviewId }: Readonly<ReviewModalProps>) {
     const [score, setScore] = useState(0);
     const [details, setDetails] = useState("");
     const userProfile = useAppSelector(selectUserProfile)

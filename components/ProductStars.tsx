@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useId } from "react";
 
-export default function ProductStars({ avarageScore }: { avarageScore: number }) {
-  const stars = Array(avarageScore).fill(0);
+export default function ProductStars({ avarageScore }: Readonly<{ avarageScore: number }>) {
+  const baseId = useId();
+  const starCount = Math.max(0, Math.floor(avarageScore || 0));
+  const stars = Array.from({ length: starCount }, (_, index) => `${baseId}-star-${index}`);
   return (
     <div className="flex gap-1">
-      {stars.map((_, index) => (
+      {stars.map((starKey) => (
         <svg
-          key={index}
+          key={starKey}
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="17"

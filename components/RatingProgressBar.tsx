@@ -5,7 +5,7 @@ interface RatingProgressBarProps {
     total: number;
 }
 
-export default function RatingProgressBar({ count, total }: RatingProgressBarProps) {
+export default function RatingProgressBar({ count, total }: Readonly<RatingProgressBarProps>) {
     const percentage = total > 0 ? (count / total) * 100 : 0;
 
     return (

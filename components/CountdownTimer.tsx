@@ -6,7 +6,7 @@ interface CountdownTimerProps {
     endDate: string;
 }
 
-export default function CountdownTimer({ endDate }: CountdownTimerProps) {
+export default function CountdownTimer({ endDate }: Readonly<CountdownTimerProps>) {
     const [timeLeft, setTimeLeft] = useState<{
         days: number;
         hours: number;
@@ -18,7 +18,7 @@ export default function CountdownTimer({ endDate }: CountdownTimerProps) {
         const end = new Date(endDate).getTime();
 
         const updateTimer = () => {
-            const now = new Date().getTime();
+            const now = Date.now();
             const difference = end - now;
 
             if (difference <= 0) {

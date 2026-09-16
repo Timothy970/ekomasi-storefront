@@ -4,9 +4,9 @@ import CategoryProductCard from './CategoryProductCard'
 
 export default function DealsProducts({
     products,
-}: {
+}: Readonly<{
     products: Product[],
-}) {
+}>) {
     return (
         <div className="mt-[2rem] lg:mt-[2.5rem]">
             {

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { customParser } from "@/lib/utils";
 import NoImage from "./NoImage";
 
-export default function CategoryBanner({ imageUrl, description, title }: { imageUrl: string, description: string, title: string }) {
+export default function CategoryBanner({ imageUrl, description, title }: Readonly<{ imageUrl: string, description: string, title: string }>) {
   return (
     <div className="relative w-full mx-auto overflow-hidden bg-black/40 h-[34.375rem] md:h-[30.125rem] z-0">
       {imageUrl ? (

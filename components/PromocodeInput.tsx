@@ -13,7 +13,7 @@ type PromocodeInputProps = {
   locationId?: number | null;
 };
 
-export default function PromocodeInput({ cartId, isBuyNow, locationId }: PromocodeInputProps) {
+export default function PromocodeInput({ cartId, isBuyNow, locationId }: Readonly<PromocodeInputProps>) {
   const dispatch = useAppDispatch();
   const code = useAppSelector((state) => state.cart.promoCode || "");
 

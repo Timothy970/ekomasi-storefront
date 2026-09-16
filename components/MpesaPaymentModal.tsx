@@ -22,7 +22,7 @@ export interface VoucherPaymentModalProps {
     ) => void;
 }
 
-const MpesaPaymentModal = ({ isOpen, onClose, totalAmount, onApplyVoucher }: VoucherPaymentModalProps) => {
+const MpesaPaymentModal = ({ isOpen, onClose, totalAmount, onApplyVoucher }: Readonly<VoucherPaymentModalProps>) => {
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [isValidating, setIsValidating] = useState<boolean>(false);

@@ -29,7 +29,7 @@ export default function ProductImages() {
     useEffect(() => {
         if (product?.urls && product.urls.length > 0) {
             const videoIndex = product.urls.findIndex(media => media.type === "video" && extractVideoId(media.url));
-            setCurrent(videoIndex >= 0 ? videoIndex : 0);
+            setCurrent(Math.max(videoIndex, 0));
         }
     }, [product?.urls]);
 
@@ -64,6 +64,7 @@ export default function ProductImages() {
                 triggerToast("Failed to remove product from wishlist.", "error");
             }
         } catch (error) {
+            console.error(error)
             triggerToast("An error occurred while removing the product.", "error");
         }
     };
@@ -82,16 +83,49 @@ export default function ProductImages() {
         }
     }
 
+    const renderMainMedia = () => {
+        const currentMedia = product?.urls?.[current];
+
+        if (currentMedia?.type === "video" && currentMedia?.url && extractVideoId(currentMedia.url)) {
+            return (
+                <div className="w-full h-full">
+                    <VideoPlayer
+                        url={currentMedia.url}
+                        config={COVER_VIDEO_CONFIG}
+                        className="product-card object-cover z-0"
+                    />
+                </div>
+            );
+        }
+
+        if (currentMedia?.url) {
+            return (
+                <Image
+                    src={currentMedia.url}
+                    alt="Product"
+                    fill
+                    unoptimized
+                    className="object-cover rounded-md z-0"
+                />
+            );
+        }
+
+        return <NoImage />;
+    };
+
     return (
         <div className="w-full h-full flex flex-row justify-between gap-x-[1rem]">
             {
                 product?.urls?.length && <div className="w-auto flex flex-col gap-y-[1rem] hide-scrollbar max-h-[43rem] overflow-y-scroll pr-[1rem]">
                     {product?.urls.map((media, index) => (
-                        <div
-                            key={index.toString()}
-                            className={`relative w-full h-[6.25rem] min-w-[6.25rem] min-h-[6.25rem] max-h-[6.25rem] rounded-md overflow-hidden cursor-pointer transition-all
+                        <Button
+                            key={media.image_id || media.url || index}
+                            type="button"
+                            variant="ghost"
+                            className={`relative p-0 w-full h-[6.25rem] min-w-[6.25rem] min-h-[6.25rem] max-h-[6.25rem] rounded-md overflow-hidden cursor-pointer transition-all
                           ${index === current ? "border border-secondary-tenant scale-105" : "opacity-70 hover:opacity-100"}`}
                             onClick={() => setCurrent(index)}
+                            aria-label={`Select media thumbnail ${index + 1}`}
                         >
                             {(() => {
                                 if (media.type === "video" && media.url && extractVideoId(media.url)) {
@@ -116,7 +150,7 @@ export default function ProductImages() {
                                     return <NoImage />;
                                 }
                             })()}
-                        </div>
+                        </Button>
                     ))}
                 </div>
             }
@@ -141,34 +175,14 @@ export default function ProductImages() {
                     product?.urls && product.urls.length > 0 ? (
                         <AnimatePresence mode="wait">
                             <motion.div
-                                key={product.urls[current]?.image_id || current}
+                                key={product.urls[current]?.image_id || product.urls[current]?.url || current}
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -50 }}
                                 transition={{ duration: 0.5 }}
                                 className="relative h-[30rem] md:h-[30.125rem]"
                             >
-                                {
-                                    product.urls[current]?.type === "video" && extractVideoId(product.urls[current].url) ? (
-                                        <div className="w-full h-full">
-                                            <VideoPlayer
-                                                url={product.urls[current].url}
-                                                config={COVER_VIDEO_CONFIG}
-                                                className="product-card object-cover z-0"
-                                            />
-                                        </div>
-                                    ) : (
-                                        product.urls[current]?.url ? (
-                                            <img
-                                                src={product.urls[current].url}
-                                                alt="Product"
-                                                className="w-full h-full object-cover rounded-md z-0"
-                                            />
-                                        ) : (
-                                            <NoImage />
-                                        )
-                                    )
-                                }
+                                {renderMainMedia()}
                             </motion.div>
                         </AnimatePresence>
                     ) : (
@@ -179,7 +193,7 @@ export default function ProductImages() {
                 }
 
                 {
-                    product && product?.urls && product?.urls?.length > 2 && <div className="absolute right-[1rem] bottom-[2rem] flex justify-between items-center gap-[0.5rem] z-10">
+                    (product?.urls?.length ?? 0) > 2 && <div className="absolute right-[1rem] bottom-[2rem] flex justify-between items-center gap-[0.5rem] z-10">
                         <Button className="rounded-full border border-black" onClick={prevSlide} variant="outline" size="icon" aria-label="Previous">
                             <ChevronLeft className="h-[2.5rem] w-[3rem]" />
                         </Button>

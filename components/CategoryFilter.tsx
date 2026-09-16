@@ -10,11 +10,11 @@ import { Button } from './ui/button'
 import { useFilterQuery } from '@/app/ClientLayout'
 
 interface CategoryFilterParam {
-    setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
-    page?: string
+    readonly setOpenFilterModal: React.Dispatch<React.SetStateAction<boolean>>
+    readonly page?: string
 }
 
-export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFilterParam) {
+export default function CategoryFilter({ page, setOpenFilterModal }: Readonly<CategoryFilterParam>) {
     const dispatch = useAppDispatch()
     const variants = useAppSelector(selectVariants)
     const router = useRouter()
@@ -88,8 +88,8 @@ export default function CategoryFilter({ page, setOpenFilterModal }: CategoryFil
             }
 
             <div className="flex flex-col gap-y-[1.5rem]">
-                {variants?.map((variant, index) => (
-                    <Variant key={index.toString()} variant={variant} />
+                {variants?.map((variant) => (
+                    <Variant key={variant.variant_type} variant={variant} />
                 ))}
             </div>
 

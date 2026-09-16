@@ -7,7 +7,7 @@ type OrderDetailsFlowProps = {
     order: Order
 }
 
-export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
+export default function OrderDetailsFlow({ order }: Readonly<OrderDetailsFlowProps>) {
     const orderFlow = [
         ORDER_STATUS.PENDING,
         ORDER_STATUS.CONFIRMED,
@@ -50,7 +50,7 @@ export default function OrderDetailsFlow({ order }: OrderDetailsFlowProps) {
                     }
 
                     return (
-                        <div key={index} className="flex flex-col items-center min-w-[6rem] flex-shrink-0 justify-start">
+                        <div key={step} className="flex flex-col items-center min-w-[6rem] flex-shrink-0 justify-start">
                             <div className="flex items-center w-full">
                                 {index < orderFlow.length - 1 && (
                                     <div className={`h-[0.1875rem] ${connectorClass}`} />

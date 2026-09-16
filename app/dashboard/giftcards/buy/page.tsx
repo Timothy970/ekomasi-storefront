@@ -17,7 +17,7 @@ import MpesaPaymentModal from '@/components/MpesaPaymentModal'
 import NoImage from '@/components/NoImage'
 
 export default function BuyGiftCards() {
-    const [voucherType, setSelectVoucherType] = useState('');
+    const [voucherType, setVoucherType] = useState('');
     const [discount, setDiscount] = useState('');
     const [recipientName, setRecipientName] = useState('');
     const [recipientEmail, setRecipientEmail] = useState('');
@@ -73,7 +73,7 @@ export default function BuyGiftCards() {
     useEffect(() => {
         if (voucherDesigns?.length > 0) {
             setDesignImage(voucherDesigns[0]?.url)
-            setSelectVoucherType(voucherDesigns[0]?.design_id)
+            setVoucherType(voucherDesigns[0]?.design_id)
         }
     }, [voucherDesigns])
 
@@ -101,7 +101,7 @@ export default function BuyGiftCards() {
         let amountToCheck: number;
 
         if (selectedAmount === "Custom") {
-            if (!customAmount || isNaN(Number(customAmount)) || Number(customAmount) <= 0) {
+            if (!customAmount || Number.isNaN(Number(customAmount)) || Number(customAmount) <= 0) {
                 triggerToast("Please enter a valid custom amount.", "error");
                 return false;
             }
@@ -122,20 +122,6 @@ export default function BuyGiftCards() {
         }
 
         return true;
-    };
-
-    const normalizePhoneTo254 = (phone: string) => {
-        const cleaned = phone.replace(/\D/g, "");
-
-        if (cleaned.startsWith("0") && cleaned.length === 10) {
-            return "254" + cleaned.slice(1);
-        }
-
-        if (cleaned.startsWith("254") && cleaned.length === 12) {
-            return cleaned;
-        }
-
-        return cleaned;
     };
 
     const normalizePhoneForSave = (phone: string) => {
@@ -254,14 +240,16 @@ export default function BuyGiftCards() {
                                 <div className='w-full mt-[1rem] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4'>
                                     {voucherDesigns?.length > 0 ? (
                                         voucherDesigns.map((design) => (
-                                            <div
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
                                                 key={design.design_id}
-                                                className={`relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 ${voucherType === design.design_id
+                                                className={`relative cursor-pointer rounded-lg overflow-hidden transition-all duration-300 text-left p-0 h-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-tenant ${voucherType === design.design_id
                                                     ? 'border-secondary-tenant ring-2 ring-secondary-tenant scale-[1.02] shadow-md'
                                                     : 'border-gray-200 hover:border-secondary-tenant/50'
                                                     } border`}
                                                 onClick={() => {
-                                                    setSelectVoucherType(design.design_id);
+                                                    setVoucherType(design.design_id);
                                                     setDesignImage(design.url);
                                                 }}
                                             >
@@ -284,7 +272,7 @@ export default function BuyGiftCards() {
                                                         )}
                                                     </>
                                                 ) : (<NoImage />)}
-                                            </div>
+                                            </Button>
                                         ))
                                     ) : (
                                         <div className="col-span-full py-8 text-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
@@ -299,17 +287,18 @@ export default function BuyGiftCards() {
 
                                 <div className='flex flex-row gap-x-[0.5rem] flex-wrap gap-y-[0.5rem]'>
                                     {voucherAmounts.map((amount, index) => (
-                                        <div
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
                                             key={index}
                                             onClick={() => setSelectedAmount(amount)}
-                                            className={`border border-black px-[1rem] py-[0.5rem] text-nowrap cursor-pointer 
-                                                ${selectedAmount === amount ? "bg-secondary-tenant border-secondary-tenant text-white" : ""}
-                                            `}
+                                            className={`border border-black px-[1rem] py-[0.5rem] h-auto text-nowrap cursor-pointer rounded-none focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-tenant ${selectedAmount === amount ? "bg-secondary-tenant border-secondary-tenant text-white hover:bg-secondary-tenant hover:text-white" : "hover:bg-gray-100"
+                                                }`}
                                         >
                                             <span>
                                                 {amount === "Custom" ? "Custom" : `KES ${amount}`}
                                             </span>
-                                        </div>
+                                        </Button>
                                     ))}
                                 </div>
 

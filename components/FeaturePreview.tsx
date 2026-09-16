@@ -4,7 +4,7 @@ import { customParser } from "@/lib/utils";
 import Image from "next/image";
 import NoImage from "./NoImage";
 
-export function FeaturePreview({ feature }: { feature: ProductFeature }) {
+export function FeaturePreview({ feature }: Readonly<{ feature: ProductFeature }>) {
     const {
         header,
         description,
@@ -31,7 +31,7 @@ export function FeaturePreview({ feature }: { feature: ProductFeature }) {
                 {product_specifications.length > 0 && (
                     <div className="flex flex-col items-center justify-center mb-[2.5rem]">
                         {product_specifications.map((spec, idx) => (
-                            <span key={idx} className="text-[1.125rem] font-[400]">
+                            <span key={`${spec}-${idx}`} className="text-[1.125rem] font-[400]">
                                 -{spec}
                             </span>
                         ))}
@@ -41,13 +41,13 @@ export function FeaturePreview({ feature }: { feature: ProductFeature }) {
                 <div className="flex flex-col lg:flex-row w-full gap-x-[1rem] mt-[2.5rem] lg:mt-[5rem]">
                     <div className="flex flex-col items-center gap-y-[4rem] w-full max-w-lg lg:max-w-[20rem] text-center">
                         {top_section.slice(0, 2).map((sec, idx) => (
-                            <SectionCard key={idx} title={sec.title} description={sec.description} />
+                            <SectionCard key={`${sec.title}-${idx}`} title={sec.title} description={sec.description} />
                         ))}
                     </div>
 
                     <div className="flex flex-col items-center gap-y-[4rem] w-full max-w-lg lg:max-w-[20rem] text-center">
                         {top_section.slice(2, 4).map((sec, idx) => (
-                            <SectionCard key={idx + 2} title={sec.title} description={sec.description} />
+                            <SectionCard key={`${sec.title}-${idx + 2}`} title={sec.title} description={sec.description} />
                         ))}
                     </div>
                 </div>
@@ -80,7 +80,7 @@ export function FeaturePreview({ feature }: { feature: ProductFeature }) {
     );
 }
 
-function SectionCard({ title, description }: { title: string; description: string }) {
+function SectionCard({ title, description }: Readonly<{ title: string; description: string }>) {
     return (
         <div className="p-4 border rounded-md bg-white shadow-sm">
             <h4 className="font-semibold mb-2">{title}</h4>

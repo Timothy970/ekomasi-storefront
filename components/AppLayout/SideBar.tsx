@@ -8,13 +8,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { selectWishLists } from '@/lib/features/wishlist/wishlistSlice';
 import Icons from '../ui/custom-icons';
+import { Button } from '@/components/ui/button';
 
 interface AppHeaderProps {
     isOpen: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
+export default function SideBar({ isOpen, setIsOpen }: Readonly<AppHeaderProps>) {
     const profile = useAppSelector(selectUserProfile)
     const token = useAppSelector(selectUserToken)
     const cartId = useAppSelector(selectCartId)
@@ -39,9 +40,14 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                     <h2 className='text-custom-black text-center font-poppins text-sm font-normal leading-[150%]'>Hi {profile?.first_name ?? ""}!</h2>
                 </div>
 
-                <div onClick={() => setIsOpen(false)} className='h-[1.5rem] w-[1.5rem]'>
+                <Button
+                    variant="ghost"
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close navigation menu"
+                    className='h-[1.5rem] w-[1.5rem] p-0 hover:bg-transparent flex items-center justify-center cursor-pointer'
+                >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x-icon lucide-x w-[1.5rem] h-[1.5rem] flex-shrink-0"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-                </div>
+                </Button>
             </div>
 
             <div className='max-h-[70%] w-full overflow-y-scroll' style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
@@ -54,9 +60,9 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                         <div className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
                             <div className='relative'>
                                 {
-                                    wishlist && wishlist[0]?.products && wishlist[0]?.products?.length > 0 ? <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
-                                        <span className='text-xs'>{wishlist[0]?.products?.length}</span>
-                                    </div> : <></>
+                                    (wishlist?.[0]?.products?.length ?? 0) > 0 ? <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                                        <span className='text-xs'>{wishlist?.[0]?.products?.length}</span>
+                                    </div> : null
                                 }
 
                                 <Icons.HeartIcon />
@@ -64,10 +70,14 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
 
                             <h2 className='text-custom-black text-sm'>Favorites</h2>
                         </div>
-                    </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
+                    </Link> : <Button
+                        variant="ghost"
+                        onClick={handleIcons}
+                        className='flex flex-row justify-start items-center gap-x-[1rem] w-full p-0 h-auto font-normal hover:bg-transparent justify-start text-left cursor-pointer'
+                    >
                         <Icons.HeartIcon />
                         <h2 className='text-custom-black text-sm'>Favorites</h2>
-                    </div>
+                    </Button>
                 }
 
                 {
@@ -76,10 +86,14 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                             <Icons.OrderIcon />
                             <h2 className='text-custom-black text-sm'>Orders</h2>
                         </div>
-                    </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
+                    </Link> : <Button
+                        variant="ghost"
+                        onClick={handleIcons}
+                        className='flex flex-row justify-start items-center gap-x-[1rem] w-full p-0 h-auto font-normal hover:bg-transparent justify-start text-left cursor-pointer'
+                    >
                         <Icons.OrderIcon />
                         <h2 className='text-custom-black text-sm'>Orders</h2>
-                    </div>
+                    </Button>
                 }
 
                 {
@@ -87,7 +101,7 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
                         <div className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
                             <div className='relative'>
                                 {
-                                    cart && cart?.cart_items && cart?.cart_items?.length > 0 && <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
+                                    (cart?.cart_items?.length ?? 0) > 0 && <div className='bg-secondary-tenant h-[1rem] w-[1rem] absolute -bottom-[5px] -right-[5px] flex justify-center items-center rounded-full'>
                                         <span className='text-xs'>{cart?.cart_items?.length}</span>
                                     </div>
                                 }
@@ -97,10 +111,14 @@ export default function SideBar({ isOpen, setIsOpen }: AppHeaderProps) {
 
                             <h2 className='text-custom-black text-sm'>Bag</h2>
                         </div>
-                    </Link> : <div onClick={handleIcons} className='flex flex-row justify-start items-center gap-x-[1rem] w-full'>
+                    </Link> : <Button
+                        variant="ghost"
+                        onClick={handleIcons}
+                        className='flex flex-row justify-start items-center gap-x-[1rem] w-full p-0 h-auto font-normal hover:bg-transparent justify-start text-left cursor-pointer'
+                    >
                         <Icons.CartIcon />
                         <h2 className='text-custom-black text-sm'>Bag</h2>
-                    </div>
+                    </Button>
                 }
             </div>
         </div>

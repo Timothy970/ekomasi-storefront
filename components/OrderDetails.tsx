@@ -2,7 +2,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { format, addDays } from "date-fns";
 import { CreateReturnPayload, Order } from '@/lib/features/types';
-import { usePayment, useReview } from '@/app/ClientLayout';
+import { useReview } from '@/app/ClientLayout';
 import { DELIVERY_STATUS, ORDER_STATUS } from '@/lib/utils';
 import { Checkbox } from './ui/checkbox';
 import { Button } from './ui/button';
@@ -22,17 +22,16 @@ type OrderDetailsProps = {
   onCloseReturn?: () => void
 }
 
-export default function OrderDetails({ order, setProductReviewId, setReviewType, toReturn, setReviewId, onCloseReturn }: OrderDetailsProps) {
+export default function OrderDetails({ order, setProductReviewId, setReviewType, toReturn, setReviewId, onCloseReturn }: Readonly<OrderDetailsProps>) {
   const { setOpenReviewModal } = useReview()
   const [checkedValues, setCheckedValues] = useState<string[]>([])
   const [reason, setReason] = useState('');
   const dispatch = useAppDispatch();
-  const { setOpenPaymentModal } = usePayment();
   const pathName = usePathname();
   const [toWriteReview, setToWriteReview] = useState(true)
 
   useEffect(() => {
-    if (pathName && pathName.includes("guest")) {
+    if (pathName?.includes("guest")) {
       setToWriteReview(false);
     }
   }, [pathName]);

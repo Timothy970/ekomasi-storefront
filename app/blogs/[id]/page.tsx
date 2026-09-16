@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import NextImage from '@/components/NextImage'
 import NoImage from '@/components/NoImage'
@@ -122,7 +123,7 @@ export default function Page() {
                                 {
                                     blog.sections.map((section, idx) => (
                                         <div
-                                            key={blog.blog_id}
+                                            key={section.title || (section.position !== undefined ? `section-${section.position}` : `section-${idx}`)}
                                             className="flex flex-col gap-y-[1.5rem]"
                                         >
                                             {/* Section Title (Optional) */}
@@ -135,9 +136,12 @@ export default function Page() {
                                             {/* First Section Image (If exists) */}
                                             {section.images?.[0]?.image_url && (
                                                 <div className="w-full max-h-[35rem] overflow-hidden rounded-lg">
-                                                    <img
+                                                    <Image
                                                         src={section.images[0].image_url}
                                                         alt={section.images[0].alt || `section-image-${idx}-0`}
+                                                        width={1000}
+                                                        height={600}
+                                                        unoptimized
                                                         className="w-full h-full object-cover rounded-lg"
                                                     />
                                                     {section.images[0].caption && (
@@ -156,8 +160,10 @@ export default function Page() {
                                                         ? section.images[pIdx + 1]
                                                         : null;
 
+                                                    const paragraphKey = p.title || (p.text ? `paragraph-${p.text.slice(0, 30)}` : `paragraph-${pIdx}`);
+
                                                     return (
-                                                        <React.Fragment key={`paragraph-${pIdx}`}>
+                                                        <React.Fragment key={paragraphKey}>
                                                             <div className="flex flex-col gap-y-3">
                                                                 {p.title && (
                                                                     <h3 className="font-[600] text-[1.125rem] lg:text-[1.25rem] text-gray-800">
@@ -174,9 +180,12 @@ export default function Page() {
                                                             {/* Render the interspersed image if it exists */}
                                                             {interspersedImage?.image_url && (
                                                                 <div className="w-full max-h-[30rem] overflow-hidden rounded-lg my-4">
-                                                                    <img
+                                                                    <Image
                                                                         src={interspersedImage.image_url}
                                                                         alt={interspersedImage.alt || `section-image-${idx}-${pIdx + 1}`}
+                                                                        width={1000}
+                                                                        height={600}
+                                                                        unoptimized
                                                                         className="w-full h-full object-cover rounded-lg"
                                                                     />
                                                                     {interspersedImage.caption && (
@@ -194,24 +203,33 @@ export default function Page() {
                                             {/* If there are more images than paragraphs (excluding the first image), render them at the end of the section */}
                                             {section.images && section.images.length > (section.paragraphs?.length || 0) + 1 && (
                                                 <div className="flex flex-col gap-y-6">
-                                                    {section.images.slice((section.paragraphs?.length || 0) + 1).map((img, imgIdx) => (
-                                                        <div key={`extra-${imgIdx}`} className="w-full max-h-[30rem] overflow-hidden rounded-lg">
-                                                            <img
-                                                                src={img.image_url}
-                                                                alt={img.alt || `extra-image-${imgIdx}`}
-                                                                className="w-full h-full object-cover rounded-lg"
-                                                            />
-                                                            {img.caption && (
-                                                                <div className='border-l-2 border-gray-400 pl-3 mt-2 italic text-gray-600 text-sm'>
-                                                                    <p>{img.caption}</p>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
+                                                     {section.images.slice((section.paragraphs?.length || 0) + 1).map((img, imgIdx) => {
+                                                         const imageKey = img.image_url || img.alt || img.caption || `extra-${imgIdx}`;
+                                                         return (
+                                                             <div key={imageKey} className="w-full max-h-[30rem] overflow-hidden rounded-lg">
+                                                                 {img.image_url && (
+                                                                     <Image
+                                                                         src={img.image_url}
+                                                                         alt={img.alt || `extra-image-${imgIdx}`}
+                                                                         width={1000}
+                                                                         height={600}
+                                                                         unoptimized
+                                                                         className="w-full h-full object-cover rounded-lg"
+                                                                     />
+                                                                 )}
+                                                                {img.caption && (
+                                                                    <div className='border-l-2 border-gray-400 pl-3 mt-2 italic text-gray-600 text-sm'>
+                                                                        <p>{img.caption}</p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                         );
+                                                     })}
                                                 </div>
                                             )}
                                         </div>
-                                    ))}
+                                    ))
+                                }
                             </div>
                         )
                     }

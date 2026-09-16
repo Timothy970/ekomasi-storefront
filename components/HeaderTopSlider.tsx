@@ -21,7 +21,7 @@ export default function HeaderTopSlider({
     subcategories,
     hoveredCategory,
     categoryPosition,
-}: HeaderTopSliderProps) {
+}: Readonly<HeaderTopSliderProps>) {
     const subCategory = useAppSelector(selectSubCategory)
     const [sliderPosition, setSliderPosition] = useState<number>(0);
     const [screenWidth, setScreenWidth] = useState<number>(0);

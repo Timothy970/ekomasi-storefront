@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import LoadingIndicator from './LoadingIndicator';
-import { useAppSelector } from '@/lib/hooks';
-import { selectUserProfile } from '@/lib/features/user/userSlice';
 import { connectWebSocket } from '@/lib/utils/websocket';
 
 interface PaymentProcessingModalProps {
@@ -20,7 +18,7 @@ export default function PaymentProcessingModal({
     onPaymentConfirmed,
     onPaymentFailed,
     onClose,
-}: PaymentProcessingModalProps) {
+}: Readonly<PaymentProcessingModalProps>) {
     const [status, setStatus] = useState<'connecting' | 'processing' | 'error' | 'success' | 'failed'>('connecting');
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [socket, setSocket] = useState<ReturnType<typeof connectWebSocket> | null>(null);

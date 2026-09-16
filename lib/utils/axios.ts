@@ -64,7 +64,7 @@ api.interceptors.response.use(
                     type: "error",
                 })
             );
-            return Promise.reject(error);
+            throw error;
         }
 
         if (status === HTTP_STATUS.UNAUTHORIZED) {
@@ -79,7 +79,7 @@ api.interceptors.response.use(
                 window.location.href = "/user/login";
             }, 2000);
 
-            return Promise.reject(error);
+            throw error;
         }
 
         if (status === HTTP_STATUS.FORBIDDEN && !originalRequest._retry) {
@@ -132,7 +132,7 @@ api.interceptors.response.use(
             })
         );
 
-        return Promise.reject(error);
+        throw error;
     }
 );
 

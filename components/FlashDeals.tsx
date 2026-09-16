@@ -19,7 +19,7 @@ interface FlashDealsProps {
     discountValue?: number;
 }
 
-export default function FlashDeals({ title, discountType, discountValue }: FlashDealsProps) {
+export default function FlashDeals({ title, discountType, discountValue }: Readonly<FlashDealsProps>) {
     const [index, setIndex] = useState(0);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const cardRef = useRef<HTMLDivElement | null>(null);

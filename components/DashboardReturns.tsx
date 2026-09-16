@@ -11,7 +11,7 @@ interface DashboardReturnsProps {
     returns: Returns[];
 }
 
-export default function DashboardReturns({ returns }: DashboardReturnsProps) {
+export default function DashboardReturns({ returns }: Readonly<DashboardReturnsProps>) {
     if (!returns || returns.length === 0) {
         return <p className="text-sm text-gray-500">No returns to display.</p>;
     }

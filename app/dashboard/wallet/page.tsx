@@ -15,6 +15,7 @@ import {
   selectWalletTransactions,
   selectWalletStatus
 } from '@/lib/features/wallet/walletSlice'
+import { Label } from '@/components/ui/label'
 
 export default function WalletDashboardPage() {
   const { tenant } = useTenant()
@@ -49,7 +50,7 @@ export default function WalletDashboardPage() {
       topupWalletMpesaAsync({
         payload: {
           phone_number: phone,
-          amount: parseFloat(topupAmount)
+          amount: Number.parseFloat(topupAmount)
         },
         callback: (msg, success) => {
           setMessage(msg)
@@ -113,7 +114,7 @@ export default function WalletDashboardPage() {
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
               <div className="p-3 bg-green-100 rounded-lg text-green-700">
                 <ShieldCheck className="w-6 h-6" />
-              </div>      
+              </div>
               <div>
                 <h4 className="font-semibold text-gray-900 text-sm">Instant Store Refunds</h4>
                 <p className="text-xs text-gray-500">Returned item refunds are credited to wallet in seconds</p>
@@ -216,7 +217,7 @@ export default function WalletDashboardPage() {
 
               <form onSubmit={handleTopUp} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">M-Pesa Phone Number</label>
+                  <Label className="block text-xs font-semibold text-gray-700 mb-1">M-Pesa Phone Number</Label>
                   <input
                     type="text"
                     value={phone}
@@ -228,7 +229,7 @@ export default function WalletDashboardPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-1">Select Amount (KES)</label>
+                  <Label className="block text-xs font-semibold text-gray-700 mb-1">Select Amount (KES)</Label>
                   <div className="grid grid-cols-3 gap-2 mb-2">
                     {["500", "1000", "2500"].map((amt) => (
                       <button

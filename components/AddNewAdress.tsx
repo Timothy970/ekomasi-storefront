@@ -12,7 +12,7 @@ type AddNewAddressProps = {
     setAddNewAdress: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function AddNewAddress({ setAddNewAdress }: AddNewAddressProps) {
+export default function AddNewAddress({ setAddNewAdress }: Readonly<AddNewAddressProps>) {
     const [isFormValid, setIsFormValid] = useState(false);
     const dispatch = useAppDispatch()
     const [formData, setFormData] = useState<FormData>({

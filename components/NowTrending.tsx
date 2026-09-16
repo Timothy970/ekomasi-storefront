@@ -14,7 +14,7 @@ import { customParser } from "@/lib/utils";
 import NoImage from "./NoImage";
 import { calculateDiscountedPrice } from "@/lib/utils/priceUtils";
 
-export default function NowTrending({ title }: { title: string }) {
+export default function NowTrending({ title }: Readonly<{ title: string }>) {
   const [index, setIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);

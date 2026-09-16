@@ -36,7 +36,7 @@ const VideoPlayer = ({
     height = '100%',
     className = '',
     config
-}: VideoPlayerProps) => {
+}: Readonly<VideoPlayerProps>) => {
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {

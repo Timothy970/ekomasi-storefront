@@ -211,8 +211,8 @@ export const extractVideoId = (url: string): { id: string; provider: "youtube" |
 
   // YouTube
   const ytRegExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  const ytMatch = url.match(ytRegExp);
-  if (ytMatch && ytMatch[7].length === 11) {
+  const ytMatch = ytRegExp.exec(url);
+  if (ytMatch?.[7]?.length === 11) {
     return { id: ytMatch[7], provider: "youtube" };
   }
 
@@ -222,17 +222,19 @@ export const extractVideoId = (url: string): { id: string; provider: "youtube" |
     if (urlObj.hostname === 'youtu.be') {
       return { id: urlObj.pathname.slice(1), provider: "youtube" };
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   // Vimeo
-  const vimeoRegExp = /^.*(vimeo\.com\/)((channels\/[^\/]+\/)|(groups\/[^\/]+\/content\/)|(album\/[^\/]+\/video\/))?([0-9]+)/;
-  const vimeoMatch = url.match(vimeoRegExp);
+  const vimeoRegExp = /^.*(vimeo\.com\/)((channels\/[^]+\/)|(groups\/[^]+\/content\/)|(album\/[^]+\/video\/))?(\d+)/;
+  const vimeoMatch = vimeoRegExp.exec(url);
   if (vimeoMatch) {
     return { id: vimeoMatch[6], provider: "vimeo" };
   }
 
   // HTML5 (if it looks like a direct video link or common video host)
-  if (url.match(/\.(mp4|webm|ogg)$/i) || url.includes('blob:') || !url.includes('.')) {
+  if (/\.(mp4|webm|ogg)$/i.exec(url) || url.includes('blob:') || !url.includes('.')) {
      return { id: url, provider: "html5" };
   }
 
@@ -247,10 +249,3 @@ export const getProductImageUrl = (urls?: Image[]): string => {
 
   return imageToShow?.url || "";
 };
-
-export function staticPageParser(string: string | undefined) {
-  if (string) {
-    return parse(string)
-  }
-  return string
-}

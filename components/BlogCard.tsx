@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
 
-export default function BlogCard({ blog }: { blog: Content }) {
+export default function BlogCard({ blog }: Readonly<{ blog: Content }>) {
     const formattedDate = blog?.created_at
         ? new Date(blog.created_at).toLocaleDateString("en-US", {
             year: "numeric",

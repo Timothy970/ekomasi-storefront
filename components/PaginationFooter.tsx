@@ -15,7 +15,7 @@ export default function PaginationFooter({
     onPrev,
     onNext,
     colSpan
-}: PaginationFooterProps) {
+}: Readonly<PaginationFooterProps>) {
     if (!pagination) {
         return (
             <tfoot className="bg-white w-full border-b-0 rounded-[1.25rem]">

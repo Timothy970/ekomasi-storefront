@@ -60,7 +60,7 @@ export default function Brands() {
                 </div>
                 <div className="marquee mt-[1rem] px-[1rem] z-0">
                     {brands.concat(brands).map((src, i) => (
-                        <div key={i} className="inline-block px-8 lg:px-[2rem]">
+                        <div key={`${src}-${i}`} className="inline-block px-8 lg:px-[2rem]">
                             <div className="relative w-32 h-16">
                                 <Image
                                     src={src}

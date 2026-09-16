@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
+import { Button } from './ui/button';
 import { useShareWishlistModal } from '@/app/ClientLayout';
 import { X } from 'lucide-react';
 
@@ -18,6 +19,8 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
     const [message, setMessage] = useState('');
     const { setShareWishlistModalOpen } = useShareWishlistModal();
 
+    if (!isOpen) return null;
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -31,7 +34,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
             return;
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
 
         if (!emailRegex.test(email)) {
             setEmailErrorMessage("Please enter a valid email address.");
@@ -48,13 +51,25 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
 
     return (
         <div className='absolute inset-0 z-[600] h-screen w-screen flex justify-center items-center'>
-            <div className='absolute bg-black/50 z-[65] h-screen w-screen' onClick={() => setShareWishlistModalOpen(false)}>
-                <div className='flex p-[1rem] pt-[3rem] w-full justify-end'>
-                    <X className='text-white' />
-                </div>
-            </div>
+            <button
+                type="button"
+                aria-label="Close modal overlay"
+                className='absolute bg-black/50 z-[65] h-screen w-screen border-none p-0 cursor-pointer'
+                onClick={() => setShareWishlistModalOpen(false)}
+            />
 
-            <div className='bg-white flex hide-scrollbar flex-col items-center justify-center w-[90vw] rounded md:w-[400px] p-[3rem] gap-y-[1rem] m-[1rem] overflow-y-scroll z-[70]'>
+            <div className='bg-white relative flex hide-scrollbar flex-col items-center justify-center w-[90vw] rounded md:w-[400px] p-[3rem] gap-y-[1rem] m-[1rem] overflow-y-scroll z-[70]'>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Close modal"
+                    className="absolute top-3 right-3 text-custom-black hover:bg-gray-100 rounded-full"
+                    onClick={() => setShareWishlistModalOpen(false)}
+                >
+                    <X className="w-5 h-5" />
+                </Button>
+
                 <h2 className="text-[1.125rem] font-semibold mb-4 text-custom-black">Share Wishlist</h2>
 
                 <form onSubmit={handleSubmit} className='w-full flex flex-col gap-y-[1rem]'>
@@ -103,21 +118,21 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
                     </div>
 
                     <div className="flex justify-end gap-[0.75rem]">
-                        <button
+                        <Button
                             type="button"
+                            variant="outline"
                             className="px-4 py-2 h-[2.5rem] bg-white text-custom-black text-[0.875rem] border border-black rounded-[0.5rem] hover:bg-gray-50 transition-colors"
                             onClick={() => setShareWishlistModalOpen(false)}
                         >
                             Cancel
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
                             type="submit"
                             className="px-4 py-2 h-[2.5rem] bg-[rgba(232,41,138,0.25)] text-custom-black text-[0.875rem] border border-[rgba(232,41,138,0.25)] rounded-[0.5rem] hover:bg-[rgba(232,41,138,0.35)] transition-colors"
-                            onClick={handleSubmit}
                         >
                             Share
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

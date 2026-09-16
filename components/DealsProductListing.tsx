@@ -6,17 +6,18 @@ import CustomBreadcrumb from './CustomBreadcrumb'
 import LoadingIndicator from './LoadingIndicator'
 import { scrollToTop } from '@/lib/utils'
 import DealsProducts from './DealsProducts'
+import { Button } from '@/components/ui/button'
 
 type ProductListingLayoutProps = {
     products: Product[];
-    listingDescription: | React.ReactNode;
+    listingDescription: React.ReactNode;
     listingName: string;
     pagination: Pagination | null;
     handlePrev: () => void;
     handleNext: () => void;
     crumbs: Crumb[];
-    status: string,
-    page?: string,
+    status: string;
+    page?: string;
 };
 
 export default function DealsProductListing({
@@ -29,7 +30,7 @@ export default function DealsProductListing({
     crumbs,
     status,
     page,
-}: ProductListingLayoutProps) {
+}: Readonly<ProductListingLayoutProps>) {
 
     return (
         <div className='px-[1rem] lg:px-[3rem] max-w-[90rem] mx-auto w-full mb-[3rem]'>
@@ -74,13 +75,21 @@ export default function DealsProductListing({
                         pagination && products?.length > 0 && status !== "loading" && <PaginationBtns meta={pagination} onPrev={handlePrev} onNext={handleNext} />
                     }
 
-                    <div onClick={scrollToTop} className='bg-secondary-tenant rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem]'>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={scrollToTop}
+                        aria-label="Scroll to top"
+                        className='bg-secondary-tenant rounded-full h-[2.5rem] w-[2.5rem] self-end mt-[2rem] p-0 hover:bg-secondary-tenant/80 cursor-pointer'
+                    >
                         <svg
                             width="40"
                             height="40"
                             viewBox="0 0 40 40"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
+                            className="size-full"
                         >
                             <rect width="40" height="40" fill="url(#pattern0_14122_18188)" />
                             <defs>
@@ -101,7 +110,7 @@ export default function DealsProductListing({
                                 />
                             </defs>
                         </svg>
-                    </div>
+                    </Button>
                 </div>
             </div>
         </div>

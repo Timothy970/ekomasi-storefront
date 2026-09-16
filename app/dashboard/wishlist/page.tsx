@@ -45,6 +45,7 @@ export default function WishList() {
         triggerToast("Failed to remove product from wishlist.", "error");
       }
     } catch (error) {
+      console.error(error);
       triggerToast("An error occurred while removing the product.", "error");
     }
   };
@@ -74,6 +75,7 @@ export default function WishList() {
       triggerToast("All wishlist items removed successfully.", "success");
       refetchWishList();
     } catch (error) {
+      console.error(error)
       triggerToast("Failed to remove some wishlist items.", "error");
     }
   };
@@ -115,10 +117,10 @@ export default function WishList() {
               <h2 className='text-[1.25rem] md:text-[3rem]'>Wishlist</h2>
 
               {
-                wishList && wishList[0]?.products?.length && <div className='flex gap-x-[1rem] w-full justify-center md:justify-end items-center mx-auto mt-[1rem] md:mt-[1rem]'>
+                Boolean(wishList?.[0]?.products?.length) && <div className='flex gap-x-[1rem] w-full justify-center md:justify-end items-center mx-auto mt-[1rem] md:mt-[1rem]'>
                   <div className='relative'>
                     <Button
-                      disabled={wishList?.length == 0}
+                      disabled={wishList?.length === 0}
                       className='bg-[rgba(232,41,138,0.25)] border text-[0.875rem] border-[rgba(232,41,138,0.25)] text-custom-black h-[2.5rem] w-[10rem] flex gap-x-[0.75rem] md:rounded-[0.5rem]'
                       onClick={() => setShareWishlistModalOpen(true)}
                     >
@@ -130,9 +132,9 @@ export default function WishList() {
                   </div>
 
                   {
-                    wishList && wishList[0]?.products?.length && <Button
+                    Boolean(wishList?.[0]?.products?.length) && <Button
                       onClick={handleRemoveAll}
-                      disabled={wishList?.length == 0}
+                      disabled={wishList?.length === 0}
                       className='bg-white text-custom-black text-[0.875rem] h-[2.5rem] border border-black w-[10rem] md:rounded-[0.5rem]'
                     >
                       Clear All

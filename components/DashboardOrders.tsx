@@ -2,7 +2,6 @@ import { Dot } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { Button } from './ui/button';
 import { Order } from '@/lib/features/types';
 import moment from "moment";
 import NoImage from './NoImage';
@@ -11,7 +10,7 @@ interface DashboardOrdersProps {
   orders: Order[];
 }
 
-export default function DashboardOrders({ orders }: DashboardOrdersProps) {
+export default function DashboardOrders({ orders }: Readonly<DashboardOrdersProps>) {
   if (!orders || orders.length === 0) {
     return <p className="text-sm text-gray-500">No orders to display.</p>;
   }

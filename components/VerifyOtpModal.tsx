@@ -15,9 +15,11 @@ interface VerifyOtpModalProps {
     onVerifySuccess: () => void
 }
 
-export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: VerifyOtpModalProps) {
+const OTP_SLOTS = ["otp-input-0", "otp-input-1", "otp-input-2", "otp-input-3"]
+
+export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Readonly<VerifyOtpModalProps>) {
     const length = 4
-    const [code, setCode] = useState<string[]>(Array(length).fill(""))
+    const [code, setCode] = useState<string[]>(new Array(length).fill(""))
     const inputsRef = useRef<Array<HTMLInputElement | null>>([])
     const dispatch = useAppDispatch()
     const status = useAppSelector(selectStatus)
@@ -28,7 +30,7 @@ export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Ver
             // Focus first input when modal opens
             setTimeout(() => focusAt(0), 100)
         } else {
-            setCode(Array(length).fill(""))
+            setCode(new Array(length).fill(""))
         }
     }, [isOpen])
 
@@ -58,38 +60,49 @@ export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Ver
         if (idx < length - 1) focusAt(Math.min(idx + digits.length, length - 1))
     }
 
+    const handleBackspace = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (code[idx]) return
+        if (idx > 0) {
+            const prev = [...code]
+            prev[idx - 1] = ""
+            setCode(prev)
+            focusAt(idx - 1)
+            e.preventDefault()
+        }
+    }
+
+    const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        const otpValue = code.join("").trim()
+        if (otpValue.length === length) {
+            handleSubmit(e as any)
+            return
+        }
+        triggerToast(`Please enter all ${length} digits of the code`, "error")
+        const firstEmpty = code.indexOf("")
+        if (firstEmpty !== -1) focusAt(firstEmpty)
+    }
+
     const handleKeyDown = (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Backspace") {
-            if (code[idx]) return
-            if (idx > 0) {
-                const prev = [...code]
-                prev[idx - 1] = ""
-                setCode(prev)
-                focusAt(idx - 1)
-                e.preventDefault()
-            }
+            handleBackspace(idx, e)
+            return
         }
 
         if (e.key === "ArrowLeft" && idx > 0) {
             focusAt(idx - 1)
             e.preventDefault()
+            return
         }
 
         if (e.key === "ArrowRight" && idx < length - 1) {
             focusAt(idx + 1)
             e.preventDefault()
+            return
         }
 
         if (e.key === "Enter") {
-            const otpValue = code.join("").trim()
-            if (otpValue.length === length) {
-                handleSubmit(e as any)
-            } else {
-                triggerToast(`Please enter all ${length} digits of the code`, "error")
-                const firstEmpty = code.findIndex((c) => c === "")
-                if (firstEmpty !== -1) focusAt(firstEmpty)
-            }
-            e.preventDefault()
+            handleEnterKey(e)
         }
     }
 
@@ -154,13 +167,13 @@ export default function VerifyOtpModal({ isOpen, onClose, onVerifySuccess }: Ver
 
                 <form className="flex flex-col items-center gap-y-[1.5rem]" onSubmit={handleSubmit}>
                     <div className="flex flex-row justify-center items-center gap-x-[1rem]">
-                        {code.map((digit, idx) => (
+                        {OTP_SLOTS.map((slotKey, idx) => (
                             <Input
-                                key={idx}
+                                key={slotKey}
                                 ref={(el) => {
                                     inputsRef.current[idx] = el
                                 }}
-                                value={digit}
+                                value={code[idx]}
                                 onChange={handleChange(idx)}
                                 onKeyDown={handleKeyDown(idx)}
                                 onPaste={handlePaste(idx)}

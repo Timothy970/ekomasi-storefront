@@ -19,7 +19,7 @@ type Props = {
     isBuyNow: boolean
 };
 
-export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Props) {
+export default function LocationDropdown({ onSelect, setFormData, isBuyNow }:Readonly< Props>) {
     const [selectedId, setSelectedId] = React.useState<number | null>(null);
     const [search, setSearch] = useState("");
     const [open, setOpen] = useState(false);
@@ -63,10 +63,8 @@ export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Pr
                 if (buyNowCartId && selectedId) {
                     dispatch(getBuyNowCartAsync({ cart_id: buyNowCartId, location_id: selectedId }));
                 }
-            } else {
-                if (cartId && selectedId) {
-                    dispatch(getCartAsync({ cart_id: cartId, location_id: selectedId }));
-                }
+            } else if (cartId && selectedId) {
+                dispatch(getCartAsync({ cart_id: cartId, location_id: selectedId }));
             }
         }
     }, [selected, onSelect, setFormData]);
@@ -79,7 +77,7 @@ export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Pr
         if (!cartId) return;
 
         const locationIdFromUrl = searchParams.get("location_id");
-        const idNum = locationIdFromUrl && !isNaN(Number(locationIdFromUrl)) ? Number(locationIdFromUrl) : null;
+        const idNum = locationIdFromUrl && !Number.isNaN(Number(locationIdFromUrl)) ? Number(locationIdFromUrl) : null;
 
         if (idNum) {
             setSelectedId(idNum);
@@ -105,7 +103,7 @@ export default function LocationDropdown({ onSelect, setFormData, isBuyNow }: Pr
             onValueChange={(val) => {
                 if (!val) return;
                 const num = Number(val);
-                if (!isNaN(num)) setSelectedId(num);
+                if (!Number.isNaN(num)) setSelectedId(num);
             }}
         >
             <SelectTrigger className="w-full p-[0.5rem] h-[2.5rem] border-[rgba(0,0,0,0.40)] border text-[0.875rem]">

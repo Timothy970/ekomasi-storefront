@@ -5,10 +5,10 @@ import { ChevronDown } from "lucide-react";
 export default function Accordion({
   title,
   children,
-}: {
+}: Readonly<{
   title: string;
   children: React.ReactNode;
-}) {
+}>) {
   const [open, setOpen] = useState(false);
 
   return (

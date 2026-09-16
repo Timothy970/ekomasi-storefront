@@ -13,7 +13,7 @@ interface Props {
   readonly children: ReactNode;
 }
 
-export const StoreProvider = ({ children }: Props) => {
+export const StoreProvider = ({ children }:Readonly< Props>) => {
   const storeRef = useRef<AppStore | null>(null);
 
   if (!storeRef.current) {

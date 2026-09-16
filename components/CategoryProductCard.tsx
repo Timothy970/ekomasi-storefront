@@ -9,7 +9,7 @@ import { calculateDiscountedPrice, formatPrice } from "@/lib/utils/priceUtils";
 
 interface CategoryProductCardProps {
   product: Product;
-  discountType?: 'percentage' | 'fixed' | string | null;
+  discountType?: 'percentage' | 'fixed' | (string & {}) | null;
   discountValue?: number | string | null;
 }
 
@@ -17,7 +17,7 @@ export default function CategoryProductCard({
   product,
   discountType,
   discountValue
-}: CategoryProductCardProps) {
+}: Readonly<CategoryProductCardProps>) {
   const [productId, setProductId] = useState<string | null>(null);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video">("image");

@@ -10,10 +10,10 @@ import ProductImages from '@/components/ProductImages'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { getProductAsync, selectProductStatus, selectProduct, getProductReviewsAsync, selectProductReviews, selectReviewPagination } from '@/lib/features/navigation/navigationSlice'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { addToBuyNowCartAsync, addToCartAsync, createBuyNowCartAsync, createCartAsync, getBuyNowCartAsync, getCartAsync, selectCart, selectCartId, } from '@/lib/features/cart/cartSlice'
 import { triggerToast } from '@/app/utils/toastUtils'
 import CustomBreadcrumb from '@/components/CustomBreadcrumb'
-import { Crumb, Product } from '@/lib/features/types'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import { customParser, getProductImageUrl } from '@/lib/utils'
 import { selectUserToken } from '@/lib/features/user/userSlice'
@@ -26,7 +26,160 @@ import Image from 'next/image'
 import NoImage from '@/components/NoImage'
 import { calculateDiscountedPrice, formatPrice } from '@/lib/utils/priceUtils'
 import VariantSelectionModal from '@/components/VariantSelectionModal'
-import { VariantSelection } from '@/lib/features/types'
+import { VariantSelection, Crumb } from '@/lib/features/types'
+
+function formatGroupedVariants(variants?: Array<{ variant_type: string; name: string }>) {
+  if (!variants) return {};
+
+  return variants.reduce((acc, variant) => {
+    let typeKey = variant.variant_type.replace(/_/g, " ");
+
+    if (typeKey.toLowerCase() === "weight") {
+      typeKey = "Weight (kg)";
+    } else {
+      typeKey = typeKey.charAt(0).toUpperCase() + typeKey.slice(1);
+    }
+
+    if (!acc[typeKey]) acc[typeKey] = [];
+    acc[typeKey].push(variant.name);
+    return acc;
+  }, {} as Record<string, string[]>);
+}
+
+function getWarrantyText(warranty?: { warranty_type?: string; warranty_period?: string }) {
+  if (!warranty) {
+    return "No warranty information available.";
+  }
+  return `This product comes with a ${warranty.warranty_type} warranty valid for ${warranty.warranty_period}.`;
+}
+
+function ProductPriceDisplay({ product }: Readonly<{ product: any }>) {
+  if (product?.variant_selection && product.variant_selection.length > 0) {
+    return (
+      <span className='text-lg lg:text-[1.5rem] font-bold'>
+        {formatPrice(product.price)} - {formatPrice(product.price + Math.max(...product.variant_selection.map((v: any) => v.additional_price)))}
+      </span>
+    );
+  }
+
+  if (product?.discount_type && product?.discount) {
+    return (
+      <>
+        <span className="text-lg lg:text-[1.5rem] font-bold text-[#D0021B]">
+          {formatPrice(calculateDiscountedPrice(product.price, product.discount_type, product.discount))}
+        </span>
+        <span className="text-[1.125rem] text-gray-500 line-through">
+          {formatPrice(product.price)}
+        </span>
+      </>
+    );
+  }
+
+  return (
+    <span className='text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
+  );
+}
+
+function StockStatusDisplay({ stockQuantity }: Readonly<{ stockQuantity?: number }>) {
+  if ((stockQuantity ?? 0) > 0) {
+    return (
+      <div className='flex items-center gap-x-[0.5rem]'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+          <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
+        </svg>
+        <span className='text-base'>In Stock</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
+      <span className='text-base'>Sold Out:</span>
+      <span className='text-base'>This product is currently unavailable</span>
+    </div>
+  );
+}
+
+function ProductReviewScore({ reviews, reviewPagination }: Readonly<{ reviews: any; reviewPagination: any }>) {
+  if (reviews?.average_score === undefined) return null;
+
+  const score = reviews.average_score;
+  const totalItems = reviewPagination?.total_items;
+
+  return (
+    <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
+      <ProductStars avarageScore={score} />
+      <span>{score} {score > 1 ? "stars" : "star"}</span>
+      {totalItems !== undefined && <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span>}
+      {totalItems !== undefined && (
+        <span>{totalItems} {totalItems > 1 ? "Reviews" : "Review"}</span>
+      )}
+    </div>
+  );
+}
+
+function BundleProductsAccordion({ products }: Readonly<{ products?: any[] }>) {
+  if (!products || products.length === 0) return null;
+
+  return (
+    <Accordion title="Bundle Products">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">
+        {products.map((item) => (
+          <Link
+            key={item.product_id}
+            href={`/products/${item.product_id}`}
+            className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            {item.urls || item.images ? (
+              <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
+                <Image
+                  src={getProductImageUrl(item.urls || item.images)}
+                  alt={item.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ) : (<NoImage />)}
+            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
+            {item.discount_type && item.discount ? (
+              <>
+                <span className="text-[1.25rem] font-bold text-[#D0021B]">
+                  {formatPrice(calculateDiscountedPrice(item.price, item.discount_type, item.discount))}
+                </span>
+                <span className="text-[0.875rem] text-gray-500 line-through">
+                  {formatPrice(item.price)}
+                </span>
+              </>
+            ) : (
+              <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
+            )}
+            {item.bundle_quantity && item.bundle_quantity > 0 && (
+              <span className="bg-[#D0021B] text-white text-xs text-center font-semibold px-2 py-1 rounded-full shadow-sm">
+                x{item.bundle_quantity}
+              </span>
+            )}
+          </Link>
+        ))}
+      </div>
+    </Accordion>
+  );
+}
+
+function SpecificationsAccordion({ hasVariants, groupedVariants }: Readonly<{ hasVariants: boolean; groupedVariants: Record<string, string[]> }>) {
+  if (!hasVariants) return null;
+
+  return (
+    <Accordion title="Specifications">
+      <ul className="list-disc list-inside ml-5 mt-1">
+        {Object.entries(groupedVariants).map(([variantType, names]) => (
+          <li key={variantType} className="mb-2">
+            <strong>{variantType}:</strong> {names.join(", ")}
+          </li>
+        ))}
+      </ul>
+    </Accordion>
+  );
+}
 
 export default function ProductDetail() {
   const product = useAppSelector(selectProduct)
@@ -35,7 +188,6 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1)
   const cartId = useAppSelector(selectCartId)
   const router = useRouter()
-  const [breadCrumb, setBreadCrumb] = useState<Crumb[]>([])
   const status = useAppSelector(selectProductStatus)
   const cart = useAppSelector(selectCart)
   const isInCart = cart?.cart_items?.some(item => item?.product.product_id === product?.product_id);
@@ -43,52 +195,49 @@ export default function ProductDetail() {
   const token = useAppSelector(selectUserToken)
   const { setOpenGuestCheckoutModal } = useGuestCheckout()
   const { setIsBuyNow } = useIsBuyNow()
-  const url = typeof window !== "undefined" ? window.location.href : "";
-  const [warranty, setWarranty] = useState("");
   const reviews = useAppSelector(selectProductReviews)
   const reviewPagination = useAppSelector(selectReviewPagination)
   const brandVariant = product?.product_variants?.find(v => v.variant_type === "brand");
   const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
   const [isBuyNowFlow, setIsBuyNowFlow] = useState(false);
 
-  useEffect(() => {
-    if (product) {
-      let crumbs = []
-
-      crumbs?.push({
-        link: `/products/${product?.product_id}`,
-        name: product?.name
-      })
-      setBreadCrumb(crumbs)
-    }
-  }, [product])
-
-  useEffect(() => {
-    if (product && cart?.cart_items) {
-      const cartItem = cart.cart_items.find(
-        item => item?.product.product_id === product.product_id
-      );
-
-      if (cartItem) {
-        setQuantity(cartItem.quantity);
-      } else {
-        setQuantity(product.stock_quantity > 0 ? 1 : 0);
-      }
-    }
+  const breadCrumb = React.useMemo<Crumb[]>(() => {
+    if (!product) return [];
+    return [{
+      link: `/products/${product.product_id}`,
+      name: product.name
+    }];
   }, [product]);
 
-  const createAndAdd = (cart_id: string) => {
-    if (product?.product_id && cart_id) {
-      dispatch(addToCartAsync({ product_id: product?.product_id, quantity, cart_id }))
+  const warranty = getWarrantyText(product?.warranty);
 
-      if (cart_id) {
-        setTimeout(() => {
-          triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync({ cart_id }))
-        }, 1000)
-      }
+  const groupedVariants = React.useMemo(
+    () => formatGroupedVariants(product?.product_variants),
+    [product?.product_variants]
+  );
+
+  useEffect(() => {
+    if (!product) return;
+    const cartItem = cart?.cart_items?.find(
+      item => item?.product.product_id === product.product_id
+    );
+
+    if (cartItem) {
+      setQuantity(cartItem.quantity);
+    } else {
+      setQuantity(product.stock_quantity > 0 ? 1 : 0);
     }
-  }
+  }, [product, cart?.cart_items]);
+
+  const createAndAdd = (cart_id: string) => {
+    if (!product?.product_id || !cart_id) return;
+    dispatch(addToCartAsync({ product_id: product.product_id, quantity, cart_id }));
+
+    setTimeout(() => {
+      triggerToast("Cart updated successfully!", "success");
+      dispatch(getCartAsync({ cart_id }));
+    }, 1000);
+  };
 
   const createAndAddBuyNowCart = (cart_id: string) => {
     if (!product?.product_id || !cart_id) return;
@@ -102,204 +251,145 @@ export default function ProductDetail() {
       if (token) {
         router.push("/checkout/member/buy-now");
       } else {
-        setOpenGuestCheckoutModal(true)
+        setOpenGuestCheckoutModal(true);
       }
     }, 1000);
   };
 
   useEffect(() => {
     if (params?.product_id) {
-      dispatch(getProductAsync(params?.product_id))
-      dispatch(getProductReviewsAsync(params?.product_id))
+      dispatch(getProductAsync(params.product_id));
+      dispatch(getProductReviewsAsync(params.product_id));
     }
-
-  }, [dispatch, params?.product_id])
+  }, [dispatch, params?.product_id]);
 
   const handleAddToCart = async (addedQuantity: number, variation_sku?: string) => {
-    setAddToCartLoading(true)
+    setAddToCartLoading(true);
 
     if (!cartId && product?.product_id && addedQuantity > 0) {
       dispatch(
-        createCartAsync(
-          {
-            product_id: product.product_id,
-            quantity: addedQuantity,
-            variation_sku,
-            createAndAdd,
-          }
-        )
-      )
+        createCartAsync({
+          product_id: product.product_id,
+          quantity: addedQuantity,
+          variation_sku,
+          createAndAdd,
+        })
+      );
     } else {
       if (product?.product_id && cartId) {
-        dispatch(addToCartAsync({ product_id: product?.product_id, quantity: addedQuantity, cart_id: cartId, variation_sku }))
+        dispatch(addToCartAsync({ product_id: product.product_id, quantity: addedQuantity, cart_id: cartId, variation_sku }));
       }
 
       if (cartId) {
         setTimeout(() => {
           triggerToast("Cart updated successfully!", "success");
-          dispatch(getCartAsync({ cart_id: cartId }))
-        }, 1000)
+          dispatch(getCartAsync({ cart_id: cartId }));
+        }, 1000);
       }
     }
     setTimeout(() => {
-      setAddToCartLoading(false)
-    }, 1000)
-  }
+      setAddToCartLoading(false);
+    }, 1000);
+  };
+
+  const handleBuyNowVariantSelection = (selected: { variant: VariantSelection; quantity: number }[]) => {
+    const first = selected[0];
+    if (first && product?.product_id) {
+      dispatch(
+        createBuyNowCartAsync({
+          product_id: product.product_id,
+          quantity: first.quantity,
+          variation_sku: first.variant.sku,
+          createAndAddBuyNowCart,
+        })
+      );
+      setIsBuyNow(true);
+    }
+  };
+
+  const handleRegularCartVariantSelection = async (selected: { variant: VariantSelection; quantity: number }[]) => {
+    let currentCartId = cartId;
+
+    for (const item of selected) {
+      if (!currentCartId && product?.product_id) {
+        const result = await dispatch(
+          createCartAsync({
+            product_id: product.product_id,
+            quantity: item.quantity,
+            variation_sku: item.variant.sku,
+            createAndAdd: (id) => {
+              currentCartId = id;
+            },
+          })
+        ).unwrap();
+
+        if (result.data?.cart_id) {
+          currentCartId = result.data.cart_id;
+        }
+      } else if (product?.product_id && currentCartId) {
+        await dispatch(
+          addToCartAsync({
+            product_id: product.product_id,
+            quantity: item.quantity,
+            cart_id: currentCartId,
+            variation_sku: item.variant.sku,
+          })
+        ).unwrap();
+      }
+    }
+
+    if (currentCartId) {
+      triggerToast("Items added to cart", "success");
+      dispatch(getCartAsync({ cart_id: currentCartId }));
+    }
+  };
 
   const handleVariantSelectionConfirm = async (selected: { variant: VariantSelection, quantity: number }[]) => {
     setIsVariantModalOpen(false);
     setAddToCartLoading(true);
 
     if (isBuyNowFlow) {
-      // For Buy Now, usually we handle one at a time for checkout redirect
-      // but let's see how createBuyNowCart handles it.
-      // If multiple, we might need a batch add.
-      // For now, let's take the first one or logic as requested.
-      // User said "if 2 different variations selected then we will have two sets with different skus"
-      // This implies cart/order creation.
-
-      const first = selected[0];
-      if (first) {
-        dispatch(
-          createBuyNowCartAsync({
-            product_id: product!.product_id!,
-            quantity: first.quantity,
-            variation_sku: first.variant.sku,
-            createAndAddBuyNowCart,
-          })
-        );
-        setIsBuyNow(true);
-        // If there are more, they won't work well with "Buy Now" redirect if done separately.
-        // But the requirement says "both for cart api and order creation".
-      }
+      handleBuyNowVariantSelection(selected);
     } else {
-      // Regular cart addition
-      let currentCartId = cartId;
-
-      for (let i = 0; i < selected.length; i++) {
-        const item = selected[i];
-        if (!currentCartId) {
-          // First item creates the cart
-          const result = await dispatch(createCartAsync({
-            product_id: product!.product_id!,
-            quantity: item.quantity,
-            variation_sku: item.variant.sku,
-            createAndAdd: (id) => { currentCartId = id; }
-          })).unwrap();
-
-          if (result.data?.cart_id) {
-            currentCartId = result.data.cart_id;
-          }
-        } else {
-          // Subsequent items use the existing/newly created cartId
-          await dispatch(addToCartAsync({
-            product_id: product!.product_id!,
-            quantity: item.quantity,
-            cart_id: currentCartId,
-            variation_sku: item.variant.sku
-          })).unwrap();
-        }
-      }
-
-      if (currentCartId) {
-        triggerToast("Items added to cart", "success");
-        dispatch(getCartAsync({ cart_id: currentCartId }));
-      }
+      await handleRegularCartVariantSelection(selected);
     }
 
     setAddToCartLoading(false);
-  }
+  };
 
   const handleAddToBuyNowCart = async () => {
     if (product?.product_id && quantity > 0) {
       dispatch(
-        createBuyNowCartAsync(
-          {
-            product_id: product.product_id,
-            quantity,
-            createAndAddBuyNowCart,
-          }
-        )
-      )
-      setIsBuyNow(true)
+        createBuyNowCartAsync({
+          product_id: product.product_id,
+          quantity,
+          createAndAddBuyNowCart,
+        })
+      );
+      setIsBuyNow(true);
     } else {
-      setIsBuyNow(false)
+      setIsBuyNow(false);
       triggerToast("Please select a valid quantity", 'error');
     }
-  }
+  };
 
-  const groupedVariants = React.useMemo(() => {
-    if (!product?.product_variants) return {};
+  const hasVariants = Boolean(product?.variant_selection && product.variant_selection.length > 0);
 
-    return product?.product_variants.reduce((acc, variant) => {
-      let typeKey = variant.variant_type.replace(/_/g, " ");
-
-      if (typeKey.toLowerCase() === "weight") {
-        typeKey = "Weight (kg)";
-      } else {
-        typeKey = typeKey.charAt(0).toUpperCase() + typeKey.slice(1);
-      }
-
-      if (!acc[typeKey]) acc[typeKey] = [];
-      acc[typeKey].push(variant.name);
-      return acc;
-    }, {} as Record<string, string[]>);
-  }, [product?.product_variants]);
-
-  useEffect(() => {
-    if (!product?.warranty) {
-      setWarranty("No warranty information available.");
-      return;
+  const handleAddToCartButtonClick = () => {
+    if (hasVariants) {
+      setIsBuyNowFlow(false);
+      setIsVariantModalOpen(true);
+    } else {
+      handleAddToCart(quantity);
     }
+  };
 
-    const { warranty_type, warranty_period, manufacturing_date, expiry_date } = product.warranty;
-
-    const mfgDate = manufacturing_date ? new Date(manufacturing_date).toLocaleDateString() : "N/A";
-    const expDate = expiry_date ? new Date(expiry_date).toLocaleDateString() : "N/A";
-
-    const text = `This product comes with a ${warranty_type} warranty valid for ${warranty_period}.`;
-
-    setWarranty(text);
-  }, [product?.warranty]);
-
-  useEffect(() => {
-    if (product) {
-      if (product.stock_quantity > 0) {
-        setQuantity(1);
-      } else {
-        setQuantity(0);
-      }
-    }
-  }, [product]);
-
-
-  const shareTo = (target: string) => {
-    switch (target) {
-      case "whatsapp":
-        window.open(`https://wa.me/?text=${encodeURIComponent(url)}`);
-        break;
-
-      case "twitter":
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(product?.name ?? "")}`);
-        break;
-
-      case "instagram":
-        navigator.clipboard.writeText(url);
-        triggerToast("Link copied! Open Instagram and paste it.", "success");
-        break;
-
-      case "tiktok":
-        window.open(`https://www.tiktok.com/share?url=${encodeURIComponent(url)}`);
-        break;
-
-      case "facebook":
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
-        break;
-
-      case "copy":
-        navigator.clipboard.writeText(url);
-        triggerToast("Link copied!", "success");
-        break;
+  const handleBuyNowButtonClick = () => {
+    if (hasVariants) {
+      setIsBuyNowFlow(true);
+      setIsVariantModalOpen(true);
+    } else {
+      handleAddToBuyNowCart();
     }
   };
 
@@ -333,6 +423,8 @@ export default function ProductDetail() {
     );
   }
 
+  const showQuantitySelector = product.stock_quantity > 0 && (!product.variant_selection || product.variant_selection.length === 0);
+
   return (
     <Navigation>
       <div className='max-w-[90rem] mx-auto w-full pt-[2rem] lg:pt-[2.5rem]'>
@@ -342,71 +434,25 @@ export default function ProductDetail() {
 
         <div className='mt-[1.5rem] px-[1rem] lg:px-[3rem]'>
           <div className='w-full flex flex-col md:flex-row items-stretch gap-x-[1rem]'>
-            {
-              product ? <div className='w-full h-full flex-1'>
-                <ProductImages />
-              </div> : <></>
-            }
+            <div className='w-full h-full flex-1'>
+              <ProductImages />
+            </div>
 
             <div className='w-full flex flex-col justify-start pb-[1rem] flex-1'>
-              <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product?.name}</h2>
+              <h2 className='capitalize text-lg lg:text-[2.25rem] font-medium mt-[0.75rem] md:mt-0'>{product.name}</h2>
 
               <div className="mt-[0.5rem] flex items-baseline gap-2 flex-wrap">
-                {product?.variant_selection && product.variant_selection.length > 0 ? (
-                  <span className='text-lg lg:text-[1.5rem] font-bold'>
-                    {formatPrice(product.price)} - {formatPrice(product.price + Math.max(...product.variant_selection.map(v => v.additional_price)))}
-                  </span>
-                ) : product?.discount_type && product?.discount ? (
-                  <>
-                    <span className="text-lg lg:text-[1.5rem] font-bold text-[#D0021B]">
-                      {formatPrice(calculateDiscountedPrice(product.price, product.discount_type, product.discount))}
-                    </span>
-                    <span className="text-[1.125rem] text-gray-500 line-through">
-                      {formatPrice(product.price)}
-                    </span>
-                  </>
-                ) : (
-                  <span className='text-lg lg:text-[1.5rem] font-bold'>KES {product?.price}</span>
-                )}
+                <ProductPriceDisplay product={product} />
               </div>
 
-              <div className='flex items-center text-[0.875rem] justify-start gap-x-[0.5rem] mt-[0.75rem]'>
-                {
-                  reviews?.average_score !== undefined ? <ProductStars avarageScore={reviews?.average_score} /> : <></>
-                }
+              <ProductReviewScore reviews={reviews} reviewPagination={reviewPagination} />
 
-                {
-                  reviews?.average_score !== undefined ? <span>{reviews?.average_score} {reviews?.average_score > 1 ? "stars" : "star"} </span> : <></>
-                }
-
-                {
-                  reviews?.average_score !== undefined && reviewPagination?.total_items !== undefined ? <span className='bg-black rounded-full h-[0.5rem] w-[0.5rem]'></span> : <></>
-                }
-
-                {
-                  reviewPagination?.total_items !== undefined ? <span>{reviewPagination?.total_items} {reviewPagination?.total_items > 1 ? "Reviews" : "Review"}</span> : <></>
-                }
-              </div>
-
-              {
-                product?.description ? <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product?.description)}</div> : <></>
-              }
+              {product.description && (
+                <div className='text-[0.875rem] lg:text-[1rem] mt-[0.75rem] capitalize'>{customParser(product.description)}</div>
+              )}
 
               <div className='mt-[1.5rem] min-h-[2.5rem]'>
-                {product && product?.stock_quantity && product?.stock_quantity > 0 ? (
-                  <div className='flex items-center gap-x-[0.5rem]'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
-                      <circle cx="6.5" cy="7" r="6.5" fill="#34C759" />
-                    </svg>
-                    <span className='text-base'>In Stock</span>
-                  </div>
-                ) : (
-                  <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
-                    <span className='text-base'>Sold Out:</span>
-                    <span className='text-base'>This product is currently unavailable</span>
-                  </div>
-                )
-                }
+                <StockStatusDisplay stockQuantity={product.stock_quantity} />
               </div>
 
               {brandVariant && (
@@ -415,17 +461,19 @@ export default function ProductDetail() {
                   <span className="font-bold underline">{brandVariant.name}</span>
                 </div>
               )}
-              {product?.product_variants?.some(v => v.variant_type.toLowerCase() === "color") && (
+
+              {product.product_variants?.some(v => v.variant_type.toLowerCase() === "color") && (
                 <div className='mt-[0.75rem]'>
                   <h3 className='text-[0.875rem] gap-y-[0.5rem]'>Color</h3>
                   <ProductColors product={product} />
                 </div>
               )}
-              {product?.variant_selection && product.variant_selection.length > 0 && (
+
+              {hasVariants && (
                 <div className='mt-[1rem]'>
                   <h3 className='text-[0.875rem] font-semibold mb-2'>Available Variations</h3>
                   <div className='flex flex-wrap gap-2'>
-                    {product.variant_selection.map((variant) => (
+                    {product.variant_selection!.map((variant) => (
                       <div
                         key={variant.sku}
                         className={`px-3 py-2 border rounded text-sm ${variant.stock_quantity === 0
@@ -439,159 +487,44 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {
-                product && product?.stock_quantity > 0 && (!product?.variant_selection || product.variant_selection.length === 0) ? <div className='mt-[1.5rem]'>
+              {showQuantitySelector && (
+                <div className='mt-[1.5rem]'>
                   <h3 className='text-[0.875rem] lg:text-base mb-[1.5rem]'>Quantity</h3>
                   <ProductQuantity
                     setQuantity={setQuantity}
                     quantity={quantity}
                   />
-                </div> : <></>
-              }
-
-              {
-                product && <Button
-                  disabled={product && product?.stock_quantity <= 0 || addToCartLoading}
-                  onClick={() => {
-                    if (product?.variant_selection && product.variant_selection.length > 0) {
-                      setIsBuyNowFlow(false);
-                      setIsVariantModalOpen(true);
-                    } else {
-                      handleAddToCart(quantity);
-                    }
-                  }}
-                  className='w-full bg-primary-tenant hover:opacity-90 mt-[1.5rem] h-[3rem]'
-                >
-                  {
-                    addToCartLoading && <LoadingIndicator textColor="text-white" />
-                  }
-                  {isInCart ? "Update Cart Item" : "Add to Cart"}
-                </Button>
-              }
+                </div>
+              )}
 
               <Button
-                disabled={product && product?.stock_quantity <= 0}
-                onClick={() => {
-                  if (product?.variant_selection && product.variant_selection.length > 0) {
-                    setIsBuyNowFlow(true);
-                    setIsVariantModalOpen(true);
-                  } else {
-                    handleAddToBuyNowCart();
-                  }
-                }}
+                disabled={product.stock_quantity <= 0 || addToCartLoading}
+                onClick={handleAddToCartButtonClick}
+                className='w-full bg-primary-tenant hover:opacity-90 mt-[1.5rem] h-[3rem]'
+              >
+                {addToCartLoading && <LoadingIndicator textColor="text-white" />}
+                {isInCart ? "Update Cart Item" : "Add to Cart"}
+              </Button>
+
+              <Button
+                disabled={product.stock_quantity <= 0}
+                onClick={handleBuyNowButtonClick}
                 className='w-full bg-white border border-primary-tenant text-primary-tenant hover:bg-gray-50 mt-[0.75rem] h-[3rem]'
               >
                 Buy Now
               </Button>
 
               <div className='mt-[1.5rem] flex flex-col gap-y-[1.5rem]'>
-                {/* <div className='flex gap-x-[0.5rem] w-full border-b border-b-black py-[1.5rem]'>
-                  <span className='text-base'>Share:</span>
-
-                  <div className='flex gap-x-[0.44rem] items-center justify-center'>
-                    <svg onClick={() => shareTo("facebook")} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M22 12.3033C22 6.7467 17.5229 2.24219 12 2.24219C6.47715 2.24219 2 6.7467 2 12.3033C2 17.325 5.65684 21.4874 10.4375 22.2422V15.2116H7.89844V12.3033H10.4375V10.0867C10.4375 7.56515 11.9305 6.17231 14.2146 6.17231C15.3088 6.17231 16.4531 6.36882 16.4531 6.36882V8.8448H15.1922C13.95 8.8448 13.5625 9.62041 13.5625 10.4161V12.3033H16.3359L15.8926 15.2116H13.5625V22.2422C18.3432 21.4874 22 17.3252 22 12.3033Z" fill="#1976D2" />
-                    </svg>
-
-                    <svg onClick={() => shareTo("instagram")} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M17.0085 20.9941L7.0085 21.0036C4.8085 21.0056 3.007 19.2076 3.0045 17.0076L2.995 7.00764C2.993 4.80764 4.791 3.00614 6.991 3.00364L16.991 2.99414C19.191 2.99214 20.9925 4.79014 20.995 6.99014L21.0045 16.9901C21.007 19.1906 19.2085 20.9921 17.0085 20.9941Z" fill="url(#paint0_radial_16349_2479)" />
-                      <path d="M17.0085 20.9941L7.0085 21.0036C4.8085 21.0056 3.007 19.2076 3.0045 17.0076L2.995 7.00764C2.993 4.80764 4.791 3.00614 6.991 3.00364L16.991 2.99414C19.191 2.99214 20.9925 4.79014 20.995 6.99014L21.0045 16.9901C21.007 19.1906 19.2085 20.9921 17.0085 20.9941Z" fill="url(#paint1_radial_16349_2479)" />
-                      <path d="M12 15.5C10.0705 15.5 8.5 13.93 8.5 12C8.5 10.07 10.0705 8.5 12 8.5C13.9295 8.5 15.5 10.07 15.5 12C15.5 13.93 13.9295 15.5 12 15.5ZM12 9.5C10.6215 9.5 9.5 10.6215 9.5 12C9.5 13.3785 10.6215 14.5 12 14.5C13.3785 14.5 14.5 13.3785 14.5 12C14.5 10.6215 13.3785 9.5 12 9.5Z" fill="white" />
-                      <path d="M15.75 9C16.1642 9 16.5 8.66421 16.5 8.25C16.5 7.83579 16.1642 7.5 15.75 7.5C15.3358 7.5 15 7.83579 15 8.25C15 8.66421 15.3358 9 15.75 9Z" fill="white" />
-                      <path d="M15 18.5H9C7.0705 18.5 5.5 16.93 5.5 15V9C5.5 7.07 7.0705 5.5 9 5.5H15C16.9295 5.5 18.5 7.07 18.5 9V15C18.5 16.93 16.9295 18.5 15 18.5ZM9 6.5C7.6215 6.5 6.5 7.6215 6.5 9V15C6.5 16.3785 7.6215 17.5 9 17.5H15C16.3785 17.5 17.5 16.3785 17.5 15V9C17.5 7.6215 16.3785 6.5 15 6.5H9Z" fill="white" />
-                      <defs>
-                        <radialGradient id="paint0_radial_16349_2479" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(9.69 21.0166) scale(22.4495)">
-                          <stop stopColor="#FFDD55" />
-                          <stop offset="0.328" stopColor="#FF543F" />
-                          <stop offset="0.348" stopColor="#FC5245" />
-                          <stop offset="0.504" stopColor='var(--secondary)' />
-                          <stop offset="0.643" stopColor='var(--secondary)' />
-                          <stop offset="0.761" stopColor='var(--secondary)' />
-                          <stop offset="0.841" stopColor='var(--secondary)' />
-                        </radialGradient>
-
-                        <radialGradient id="paint1_radial_16349_2479" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(5.893 2.76929) scale(14.9065 9.9322)">
-                          <stop stopColor='var(--primary)' />
-                          <stop offset="0.999" stopColor='var(--primary)' stopOpacity="0" />
-                        </radialGradient>
-                      </defs>
-                    </svg>
-
-                    <svg onClick={() => shareTo("tiktok")} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                      <path d="M16 0H1.6C0.716 0 0 0.716 0 1.6V16C0 16.884 0.716 17.6 1.6 17.6H16C16.884 17.6 17.6 16.884 17.6 16V1.6C17.6 0.716 16.8832 0 16 0ZM14.9512 7.5792C14.8472 7.5888 14.7424 7.5952 14.6368 7.5952C13.4408 7.5952 12.3896 6.9808 11.7776 6.0504C11.7776 8.4896 11.7776 11.2656 11.7776 11.312C11.7776 13.46 10.036 15.2008 7.8888 15.2008C5.7416 15.2 4 13.4584 4 11.3112C4 9.1632 5.7416 7.4224 7.8888 7.4224C7.9704 7.4224 8.0496 7.4296 8.1288 7.4344V9.3512C8.0488 9.3416 7.9712 9.3272 7.8888 9.3272C6.7928 9.3272 5.904 10.216 5.904 11.312C5.904 12.408 6.792 13.2968 7.8888 13.2968C8.9856 13.2968 9.9536 12.4328 9.9536 11.3368C9.9536 11.2928 9.9728 2.4008 9.9728 2.4008H11.804C11.976 4.0384 13.2984 5.3312 14.9512 5.4496V7.5792Z" fill="black" />
-                    </svg>
-
-                    <svg onClick={() => shareTo("twitter")} xmlns="http://www.w3.org/2000/svg" width="18" height="16" viewBox="0 0 18 16" fill="none">
-                      <path d="M14.1761 0H16.9362L10.9061 6.7774L18 16H12.4456L8.0951 10.4066L3.11723 16H0.35544L6.80517 8.7508L0 0H5.69545L9.6279 5.11262L14.1761 0ZM13.2073 14.3754H14.7368L4.86441 1.53928H3.2232L13.2073 14.3754Z" fill="black" />
-                    </svg>
-
-                    <svg onClick={() => shareTo("whatsapp")} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M9.6 0C4.2984 0 0 4.2984 0 9.6C0 11.401 0.505873 13.0801 1.36875 14.5203L0.0859375 19.2L4.86562 17.9453C6.26348 18.74 7.87719 19.2 9.6 19.2C14.9016 19.2 19.2 14.9016 19.2 9.6C19.2 4.2984 14.9016 0 9.6 0ZM6.31406 5.12188C6.47006 5.12188 6.63035 5.12092 6.76875 5.12813C6.93995 5.13213 7.12629 5.14466 7.30469 5.53906C7.51669 6.00786 7.9783 7.18393 8.0375 7.30312C8.0967 7.42233 8.13865 7.56275 8.05625 7.71875C7.97785 7.87875 7.93708 7.97559 7.82188 8.11719C7.70268 8.25479 7.57206 8.42569 7.46406 8.52969C7.34486 8.64889 7.22178 8.77959 7.35938 9.01719C7.49697 9.25479 7.97485 10.0337 8.68125 10.6625C9.58925 11.4737 10.3554 11.723 10.5938 11.8422C10.8321 11.9614 10.9702 11.9428 11.1078 11.7828C11.2494 11.6268 11.7025 11.0915 11.8625 10.8531C12.0185 10.6147 12.1778 10.656 12.3938 10.7344C12.613 10.8128 13.7819 11.3886 14.0203 11.5078C14.2587 11.627 14.415 11.686 14.475 11.7828C14.5366 11.8828 14.5367 12.3589 14.3391 12.9141C14.1415 13.4685 13.1711 14.0046 12.7359 14.0422C12.2967 14.083 11.8868 14.2396 9.88125 13.45C7.46205 12.4972 5.93639 10.0194 5.81719 9.85938C5.69799 9.70337 4.84844 8.57113 4.84844 7.40313C4.84844 6.23112 5.46293 5.65715 5.67812 5.41875C5.89733 5.18035 6.15406 5.12188 6.31406 5.12188Z" fill="#62CE40" />
-                    </svg>
-                  </div>
-                </div> */}
-
-                {
-                  product?.products && product.products.length > 0 && (
-                    <Accordion title="Bundle Products">
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-2">
-                        {product.products.map((item) => (
-                          <div
-                            key={item.product_id}
-                            className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
-                            onClick={() => router.push(`/products/${item.product_id}`)}
-                          >
-                            {item.urls || item.images ? (
-                              <div className="w-full aspect-square relative rounded-md overflow-hidden bg-gray-100 border">
-                                <Image
-                                  src={getProductImageUrl(item.urls || item.images)}
-                                  alt={item.name}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                            ) : (<NoImage />)}
-                            <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">{item.name}</span>
-                            {item.discount_type && item.discount ? (
-                              <>
-                                <span className="text-[1.25rem] font-bold text-[#D0021B]">
-                                  {formatPrice(calculateDiscountedPrice(item.price, item.discount_type, item.discount))}
-                                </span>
-                                <span className="text-[0.875rem] text-gray-500 line-through">
-                                  {formatPrice(item.price)}
-                                </span>
-                              </>
-                            ) : (
-                              <span className="text-xs text-center mt-1 line-clamp-2 px-1 font-medium">KES {item.price.toLocaleString()}</span>
-                            )}
-                            {/* Bundle Quantity Badge */}
-                            {item.bundle_quantity && item.bundle_quantity > 0 && (
-                              <span className="bg-[#D0021B] text-white text-xs text-center font-semibold px-2 py-1 rounded-full shadow-sm">
-                                x{item.bundle_quantity}
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </Accordion>
-                  )
-                }
-                {
-                  warranty && <Accordion title="Warranty">
+                <BundleProductsAccordion products={product.products} />
+                {warranty && (
+                  <Accordion title="Warranty">
                     <span>{warranty}</span>
                   </Accordion>
-                }
-                {
-                  product.product_variants && <Accordion title="Specifications">
-                    <ul className="list-disc list-inside ml-5 mt-1">
-                      {Object.entries(groupedVariants)?.map(([variantType, names]) => (
-                        <li key={variantType} className="mb-2">
-                          <strong>{variantType}:</strong> {names.join(", ")}
-                        </li>
-                      ))}
-                    </ul>
-                  </Accordion>
-                }
+                )}
+                <SpecificationsAccordion
+                  hasVariants={Boolean(product.product_variants && product.product_variants.length > 0)}
+                  groupedVariants={groupedVariants}
+                />
               </div>
             </div>
           </div>
@@ -605,21 +538,18 @@ export default function ProductDetail() {
           <NowTrending title="You may also like" />
         </div>
 
-        {
-          product?.features?.length > 0 && <ProductFeatureSection
-            features={product?.features}
-          />
-        }
+        {Boolean(product.features?.length) && (
+          <ProductFeatureSection features={product.features!} />
+        )}
       </div>
-      {product && (
-        <VariantSelectionModal
-          product={product}
-          isOpen={isVariantModalOpen}
-          onClose={() => setIsVariantModalOpen(false)}
-          onConfirm={handleVariantSelectionConfirm}
-          loading={addToCartLoading}
-        />
-      )}
-    </Navigation >
+
+      <VariantSelectionModal
+        product={product}
+        isOpen={isVariantModalOpen}
+        onClose={() => setIsVariantModalOpen(false)}
+        onConfirm={handleVariantSelectionConfirm}
+        loading={addToCartLoading}
+      />
+    </Navigation>
   )
 }

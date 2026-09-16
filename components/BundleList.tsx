@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Bundle } from "@/lib/features/types";
 import React from "react";
 
@@ -7,12 +8,12 @@ interface Props {
     bundles: Bundle[];
 }
 
-export default function BundleList({ bundles }: Props) {
+export default function BundleList({ bundles }:Readonly< Props>) {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bundles.map((bundle, index) => (
+            {bundles.map((bundle) => (
                 <div
-                    key={index.toString()}
+                    key={bundle.id || bundle.product_id || bundle.name}
                     className="border rounded-2xl shadow-sm bg-white p-5"
                 >
                     <h2 className="text-lg font-semibold">{bundle.name}</h2>
@@ -34,11 +35,13 @@ export default function BundleList({ bundles }: Props) {
 
                     {/* Add first product image */}
                     {bundle.products?.[0]?.urls?.[0]?.url && (
-                        <div className="mt-4 w-full h-48 rounded-lg overflow-hidden">
-                            <img
+                        <div className="mt-4 w-full h-48 rounded-lg overflow-hidden relative">
+                            <Image
                                 src={bundle.products[0].urls[0].url}
                                 alt={bundle.products[0].name}
-                                className="object-cover w-full h-full"
+                                fill
+                                unoptimized
+                                className="object-cover"
                             />
                         </div>
                     )}

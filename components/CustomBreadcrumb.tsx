@@ -12,7 +12,7 @@ import {
 import { Crumb } from "@/lib/features/types"
 import React from "react"
 
-export default function CustomBreadcrumb({ crumbs }: { crumbs: Crumb[] }) {
+export default function CustomBreadcrumb({ crumbs }: Readonly<{ crumbs: Crumb[] }>) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -28,7 +28,7 @@ export default function CustomBreadcrumb({ crumbs }: { crumbs: Crumb[] }) {
         </BreadcrumbItem>
 
         {crumbs?.map((crumb, idx) => (
-          <React.Fragment key={idx}>
+          <React.Fragment key={`${crumb.name}-${crumb.link}`}>
             <BreadcrumbSeparator />
 
             <BreadcrumbItem>

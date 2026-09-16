@@ -8,9 +8,11 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { triggerToast } from '@/app/utils/toastUtils';
 import LoadingIndicator from './LoadingIndicator';
 
+const OTP_SLOTS = ["otp-input-0", "otp-input-1", "otp-input-2", "otp-input-3"];
+
 export default function OtpForm() {
     const length = 4;
-    const [code, setCode] = useState<string[]>(Array(length).fill(""));
+    const [code, setCode] = useState<string[]>(new Array(length).fill(""));
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
     const dispatch = useAppDispatch()
     const emailOrPhone = useAppSelector(selectPhoneOrEmailValue)
@@ -20,8 +22,8 @@ export default function OtpForm() {
     const [resendAvailable, setResendAvailable] = useState(true)
     const [secondsLeft, setSecondsLeft] = useState(0)
     const otpResendExpiry = useAppSelector(selectOtpResendExpiry)
-    const isEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    const isPhone = (value: string) => /^\+?[0-9]{7,15}$/.test(value);
+    const isEmail = (value: string) => /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(value);
+    const isPhone = (value: string) => /^\+?\d{7,15}$/.test(value);
     const token = useAppSelector(selectUserToken)
 
     const focusAt = (idx: number) => {
@@ -50,40 +52,50 @@ export default function OtpForm() {
         if (idx < length - 1) focusAt(Math.min(idx + digits.length, length - 1));
     };
 
-    const handleKeyDown = (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Backspace") {
-            if (code[idx]) return;
-            if (idx > 0) {
-                const prev = [...code];
-                prev[idx - 1] = "";
-                setCode(prev);
-                focusAt(idx - 1);
-                e.preventDefault();
-            }
-        }
-
-        if (e.key === "ArrowLeft" && idx > 0) {
+    const handleBackspace = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (code[idx]) return;
+        if (idx > 0) {
+            const prev = [...code];
+            prev[idx - 1] = "";
+            setCode(prev);
             focusAt(idx - 1);
             e.preventDefault();
         }
+    };
 
-        if (e.key === "ArrowRight" && idx < length - 1) {
-            focusAt(idx + 1);
-            e.preventDefault();
+    const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        const otpValue = code.join("").trim();
+        if (otpValue.length === length) {
+            handleSubmit(e as any);
+            return;
         }
 
-        if (e.key === "Enter") {
-            const otpValue = code.join("").trim();
+        triggerToast(`Please enter all ${length} digits of the code`, "error");
+        const firstEmpty = code.indexOf("");
+        if (firstEmpty !== -1) focusAt(firstEmpty);
+    };
 
-            if (otpValue.length === length) {
-                handleSubmit(e as any);
-            } else {
-                triggerToast(`Please enter all ${length} digits of the code`, "error");
-                const firstEmpty = code.findIndex((c) => c === "");
-                if (firstEmpty !== -1) focusAt(firstEmpty);
-            }
-
-            e.preventDefault();
+    const handleKeyDown = (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+        switch (e.key) {
+            case "Backspace":
+                handleBackspace(idx, e);
+                break;
+            case "ArrowLeft":
+                if (idx > 0) {
+                    focusAt(idx - 1);
+                    e.preventDefault();
+                }
+                break;
+            case "ArrowRight":
+                if (idx < length - 1) {
+                    focusAt(idx + 1);
+                    e.preventDefault();
+                }
+                break;
+            case "Enter":
+                handleEnter(e);
+                break;
         }
     };
 
@@ -187,10 +199,8 @@ export default function OtpForm() {
                     router.replace(successRedirect);
                 }
             }
-        } else {
-            if (message) {
-                triggerToast(message, "error");
-            }
+        } else if (message) {
+            triggerToast(message, "error");
         }
     }
 
@@ -204,8 +214,8 @@ export default function OtpForm() {
             return;
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^[0-9]{7,15}$/; // simple phone check
+        const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
+        const phoneRegex = /^\d{7,15}$/; // simple phone check
 
         if (emailRegex.test(emailOrPhone)) {
             dispatch(verifyOtpAsync({ email: emailOrPhone, otp: otpValue }))
@@ -239,13 +249,13 @@ export default function OtpForm() {
             <input type="hidden" name="otp" value={value} />
 
             <div className="flex flex-row justify-center items-center gap-x-[1rem] justify-items-center">
-                {code.map((digit, idx) => (
+                {OTP_SLOTS.map((slotKey, idx) => (
                     <Input
-                        key={idx}
+                        key={slotKey}
                         ref={(el) => {
                             inputsRef.current[idx] = el
                         }}
-                        value={digit}
+                        value={code[idx]}
                         onChange={handleChange(idx)}
                         onKeyDown={handleKeyDown(idx)}
                         onPaste={handlePaste(idx)}
@@ -262,14 +272,16 @@ export default function OtpForm() {
             <div className='mt-[1.5rem]'>
                 <p className='text-[color:var(--Color-Scheme-1-Foreground,#FFF)] text-center font-poppins text-[0.875rem] font-normal leading-[195%]'>
                     You didn’t receive any code? {" "}
-                    <button
+                    <Button
+                        type="button"
+                        variant="link"
                         style={{ cursor: !resendAvailable ? 'not-allowed' : 'pointer' }}
                         disabled={!resendAvailable}
                         onClick={handleRequestOtp}
-                        className='underline h-[2rem]'
+                        className='underline h-[2rem] text-white p-0 font-normal inline-flex'
                     >
                         {resendAvailable ? 'Resend Code' : `Resend in ${secondsLeft}s`}
-                    </button>
+                    </Button>
                 </p>
             </div>
 

@@ -14,7 +14,7 @@ type AddNewAddressProps = {
     editAdressDetails: MyAddress;
 };
 
-export default function EditAdress({ setEditAdress, editAdressDetails }: AddNewAddressProps) {
+export default function EditAdress({ setEditAdress, editAdressDetails }: Readonly<AddNewAddressProps>) {
     const profile = useAppSelector(selectUserProfile)
     const dispatch = useAppDispatch()
     const [isFormValid, setIsFormValid] = useState(false);

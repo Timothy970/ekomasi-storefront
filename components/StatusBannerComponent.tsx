@@ -1,6 +1,6 @@
 import { RETURN_STATUS } from "@/lib/utils";
 
-const StatusBanner = ({ status }: { status: string }) => {
+const StatusBanner = ({ status }: Readonly<{ status: string }>) => {
     const STATUS_CONFIG = {
         [RETURN_STATUS.REJECTED]: {
             bg: "bg-[#FF3B308F]",

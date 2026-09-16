@@ -2,9 +2,9 @@ import RatingProgressBar from "./RatingProgressBar";
 
 export default function RatingBreakdown({
   score_counts,
-}: {
+}: Readonly<{
   score_counts: { score: number; count: number }[];
-}) {
+}>) {
   const ratings: Record<number, number> = {
     1: 0,
     2: 0,

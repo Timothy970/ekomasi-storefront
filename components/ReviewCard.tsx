@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 
 interface ReviewCardProps {
   user: string;
@@ -27,15 +27,20 @@ export default function ReviewCard({
   created_at,
   score,
   details,
-}: ReviewCardProps) {
-  const stars = Array(5).fill(0);
+}: Readonly<ReviewCardProps>) {
+  const baseId = useId();
+  const stars = Array.from({ length: 5 }, (_, i) => `${baseId}-star-${i}`);
 
   return (
     <div className="p-[2rem] border border-[#CCC] rounded-[0.5rem] gap-[1rem] mb-6">
       <div className="flex items-center justify-between mb-2">
         <div className="flex gap-1">
-          {stars.map((_, i) =>
-            i < score ? <StarIcon key={i} /> : <div key={i} className="w-[20px] h-[19px]" />
+          {stars.map((starKey, i) =>
+            i < score ? (
+              <StarIcon key={starKey} />
+            ) : (
+              <div key={starKey} className="w-[20px] h-[19px]" />
+            )
           )}
         </div>
         <span className="text-[#666] font-[400]">

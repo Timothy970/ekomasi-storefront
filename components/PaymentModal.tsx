@@ -17,12 +17,11 @@ interface ReviewModalProps {
     order: Order;
 }
 
-export default function PaymentModal({ order, openPaymentModal }: ReviewModalProps) {
+export default function PaymentModal({ order, openPaymentModal }: Readonly<ReviewModalProps>) {
     const { setOpenPaymentModal } = usePayment();
     const [formData, setFormData] = useState<PaymentFormData>({ phone_number: "", order_id: "" });
     const [status, setStatus] = useState<"idle" | "loading">("idle");
     const [isFormValid, setIsFormValid] = useState(false);
-    const [blurDone, setBlurDone] = useState(false);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -42,7 +41,7 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
 
             if (!phone) return prev;
 
-            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phone)) return prev;
+            if (/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(phone)) return prev;
 
             phone = phone.trim().replace(/\D/g, "");
 
@@ -52,14 +51,11 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
 
             return { ...prev, [name]: phone };
         });
-
-        setBlurDone(true);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setBlurDone(false);
     };
 
     const handleReviewResponse = (message: string, type: ToastType) => {
@@ -99,13 +95,17 @@ export default function PaymentModal({ order, openPaymentModal }: ReviewModalPro
 
     return (
         <div className="absolute inset-0 z-[60] h-screen w-screen flex justify-center items-center">
-            <div
-                className="absolute bg-black/50 z-[65] h-screen w-screen"
+            <button
+                type="button"
+                aria-label="Close modal overlay"
+                className="absolute bg-black/50 z-[65] h-screen w-screen cursor-default"
                 onClick={() => setOpenPaymentModal(false)}
             />
 
             <div className="bg-white flex hide-scrollbar flex-col items-center p-[3rem] gap-y-[1rem] rounded m-[1rem] z-[70] relative">
                 <button
+                    type="button"
+                    aria-label="Close modal"
                     onClick={() => setOpenPaymentModal(false)}
                     className="absolute top-[1rem] right-[1rem] p-[0.25rem] hover:bg-gray-100 rounded"
                 >

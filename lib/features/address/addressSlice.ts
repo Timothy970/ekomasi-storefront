@@ -2,14 +2,14 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { MyAddress, UserAddressPayload } from "../types";
 import { deleteUserAddress, editUserAddress, getUserAddress, postUserAddress } from "./addressAPI";
 
-interface addressSliceState {
+interface AddressSliceState {
 	address: MyAddress[] | null;
 	status: "idle" | "loading" | "failed";
 	message: string;
 	success: boolean;
 }
 
-const initialState: addressSliceState = {
+const initialState: AddressSliceState = {
 	address: null,
 	status: "idle",
 	message: "",
@@ -150,10 +150,10 @@ export const addressSlice = createAppSlice({
 		),
 	}),
 	selectors: {
-		selectAddress: (state: addressSliceState) => state.address,
-		selectStatus: (state: addressSliceState) => state.status,
-		selectSuccess: (state: addressSliceState) => state.success,
-		selectMessage: (state: addressSliceState) => state.message,
+		selectAddress: (state: AddressSliceState) => state.address,
+		selectStatus: (state: AddressSliceState) => state.status,
+		selectSuccess: (state: AddressSliceState) => state.success,
+		selectMessage: (state: AddressSliceState) => state.message,
 	},
 });
 

@@ -2,7 +2,7 @@ import React from 'react'
 import type { Product } from '@/lib/features/types'
 import CategoryProductCard from './CategoryProductCard'
 
-export default function CategoryProducts({ products, gridCols = 3 }: { products: Product[], gridCols?: number }) {
+export default function CategoryProducts({ products, gridCols = 3 }: Readonly<{ products: Product[], gridCols?: number }>) {
     return (
         <div className="mt-[2rem] lg:mt-[2.5rem]">
             {

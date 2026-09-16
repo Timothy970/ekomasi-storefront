@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type { VariantGroup } from "@/lib/features/types"
 
-export default function Variant({ variant }: { variant: VariantGroup }) {
+export default function Variant({ variant }: Readonly<{ variant: VariantGroup }>) {
     const pathname = usePathname()
     const router = useRouter()
     const searchParamsFromHook = useSearchParams()
@@ -60,10 +60,8 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         let updatedOpenList = [...openList]
         if (isOpen) {
             updatedOpenList = updatedOpenList.filter(name => name !== variantName)
-        } else {
-            if (!updatedOpenList.includes(variantName)) {
-                updatedOpenList.push(variantName)
-            }
+        } else if (!updatedOpenList.includes(variantName)) {
+            updatedOpenList.push(variantName)
         }
 
         if (updatedOpenList.length > 0) {
@@ -72,7 +70,8 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
             params.delete(paramKey)
         }
 
-        const newUrl = `${pathname}${params.toString() ? `?${params.toString()}` : ""}`
+        const queryString = params.toString()
+        const newUrl = queryString ? `${pathname}?${queryString}` : pathname
         router.push(newUrl, { scroll: false })
     }
 
@@ -97,7 +96,7 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
         })
 
         const newQuery = updatedParams.toString()
-        const newUrl = `${pathname}${newQuery ? `?${newQuery}` : ""}`
+        const newUrl = newQuery ? `${pathname}?${newQuery}` : pathname
         router.replace(newUrl, { scroll: false })
     }
 
@@ -109,9 +108,11 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
 
     return (
         <div className="flex flex-col mb-[1rem]">
-            <div
-                className="bg-secondary-tenant w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none"
-                onClick={() => toggleDropdown()}
+            <button
+                type="button"
+                aria-expanded={isOpen}
+                className="bg-secondary-tenant w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none text-left"
+                onClick={toggleDropdown}
             >
                 <h2 className="text-custom-black font-bold text-[0.875rem] lg:text-[1rem] leading-[1.6875rem] capitalize">
                     {variant?.variant_type?.replace(/_/g, " ")}
@@ -131,16 +132,16 @@ export default function Variant({ variant }: { variant: VariantGroup }) {
                 >
                     <path d="M6 9l6 6 6-6" />
                 </svg>
-            </div>
+            </button>
 
             <div ref={contentRef} className="overflow-hidden" style={heightStyle}>
                 <div className="flex flex-col gap-y-[1rem] p-[0.5rem]">
-                    {variant?.variants?.map((item, index) => {
+                    {variant?.variants?.map((item) => {
                         const isChecked = checkedValues.includes(item.name)
                         const colorName = item?.name?.toLowerCase() || "#fff"
 
                         return (
-                            <div key={index} className="flex items-center justify-strart flex-row gap-x-[0.75rem]">
+                            <div key={item.variant_id || item.name} className="flex items-center justify-strart flex-row gap-x-[0.75rem]">
                                 {isColorVariant && <div style={{ backgroundColor: colorName }} className="rounded-full border border-black bg-green-600 h-[1rem] w-[1rem]"></div>}
                                 <div className="flex justify-start items-center gap-x-[0.5rem]">
                                     <Checkbox

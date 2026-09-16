@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./ui/button";
@@ -91,10 +92,13 @@ export default function HomeBanner() {
                     transition={{ duration: 0.5 }}
                     className="relative h-[34.375rem] md:h-[30.125rem] lg:h-[34.75rem]"
                 >
-                    <img
+                    <Image
                         src={slides[current].image_url}
                         alt={slides[current].heading}
-                        className="w-full h-full object-cover"
+                        fill
+                        priority
+                        unoptimized
+                        className="object-cover"
                     />
                     <div className="absolute inset-0 lg:bg-black/40 flex flex-col justify-center items-center text-center">
                         <div className="bg-black/40 lg:bg-transparent p-4 w-[80%] lg:max-w-[55rem]">
@@ -142,9 +146,9 @@ export default function HomeBanner() {
                     </div>
 
                     <div className="absolute w-[10rem] lg:w-[25rem] flex justify-start items-center space-x-[1.47rem] px-[1rem] lg:px-[3rem] h-[1.5rem]">
-                        {slides.map((_, index) => (
+                        {slides.map((slide, index) => (
                             <button
-                                key={index}
+                                key={slide.id ?? index}
                                 onClick={() => setCurrent(index)}
                                 className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
                             >

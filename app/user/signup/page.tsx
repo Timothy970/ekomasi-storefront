@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import SocialLogins from '@/components/SocialLogins'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { resetMessage, resetSuccess, selectMessage, selectStatus, selectUserToken, signUpUserAsync } from '@/lib/features/user/userSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -28,8 +27,8 @@ export default function SignUp() {
     function handlePhoneOrEmail(e: React.FormEvent) {
         e.preventDefault()
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        const phoneRegex = /^[0-9]{12}$/
+        const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/
+        const phoneRegex = /^\d{12}$/
 
         if (emailRegex.test(phoneOrEmail)) {
             setError("")
@@ -44,8 +43,8 @@ export default function SignUp() {
 
     useEffect(() => {
         if (message === "Account created successfully. Please check your email/phone for activation.") {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-            const phoneRegex = /^[0-9]{12}$/
+            const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/
+            const phoneRegex = /^\d{12}$/
 
             if (emailRegex.test(phoneOrEmail)) {
                 triggerToast("Verify using the OTP sent to your email within 10 minutes to complete registration.", "success");
@@ -83,15 +82,9 @@ export default function SignUp() {
         }
     }, [token, router]);
 
-    const handleLogin = () => {
-        const redirect = searchParams.get("redirect")
+    const redirect = searchParams.get("redirect")
+    const loginUrl = redirect ? `/user/login?redirect=${redirect}` : "/user/login";
 
-        if (redirect) {
-            router.push(`/user/login?redirect=${redirect}`);
-        } else {
-            router.push(`/user/login`);
-        }
-    }
 
     return (
         <div className='h-screen w-screen flex flex-col lg:flex-row justify-center items-center px-[1.25rem]'>
@@ -124,7 +117,7 @@ export default function SignUp() {
                                 value={phoneOrEmail}
                                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                                 onBlur={() => {
-                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                                    const emailRegex = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/
                                     let value = phoneOrEmail.trim()
 
                                     if (!emailRegex.test(value)) {
@@ -182,9 +175,12 @@ export default function SignUp() {
                         <div className='flex flex-row justify-center items-center gap-x-[0.31rem] mt-[0.75rem]'>
                             <span className='font-poppins text-[0.875rem] font-normal leading-[195%] text-center text-[var(--Color-Scheme-1-Text,#000)]'>Already have an account?</span>
 
-                            <div onClick={handleLogin} className='cursor-pointer'>
-                                <span className='font-roboto text-[0.875rem] cursor-pointer font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'>Login</span>
-                            </div>
+                            <Link
+                                href={loginUrl}
+                                className='font-roboto text-[0.875rem] cursor-pointer font-normal leading-[150%] text-center text-[var(--Colors-Blue,#007AFF)] underline decoration-solid underline-offset-auto'
+                            >
+                                Login
+                            </Link>
                         </div>
                     </div>
                 </div>

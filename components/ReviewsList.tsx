@@ -7,8 +7,8 @@ export default function ReviewsList() {
 
     return (
         <div>
-            {reviews?.reviews.map((review, i) => (
-                <ReviewCard key={i} {...review} />
+            {reviews?.reviews.map((review) => (
+                <ReviewCard key={review.review_id} {...review} />
             ))}
         </div>
     );

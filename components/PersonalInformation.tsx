@@ -34,7 +34,7 @@ type PersonalInformationProps = {
     readonly onLocationIdChange?: (locationId: string | null) => void
 };
 
-export default function PersonalInformation(props: PersonalInformationProps) {
+export default function PersonalInformation(props: Readonly<PersonalInformationProps>) {
     const { page, cart, isBuyNow, processPayment, onLocationIdChange } = props;
     const [formData, setFormData] = useState<FormData>({
         firstName: '',
@@ -202,7 +202,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
 
             if (!phone) return prev;
 
-            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phone)) return prev;
+            if (/^[^\s@]+@(?:[^\s@.]+\.)+[^\s@.]+$/.test(phone)) return prev;
 
             phone = phone.trim().replace(/\D/g, "");
 
@@ -265,7 +265,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
 
     const orderPayload = (formData: FormData) => {
         let payload = {
-            is_guest_order: page === "member" ? false : true,
+            is_guest_order: page !== "member",
             guest_delivery_address: {
                 street: formData?.address,
                 apartment: formData?.apartment,
@@ -329,7 +329,7 @@ export default function PersonalInformation(props: PersonalInformationProps) {
         }
     };
 
-    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, fail = false, message = '', delivery_id: string, skipPayment = false) => {
+    const redirectToOrderDetails = (order_id: string, data: MemberOrderPayload, page: string, delivery_id: string, fail = false, message = '', skipPayment = false) => {
         if (skipPayment) {
             triggerToast("Order placed successfully!", "success");
             dispatch(clearCartState());
@@ -681,7 +681,6 @@ export default function PersonalInformation(props: PersonalInformationProps) {
                                 onClick={() => {
                                     if (!isFormValid) {
                                         triggerToast("Please fill out all required fields before continuing.", "error");
-                                        return;
                                     }
                                 }}
                                 className={`h-[2.5rem] md:max-w-[19rem] bg-secondary-tenant ${!isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}

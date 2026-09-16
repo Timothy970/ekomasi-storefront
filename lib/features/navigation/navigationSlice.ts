@@ -2,13 +2,15 @@ import { createAppSlice } from "@/lib/createAppSlice";
 import { Category, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeBannerInfo, HomeDataWrapper, MinMaxData, Pagination, Partner, Product, ProductBundleData, ProductFeature, Review, SingleReview, StaticContent, SubcategoryProducts, Warehouse, } from "../types";
 import { getBanners, getCategories, getCategoryById, getDealById, getDeals, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getPartners, getProduct, getProductBundles, getProductFeatures, getProductReview, getProductReviews, getStaticContents, getSubCategoryById, getWarehouses } from "./navigationAPI";
 
+export type Status = "idle" | "loading" | "failed";
+
 interface NavigationSliceState {
 	categories: Category[] | null;
 	category: Category | null;
 	subcategory: SubcategoryProducts | null;
-	status: "idle" | "loading" | "failed";
-	productStatus: "idle" | "loading" | "failed";
-	dealsStatus: "idle" | "loading" | "failed";
+	status: Status;
+	productStatus: Status;
+	dealsStatus: Status;
 	message: string;
 	success: boolean;
 	homeData: HomeDataWrapper | null;
@@ -147,7 +149,7 @@ export const navigationSlice = createAppSlice({
 		),
 		getSubCategoryAsync: create.asyncThunk(
 			async ({ id, page, size, query }: { id: string; page?: number; size?: number, query: string }) => {
-				const response = await getSubCategoryById(id, page, size, query);
+				const response = await getSubCategoryById(id, query, page, size);
 				return response;
 			},
 			{

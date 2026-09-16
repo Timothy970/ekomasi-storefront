@@ -12,7 +12,7 @@ type CheckoutCartSummaryProps = {
     locationId?: number | null;
 };
 
-export default function CheckoutCartSummary({ cart, cartId, isBuyNow, locationId }: CheckoutCartSummaryProps) {
+export default function CheckoutCartSummary({ cart, cartId, isBuyNow, locationId }: Readonly<CheckoutCartSummaryProps>) {
     const token = useAppSelector(selectUserToken)
 
     return (

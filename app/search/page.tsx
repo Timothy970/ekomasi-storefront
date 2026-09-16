@@ -7,7 +7,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ProductListingLayout from '@/components/ProductListingLayout'
 import { useFilterQuery } from '../ClientLayout'
 import { Crumb } from '@/lib/features/types'
-import { triggerToast } from '../utils/toastUtils'
 
 export default function search() {
     const dispatch = useAppDispatch()

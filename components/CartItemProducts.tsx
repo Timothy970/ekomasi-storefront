@@ -4,12 +4,12 @@ import { Button } from './ui/button'
 import { CartItem } from '@/lib/features/types'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { useParams, useRouter } from 'next/navigation'
-import { deleteProductFromCartAsync, getCartAsync, selectCart, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
+import { deleteProductFromCartAsync, getCartAsync, selectCartId, updateCartAsync } from '@/lib/features/cart/cartSlice'
 import { customParser } from '@/lib/utils'
 import NoImage from './NoImage'
 import { calculateDiscountedPrice } from '@/lib/utils/priceUtils'
 
-export default function CartItemProducts({ item, hideBtns }: { item: CartItem, hideBtns: boolean }) {
+export default function CartItemProducts({ item, hideBtns }: Readonly<{ item: CartItem, hideBtns: boolean }>) {
     const dispatch = useAppDispatch()
     const params = useParams<{ cart_id: string }>()
     const router = useRouter()
@@ -115,7 +115,7 @@ export default function CartItemProducts({ item, hideBtns }: { item: CartItem, h
                 <div className='text-[0.875rem] md:text-[1.125rem] font-medium'>{customParser(item?.product?.description)}</div>
 
                 {
-                    item?.product && item?.product?.stock_quantity && item?.product?.stock_quantity > 0 ? <div className='flex items-center gap-x-[0.5rem]'>
+                    (item?.product?.stock_quantity ?? 0) > 0 ? <div className='flex items-center gap-x-[0.5rem]'>
                         <span className='text-base text-[#16A34A]'>In Stock</span>
                     </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
                         <span className='text-base'>Sold Out:</span>
