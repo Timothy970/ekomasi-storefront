@@ -1,0 +1,27 @@
+import { RootState } from "@/lib/store";
+
+export const selectCategories = (state: RootState) => state.navigation.categories || null;
+export const selectCategory = (state: RootState) => state.navigation.category || null;
+export const selectFeatured = (state: RootState) => state.navigation.featured || null;
+export const selectProduct = (state: RootState) => state.navigation.product || null;
+export const selectProductBundles = (state: RootState) => state.navigation.productBundles || null;
+export const selectSubCategory = (state: RootState) => state.navigation.subcategory || null;
+export const selectPagination = (state: RootState) => state.navigation.pagination || null;
+export const selectHomeData = (state: RootState) => state.navigation.homeData?.data || null;
+export const selectStatus = (state: RootState) => state.navigation.status;
+export const selectProductStatus = (state: RootState) => state.navigation.productStatus;
+export const selectSuccess = (state: RootState) => state.navigation.success;
+export const selectMessage = (state: RootState) => state.navigation.message;
+export const selectMinMaxPriceRange = (state: RootState) => state.navigation.minMaxPriceRange;
+export const selectStaticContents = (state: RootState) => state.navigation.staticContents || [];
+export const selectProductFeatures = (state: RootState) => state.navigation.productFeatures || [];
+export const selectDeals = (state: RootState) => state.navigation.deals || null;
+export const selectDeal = (state: RootState) => state.navigation.deal || null;
+export const selectDealStatus = (state: RootState) => state.navigation.dealsStatus || null;
+export const selectProductReviews = (state: RootState) => state.navigation.productReviews || null;
+export const selectProductReview = (state: RootState) => state.navigation.productReview || null;
+export const selectReviewPagination = (state: RootState) => state.navigation.reviewPagination || null;
+export const selectWarehouses = (state: RootState) => state.navigation.warehouses;
+export const selectWarehousePagination = (state: RootState) => state.navigation.wareHousePagination;
+export const selectBanners = (state: RootState) => state.navigation.banners || null;
+export const selectPartners = (state: RootState) => state.navigation.partners || null;
