@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import axios from 'axios';
 
 import { activeTheme } from '@/lib/config/theme';
+import LoadingIndicator from '@/components/LoadingIndicator';
 
 export type Tenant = {
     id: number;
@@ -222,7 +223,11 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
     const queryVal = React.useMemo(() => ({ query, setQuery }), [query]);
 
     if (!mounted || tenantLoading) {
-        return <div className="min-h-screen flex justify-center items-center font-sans">Loading store...</div>;
+        return (
+            <div className="min-h-screen flex justify-center items-center bg-[var(--background)]">
+                <LoadingIndicator size="xl" text="Loading Store..." />
+            </div>
+        );
     }
 
     return (

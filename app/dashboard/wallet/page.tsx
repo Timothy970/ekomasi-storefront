@@ -5,6 +5,7 @@ import DashboardLayout from '@/components/AppLayout/DashboardLayout'
 import Navigation from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Wallet, ArrowDownRight, ArrowUpRight, Plus, RefreshCw, CreditCard, ShieldCheck, Loader2 } from 'lucide-react'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import { selectUserProfile } from '@/lib/features/user/userSlice'
 import { useTenant } from '@/app/ClientLayout'
@@ -88,7 +89,7 @@ export default function WalletDashboardPage() {
                   <span>My In-App Wallet & Store Credit</span>
                 </div>
                 <div className="text-3xl md:text-5xl font-extrabold tracking-tight flex items-center gap-3">
-                  {status === 'loading' && <Loader2 className="w-8 h-8 animate-spin" />}
+                  {status === 'loading' && <LoadingIndicator size="sm" />}
                   KES {(balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </div>
                 <p className="text-xs text-white/80">

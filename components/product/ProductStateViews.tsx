@@ -1,12 +1,13 @@
 import React from 'react';
 import Navigation from '@/components/Navigation';
 import { ShoppingBag } from 'lucide-react';
+import LoadingIndicator from '@/components/LoadingIndicator';
 
 export function ProductLoadingView() {
   return (
     <Navigation>
       <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4">
-        <div className="w-12 h-12 border-4 border-secondary-tenant/30 border-t-[var(--secondary)] rounded-full animate-spin"></div>
+        <LoadingIndicator size="lg" text="Loading Product Details..." />
       </div>
     </Navigation>
   );

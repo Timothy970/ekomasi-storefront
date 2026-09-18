@@ -241,3 +241,31 @@
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* ─── Luxury Modern Loader Animations ─── */
+@keyframes luxury-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes luxury-spin-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes luxury-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.92); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.animate-luxury-spin {
+  animation: luxury-spin 2.2s linear infinite;
+}
+
+.animate-luxury-spin-reverse {
+  animation: luxury-spin-reverse 1.6s linear infinite;
+}
+
+.animate-luxury-pulse {
+  animation: luxury-pulse 2s ease-in-out infinite;
+}
+

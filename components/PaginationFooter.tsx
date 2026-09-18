@@ -2,6 +2,7 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Pagination } from "@/lib/features/types";
+import LoadingIndicator from "./LoadingIndicator";
 
 interface PaginationFooterProps {
     pagination: Pagination | null;
@@ -21,8 +22,8 @@ export default function PaginationFooter({
             <tfoot className="bg-white w-full border-b-0 rounded-[1.25rem]">
                 <tr>
                     <td colSpan={colSpan} className="p-2">
-                        <div className="flex justify-center items-center w-full py-2 text-gray-400 text-sm">
-                            Loading...
+                        <div className="flex justify-center items-center w-full py-2">
+                            <LoadingIndicator size="sm" />
                         </div>
                     </td>
                 </tr>

@@ -9,6 +9,8 @@ import "react-quill-new/dist/quill.snow.css";
 import Navigation from './Navigation';
 import CustomBreadcrumb from './CustomBreadcrumb';
 
+import LoadingIndicator from './LoadingIndicator';
+
 // Custom styles for static page content to support Quill alignment and image wrapping
 const staticPageStyles = `
   .static-content-container .ql-align-center {
@@ -69,7 +71,13 @@ export default function StaticContentPage({ contentPath }: Readonly<StaticConten
   }, [staticContents, contentPath]);
 
   if (!content) {
-    return <div>Loading...</div>;
+    return (
+      <Navigation>
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <LoadingIndicator size="lg" text="Loading content..." />
+        </div>
+      </Navigation>
+    );
   }
 
   return (
