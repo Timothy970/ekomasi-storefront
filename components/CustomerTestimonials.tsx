@@ -7,20 +7,20 @@ const slides = [
     {
         id: 1,
         testimony:
-            "“My daughter-in-law is pretty particular (in a good way!), so I was nervous about buying baby gifts. The Ekomasi customer service team helped me pick the perfect items for my new grandson. She was thrilled and said 'Finally, someone who gets what new parents actually need!' Made this grandma very happy”",
-        name: "Linda K",
+            "“The sillage and longevity of the Oud & Amber blend is unlike anything in my collection. It leaves an intoxicating trail that draws compliments wherever I go. Truly haute perfumery at its finest.”",
+        name: "Genevieve L., Paris",
         stars: 5,
     },
     {
         id: 2,
-        testimony: "“Excellent customer service helped me choose gifts. Really satisfied!”",
-        name: "John D",
-        stars: 4,
+        testimony: "“The bespoke discovery set arrived like an exquisite treasure box with hand-stamped wax seals. Finding my signature fragrance has never felt more luxurious.”",
+        name: "Julian V., London",
+        stars: 5,
     },
     {
         id: 3,
-        testimony: "“Quick delivery and quality products. Highly recommend Ekomasi!”",
-        name: "Sarah M",
+        testimony: "“A rare olfactory masterpiece. The vibrant top notes transition into velvety damask rose and smoky cedar that lasts from dawn to midnight. Impeccable.”",
+        name: "Sophia R., New York",
         stars: 5,
     },
 ];

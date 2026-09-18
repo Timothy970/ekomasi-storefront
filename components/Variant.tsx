@@ -114,7 +114,7 @@ export default function Variant({ variant }: Readonly<{ variant: VariantGroup }>
                 className="bg-secondary-tenant w-full flex justify-between items-center py-[1rem] min-h-[2.5rem] px-[0.5rem] cursor-pointer select-none text-left"
                 onClick={toggleDropdown}
             >
-                <h2 className="text-custom-black font-bold text-[0.875rem] lg:text-[1rem] leading-[1.6875rem] capitalize">
+                <h2 className="text-muted font-bold text-[0.875rem] lg:text-[1rem] leading-[1.6875rem] capitalize">
                     {variant?.variant_type?.replace(/_/g, " ")}
                 </h2>
 
@@ -138,11 +138,11 @@ export default function Variant({ variant }: Readonly<{ variant: VariantGroup }>
                 <div className="flex flex-col gap-y-[1rem] p-[0.5rem]">
                     {variant?.variants?.map((item) => {
                         const isChecked = checkedValues.includes(item.name)
-                        const colorName = item?.name?.toLowerCase() || "#fff"
+                        const colorName = item?.name?.toLowerCase() || "transparent"
 
                         return (
                             <div key={item.variant_id || item.name} className="flex items-center justify-strart flex-row gap-x-[0.75rem]">
-                                {isColorVariant && <div style={{ backgroundColor: colorName }} className="rounded-full border border-black bg-green-600 h-[1rem] w-[1rem]"></div>}
+                                {isColorVariant && <div style={{ backgroundColor: colorName }} className="rounded-full border border-border h-[1rem] w-[1rem]"></div>}
                                 <div className="flex justify-start items-center gap-x-[0.5rem]">
                                     <Checkbox
                                         checked={isChecked}

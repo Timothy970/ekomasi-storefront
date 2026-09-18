@@ -1,2 +1,529 @@
-export * from './navigationSlice_part1';
-export * from './navigationSlice_part2';
+import { createAppSlice } from "@/lib/createAppSlice";
+import { Category, FeaturedProduct, FlashSaleDealData, FlashSaleDealsData, HomeBannerInfo, HomeDataWrapper, MinMaxData, Pagination, Partner, Product, ProductBundleData, ProductFeature, Review, SingleReview, StaticContent, SubcategoryProducts, Warehouse, } from "../types";
+import { getBanners, getCategories, getCategoryById, getDealById, getDeals, getFeaturedProducts, getHomeDate, getMinMaxPriceRange, getPartners, getProduct, getProductBundles, getProductFeatures, getProductReview, getProductReviews, getStaticContents, getSubCategoryById, getWarehouses } from "./navigationAPI";
+
+export type Status = "idle" | "loading" | "failed";
+
+interface NavigationSliceState {
+	categories: Category[] | null;
+	category: Category | null;
+	subcategory: SubcategoryProducts | null;
+	status: Status;
+	productStatus: Status;
+	dealsStatus: Status;
+	message: string;
+	success: boolean;
+	homeData: HomeDataWrapper | null;
+	pagination: Pagination | null;
+	featured: FeaturedProduct[] | null;
+	product: Product | null;
+	minMaxPriceRange: MinMaxData | null;
+	staticContents: StaticContent[] | [];
+	productFeatures: ProductFeature[] | [];
+	productReviews: Review | null;
+	productReview: SingleReview | null;
+	productBundles: ProductBundleData | null;
+	deals: FlashSaleDealsData | null;
+	deal: FlashSaleDealData | null;
+	reviewPagination: Pagination | null;
+	wareHousePagination: Pagination | null;
+	warehouses: Warehouse[] | null;
+	banners: HomeBannerInfo[] | null;
+	partners: Partner[] | null;
+}
+
+const initialState: NavigationSliceState = {
+	categories: null,
+	subcategory: null,
+	category: null,
+	homeData: null,
+	status: "idle",
+	productStatus: "idle",
+	message: "",
+	success: false,
+	pagination: null,
+	featured: null,
+	product: null,
+	minMaxPriceRange: null,
+	staticContents: [],
+	productFeatures: [],
+	productReviews: null,
+	productReview: null,
+	productBundles: null,
+	deals: null,
+	dealsStatus: "idle",
+	deal: null,
+	reviewPagination: null,
+	wareHousePagination: null,
+	warehouses: null,
+	banners: null,
+	partners: null,
+};
+
+export const navigationSlice = createAppSlice({
+	name: "navigation",
+	initialState,
+	reducers: (create) => ({
+		resetSuccess: create.reducer((state) => {
+			state.success = false;
+		}),
+		getCategoriesAsync: create.asyncThunk(
+			async () => {
+				const response = await getCategories();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.categories = action.payload.data?.categories;
+						state.message = action.payload.message;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getStaticContentsAsync: create.asyncThunk(
+			async () => {
+				const response = await getStaticContents()
+				return response
+			},
+			{
+				pending: (state) => {
+					state.status = "loading"
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.data) {
+						state.success = true
+						state.message = action.payload?.message
+						state.staticContents = action?.payload?.data
+					} else {
+						state.success = false
+						state.message = action.payload?.message
+						state.staticContents = []
+					}
+					state.status = "idle"
+				},
+				rejected: (state) => {
+					state.status = "failed"
+					state.success = false
+					state.message = ""
+				},
+			}
+		),
+		getCategoryAsync: create.asyncThunk(
+			async ({ id, query }: { id: string; query: string }) => {
+				const response = await getCategoryById(id, query);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.category = action.payload.data.categories[0];
+						state.pagination = action.payload.data.pagination;
+					} else {
+						state.success = false;
+						state.category = null;
+						state.pagination = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getSubCategoryAsync: create.asyncThunk(
+			async ({ id, page, size, query }: { id: string; page?: number; size?: number, query: string }) => {
+				const response = await getSubCategoryById(id, query, page, size);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.subcategory = action.payload.data.products;
+						state.pagination = action.payload.data.pagination;
+					} else {
+						state.success = false;
+						state.subcategory = null;
+						state.pagination = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+					state.subcategory = null;
+					state.pagination = null;
+				},
+			}
+		),
+		getFeaturedProductsAsync: create.asyncThunk(
+			async () => {
+				const response = await getFeaturedProducts();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.status = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.featured = action.payload.data;
+					} else {
+						state.success = false;
+						state.featured = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+					state.featured = null;
+				},
+			}
+		),
+		getProductAsync: create.asyncThunk(
+			async (product_id: string) => {
+				const response = await getProduct(product_id);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.productStatus = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.productStatus = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.product = action.payload.data;
+					} else {
+						state.success = false;
+						state.featured = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.productStatus = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+					state.product = null;
+				},
+			}
+		),
+		getDealByIdAsync: create.asyncThunk(
+			async (deal_id: string) => {
+				const response = await getDealById(deal_id);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.dealsStatus = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.dealsStatus = "idle";
+
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.deal = action.payload.data;
+					} else {
+						state.success = false;
+						state.deal = null;
+					}
+				},
+				rejected: (state, action) => {
+					state.dealsStatus = "failed";
+					state.success = false;
+					state.deal = null;
+				},
+			}
+		),
+		getProductBundlesAsync: create.asyncThunk(
+			async ({ query }: { query: string }) => {
+				const response = await getProductBundles(query);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.productStatus = "loading";
+				},
+				fulfilled: (state, action) => {
+					state.productStatus = "idle";
+
+					if (action.payload?.status_code === 200 || action.payload?.status_code === 201) {
+						state.productBundles = action.payload.data;
+						state.pagination = action.payload.data?.pagination;
+					} else {
+						state.productBundles = null;
+						state.pagination = null;
+					}
+				},
+				rejected: (state) => {
+					state.productBundles = null;
+					state.pagination = null;
+					state.productStatus = "failed";
+				},
+			}
+		),
+		getProductReviewsAsync: create.asyncThunk(
+			async (product_id: string) => {
+				const response = await getProductReviews(product_id);
+				return response;
+			},
+			{
+				pending: () => {
+				},
+				fulfilled: (state, action) => {
+
+					if (action.payload?.status_code === 200) {
+						state.productReviews = action.payload.data?.reviews;
+						state.reviewPagination = action?.payload.data?.pagination
+					} else {
+						state.productReviews = null;
+						state.reviewPagination = null;
+					}
+				},
+				rejected: (state) => {
+					state.productReviews = null;
+				},
+			}
+		),
+		getProductReviewAsync: create.asyncThunk(
+			async ({ product_id, review_id }: { product_id: string; review_id: string }) => {
+				const response = await getProductReview(product_id, review_id);
+				return response;
+			},
+			{
+				pending: () => {
+				},
+				fulfilled: (state, action) => {
+
+					if (action.payload?.status_code === 200) {
+						state.productReview = action.payload.data?.reviews?.[0];
+					} else {
+						state.productReview = null;
+					}
+				},
+				rejected: (state) => {
+					state.productReview = null;
+				},
+			}
+		),
+		getProductFeaturesAsync: create.asyncThunk(
+			async (product_id: string) => {
+				const response = await getProductFeatures(product_id);
+				return response;
+			},
+			{
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.productFeatures = action.payload.data;
+					} else {
+						state.productFeatures = [];
+					}
+				},
+				rejected: (state) => {
+					state.productFeatures = [];
+				},
+			}
+		),
+		getHomeDataAsync: create.asyncThunk(
+			async () => {
+				const response = await getHomeDate();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.homeData = action.payload.data;
+						state.message = action.payload.message;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getDealsAsync: create.asyncThunk(
+			async ({ query }: { query: string }) => {
+				const response = await getDeals(query);
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.deals = action.payload.data;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.deals = null;
+				},
+			}
+		),
+		getMinMaxPriceRangeAsync: create.asyncThunk(
+			async () => {
+				const response = await getMinMaxPriceRange();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.success = true;
+						state.minMaxPriceRange = action.payload.data;
+						state.message = action.payload.message;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getWarehousesAsync: create.asyncThunk(
+			async () => {
+				const response = await getWarehouses();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 201) {
+						state.warehouses = action.payload.data?.data;
+						state.success = true;
+						state.wareHousePagination = action?.payload?.data?.meta
+					} else {
+						state.message = action.payload?.message || "Failed to fetch warehouses";
+						state.success = false;
+						state.warehouses = null;
+						state.wareHousePagination = null
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message || "Something went wrong";
+					state.success = false;
+					state.wareHousePagination = null
+				},
+			}
+		),
+		getBannersAsync: create.asyncThunk(
+			async () => {
+				const response = await getBanners();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.banners = action?.payload?.data || null;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+		getPartnersAsync: create.asyncThunk(
+			async () => {
+				const response = await getPartners();
+				return response;
+			},
+			{
+				pending: (state) => {
+					state.status = "loading";
+				},
+				fulfilled: (state, action) => {
+					if (action.payload?.status_code === 200) {
+						state.partners = action.payload.data;
+					}
+					state.status = "idle";
+				},
+				rejected: (state, action) => {
+					state.status = "failed";
+					state.message = action.error?.message ?? "";
+					state.success = false;
+				},
+			}
+		),
+	}),
+	selectors: {
+		selectCategories: (state: NavigationSliceState) => state.categories || null,
+		selectCategory: (state: NavigationSliceState) => state.category || null,
+		selectFeatured: (state: NavigationSliceState) => state.featured || null,
+		selectProduct: (state: NavigationSliceState) => state.product || null,
+		selectProductBundles: (state: NavigationSliceState) => state.productBundles || null,
+		selectSubCategory: (state: NavigationSliceState) => state.subcategory || null,
+		selectPagination: (state: NavigationSliceState) => state.pagination || null,
+		selectHomeData: (state: NavigationSliceState) => state.homeData?.data || null,
+		selectStatus: (state: NavigationSliceState) => state.status,
+		selectProductStatus: (state: NavigationSliceState) => state.productStatus,
+		selectSuccess: (state: NavigationSliceState) => state.success,
+		selectMessage: (state: NavigationSliceState) => state.message,
+		selectMinMaxPriceRange: (state: NavigationSliceState) => state.minMaxPriceRange,
+		selectStaticContents: (state: NavigationSliceState) => state.staticContents || [],
+		selectProductFeatures: (state: NavigationSliceState) => state.productFeatures || [],
+		selectDeals: (state: NavigationSliceState) => state.deals || null,
+		selectDeal: (state: NavigationSliceState) => state.deal || null,
+		selectDealStatus: (state: NavigationSliceState) => state.dealsStatus || null,
+		selectProductReviews: (state: NavigationSliceState) => state.productReviews || null,
+		selectProductReview: (state: NavigationSliceState) => state.productReview || null,
+		selectReviewPagination: (state: NavigationSliceState) => state.reviewPagination || null,
+		selectWarehouses: (state: NavigationSliceState) => state.warehouses,
+		selectWarehousePagination: (state: NavigationSliceState) => state.wareHousePagination,
+		selectBanners: (state: NavigationSliceState) => state.banners || null,
+		selectPartners: (state: NavigationSliceState) => state.partners || null,
+	},
+});
+
+// Export actions and selectors
+export const { getCategoriesAsync, getHomeDataAsync, getCategoryAsync, getWarehousesAsync, getProductAsync, getDealsAsync, getDealByIdAsync, getProductBundlesAsync, getStaticContentsAsync, getProductFeaturesAsync, getProductReviewsAsync, getMinMaxPriceRangeAsync, getSubCategoryAsync, getFeaturedProductsAsync, getProductReviewAsync, getBannersAsync, getPartnersAsync } = navigationSlice.actions;
+export const { selectCategories, selectHomeData, selectCategory, selectWarehouses, selectProductReviews, selectReviewPagination, selectDeals, selectDealStatus, selectDeal, selectProductBundles, selectStaticContents, selectProductFeatures, selectMinMaxPriceRange, selectStatus, selectSubCategory, selectPagination, selectFeatured, selectProduct, selectProductStatus, selectProductReview, selectBanners, selectPartners } = navigationSlice.selectors;
+export const navigationReducer = navigationSlice.reducer;

@@ -9,7 +9,7 @@ export default function CategorySlider() {
     const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(null);
     const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const categories = useAppSelector(selectCategories);
+    const categories = useAppSelector(selectCategories) as Category[] | undefined;
     const [hoveredCategory, setHoveredCategory] = useState<Category | undefined>();
     const dispatch = useAppDispatch()
     const activeHoverRef = useRef<string | null>(null);
@@ -76,24 +76,24 @@ export default function CategorySlider() {
 
     return (
         <div className="w-full relative hidden lg:block">
-            <div className="w-full lg:flex justify-center items-center flex-col h-auto bg-secondary-tenant hidden overflow-x-scroll hide-scrollbar">
+            <div className="w-full lg:flex justify-center items-center flex-col h-auto bg-secondary-tenant hidden overflow-x-scroll hide-scrollbar border-y border-amber-950/20">
                 <div className="max-w-[90rem] mx-auto">
-                    <ul className="flex flex-row px-[1.5rem] py-[0.62rem] gap-x-[2rem] list-none text-custom-black font-sans text-[0.875rem] font-normal leading-[1.5rem] h-[2.438rem] overflow-x-scroll hide-scrollbar max-w-full">
-                        <Link href={"/new-in"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
-                                New In
+                    <ul className="flex flex-row px-[1.5rem] py-[0.62rem] gap-x-[2.25rem] list-none text-amber-50/90 font-sans text-[0.8125rem] tracking-wider uppercase font-medium leading-[1.5rem] h-[2.5rem] overflow-x-scroll hide-scrollbar max-w-full items-center">
+                        <Link href={"/new-in"} className="flex w-auto justify-center items-center gap-[0.625rem] rounded cursor-pointer transition hover:text-primary-tenant">
+                            <span className="leading-[1.95rem] text-nowrap">
+                                New Arrivals
                             </span>
                         </Link>
 
-                        <Link href={"/sales"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
-                                Sales
+                        <Link href={"/sales"} className="flex w-auto justify-center items-center gap-[0.625rem] rounded cursor-pointer transition hover:text-primary-tenant">
+                            <span className="leading-[1.95rem] text-nowrap">
+                                Special Offers
                             </span>
                         </Link>
 
-                        <Link href={"/bundles"} className="flex w-auto text-[0.875rem] justify-center items-center gap-[0.625rem] rounded cursor-pointer transition">
-                            <span className="text-custom-black leading-[1.95rem] text-nowrap">
-                                Bundles
+                        <Link href={"/bundles"} className="flex w-auto justify-center items-center gap-[0.625rem] rounded cursor-pointer transition hover:text-primary-tenant">
+                            <span className="leading-[1.95rem] text-nowrap">
+                                Discovery Sets
                             </span>
                         </Link>
 
@@ -102,9 +102,9 @@ export default function CategorySlider() {
                                 key={cat.id}
                                 onMouseEnter={(e) => handleMouseEnter(cat.id, e)}
                                 onMouseLeave={() => handleMouseLeave(cat.id)}
-                                className="flex w-auto  text-[0.875rem] justify-center items-center rounded cursor-pointer transition"
+                                className="flex w-auto justify-center items-center rounded cursor-pointer transition hover:text-primary-tenant"
                             >
-                                <span className="text-custom-black leading-[1.95rem] text-nowrap">
+                                <span className="leading-[1.95rem] text-nowrap">
                                     {cat.name}
                                 </span>
                             </li>

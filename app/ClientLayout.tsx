@@ -5,25 +5,16 @@ import "@fontsource/league-spartan/400.css";
 import { useSearchParams } from "next/navigation";
 import axios from 'axios';
 
+import { activeTheme } from '@/lib/config/theme';
+
 export type Tenant = {
     id: number;
     name: string;
     domain: string;
-    app_domain?: string;
-    admin_domain?: string;
     slogan: string;
     logo: string;
-    color: string;
     app_logo?: string;
-    app_color?: string;
-    app_primary_color?: string;
-    app_secondary_color?: string;
-    app_tertiary_color?: string;
     admin_logo?: string;
-    admin_color?: string;
-    admin_primary_color?: string;
-    admin_secondary_color?: string;
-    admin_tertiary_color?: string;
 }
 
 type TenantContextType = {
@@ -179,24 +170,32 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
 
     useEffect(() => {
         setMounted(true);
+        if (typeof document !== 'undefined') {
+            const root = document.documentElement;
+            root.style.setProperty('--primary', activeTheme.primary);
+            root.style.setProperty('--primary-foreground', activeTheme.primaryForeground);
+            root.style.setProperty('--secondary', activeTheme.secondary);
+            root.style.setProperty('--secondary-foreground', activeTheme.secondaryForeground);
+            root.style.setProperty('--minor', activeTheme.minor);
+            root.style.setProperty('--ebony', activeTheme.ebony);
+            root.style.setProperty('--background', activeTheme.background);
+            root.style.setProperty('--foreground', activeTheme.foreground);
+            root.style.setProperty('--card', activeTheme.card);
+            root.style.setProperty('--card-foreground', activeTheme.cardForeground);
+            root.style.setProperty('--muted', activeTheme.muted);
+            root.style.setProperty('--muted-foreground', activeTheme.mutedForeground);
+            root.style.setProperty('--accent', activeTheme.accent);
+            root.style.setProperty('--accent-foreground', activeTheme.accentForeground);
+            root.style.setProperty('--border', activeTheme.border);
+            root.style.setProperty('--ring', activeTheme.ring);
+        }
         const fetchTenant = async () => {
             try {
                 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8009/api/';
                 const res = await axios.get(`${baseUrl}tenant/active`);
-                if (res.data && res.data.data) {
+                if (res.data?.data) {
                     const t = res.data.data;
                     setTenant(t);
-                    const primaryColor = t.app_primary_color || t.app_color || t.color || 'var(--primary)';
-                    const secondaryColor = t.app_secondary_color || 'var(--secondary)';
-                    const tertiaryColor = t.app_tertiary_color || '#EEF2FF';
-
-                    document.documentElement.style.setProperty('--primary', primaryColor);
-                    document.documentElement.style.setProperty('--color-primary', primaryColor);
-                    document.documentElement.style.setProperty('--secondary', secondaryColor);
-                    document.documentElement.style.setProperty('--color-secondary', secondaryColor);
-                    document.documentElement.style.setProperty('--minor', tertiaryColor);
-                    document.documentElement.style.setProperty('--tertiary', tertiaryColor);
-                    document.documentElement.style.setProperty('--color-tertiary', tertiaryColor);
                     if (t.name) {
                         document.title = t.name + (t.slogan ? ` - ${t.slogan}` : "");
                     }
@@ -210,22 +209,34 @@ export default function ClientLayout({ children }: Readonly<{ children: React.Re
         fetchTenant();
     }, []);
 
+    const tenantVal = React.useMemo(() => ({ tenant, loading: tenantLoading }), [tenant, tenantLoading]);
+    const paymentVal = React.useMemo(() => ({ openPaymentModal, setOpenPaymentModal }), [openPaymentModal]);
+    const voucherVal = React.useMemo(() => ({ voucherSuccessModalOpen, setVoucherSuccessModalOpen }), [voucherSuccessModalOpen]);
+    const reviewVal = React.useMemo(() => ({ openReviewModal, setOpenReviewModal }), [openReviewModal]);
+    const shareWishlistVal = React.useMemo(() => ({ isShareWishlistModalOpen, setShareWishlistModalOpen }), [isShareWishlistModalOpen]);
+    const filterVal = React.useMemo(() => ({ openFilterModal, setOpenFilterModal }), [openFilterModal]);
+    const isBuyNowVal = React.useMemo(() => ({ isBuyNow, setIsBuyNow }), [isBuyNow]);
+    const isEditingAddressVal = React.useMemo(() => ({ isEditingAddress, setIsEditingAddress }), [isEditingAddress]);
+    const guestCheckoutVal = React.useMemo(() => ({ openGuestCheckoutModal, setOpenGuestCheckoutModal }), [openGuestCheckoutModal]);
+    const searchVal = React.useMemo(() => ({ openSearchModal, setOpenSearchModal }), [openSearchModal]);
+    const queryVal = React.useMemo(() => ({ query, setQuery }), [query]);
+
     if (!mounted || tenantLoading) {
         return <div className="min-h-screen flex justify-center items-center font-sans">Loading store...</div>;
     }
 
     return (
-        <TenantContext.Provider value={{ tenant, loading: tenantLoading }}>
-            <PaymentContext.Provider value={{ openPaymentModal, setOpenPaymentModal }}>
-                <VoucherSuccessModalContext.Provider value={{ voucherSuccessModalOpen, setVoucherSuccessModalOpen }}>
-                    <ReviewContext.Provider value={{ openReviewModal, setOpenReviewModal }}>
-                        <ShareWishlistModalContext.Provider value={{ isShareWishlistModalOpen, setShareWishlistModalOpen }}>
-                            <FilterContext.Provider value={{ openFilterModal, setOpenFilterModal }}>
-                                <IsBuyNowContext.Provider value={{ isBuyNow, setIsBuyNow }}>
-                                    <IsEditingAdressContext.Provider value={{ isEditingAddress, setIsEditingAddress }}>
-                                        <GuestCheckoutContext.Provider value={{ openGuestCheckoutModal, setOpenGuestCheckoutModal }}>
-                                            <SearchContext.Provider value={{ openSearchModal, setOpenSearchModal }}>
-                                                <QueryContext.Provider value={{ query, setQuery }}>
+        <TenantContext.Provider value={tenantVal}>
+            <PaymentContext.Provider value={paymentVal}>
+                <VoucherSuccessModalContext.Provider value={voucherVal}>
+                    <ReviewContext.Provider value={reviewVal}>
+                        <ShareWishlistModalContext.Provider value={shareWishlistVal}>
+                            <FilterContext.Provider value={filterVal}>
+                                <IsBuyNowContext.Provider value={isBuyNowVal}>
+                                    <IsEditingAdressContext.Provider value={isEditingAddressVal}>
+                                        <GuestCheckoutContext.Provider value={guestCheckoutVal}>
+                                            <SearchContext.Provider value={searchVal}>
+                                                <QueryContext.Provider value={queryVal}>
                                                     <main className={`bg-white h-screen w-screen flex justify-between flex-col items-center z-0 ${openSearchModal ? 'overflow-hidden' : ''}`}>
                                                         {children}
                                                     </main>

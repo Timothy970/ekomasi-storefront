@@ -53,7 +53,7 @@ const VideoPlayer = ({
         return (
             <div
                 className={`video-player-placeholder ${className}`}
-                style={{ width, height, backgroundColor: '#f3f4f6' }}
+                style={{ width, height, backgroundColor: 'var(--muted)' }}
             />
         );
     }
@@ -92,7 +92,7 @@ const VideoPlayer = ({
                 height: height,
                 position: 'relative',
                 overflow: 'hidden',
-                backgroundColor: '#000'
+                backgroundColor: 'var(--ebony)'
             }}
         >
             <div style={{

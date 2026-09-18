@@ -7,31 +7,31 @@ import { customParser } from "@/lib/utils";
 const slides = [
     {
         id: 1,
-        title: "Mother’s Day Bundle",
-        description: "Celebrate the moms in your life with 15% savings on our specially curated bundle",
-        image: "https://picsum.photos/1200/400?random=1",
-        buttonText: "Learn More",
+        title: "The Royal Elixir Collection",
+        description: "Artisanal extrait de parfum bottled in hand-polished flacons with pure 24k gold accents.",
+        image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1600&auto=format&fit=crop",
+        buttonText: "Explore Collection",
     },
     {
         id: 2,
-        title: "Discover New Deals",
-        description: "Get the best offers curated just for you.",
-        image: "https://picsum.photos/1200/400?random=1",
-        buttonText: "Learn More",
+        title: "Private Discovery Coffret",
+        description: "Experience 5 iconic miniatures with a complimentary voucher redeemable against your first full-size flacon.",
+        image: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1600&auto=format&fit=crop",
+        buttonText: "Discover Coffrets",
     },
     {
         id: 3,
-        title: "Shop the Latest Trends",
-        description: "Stay ahead with fresh arrivals every week.",
-        image: "https://picsum.photos/1200/400?random=2",
-        buttonText: "Learn More",
+        title: "Nocturne Rare Accords",
+        description: "Deep smoky amber, dark velvet patchouli, and bourbon vanilla crafted for unforgettable evenings.",
+        image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=1600&auto=format&fit=crop",
+        buttonText: "Shop Nocturne",
     },
     {
         id: 4,
-        title: "Exclusive Discounts",
-        description: "Enjoy up to 50% off on selected items.",
-        image: "https://picsum.photos/1200/400?random=3",
-        buttonText: "Learn More",
+        title: "Bespoke Flacon Engraving",
+        description: "Personalize your signature perfume flacon with custom gold calligraphy for the ultimate bespoke gift.",
+        image: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?q=80&w=1600&auto=format&fit=crop",
+        buttonText: "Personalize Flacon",
     },
 ];
 
@@ -83,9 +83,10 @@ export default function MothersDayBundle() {
                     <button
                         key={slide.id}
                         onClick={() => setCurrent(index)}
-                        className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
+                        aria-label={`Go to slide ${index + 1}`}
+                        className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border border-white w-[1rem] h-[1rem]" : "bg-white/60 w-[0.5rem] h-[0.5rem]"}`}
                     >
-                        <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer ${current === index ? "bg-white" : "bg-[#F5F5F596]"}`}>
+                        <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer ${current === index ? "bg-white" : "bg-white/60"}`}>
 
                         </span>
                     </button>

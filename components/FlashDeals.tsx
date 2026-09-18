@@ -77,7 +77,7 @@ export default function FlashDeals({ title, discountType, discountValue }: Reado
 
     return (
         <>
-            {deals && deals.deals && deals.deals.length > 0 && (
+            {deals?.deals && deals.deals.length > 0 && (
                 <div className="w-full flex justify-center items-start mt-[2rem] lg:mt-[2.5rem] lg:mb-[2.5rem] pb-4">
                     <div className="max-w-[90rem] w-full">
                         <div className="flex items-end justify-between gap-4 mb-[2rem]">
@@ -99,7 +99,7 @@ export default function FlashDeals({ title, discountType, discountValue }: Reado
                                 transition={{ type: "spring", stiffness: 380, damping: 40 }}
                             >
                                 {deals?.deals?.map((deal, i) => (
-                                    <Link key={i.toString()} href={`/deals/${deal?.deal_id}`}>
+                                    <Link key={deal?.deal_id ?? i} href={`/deals/${deal?.deal_id}`}>
                                         <div
                                             ref={i === 0 ? cardRef : undefined}
                                             className="shrink-0 overflow-hidden bg-white w-[10rem] sm:w-[13rem] md:w-[16rem] mr-[1rem]"
@@ -139,7 +139,7 @@ export default function FlashDeals({ title, discountType, discountValue }: Reado
                         {(canPrev || canNext) && (
                             <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
                                 <Button
-                                    className="rounded-full border border-black"
+                                    className="rounded-full border border-border hover:bg-muted"
                                     onClick={prev}
                                     variant="outline"
                                     size="icon"
@@ -149,7 +149,7 @@ export default function FlashDeals({ title, discountType, discountValue }: Reado
                                     <ChevronLeft className="h-[2.5rem] w-[3rem]" />
                                 </Button>
                                 <Button
-                                    className="rounded-full border border-black"
+                                    className="rounded-full border border-border hover:bg-muted"
                                     onClick={next}
                                     variant="outline"
                                     size="icon"

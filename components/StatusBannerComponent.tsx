@@ -3,15 +3,15 @@ import { RETURN_STATUS } from "@/lib/utils";
 const StatusBanner = ({ status }: Readonly<{ status: string }>) => {
     const STATUS_CONFIG = {
         [RETURN_STATUS.REJECTED]: {
-            bg: "bg-[#FF3B308F]",
+            bg: "bg-red-500/80 text-white",
             message: "Your Return Request Was Rejected.",
         },
         [RETURN_STATUS.PENDING]: {
-            bg: "bg-[#FFA5008F]",
+            bg: "bg-amber-500/80 text-white",
             message: "Your Return Request Is Pending Review.",
         },
         [RETURN_STATUS.APPROVED]: {
-            bg: "bg-[rgba(52,199,89,0.58)]",
+            bg: "bg-emerald-500/80 text-white",
             message: "Your Return Request Was Successfully Approved.",
         },
     };
@@ -24,7 +24,7 @@ const StatusBanner = ({ status }: Readonly<{ status: string }>) => {
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
                     <path
                         d="M4.99997 8.58597L1.70697 5.29297L0.292969 6.70697L4.99997 11.414L14.707 1.70697L13.293 0.292969L4.99997 8.58597Z"
-                        fill="black"
+                        fill="currentColor"
                     />
                 </svg>
                 <p className="text-[0.875rem]">{message}</p>

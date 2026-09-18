@@ -27,7 +27,7 @@ export default function Brands() {
 
     //if we have fetched brands, use them, otherwise fallback to baseBrands
     useEffect(() => {
-        const fetchedBrandUrls = fetchedBrands?.map(partner => partner.image_url) || [];
+        const fetchedBrandUrls = fetchedBrands?.map(partner => partner.image_url || partner.logo || "") || [];
         if (fetchedBrands && fetchedBrands.length > 0) {
             setBrandsToUse(fetchedBrandUrls);
         }
@@ -46,7 +46,7 @@ export default function Brands() {
             <div className="flex w-full max-w-[90rem] bg-white">
                 <div className="flex items-start justify-between gap-4 mb-8 w-full px-[1rem] lg:px-[3rem]">
                     <div className='w-full'>
-                        <h2 className="text-[#222] font-comfortaa text-[1.5rem] lg:text-[2.25rem] font-bold leading-[2.7rem]">
+                        <h2 className="text-foreground gold-shimmer font-comfortaa text-[1.5rem] lg:text-[2.25rem] font-bold leading-[2.7rem]">
                             Our Partners
                         </h2>
                     </div>

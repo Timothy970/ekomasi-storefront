@@ -18,9 +18,8 @@ import {
 import { Label } from '@/components/ui/label'
 
 export default function WalletDashboardPage() {
-  const { tenant } = useTenant()
-  const primaryColor = tenant?.app_primary_color || tenant?.app_color || tenant?.color || 'var(--primary)'
-  const secondaryColor = tenant?.app_secondary_color || 'var(--secondary)'
+  const primaryColor = 'var(--primary)'
+  const secondaryColor = 'var(--secondary)'
 
   const dispatch = useAppDispatch()
   const profile = useAppSelector(selectUserProfile)

@@ -255,4 +255,37 @@ export interface ShareWishListPayload {
   sender_name: string;
 }
 
+export interface HomeBannerInfo {
+  id: number | string;
+  heading: string;
+  text: string;
+  image_url: string;
+  button_text: string;
+  button_url: string;
+}
+
+export interface GetBannersResponse {
+  status: boolean;
+  status_code?: number;
+  message: string;
+  data: HomeBannerInfo[];
+}
+
+export interface PartnerInfo {
+  id: number | string;
+  name: string;
+  logo: string;
+  image_url?: string;
+  url?: string;
+}
+
+export type Partner = PartnerInfo;
+
+export interface GetPartnersResponse {
+  status: boolean;
+  status_code?: number;
+  message: string;
+  data: PartnerInfo[];
+}
+
 export * from './static.types';

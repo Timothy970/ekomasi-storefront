@@ -40,7 +40,7 @@ export default function WareHouseDropdown({
 
     return (
         <Select value={selectedId} onValueChange={handleSelect}>
-            <SelectTrigger className="w-full p-[0.5rem] h-[2.5rem] border border-[rgba(0,0,0,0.40)] text-[0.875rem]">
+            <SelectTrigger className="w-full p-[0.5rem] h-[2.5rem] border border-border text-[0.875rem]">
                 <SelectValue placeholder="Select pick up store ..." />
             </SelectTrigger>
 

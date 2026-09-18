@@ -164,7 +164,7 @@ export default function VouchersTable({ data, pagination }: Readonly<VouchersTab
                 <table className="w-full">
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id} className='bg-[#F8F9FA] uppercase text-[0.75rem]'>
+                            <tr key={headerGroup.id} className='bg-muted uppercase text-[0.75rem]'>
                                 {headerGroup.headers.map((header) => (
                                     <th
                                         key={header.id}

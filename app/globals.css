@@ -37,77 +37,146 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-custom-black: var(--ebony);
+  --color-minor: var(--minor);
+  --color-ebony: var(--ebony);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-custom-black: #031026;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+
+  /* ─── Perfume Luxury Design System (Dynamic Tenant Tokens) ─── */
+  --primary: #D4AF37;
+  --secondary: #2A1A1F;
+  --minor: #FAF8F5;
+  --ebony: #121212;
+  --primary-foreground: #121212;
+  --secondary-foreground: #FAF8F5;
+
+  /* ─── Shadcn/UI token mapping ─── */
+  --background: #FAF8F5;
+  --foreground: #121212;
+  --card: #FFFFFF;
+  --card-foreground: #121212;
+  --popover: #FFFFFF;
+  --popover-foreground: #121212;
+  --muted: #F0EDE8;
+  --muted-foreground: #7A6D5A;
+  --accent: #F5EFE0;
+  --accent-foreground: #2A1A1F;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #E8E0D4;
+  --input: #EDE8E0;
+  --ring: #D4AF37;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #2A1A1F;
+  --sidebar-foreground: #FAF8F5;
+  --sidebar-primary: #D4AF37;
+  --sidebar-primary-foreground: #121212;
+  --sidebar-accent: #3D2A2F;
+  --sidebar-accent-foreground: #FAF8F5;
+  --sidebar-border: rgba(212, 175, 55, 0.2);
+  --sidebar-ring: #D4AF37;
 }
 
-/* Tenant Dynamic Color Palette Utilities */
+/* ─── Luxury Storefront Color Utilities ─── */
+/* References the perfume design tokens above. */
 .bg-primary-tenant {
-  background-color: var(--primary, var(--primary)) !important;
+  background-color: var(--primary) !important;
 }
 .text-primary-tenant {
-  color: var(--primary, var(--primary)) !important;
+  color: var(--primary) !important;
 }
 .border-primary-tenant {
-  border-color: var(--primary, var(--primary)) !important;
+  border-color: var(--primary) !important;
 }
 
 .bg-secondary-tenant {
-  background-color: var(--secondary, var(--secondary)) !important;
+  background-color: var(--secondary) !important;
 }
 .text-secondary-tenant {
-  color: var(--secondary, var(--secondary)) !important;
+  color: var(--secondary) !important;
 }
 .border-secondary-tenant {
-  border-color: var(--secondary, var(--secondary)) !important;
+  border-color: var(--secondary) !important;
 }
 
 .bg-minor-tenant {
-  background-color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+  background-color: var(--minor) !important;
 }
 .text-minor-tenant {
-  color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+  color: var(--minor) !important;
 }
 .border-minor-tenant {
-  border-color: var(--minor, var(--tertiary, #EEF2FF)) !important;
+  border-color: var(--minor) !important;
+}
+
+/* ─── Luxury UI Utilities ─── */
+.gold-text {
+  color: var(--primary);
+}
+.gold-border {
+  border-color: var(--primary);
+}
+.bg-ebony {
+  background-color: var(--ebony);
+}
+.bg-ivory {
+  background-color: var(--minor);
+}
+.text-ivory {
+  color: var(--minor);
+}
+
+/* Glassmorphism panel for product cards */
+.glass-panel {
+  background: rgba(250, 248, 245, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Champagne gold shimmer animation */
+@keyframes gold-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.gold-shimmer {
+  background: linear-gradient(90deg, #D4AF37 0%, #F4D87A 50%, #D4AF37 100%);
+  background-size: 200% auto;
+  animation: gold-shimmer 3s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Luxury underline hover effect */
+.luxury-link {
+  position: relative;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+.luxury-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+.luxury-link:hover::after {
+  width: 100%;
 }
 
 .dark {

@@ -94,7 +94,7 @@ export default function NowTrending({ title }: Readonly<{ title: string }>) {
                 {featured?.map((p, i) => {
                   const productImage = p.urls && p.urls.length > 0 ? p.urls[0].url : null;
                   return (
-                    <Link key={i.toString()} href={`/products/${p.product_id}`}>
+                    <Link key={p.product_id ?? i} href={`/products/${p.product_id}`}>
                       <div
                         ref={i === 0 ? cardRef : undefined}
                         className="shrink-0 overflow-hidden bg-white w-[10rem] sm:w-[13rem] md:w-[16rem] mr-[1rem]"
@@ -126,13 +126,13 @@ export default function NowTrending({ title }: Readonly<{ title: string }>) {
                           <div className="mt-2 flex items-baseline gap-2 flex-wrap">
                             {p.discount_type && p.discount ? (
                               <>
-                                <p className="text-[1.25rem] font-bold text-[#D0021B]">
+                                <p className="mt-2 text-[1.25rem] font-bold text-destructive">
                                   {"KES " +
                                     new Intl.NumberFormat("en-KE", {
                                       minimumFractionDigits: 0,
                                     }).format(calculateDiscountedPrice(p.price, p.discount_type, p.discount))}
                                 </p>
-                                <p className="text-[0.875rem] text-gray-500 line-through">
+                                <p className="text-[0.875rem] text-muted-foreground line-through">
                                   {"KES " +
                                     new Intl.NumberFormat("en-KE", {
                                       minimumFractionDigits: 0,
@@ -140,7 +140,7 @@ export default function NowTrending({ title }: Readonly<{ title: string }>) {
                                 </p>
                               </>
                             ) : (
-                              <p className="mt-2 text-[1.25rem] font-bold text-custom-black">
+                              <p className="mt-2 text-[1.25rem] font-bold gold-text">
                                 {"KES " +
                                   new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
@@ -159,7 +159,7 @@ export default function NowTrending({ title }: Readonly<{ title: string }>) {
             {(canPrev || canNext) && (
               <div className="flex items-center justify-end gap-[1rem] mt-[1rem]">
                 <Button
-                  className="rounded-full border border-black"
+                  className="rounded-full border border-border hover:bg-muted"
                   onClick={prev}
                   variant="outline"
                   size="icon"
@@ -169,7 +169,7 @@ export default function NowTrending({ title }: Readonly<{ title: string }>) {
                   <ChevronLeft className="h-[2.5rem] w-[3rem]" />
                 </Button>
                 <Button
-                  className="rounded-full border border-black"
+                  className="rounded-full border border-border hover:bg-muted"
                   onClick={next}
                   variant="outline"
                   size="icon"

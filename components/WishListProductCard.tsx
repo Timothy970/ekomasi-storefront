@@ -99,8 +99,8 @@ export default function WishListProductCard({ product, pageType }: Readonly<{ pr
                                 unoptimized
                             />
                             {
-                                product?.tag && <div className="bg-[#A75B5B] w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
-                                    <span className="text-[0.75rem] text-white font-bold">{product?.tag}</span>
+                                product?.tag && <div className="bg-primary-tenant text-primary-foreground w-[4.8rem] h-[1.93rem] absolute z-10 flex justify-center items-center rounded-tr-[0.5rem] rounded-br-[0.5rem] mt-[1rem]">
+                                    <span className="text-[0.75rem] font-bold">{product?.tag}</span>
                                 </div>
                             }
                         </div>

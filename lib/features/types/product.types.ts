@@ -31,6 +31,12 @@ export interface VariantGroup {
   variants: MallVariant[];
 }
 
+export interface GetVariantsResponse {
+  data: VariantGroup[];
+  message: string;
+  status_code: number;
+}
+
 export interface ProductFeature {
   feature_id: string;
   description: string;
@@ -111,6 +117,17 @@ export interface CategoriesResponse {
   status_code: number;
 }
 
+import type { Pagination } from './common.types';
+
+export interface CategoryResponse {
+  data: {
+    categories: Category[];
+    pagination: Pagination;
+  };
+  message: string;
+  status_code: number;
+}
+
 export interface SubCategoryProduct extends Product {}
 
 export interface SubcategoryProducts {
@@ -122,6 +139,15 @@ export interface SubcategoryProducts {
   parent_category_image_url: string;
   products: SubCategoryProduct[];
   description: string
+}
+
+export interface SubcategoryProductsResponse {
+  data: {
+    products: SubcategoryProducts;
+    pagination: Pagination;
+  };
+  message: string;
+  status_code: number;
 }
 
 export interface ProductImage {

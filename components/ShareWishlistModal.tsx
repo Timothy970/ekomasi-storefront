@@ -121,7 +121,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
                         <Button
                             type="button"
                             variant="outline"
-                            className="px-4 py-2 h-[2.5rem] bg-white text-custom-black text-[0.875rem] border border-black rounded-[0.5rem] hover:bg-gray-50 transition-colors"
+                            className="px-4 py-2 h-[2.5rem] bg-white text-foreground text-[0.875rem] border border-border rounded-[0.5rem] hover:bg-muted transition-colors"
                             onClick={() => setShareWishlistModalOpen(false)}
                         >
                             Cancel
@@ -129,7 +129,7 @@ const ShareWishlistModal: React.FC<ShareWishlistModalProps> = ({ isOpen, onShare
 
                         <Button
                             type="submit"
-                            className="px-4 py-2 h-[2.5rem] bg-[rgba(232,41,138,0.25)] text-custom-black text-[0.875rem] border border-[rgba(232,41,138,0.25)] rounded-[0.5rem] hover:bg-[rgba(232,41,138,0.35)] transition-colors"
+                            className="px-4 py-2 h-[2.5rem] bg-primary-tenant text-primary-foreground text-[0.875rem] border border-primary-tenant rounded-[0.5rem] hover:opacity-90 transition-opacity"
                         >
                             Share
                         </Button>

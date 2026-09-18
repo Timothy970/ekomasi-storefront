@@ -135,6 +135,10 @@ export function BundleProductsAccordion({ products }: Readonly<{ products?: any[
           </Link>
         ))}
       </div>
+    </Accordion>
+  );
+}
+
 export function SpecificationsAccordion({ hasVariants, groupedVariants }: Readonly<{ hasVariants: boolean; groupedVariants: Record<string, string[]> }>) {
   if (!hasVariants) return null;
 

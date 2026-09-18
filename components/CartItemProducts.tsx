@@ -87,13 +87,13 @@ export default function CartItemProducts({ item, hideBtns }: Readonly<{ item: Ca
                     <div className="mt-2 flex items-baseline gap-2 flex-wrap">
                         {item?.product?.discount_type && item?.product?.discount ? (
                             <>
-                                <span className="text-[1.25rem] font-bold text-[#D0021B]">
+                                <span className="text-[1.25rem] font-bold text-destructive">
                                     {"KES " +
                                         new Intl.NumberFormat("en-KE", {
                                             minimumFractionDigits: 0,
                                         }).format(calculateDiscountedPrice(item?.product?.price, item?.product?.discount_type, item?.product?.discount))}
                                 </span>
-                                <span className="text-[0.875rem] text-gray-500 line-through">
+                                <span className="text-[0.875rem] text-muted-foreground line-through">
                                     {"KES " +
                                         new Intl.NumberFormat("en-KE", {
                                             minimumFractionDigits: 0,
@@ -101,7 +101,7 @@ export default function CartItemProducts({ item, hideBtns }: Readonly<{ item: Ca
                                 </span>
                             </>
                         ) : (
-                            <span className='font-semibold text-[1rem] uppercase'>
+                            <span className='font-semibold text-[1rem] uppercase gold-text'>
                                 {"KES " + new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
                                 }).format(item?.product?.price ?? 0)}
@@ -116,10 +116,10 @@ export default function CartItemProducts({ item, hideBtns }: Readonly<{ item: Ca
 
                 {
                     (item?.product?.stock_quantity ?? 0) > 0 ? <div className='flex items-center gap-x-[0.5rem]'>
-                        <span className='text-base text-[#16A34A]'>In Stock</span>
-                    </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-[#EDEDF2] py-[2rem]'>
-                        <span className='text-base'>Sold Out:</span>
-                        <span className='text-base'>This product is currently unavailable</span>
+                        <span className='text-base text-emerald-600 font-semibold'>In Stock</span>
+                    </div> : <div className='flex flex-col items-center justify-center gap-x-[0.5rem] bg-muted py-[2rem] rounded-md'>
+                        <span className='text-base font-semibold'>Sold Out:</span>
+                        <span className='text-base text-muted-foreground'>This product is currently unavailable</span>
                     </div>
                 }
 

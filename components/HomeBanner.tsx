@@ -13,7 +13,7 @@ export default function HomeBanner() {
     const [current, setCurrent] = useState(0);
     const router = useRouter()
     const [slides, setSlides] = useState<HomeBannerInfo[]>([]);
-    const apiBanners = useAppSelector(selectBanners)
+    const apiBanners = useAppSelector(selectBanners) as HomeBannerInfo[] | null;
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -24,26 +24,26 @@ export default function HomeBanner() {
     const banners: HomeBannerInfo[] = [
         {
             id: 1,
-            heading: "Excitement Starts Here: Welcome to Ekomasi!",
-            text: "Baby shower coming up? New niece or nephew? Find thoughtful gifts that new parents will actually love and use",
-            image_url: "https://images.unsplash.com/photo-1537860964300-fcf3d857706b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            button_text: "Find the Perfect Gift",
+            heading: "A Scent That Tells Your Story",
+            text: "Immerse your senses in artisanal fragrances crafted with rare botanicals, noble woods, and precious amber.",
+            image_url: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=2080&auto=format&fit=crop",
+            button_text: "Explore Fragrances",
             button_url: "/search",
         },
         {
             id: 2,
-            heading: "Excitement Starts Here:",
-            text: "Celebrating every giggle, step, and milestone! Discover adorable and essential products that make your parenting journey (or finding that perfect gift!) even more joyful.",
-            image_url: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            button_text: "Discover Our Collections",
+            heading: "The Art of Haute Parfumerie",
+            text: "From timeless French accords to enchanting oriental blends, discover your bespoke signature scent.",
+            image_url: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=2070&auto=format&fit=crop",
+            button_text: "Discover Signature Scents",
             button_url: "/search",
         },
         {
             id: 3,
-            heading: "Because Dads Do It Too",
-            text: "Celebrating every cuddle, adventure, and milestone together! Find premium carriers, strollers, and essentials that make exploring the world with your little one safe and joyful.",
-            image_url: "https://images.unsplash.com/photo-1564149809912-731909a19d89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            button_text: "Shop Travel Essentials",
+            heading: "Private Reserve & Bespoke Blends",
+            text: "Handcrafted in limited editions for the discerning connoisseur of elegance, prestige, and allure.",
+            image_url: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?q=80&w=1974&auto=format&fit=crop",
+            button_text: "Shop Private Reserve",
             button_url: "/search",
         },
     ];
@@ -110,11 +110,11 @@ export default function HomeBanner() {
                             </div>
                         </div>
 
-                        <Button onClick={() => router.push(slides[current].button_url)} className="h-[2.5rem] rounded-[1.5rem] bg-black lg:bg-secondary-tenant mt-[1.5rem] lg:mt-[2rem]">
-                            <span className="px-[1.5rem] flex items-center justify-center gap-x-[0.75rem] text-white font-poppins text-[0.875rem] font-normal leading-[1.95rem]">
+                        <Button onClick={() => router.push(slides[current].button_url)} className="h-[2.75rem] px-6 rounded-full bg-primary-tenant hover:opacity-90 text-primary-foreground mt-[1.5rem] lg:mt-[2rem] shadow-lg font-semibold tracking-wide">
+                            <span className="flex items-center justify-center gap-x-[0.75rem] text-[0.875rem] uppercase">
                                 {slides[current].button_text}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 8 12" fill="none">
-                                    <path d="M1.70697 11.4496L7.41397 5.74264L1.70697 0.0356445L0.292969 1.44964L4.58597 5.74264L0.292969 10.0356L1.70697 11.4496Z" fill="white" />
+                                    <path d="M1.70697 11.4496L7.41397 5.74264L1.70697 0.0356445L0.292969 1.44964L4.58597 5.74264L0.292969 10.0356L1.70697 11.4496Z" fill="currentColor" />
                                 </svg>
                             </span>
                         </Button>
@@ -127,7 +127,8 @@ export default function HomeBanner() {
                     <div className="absolute right-[3rem] flex justify-between items-center">
                         <button
                             onClick={prevSlide}
-                            className="hidden lg:block"
+                            className="hidden lg:block p-1 hover:opacity-80 transition-opacity"
+                            aria-label="Previous slide"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
                                 <path d="M16.5645 2.78223C24.1462 2.78223 30.3145 8.95048 30.3145 16.5322C30.3145 24.114 24.1462 30.2822 16.5645 30.2822C8.98275 30.2822 2.8145 24.114 2.8145 16.5322C2.8145 8.95048 8.98275 2.78223 16.5645 2.78223ZM16.5645 27.5322C22.6296 27.5322 27.5645 22.5974 27.5645 16.5322C27.5645 10.4671 22.6296 5.53223 16.5645 5.53223C10.4994 5.53223 5.5645 10.4671 5.5645 16.5322C5.5645 22.5974 10.4994 27.5322 16.5645 27.5322Z" fill="white" fillOpacity="0.82" />
@@ -136,7 +137,8 @@ export default function HomeBanner() {
                         </button>
                         <button
                             onClick={nextSlide}
-                            className="hidden lg:block"
+                            className="hidden lg:block p-1 hover:opacity-80 transition-opacity"
+                            aria-label="Next slide"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
                                 <path d="M14.5645 0.782227C6.98275 0.782227 0.814499 6.95048 0.814499 14.5322C0.814499 22.114 6.98275 28.2822 14.5645 28.2822C22.1462 28.2822 28.3145 22.114 28.3145 14.5322C28.3145 6.95048 22.1462 0.782227 14.5645 0.782227ZM14.5645 25.5322C8.49937 25.5322 3.5645 20.5974 3.5645 14.5322C3.5645 8.4671 8.49937 3.53223 14.5645 3.53223C20.6296 3.53223 25.5645 8.4671 25.5645 14.5322C25.5645 20.5974 20.6296 25.5322 14.5645 25.5322Z" fill="white" />
@@ -150,9 +152,10 @@ export default function HomeBanner() {
                             <button
                                 key={slide.id ?? index}
                                 onClick={() => setCurrent(index)}
-                                className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border w-[1rem] h-[1rem]" : "bg-[#F5F5F596] w-[0.5rem] h-[0.5rem]"}`}
+                                aria-label={`Go to slide ${index + 1}`}
+                                className={`rounded-full flex justify-center items-center ${current === index ? "bg-transparent border border-white w-[1rem] h-[1rem]" : "bg-white/60 w-[0.5rem] h-[0.5rem]"}`}
                             >
-                                <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer bg-[#F5F5F596]`}></span>
+                                <span className={`w-[0.5rem] h-[0.5rem] rounded-full cursor-pointer bg-white/80`}></span>
                             </button>
                         ))}
                     </div>

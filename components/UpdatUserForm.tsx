@@ -132,7 +132,7 @@ export default function UpdateUserForm() {
                     <Input
                         value={formData.first_name}
                         onChange={e => handleChange("first_name", e.target.value)}
-                        className="border p-[0.5rem] text-[0.875rem] border-[rgba(0,0,0,0.40)]"
+                        className="border p-[0.5rem] text-[0.875rem] border-border"
                     />
                 </div>
 
@@ -143,7 +143,7 @@ export default function UpdateUserForm() {
                     <Input
                         value={formData.last_name}
                         onChange={e => handleChange("last_name", e.target.value)}
-                        className="border p-[0.5rem] text-[0.875rem] border-[rgba(0,0,0,0.40)]"
+                        className="border p-[0.5rem] text-[0.875rem] border-border"
                     />
                 </div>
 
@@ -162,7 +162,7 @@ export default function UpdateUserForm() {
                         >
                             <path
                                 d="M18 0.5H2C0.897 0.5 0 1.397 0 2.5V14.5C0 15.603 0.897 16.5 2 16.5H18C19.103 16.5 20 15.603 20 14.5V2.5C20 1.397 19.103 0.5 18 0.5ZM18 2.5V3.011L10 9.234L2 3.012V2.5H18ZM2 14.5V5.544L9.386 11.289C9.56111 11.4265 9.77733 11.5013 10 11.5013C10.2227 11.5013 10.4389 11.4265 10.614 11.289L18 5.544L18.002 14.5H2Z"
-                                fill="black"
+                                fill="currentColor"
                             />
                         </svg>
 
@@ -172,7 +172,7 @@ export default function UpdateUserForm() {
                             required
                             onChange={e => handleChange("email", e.target.value)}
                             placeholder="Email Address*"
-                            className="p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border text-[0.875rem] border-[rgba(0,0,0,0.40)]"
+                            className="p-[0.5rem] h-[2.5rem] pl-10 pr-4 py-2 border text-[0.875rem] border-border"
                         />
                     </div>
                 </div>
@@ -185,7 +185,7 @@ export default function UpdateUserForm() {
                         placeholder="0797493262"
                         value={formData.phone_number}
                         onChange={e => handleChange("phone_number", e.target.value)}
-                        className="border p-[0.5rem] text-[0.875rem] border-[rgba(0,0,0,0.40)]"
+                        className="border p-[0.5rem] text-[0.875rem] border-border"
                     />
                 </div>
 

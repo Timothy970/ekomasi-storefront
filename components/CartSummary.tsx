@@ -54,7 +54,7 @@ export default function CartSummary({ cart }: Readonly<{ cart: CartData }>) {
                 <div className='mt-[1.5rem]'>
                     <div className='flex w-full flex-col justify-between mb-[0.5rem] gap-y-[1rem]'>
                         <div className='flex justify-between w-full'>
-                            <span className='text-[0.875rem] text-[#444]'>Subtotal</span>
+                            <span className='text-[0.875rem] text-muted-foreground'>Subtotal</span>
                             <span>
                                 {"KES " + new Intl.NumberFormat("en-KE", {
                                     minimumFractionDigits: 0,
@@ -63,24 +63,24 @@ export default function CartSummary({ cart }: Readonly<{ cart: CartData }>) {
                         </div>
 
                         <div className='flex justify-between w-full'>
-                            <span className='text-[0.875rem] text-[#444]'>Estimated Shipping & Handling</span>
-                            <span className='text-custom-black text-[0.875rem]'>{cart?.delivery_charge}</span>
+                            <span className='text-[0.875rem] text-muted-foreground'>Estimated Shipping & Handling</span>
+                            <span className='text-foreground text-[0.875rem]'>{cart?.delivery_charge}</span>
                         </div>
 
                         <div className='flex justify-between w-full'>
-                            <span className='text-[0.875rem] text-[#444]'>Estimated Tax</span>
-                            <span className='text-custom-black text-[0.875rem]'>{cart?.estimated_tax}</span>
+                            <span className='text-[0.875rem] text-muted-foreground'>Estimated Tax</span>
+                            <span className='text-foreground text-[0.875rem]'>{cart?.estimated_tax}</span>
                         </div>
 
                         <div className='flex justify-between w-full'>
-                            <span className='text-[0.875rem] text-[#444]'>Discount Total</span>
-                            <span className='text-custom-black text-[0.875rem]'>{cart?.discount?.toFixed()}</span>
+                            <span className='text-[0.875rem] text-muted-foreground'>Discount Total</span>
+                            <span className='text-foreground text-[0.875rem]'>{cart?.discount?.toFixed()}</span>
                         </div>
                     </div>
 
-                    <div className='w-full flex justify-between border-b border-black border-t py-[1rem]'>
+                    <div className='w-full flex justify-between border-b border-border border-t py-[1rem] font-bold'>
                         <span>Total</span>
-                        <span>
+                        <span className="gold-text">
                             {"KES " + new Intl.NumberFormat("en-KE", {
                                 minimumFractionDigits: 0,
                             }).format(cart?.total ?? 0)}

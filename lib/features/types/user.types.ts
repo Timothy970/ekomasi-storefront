@@ -77,16 +77,26 @@ export interface VerifyOtpParams {
   otp: string
 }
 
-export interface verfiyOtp {
+export interface VerifyOtpData {
   refresh_token: string
   expires_in: number
   token: string
 }
 
+export type verfiyOtp = VerifyOtpData;
+
 export interface VerifyOtpResponse {
-  data: verfiyOtp
+  data: VerifyOtpData
   status_code: number
   message: string
   token?: string
   refresh_token?: string
 }
+
+export interface SubsribeResponse {
+  status_code: number;
+  message: string;
+  data?: any;
+}
+
+export type SubscribeResponse = SubsribeResponse;
